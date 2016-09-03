@@ -200,7 +200,7 @@ public class TechnologyHandler {
 		registerResearch(BASIC_REDSTONE, "R  ", "SRR", "CCC", 'R', Items.REDSTONE, 'S', Items.STICK, 'C', ITEM_GROUP.COLORFUL);
 
 		registerIdea(ADVANCED_REDSTONE, "RC", 'R', Blocks.REDSTONE_TORCH, 'C', ITEM_GROUP.COLORFUL);
-		registerResearch(ADVANCED_REDSTONE, "CTR", "RTC", "SSS", 'C', ITEM_GROUP.COLORFUL, 'T', Blocks.REDSTONE_TORCH, 'R', Items.REDSTONE, 'S', new ItemStack(Blocks.STONE));
+		registerResearch(ADVANCED_REDSTONE, "CTR", "RTC", "CCC", 'C', ITEM_GROUP.COLORFUL, 'T', Blocks.REDSTONE_TORCH, 'R', Items.REDSTONE);
 
 		registerIdea(TIME_PLACE_DESTINATION, "RP", 'R', Items.REDSTONE, 'P', Items.PAPER);
 		registerResearch(TIME_PLACE_DESTINATION, "PGP", "IRI", "PGP", 'P', Items.PAPER, 'G', Items.GOLD_INGOT, 'I', Items.IRON_INGOT, 'R', Items.REDSTONE);

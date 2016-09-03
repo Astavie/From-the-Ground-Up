@@ -48,12 +48,12 @@ public class EventHandler {
 			evt.getToolTip().add("§4" + I18n.translateToLocal("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			String k = tech.canResearch(evt.getEntityPlayer()) ? "" : "§k";
+			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "§k";
 			evt.getToolTip().add("§6" + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
 			evt.getToolTip().add("§5§o" + k + tech.getDescription());
 		} else if (item == FTGUAPI.i_parchmentResearch) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			String k = tech.canResearch(evt.getEntityPlayer()) ? "" : "§k";
+			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "§k";
 			evt.getToolTip().add("§6" + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
 			evt.getToolTip().add("§5§o" + k + tech.getDescription());
 			evt.getToolTip().add("");
