@@ -79,7 +79,7 @@ public class TechnologyHandler {
 
 		Technology[] a_stoneworking = { STONEWORKING };
 
-		REFINEMENT = new Technology(PAGE.MINECRAFT, STONECRAFT, a_stoneworking, new ItemStack(Items.IRON_INGOT), 6, 1, "refinement", Blocks.FURNACE, Items.IRON_INGOT, Items.GOLD_INGOT, Items.COAL, Items.REDSTONE, Items.DIAMOND, Items.EMERALD, new ItemStack(Items.DYE, 1, 4), Items.GOLD_NUGGET, Items.FLINT_AND_STEEL, Items.QUARTZ, Blocks.COAL_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK, Blocks.GOLD_BLOCK, Blocks.IRON_BLOCK, Blocks.LAPIS_BLOCK, Blocks.QUARTZ_BLOCK, Blocks.REDSTONE_BLOCK);
+		REFINEMENT = new Technology(PAGE.MINECRAFT, STONECRAFT, a_stoneworking, new ItemStack(Items.IRON_INGOT), 6, 1, "refinement", Blocks.FURNACE, Items.IRON_INGOT, Items.GOLD_INGOT, Items.COAL, Items.REDSTONE, Items.DIAMOND, Items.EMERALD, new ItemStack(Items.DYE, 1, 4), Items.GOLD_NUGGET, Items.FLINT_AND_STEEL, Items.QUARTZ);
 		BIBLIOGRAPHY = new Technology(PAGE.MINECRAFT, WRITING, new ItemStack(Items.BOOK), 0, -4, "bibliography", Items.BOOK, Items.WRITABLE_BOOK, Items.WRITTEN_BOOK, Blocks.BOOKSHELF);
 		ADVANCED_COMBAT = new Technology(PAGE.MINECRAFT, STONEWORKING, new ItemStack(Items.SHIELD), 6, -3, "advanced_combat", Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.SHIELD);
 
@@ -87,10 +87,10 @@ public class TechnologyHandler {
 
 		METAL_ARMOR = new Technology(PAGE.MINECRAFT, ADVANCED_COMBAT, a_refinement, new ItemStack(Items.IRON_HELMET), 6, -5, "metal_armor", Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS);
 		SMITHING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.ANVIL), 8, 1, "smithing", Blocks.ANVIL, Items.IRON_AXE, Items.IRON_DOOR, Items.IRON_HOE, Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_SWORD, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL, Items.GOLDEN_SWORD, Blocks.IRON_BARS, Blocks.IRON_TRAPDOOR, Items.BUCKET);
-		BUILDING_BLOCKS = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.BRICK_BLOCK), 8, 2, "building_blocks", Blocks.STAINED_GLASS, Blocks.GLASS_PANE, Blocks.STAINED_GLASS_PANE, Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.END_BRICKS, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.STONE_BRICK_STAIRS, Blocks.STONEBRICK, new ItemStack(Blocks.STONE_SLAB, 1, 0), new ItemStack(Blocks.STONE_SLAB, 1, 4), new ItemStack(Blocks.STONE_SLAB, 1, 5), new ItemStack(Blocks.STONE_SLAB, 1, 6), new ItemStack(Blocks.STONE_SLAB, 1, 7), Blocks.PURPUR_BLOCK, Blocks.PURPUR_PILLAR, Blocks.PURPUR_SLAB, Blocks.PURPUR_STAIRS, Blocks.PRISMARINE, Blocks.GLOWSTONE);
+		BUILDING_BLOCKS = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.BRICK_BLOCK), 8, 2, "building_blocks", Blocks.STAINED_GLASS, Blocks.GLASS_PANE, Blocks.STAINED_GLASS_PANE, Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.END_BRICKS, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.STONE_BRICK_STAIRS, Blocks.STONEBRICK, new ItemStack(Blocks.STONE_SLAB, 1, 0), new ItemStack(Blocks.STONE_SLAB, 1, 4), new ItemStack(Blocks.STONE_SLAB, 1, 5), new ItemStack(Blocks.STONE_SLAB, 1, 6), new ItemStack(Blocks.STONE_SLAB, 1, 7), Blocks.PURPUR_BLOCK, Blocks.PURPUR_PILLAR, Blocks.PURPUR_SLAB, Blocks.PURPUR_STAIRS, Blocks.PRISMARINE, Blocks.GLOWSTONE, Blocks.COAL_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK, Blocks.GOLD_BLOCK, Blocks.IRON_BLOCK, Blocks.LAPIS_BLOCK, Blocks.QUARTZ_BLOCK, Blocks.REDSTONE_BLOCK);
 		COOKING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Items.BEETROOT_SOUP), 8, 3, "cooking", Items.FISHING_ROD, Items.CARROT_ON_A_STICK, Items.CAKE, Items.PUMPKIN_PIE, Items.BEETROOT_SOUP, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BREAD, Items.COOKIE);
-		GILDED_CUISINE = new Technology(PAGE.MINECRAFT, COOKING, new ItemStack(Items.GOLDEN_APPLE), 10, 3, "gilded_cuisine", Items.GOLDEN_CARROT, Items.GOLDEN_APPLE);
-		BREWING = new Technology(PAGE.MINECRAFT, COOKING, new ItemStack(Items.BREWING_STAND), 10, 4, "brewing", Items.BREWING_STAND, Items.FERMENTED_SPIDER_EYE, Items.SPECKLED_MELON, Items.MAGMA_CREAM, Items.BLAZE_POWDER);
+		GILDED_CUISINE = new Technology(PAGE.MINECRAFT, COOKING, new ItemStack(Items.GOLDEN_APPLE), 10, 3, "gilded_cuisine", Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.SPECKLED_MELON);
+		BREWING = new Technology(PAGE.MINECRAFT, GILDED_CUISINE, new ItemStack(Items.BREWING_STAND), 12, 3, "brewing", Items.BREWING_STAND, Items.FERMENTED_SPIDER_EYE, Items.MAGMA_CREAM, Items.BLAZE_POWDER);
 		GEM_CUTTING = new Technology(PAGE.MINECRAFT, SMITHING, new ItemStack(Items.DIAMOND), 8, -1, "gem_cutting", Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD);
 
 		Technology[] a_gemcutting = { GEM_CUTTING };
@@ -215,7 +215,7 @@ public class TechnologyHandler {
 		registerResearch(PLAYER_TRANSPORTATION, "W W", "WWW", "ISI", 'W', Blocks.PLANKS, 'I', Items.IRON_INGOT, 'S', Items.STICK);
 
 		registerIdea(ITEM_TRANSPORTATION, "MC", 'M', Items.MINECART, 'C', Blocks.CHEST);
-		registerResearch(ITEM_TRANSPORTATION, " C ", " M ", " I ", 'C', Blocks.CHEST, 'M', Items.MINECART, 'I', Items.IRON_INGOT);
+		registerResearch(ITEM_TRANSPORTATION, " C ", " M ", " I ", 'C', Blocks.CHEST, 'M', Items.MINECART, 'I', Blocks.RAIL);
 
 		registerIdea(ADVANCED_RAILS, "TR", 'T', Blocks.RAIL, 'R', Items.REDSTONE);
 		registerResearch(ADVANCED_RAILS, "OP ", "TTT", "RRR", 'O', Blocks.REDSTONE_TORCH, 'P', ITEM_GROUP.PRESSURE_PLATE, 'T', Blocks.RAIL, 'R', Items.REDSTONE);
@@ -419,7 +419,7 @@ public class TechnologyHandler {
 			STEW = new ITEM_GROUP("stew", Items.BEETROOT, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM);
 			VEGETABLE = new ITEM_GROUP("vegetable", Items.CARROT, new ItemStack(Items.POTATO), Items.BEETROOT);
 			FRUIT = new ITEM_GROUP("fruit", Items.APPLE, Items.MELON, Items.CHORUS_FRUIT);
-			CARROTAPPLE = new ITEM_GROUP("carrotapple", Items.APPLE, Items.CARROT);
+			CARROTAPPLE = new ITEM_GROUP("carrotapple", Items.APPLE, Items.CARROT, Items.MELON);
 			METAL_HELMET = new ITEM_GROUP("metal_helmet", Items.GOLDEN_HELMET, Items.IRON_HELMET);
 			PRESSURE_PLATE = new ITEM_GROUP("pressure_plate", Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Blocks.STONE_PRESSURE_PLATE, Blocks.WOODEN_PRESSURE_PLATE);
 			RECORD = new ITEM_GROUP("record", Items.RECORD_11, Items.RECORD_13, Items.RECORD_BLOCKS, Items.RECORD_CAT, Items.RECORD_CHIRP, Items.RECORD_FAR, Items.RECORD_MALL, Items.RECORD_MELLOHI, Items.RECORD_STAL, Items.RECORD_STRAD, Items.RECORD_WAIT, Items.RECORD_WARD);
