@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "ftgumod:research_table" },
+        "facing=south": { "model": "ftgumod:research_table", "y": 180 },
+        "facing=west":  { "model": "ftgumod:research_table", "y": 270 },
+        "facing=east":  { "model": "ftgumod:research_table", "y": 90 }
+    }
+}

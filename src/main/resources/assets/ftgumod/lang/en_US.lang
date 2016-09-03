@@ -1,0 +1,147 @@
+tile.idea_table.name=Idea Table
+tile.research_table.name=Research Table
+
+item.parchment_empty.name=Parchment
+item.parchment_idea.name=Parchment
+
+item.parchment_research.name=Parchment
+item.parchment_research.complete=Shift+Right-click this item to complete the research
+
+item.research_book.name=Research Book
+item.looking_glass.name=Looking Glass
+item.looking_glass.shift=Press Shift for more information
+
+technology.idea=Idea
+technology.research=Research
+
+technology.complete.already=is already researched
+technology.complete.flawless=Researched!
+technology.complete.understand=You do not understand this technology
+
+technology.decipher.already=is already looked at
+technology.decipher.flawless=You find hidden meaning in this block
+technology.decipher.understand=You find nothing of interest in this block
+technology.decipher.tooltip=Right-click to find hidden meaning in blocks
+
+technology.basic_crafting.name=Basic Crafting
+technology.basic_crafting.desc=I should know all these recipes already
+
+technology.woodworking.name=Woodworking
+technology.woodworking.desc=I wonder if I can turn this wood I'm getting into something
+
+technology.writing.name=Writing
+technology.writing.desc=I can't fit all this information in my head
+
+technology.wooden_tools.name=Wooden Tools
+technology.wooden_tools.desc=It seems my hands aren't the perfect tools for everything
+
+technology.research.name=Research
+technology.research.desc=Isn't that what I'm doing right now?
+
+technology.stonecraft.name=Stonecraft
+technology.stonecraft.desc=Wood is such a boring material anyway
+
+technology.carpentry.name=Carpentry
+technology.carpentry.desc=With all the possibilities no wonder you can do even more with wood
+
+technology.stoneworking.name=Stoneworking
+technology.stoneworking.desc=Because wooden tools just aren't good enough
+
+technology.refinement.name=Refinement
+technology.refinement.desc=From the Stone Age to the Iron Age
+
+technology.bibliography.name=Bibliography
+technology.bibliography.desc=Storing paper inside cowhide
+
+technology.advanced_combat.name=Advanced Combat
+technology.advanced_combat.desc=Swords are nice, but other ways of fighting would be nice too
+
+technology.metal_armor.name=Metal Armor
+technology.metal_armor.desc=Cowhide seems very uncomfortable to wear, so let's make better armor
+
+technology.undeciphered_research.name=Undeciphered Research
+technology.undeciphered_research.desc=Let's decipher those cryptic hints
+
+technology.enchanting.name=Enchanting
+technology.enchanting.desc=Some say it's overpowered, but I strongly disagree
+
+technology.glowing_eyes.name=Glowing Eyes
+technology.glowing_eyes.desc=They look at me funny
+
+technology.ender_knowledge.name=Ender Knowledge
+technology.ender_knowledge.desc=Stealin' knowledge like it's nobody's business
+
+technology.gem_armor.name=Gem Armor
+technology.gem_armor.desc=Showing off your bling in a defensive manner
+
+technology.cooking.name=Cooking
+technology.cooking.desc=Surely there must be a better way to prepare my food
+
+technology.building_blocks.name=Building Blocks
+technology.building_blocks.desc=Why would you need anything else than sand in a sandbox?
+
+technology.smithing.name=Smithing
+technology.smithing.desc=It's time to use the ingots for some crafting
+
+technology.gem_cutting.name=Gem Cutting
+technology.gem_cutting.desc=Showing off your bling in a useful manner
+
+technology.brewing.name=Brewing
+technology.brewing.desc=Drinking drugs for superhuman powers
+
+technology.gilded_cuisine.name=Gilded Cuisine
+technology.gilded_cuisine.desc=Eating gold food gives you powers, apparently
+
+technology.basic_redstone.name=Basic Redstone
+technology.basic_redstone.desc=Wouldn't it be nice to automate some things?
+
+technology.time_place_destination.name=Time, Place and Destination
+technology.time_place_destination.desc=I want to know when and where I am
+
+technology.advanced_redstone.name=Advanced Redstone
+technology.advanced_redstone.desc=This redstone here seems really useful
+
+technology.explosives.name=Explosives
+technology.explosives.desc=Griefers galore!
+
+technology.redstone_machinery.name=Redstone Machinery
+technology.redstone_machinery.desc=Machines that don't need fuel to run
+
+technology.music.name=Music
+technology.music.desc=A player has to relax sometime!
+
+technology.advanced_rails.name=Advanced Rails
+technology.advanced_rails.desc=Integrating rails and redstone
+
+technology.player_transportation.name=Player Transportation
+technology.player_transportation.desc=You didn't expect to run everywhere, did you?
+
+technology.item_transportation.name=Item Transportation
+technology.item_transportation.desc=Rails or hoppers, which do you prefer?
+
+research.stonecraft.pickaxe=...block breaker...
+research.stonecraft.unsmooth_stone=...material to craft with...
+research.stonecraft.crafting=...crafter...
+
+research.carpentry.tile.woodSlab=...half-sized...
+research.carpentry.tile.wood=...material for building...
+research.carpentry.axe=...block chopper...
+research.carpentry.tile.workbench=...crafter...
+
+research.stoneworking.tile.stonebrick=...hard material...
+research.stoneworking.item.stick=...something that you can hold...
+
+research.refinement.tile.stonebrick=...rocky to surround the heat...
+research.refinement.ore=...something to smelt...
+research.refinement.item.coal=...fuel...
+
+research.bibliography.tile.wood=...material which can encase...
+research.bibliography.item.leather=...cowhide...
+research.bibliography.item.paper=...to write on...
+
+research.advanced_combat.item.leather=...material for armor...
+research.advanced_combat.sword=...mob slayer...
+research.advanced_combat.item.ingotIron=...hard metal...
+
+research.metal_armor.item.ingotIron=...hard metal...
+research.metal_armor.item.helmetCloth=...organic headgear...
