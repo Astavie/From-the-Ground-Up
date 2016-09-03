@@ -5,7 +5,7 @@ item.parchment_empty.name=Parchment
 item.parchment_idea.name=Parchment
 
 item.parchment_research.name=Parchment
-item.parchment_research.complete=Shift+Right-click this item to complete the research
+item.parchment_research.complete=Right-click this item to complete the research
 
 item.research_book.name=Research Book
 item.looking_glass.name=Looking Glass
@@ -17,11 +17,12 @@ technology.research=Research
 technology.complete.already=is already researched
 technology.complete.flawless=Researched!
 technology.complete.understand=You do not understand this technology
+technology.complete.unlock=Unlocked the research for
 
 technology.decipher.already=is already looked at
 technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
-technology.decipher.tooltip=Right-click to find hidden meaning in blocks
+technology.decipher.tooltip=Shift Right-click to find hidden meaning in blocks
 
 technology.basic_crafting.name=Basic Crafting
 technology.basic_crafting.desc=I should know all these recipes already

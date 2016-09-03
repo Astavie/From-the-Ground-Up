@@ -99,8 +99,6 @@ public class TechnologyUtil {
 		} else if (o instanceof Block) {
 			Block b = (Block) o;
 			b.getSubBlocks(Item.getItemFromBlock(b), null, item);
-		} else if (o instanceof ItemStack) {
-			item.add((ItemStack) o);
 		}
 		return item;
 	}

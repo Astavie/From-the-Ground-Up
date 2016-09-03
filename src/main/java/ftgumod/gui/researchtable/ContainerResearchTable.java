@@ -1,6 +1,8 @@
 package ftgumod.gui.researchtable;
 
+import java.util.List;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ClickType;
@@ -11,6 +13,12 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.translation.I18n;
+import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.Decipher;
+import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
 import ftgumod.ResearchRecipe;
 import ftgumod.Technology;
@@ -18,6 +26,9 @@ import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyUtil;
 import ftgumod.gui.SlotSpecial;
 import ftgumod.gui.TileEntityInventory;
+import ftgumod.item.ItemLookingGlass;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
 
 public class ContainerResearchTable extends Container {
 
@@ -52,7 +63,7 @@ public class ContainerResearchTable extends Container {
 			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
-		onCraftMatrixChanged(this.invInput);
+		onCraftMatrixChanged(tileEntity);
 	}
 
 	protected int addSlots(TileEntityInventory tileEntity) {
@@ -121,6 +132,15 @@ public class ContainerResearchTable extends Container {
 				if (tech.researched || tech.isResearched(player) || (tech.prev != null && !tech.prev.isResearched(player))) {
 					recipe = null;
 				}
+
+				if (recipe != null && !invPlayer.player.worldObj.isRemote && TechnologyHandler.unlock.containsKey(recipe)) {
+					ITechnology cap = invPlayer.player.getCapability(CapabilityTechnology.TECH_CAP, null);
+					if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
+						cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
+						invPlayer.player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName() + "\"!"));
+						PacketDispatcher.sendTo(new TechnologyMessage(invPlayer.player), (EntityPlayerMP) invPlayer.player);
+					}
+				}
 			} else {
 				recipe = null;
 			}
@@ -133,6 +153,27 @@ public class ContainerResearchTable extends Container {
 					Technology tech = recipe.output;
 					EntityPlayer player = invPlayer.player;
 					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
+						if (TechnologyHandler.unlock.containsKey(recipe)) {
+							if (!inventorySlots.get(glass).getHasStack()) {
+								inventorySlots.get(output).putStack(null);
+								return;
+							}
+
+							Decipher d = TechnologyHandler.unlock.get(recipe);
+							List<String> items = ItemLookingGlass.getItems(inventorySlots.get(glass).getStack());
+							for (DecipherGroup g : d.list) {
+								boolean perms = false;
+								for (ItemStack s : g.unlock)
+									for (String t : items)
+										if (s.getItem().getUnlocalizedName(s).equals(t))
+											perms = true;
+								if (!perms) {
+									inventorySlots.get(output).putStack(null);
+									return;
+								}
+							}
+						}
+
 						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
 
 						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalisedName());

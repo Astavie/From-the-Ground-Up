@@ -7,12 +7,17 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
+import ftgumod.Decipher;
+import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
+import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyUtil;
 import ftgumod.gui.TileEntityInventory;
+import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
 
@@ -44,7 +49,28 @@ public class GuiResearchTable extends GuiContainer {
 				ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 				if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9 && table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
 					List<String> text = new ArrayList<String>();
-					text.add(I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine])));
+
+					String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
+					if (TechnologyHandler.unlock.containsKey(table.recipe)) {
+						Decipher d = TechnologyHandler.unlock.get(table.recipe);
+						DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
+						if (g != null) {
+							if (!table.inventorySlots.get(table.glass).getHasStack()) {
+								hint = "§k" + hint;
+							} else {
+								List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
+								boolean perms = false;
+								for (ItemStack stack : g.unlock)
+									for (String t : items)
+										if (stack.getItem().getUnlocalizedName(stack).equals(t))
+											perms = true;
+								if (!perms)
+									hint = "§k" + hint;
+							}
+						}
+					}
+					text.add(hint);
+
 					drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop, fontRendererObj);
 				}
 			}

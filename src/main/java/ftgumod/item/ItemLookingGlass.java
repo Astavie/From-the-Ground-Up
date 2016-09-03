@@ -1,5 +1,7 @@
 package ftgumod.item;
 
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,6 +22,10 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.lwjgl.input.Keyboard;
+import ftgumod.Decipher;
+import ftgumod.Decipher.DecipherGroup;
+import ftgumod.ResearchRecipe;
+import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyUtil;
 
 public class ItemLookingGlass extends Item {
@@ -30,13 +36,40 @@ public class ItemLookingGlass extends Item {
 		setMaxStackSize(1);
 	}
 
+	public static List<String> getItems(ItemStack item) {
+		List<String> list = new ArrayList<String>();
+		NBTTagList blocks = TechnologyUtil.getItemData(item).getTagList("FTGU", NBT.TAG_STRING);
+		for (int i = 0; i < blocks.tagCount(); i++) {
+			list.add(blocks.getStringTagAt(i));
+		}
+		return list;
+	}
+
 	@Override
 	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
-
 			ItemStack stack = new ItemStack(block, 1, block.getMetaFromState(state));
+
+			boolean need = false;
+			for (ResearchRecipe r : TechnologyHandler.unlock.keySet()) {
+				Decipher d = TechnologyHandler.unlock.get(r);
+				if (r.output.canResearch(player))
+					for (DecipherGroup g : d.list)
+						for (ItemStack s : g.unlock)
+							if (ItemStack.areItemStacksEqual(s, stack))
+								need = true;
+			}
+
+			if (!need) {
+				if (!world.isRemote) {
+					player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				}
+				return EnumActionResult.SUCCESS;
+			}
+
 			Item b_item = Item.getItemFromBlock(block);
 			String name = block.getUnlocalizedName();
 			if (b_item != null)

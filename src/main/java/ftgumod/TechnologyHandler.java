@@ -27,6 +27,7 @@ public class TechnologyHandler {
 	public static final List<String> vanilla = new ArrayList<String>();
 
 	public static final Map<Technology, List<ItemStack>> locked = new HashMap<Technology, List<ItemStack>>();
+	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<ResearchRecipe, Decipher>();
 
 	public static Technology BASIC_CRAFTING;
 	public static Technology WOODWORKING;
@@ -69,7 +70,7 @@ public class TechnologyHandler {
 		BASIC_CRAFTING = new Technology(PAGE.MINECRAFT, null, new ItemStack(Blocks.GRASS), 0, 0, "basic_crafting", Items.WHEAT, Blocks.HAY_BLOCK, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, new ItemStack(Items.DYE, 1, 5), new ItemStack(Items.DYE, 1, 6), new ItemStack(Items.DYE, 1, 7), new ItemStack(Items.DYE, 1, 8), new ItemStack(Items.DYE, 1, 9), new ItemStack(Items.DYE, 1, 10), new ItemStack(Items.DYE, 1, 12), new ItemStack(Items.DYE, 1, 13), new ItemStack(Items.DYE, 1, 14), Items.SUGAR, Blocks.SLIME_BLOCK);
 		WOODWORKING = new Technology(PAGE.MINECRAFT, BASIC_CRAFTING, new ItemStack(Blocks.PLANKS), 2, 0, "woodworking", Blocks.PLANKS, Blocks.CRAFTING_TABLE, Blocks.WOODEN_SLAB, ITEM_GROUP.WOODEN_STAIRS);
 		WRITING = new Technology(PAGE.MINECRAFT, BASIC_CRAFTING, new ItemStack(Items.PAPER), 0, -2, "writing", Items.PAPER);
-		WOODEN_TOOLS = new Technology(PAGE.MINECRAFT, WOODWORKING, new ItemStack(Items.STICK), 4, -1, "wooden_tools", Items.STICK, Items.WOODEN_HOE, Items.WOODEN_PICKAXE, Items.CARROT_ON_A_STICK);
+		WOODEN_TOOLS = new Technology(PAGE.MINECRAFT, WOODWORKING, new ItemStack(Items.STICK), 4, -1, "wooden_tools", Items.STICK, Items.WOODEN_HOE, Items.WOODEN_PICKAXE);
 		RESEARCH = new Technology(PAGE.MINECRAFT, WRITING, new ItemStack(FTGUAPI.i_parchmentIdea), -2, -2, "research", FTGUAPI.i_parchmentEmpty, FTGUAPI.b_ideaTable, FTGUAPI.b_researchTable);
 
 		STONECRAFT = new Technology(PAGE.MINECRAFT, WOODWORKING, new ItemStack(Blocks.COBBLESTONE), 4, 1, "stonecraft", Blocks.SANDSTONE, new ItemStack(Blocks.STONE_SLAB, 1, 1), new ItemStack(Blocks.STONE_SLAB, 1, 3), new ItemStack(Blocks.STONE_SLAB2, 1, 0), Blocks.STONE_STAIRS, Blocks.SANDSTONE_STAIRS, Blocks.STONE_PRESSURE_PLATE, Blocks.LEVER);
@@ -87,7 +88,7 @@ public class TechnologyHandler {
 		METAL_ARMOR = new Technology(PAGE.MINECRAFT, ADVANCED_COMBAT, a_refinement, new ItemStack(Items.IRON_HELMET), 6, -5, "metal_armor", Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS);
 		SMITHING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.ANVIL), 8, 1, "smithing", Blocks.ANVIL, Items.IRON_AXE, Items.IRON_DOOR, Items.IRON_HOE, Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_SWORD, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL, Items.GOLDEN_SWORD, Blocks.IRON_BARS, Blocks.IRON_TRAPDOOR, Items.BUCKET);
 		BUILDING_BLOCKS = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.BRICK_BLOCK), 8, 2, "building_blocks", Blocks.STAINED_GLASS, Blocks.GLASS_PANE, Blocks.STAINED_GLASS_PANE, Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.END_BRICKS, Blocks.NETHER_BRICK, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.STONE_BRICK_STAIRS, Blocks.STONEBRICK, new ItemStack(Blocks.STONE_SLAB, 1, 0), new ItemStack(Blocks.STONE_SLAB, 1, 4), new ItemStack(Blocks.STONE_SLAB, 1, 5), new ItemStack(Blocks.STONE_SLAB, 1, 6), new ItemStack(Blocks.STONE_SLAB, 1, 7), Blocks.PURPUR_BLOCK, Blocks.PURPUR_PILLAR, Blocks.PURPUR_SLAB, Blocks.PURPUR_STAIRS, Blocks.PRISMARINE, Blocks.GLOWSTONE);
-		COOKING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Items.BEETROOT_SOUP), 8, 3, "cooking", Items.FISHING_ROD, Items.CAKE, Items.PUMPKIN_PIE, Items.BEETROOT_SOUP, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BREAD, Items.COOKIE);
+		COOKING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Items.BEETROOT_SOUP), 8, 3, "cooking", Items.FISHING_ROD, Items.CARROT_ON_A_STICK, Items.CAKE, Items.PUMPKIN_PIE, Items.BEETROOT_SOUP, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BREAD, Items.COOKIE);
 		GILDED_CUISINE = new Technology(PAGE.MINECRAFT, COOKING, new ItemStack(Items.GOLDEN_APPLE), 10, 3, "gilded_cuisine", Items.GOLDEN_CARROT, Items.GOLDEN_APPLE);
 		BREWING = new Technology(PAGE.MINECRAFT, COOKING, new ItemStack(Items.BREWING_STAND), 10, 4, "brewing", Items.BREWING_STAND, Items.FERMENTED_SPIDER_EYE, Items.SPECKLED_MELON, Items.MAGMA_CREAM, Items.BLAZE_POWDER);
 		GEM_CUTTING = new Technology(PAGE.MINECRAFT, SMITHING, new ItemStack(Items.DIAMOND), 8, -1, "gem_cutting", Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD);
@@ -232,12 +233,19 @@ public class TechnologyHandler {
 		registerResearch(ENDER_KNOWLEDGE, "   ", " S ", "   ", 'S', Items.NETHER_STAR);
 
 		registerIdea(UNDECIPHERED_RESEARCH, "B", 'B', ITEM_GROUP.UNDECIPHERED);
-		//registerResearch(UNDECIPHERED_RESEARCH);
+		registerResearch(UNDECIPHERED_RESEARCH, "ONO", "NGN", "ONO", 'O', Blocks.OBSIDIAN, 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE);
 	}
 
 	public static int getID() {
 		ID++;
 		return ID;
+	}
+
+	public static void registerDecipher(ResearchRecipe r, Decipher d) {
+		unlock.put(r, d);
+		ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);
+		TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalisedName());
+		ITEM_GROUP.UNDECIPHERED.addItem(i);
 	}
 
 	public static void registerTechnology(Technology tech) {
@@ -264,6 +272,14 @@ public class TechnologyHandler {
 
 	public static void registerResearch(Technology tech, Object... pars) {
 		researches.add(new ResearchRecipe(tech, pars));
+	}
+
+	public static void registerIdea(IdeaRecipe recipe) {
+		ideas.add(recipe);
+	}
+
+	public static void registerResearch(ResearchRecipe recipe) {
+		researches.add(recipe);
 	}
 
 	public static Technology getTechnology(String name) {

@@ -20,9 +20,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.Technology;
 import ftgumod.TechnologyHandler;
-import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.TechnologyHandler.PAGE;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
@@ -188,7 +188,7 @@ public class GuiResearchBook extends GuiScreen {
 	public void mouseClicked(int x, int y, int b) throws IOException {
 		if (b == 1 && player.capabilities.isCreativeMode && selected != null)
 			PacketDispatcher.sendToServer(new UnlockTechMessage(selected.getID()));
-		if (b == 0 && selected != null) {
+		if (b == 0 && selected != null && selected.isResearched(player)) {
 			state = selected.getID();
 			initGui();
 		}
@@ -361,7 +361,7 @@ public class GuiResearchBook extends GuiScreen {
 				if (!flag)
 					itemRender.isNotRenderingEffectsInGUI(true);
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-				if (f3 >= (float) l6 && f3 <= (float) (l6 + 22) && f4 >= (float) j7 && f4 <= (float) (j7 + 22))
+				if (f3 >= (float) l6 && f3 <= (float) (l6 + 22) && f4 >= (float) j7 && f4 <= (float) (j7 + 22) && t2.canResearchIgnoreResearched(player))
 					selected = t2;
 			}
 		} else {
@@ -420,23 +420,16 @@ public class GuiResearchBook extends GuiScreen {
 			int i7 = x + 12;
 			int k7 = y - 4;
 
-			boolean flag = selected.canResearchIgnoreResearched(player);
+			int j8 = Math.max(fontRendererObj.getStringWidth(s), 120);
+			int i9 = fontRendererObj.splitStringWidth(s1, j8);
+			if (selected.isResearched(player))
+				i9 += 12;
 
-			if (flag) {
-				int j8 = Math.max(fontRendererObj.getStringWidth(s), 120);
-				int i9 = fontRendererObj.splitStringWidth(s1, j8);
-				if (selected.isResearched(player))
-					i9 += 12;
-
-				drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
-				fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
-				if (selected.isResearched(player))
-					fontRendererObj.drawStringWithShadow(I18n.format("technology.complete.flawless", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
-			} else
-				s = null;
-
-			if (s != null)
-				fontRendererObj.drawStringWithShadow(s, i7, k7, flag ? -1 : 0xff808080);
+			drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
+			fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
+			if (selected.isResearched(player))
+				fontRendererObj.drawStringWithShadow(I18n.format("technology.complete.flawless", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
+			fontRendererObj.drawStringWithShadow(s, i7, k7, -1);
 		} else if (state != 0) {
 			Technology tech = TechnologyHandler.getTechnology(state);
 
