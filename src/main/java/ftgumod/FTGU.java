@@ -12,6 +12,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -32,6 +33,7 @@ import ftgumod.item.ItemParchmentIdea;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.item.ItemResearchBook;
 import ftgumod.packet.PacketDispatcher;
+import ftgumod.proxy.ProxyCommon;
 
 @Mod(modid = FTGU.MODID, version = FTGU.VERSION)
 public class FTGU {
@@ -44,6 +46,9 @@ public class FTGU {
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU instance;
+
+	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
+	public static ProxyCommon proxy;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

@@ -1,8 +1,8 @@
 package ftgumod;
 
+import java.util.Arrays;
 import java.util.List;
 import net.minecraft.item.ItemStack;
-import scala.actors.threadpool.Arrays;
 
 public class Decipher {
 
