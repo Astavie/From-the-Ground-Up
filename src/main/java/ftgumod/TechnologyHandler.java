@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import ftgumod.Decipher.DecipherGroup;
 
 public class TechnologyHandler {
 
@@ -193,10 +194,16 @@ public class TechnologyHandler {
 		registerResearch(GILDED_CUISINE, "NNN", "NCN", "NNN", 'N', Items.GOLD_NUGGET, 'C', ITEM_GROUP.CARROTAPPLE);
 
 		registerIdea(BREWING, "BW", 'B', new ItemStack(Items.POTIONITEM, 1, 0), 'W', Items.NETHER_WART);
-		registerResearch(BREWING, " W ", " S ", " B ", 'B', new ItemStack(Items.POTIONITEM, 1, 0), 'W', Items.NETHER_WART, 'S', Items.SUGAR);
+		ResearchRecipe r_brewing = new ResearchRecipe(BREWING, " W ", " S ", " B ", 'B', new ItemStack(Items.POTIONITEM, 1, 0), 'W', Items.NETHER_WART, 'S', Items.SUGAR);
+
+		registerResearch(r_brewing);
+		registerDecipher(r_brewing, new Decipher(new DecipherGroup(Blocks.CAULDRON, 7)));
 
 		registerIdea(GEM_CUTTING, "D", 'D', Items.DIAMOND);
-		registerResearch(GEM_CUTTING, " P ", " D ", " C ", 'C', ITEM_GROUP.CRAFTING, 'D', Items.DIAMOND, 'P', ITEM_GROUP.PICKAXE);
+		ResearchRecipe r_gem_cutting = new ResearchRecipe(GEM_CUTTING, " P ", " D ", " C ", 'C', ITEM_GROUP.CRAFTING, 'D', Items.DIAMOND, 'P', ITEM_GROUP.PICKAXE);
+
+		registerResearch(r_gem_cutting);
+		registerDecipher(r_gem_cutting, new Decipher(new DecipherGroup(Blocks.DIAMOND_ORE, 4)));
 
 		registerIdea(GEM_ARMOR, "MD", 'M', ITEM_GROUP.METAL_ARMOR, 'D', Items.DIAMOND);
 		registerResearch(GEM_ARMOR, "DDD", "DMD", "   ", 'D', Items.DIAMOND, 'M', ITEM_GROUP.METAL_HELMET);
@@ -229,13 +236,22 @@ public class TechnologyHandler {
 		registerResearch(MUSIC, " DI", " R ", "WWW", 'D', Items.DIAMOND, 'I', Items.IRON_INGOT, 'R', ITEM_GROUP.RECORD, 'W', Blocks.PLANKS);
 
 		registerIdea(ENCHANTING, "E", 'E', Items.ENCHANTED_BOOK);
-		registerResearch(ENCHANTING, "BBB", "BEB", "OOO", 'B', Blocks.BOOKSHELF, 'E', Items.ENCHANTED_BOOK, 'O', Blocks.OBSIDIAN);
+		ResearchRecipe r_enchanting = new ResearchRecipe(ENCHANTING, "BBB", "BEB", "OOO", 'B', Blocks.BOOKSHELF, 'E', Items.ENCHANTED_BOOK, 'O', Blocks.OBSIDIAN);
+
+		registerResearch(r_enchanting);
+		registerDecipher(r_enchanting, new Decipher(new DecipherGroup(Blocks.OBSIDIAN, 6, 7, 8), new DecipherGroup(Blocks.BOOKSHELF, 0, 1, 2, 3, 5)));
 
 		registerIdea(GLOWING_EYES, "EB", 'E', Items.ENDER_PEARL, 'B', Items.BLAZE_POWDER);
-		registerResearch(GLOWING_EYES, "OEO", "EBE", "OEO", 'O', Blocks.OBSIDIAN, 'E', Items.ENDER_PEARL, 'B', Items.BLAZE_POWDER);
+		ResearchRecipe r_glowing_eyes = new ResearchRecipe(GLOWING_EYES, "OEO", "EBE", "OEO", 'O', Blocks.OBSIDIAN, 'E', Items.ENDER_PEARL, 'B', Items.BLAZE_POWDER);
+
+		registerResearch(r_glowing_eyes);
+		registerDecipher(r_glowing_eyes, new Decipher(new DecipherGroup(Blocks.SOUL_SAND, 1, 3, 5, 7)));
 
 		registerIdea(ENDER_KNOWLEDGE, "D", 'D', ITEM_GROUP.DRAGON);
-		registerResearch(ENDER_KNOWLEDGE, "WWW", " S ", " E ", 'S', Items.NETHER_STAR, 'W', new ItemStack(Items.SKULL, 1, 1), 'E', Blocks.END_STONE);
+		ResearchRecipe r_ender_knowledge = new ResearchRecipe(ENDER_KNOWLEDGE, "WWW", " S ", " E ", 'S', Items.NETHER_STAR, 'W', new ItemStack(Items.SKULL, 1, 1), 'E', Blocks.END_ROD);
+
+		registerResearch(r_ender_knowledge);
+		registerDecipher(r_ender_knowledge, new Decipher(new DecipherGroup(Blocks.END_PORTAL, 7), new DecipherGroup(new ItemStack(Blocks.SKULL, 1, 1), 0, 1, 2), new DecipherGroup(Blocks.DRAGON_EGG, 4)));
 
 		registerIdea(UNDECIPHERED_RESEARCH, "B", 'B', ITEM_GROUP.UNDECIPHERED);
 		registerResearch(UNDECIPHERED_RESEARCH, "ONO", "NGN", "ONO", 'O', Blocks.OBSIDIAN, 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE);

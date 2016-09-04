@@ -61,9 +61,10 @@ public class GuiResearchTable extends GuiContainer {
 								List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
 								boolean perms = false;
 								for (ItemStack stack : g.unlock)
-									for (String t : items)
-										if (stack.getItem().getUnlocalizedName(stack).equals(t))
+									for (String t : items) {
+										if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null && stack.getItem().getUnlocalizedName(stack).equals(t)))
 											perms = true;
+									}
 								if (!perms)
 									hint = "§k" + hint;
 							}

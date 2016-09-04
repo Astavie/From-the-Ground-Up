@@ -168,7 +168,7 @@ public class ContainerResearchTable extends Container {
 								boolean perms = false;
 								for (ItemStack s : g.unlock)
 									for (String t : items)
-										if (s.getItem().getUnlocalizedName(s).equals(t))
+										if ((s.getItem() == null && t.equals("tile.null")) || (s.getItem() != null && s.getItem().getUnlocalizedName(s).equals(t)))
 											perms = true;
 								if (!perms) {
 									inventorySlots.get(output).putStack(null);
