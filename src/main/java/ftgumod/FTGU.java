@@ -11,6 +11,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -32,18 +33,22 @@ import ftgumod.item.ItemParchmentIdea;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.item.ItemResearchBook;
 import ftgumod.packet.PacketDispatcher;
+import ftgumod.proxy.ProxyCommon;
 
 @Mod(modid = FTGU.MODID, version = FTGU.VERSION)
 public class FTGU {
 
 	public static final String MODID = "ftgumod";
 	public static final String VERSION = "Minecraft 1.9.4";
-	
+
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU instance;
+
+	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
+	public static ProxyCommon proxy;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -74,13 +79,13 @@ public class FTGU {
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
 
 		PacketDispatcher.registerPackets();
-		
+
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
-		
+
 		headstart = config.get(config.CATEGORY_GENERAL, "Headstart", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
 		moddedOnly = config.get(config.CATEGORY_GENERAL, "Modded", false, "Set this to true to automatically research all vanilla technologies").getBoolean();
-		
+
 		config.save();
 	}
 

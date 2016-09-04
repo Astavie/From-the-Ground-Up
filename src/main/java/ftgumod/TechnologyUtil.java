@@ -1,6 +1,7 @@
 package ftgumod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -91,14 +92,37 @@ public class TechnologyUtil {
 		return "";
 	}
 
+	private static List<ItemStack> getSubItems(Item i) {
+		if (!i.getHasSubtypes())
+			return Arrays.asList(new ItemStack(i));
+		else {
+			List<ItemStack> l = new ArrayList<ItemStack>();
+			for (int j = 0; j < i.getMaxDamage(); j++) {
+				l.add(new ItemStack(i, 1, j));
+			}
+			return l;
+		}
+	}
+
+	private static List<ItemStack> getSubBlocks(Block b) {
+		Item i = Item.getItemFromBlock(b);
+		if (i == null || !i.getHasSubtypes())
+			return Arrays.asList(new ItemStack(b));
+		else {
+			List<ItemStack> l = new ArrayList<ItemStack>();
+			for (int j = 0; j < 16; j++) {
+				l.add(new ItemStack(b, 1, j));
+			}
+			return l;
+		}
+	}
+
 	private static List<ItemStack> getItems(Object o) {
 		List<ItemStack> item = new ArrayList<ItemStack>();
 		if (o instanceof Item) {
-			Item i = (Item) o;
-			i.getSubItems(i, null, item);
+			item.addAll(getSubItems((Item) o));
 		} else if (o instanceof Block) {
-			Block b = (Block) o;
-			b.getSubBlocks(Item.getItemFromBlock(b), null, item);
+			item.addAll(getSubBlocks((Block) o));
 		}
 		return item;
 	}
@@ -112,9 +136,7 @@ public class TechnologyUtil {
 			item.add((ItemStack) obj);
 		else if (obj instanceof String)
 			item.addAll(OreDictionary.getOres((String) obj));
-		else if (obj instanceof Item)
-			item.addAll(getItems(obj));
-		else if (obj instanceof Block)
+		else if (obj instanceof Item || obj instanceof Block)
 			item.addAll(getItems(obj));
 		else if (obj instanceof ITEM_GROUP)
 			item.addAll(((ITEM_GROUP) obj).toItems());

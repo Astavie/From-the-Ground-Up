@@ -9,18 +9,20 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ftgumod.gui.researchbook.GuiResearchBook;
 
-
 public class ItemResearchBook extends Item {
-	
+
 	public ItemResearchBook(String name) {
 		setUnlocalizedName(name);
 		setCreativeTab(CreativeTabs.MISC);
 		setMaxStackSize(1);
 	}
-	
+
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ActionResult<ItemStack> onItemRightClick(ItemStack item, World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
