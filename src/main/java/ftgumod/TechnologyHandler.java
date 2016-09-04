@@ -106,11 +106,11 @@ public class TechnologyHandler {
 		ADVANCED_RAILS = new Technology(PAGE.MINECRAFT, PLAYER_TRANSPORTATION, new ItemStack(Blocks.GOLDEN_RAIL), 16, 3, "advanced_rails", Blocks.ACTIVATOR_RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL);
 		MUSIC = new Technology(PAGE.MINECRAFT, REDSTONE_MACHINERY, a_gemcutting, new ItemStack(Blocks.JUKEBOX), 14, -1, "music", Blocks.JUKEBOX, Blocks.NOTEBLOCK);
 
-		Technology[] a_redstone = { MUSIC, ITEM_TRANSPORTATION, ADVANCED_RAILS, EXPLOSIVES, TIME_PLACE_DESTINATION };
+		Technology[] a_redstone = { MUSIC, ITEM_TRANSPORTATION, ADVANCED_RAILS, EXPLOSIVES, TIME_PLACE_DESTINATION, GEM_CUTTING, BREWING };
 
-		ENCHANTING = new Technology(PAGE.MINECRAFT, BIBLIOGRAPHY, a_redstone, new ItemStack(Blocks.ENCHANTING_TABLE), true, 0, -6, "enchanting", Blocks.ENCHANTING_TABLE);
-		GLOWING_EYES = new Technology(PAGE.MINECRAFT, ENCHANTING, new ItemStack(Items.ENDER_EYE), true, 0, -8, "glowing_eyes", Items.ENDER_EYE);
-		ENDER_KNOWLEDGE = new Technology(PAGE.MINECRAFT, GLOWING_EYES, new ItemStack(Items.END_CRYSTAL), true, 0, -10, "ender_knowledge", Items.END_CRYSTAL, Blocks.ENDER_CHEST, Blocks.BEACON);
+		ENCHANTING = new Technology(PAGE.MINECRAFT, BIBLIOGRAPHY, a_redstone, new ItemStack(Blocks.ENCHANTING_TABLE), 0, -6, "enchanting", Blocks.ENCHANTING_TABLE);
+		GLOWING_EYES = new Technology(PAGE.MINECRAFT, ENCHANTING, new ItemStack(Items.ENDER_EYE), 0, -8, "glowing_eyes", Items.ENDER_EYE);
+		ENDER_KNOWLEDGE = new Technology(PAGE.MINECRAFT, GLOWING_EYES, new ItemStack(Items.END_CRYSTAL), 0, -10, "ender_knowledge", Items.END_CRYSTAL, Blocks.ENDER_CHEST, Blocks.BEACON);
 
 		UNDECIPHERED_RESEARCH = new Technology(PAGE.MINECRAFT, null, new ItemStack(Items.NETHER_STAR), -2, 0, "undeciphered_research", FTGUAPI.i_lookingGlass);
 
@@ -146,8 +146,13 @@ public class TechnologyHandler {
 		registerTechnology(MUSIC);
 
 		registerTechnology(ENCHANTING);
+		ENCHANTING.setCustomUnlock(true);
+
 		registerTechnology(GLOWING_EYES);
+		GLOWING_EYES.setCustomUnlock(true);
+
 		registerTechnology(ENDER_KNOWLEDGE);
+		ENDER_KNOWLEDGE.setCustomUnlock(true);
 
 		registerTechnology(UNDECIPHERED_RESEARCH);
 		UNDECIPHERED_RESEARCH.setCustomUnlock(true);
@@ -230,7 +235,7 @@ public class TechnologyHandler {
 		registerResearch(GLOWING_EYES, "OEO", "EBE", "OEO", 'O', Blocks.OBSIDIAN, 'E', Items.ENDER_PEARL, 'B', Items.BLAZE_POWDER);
 
 		registerIdea(ENDER_KNOWLEDGE, "D", 'D', ITEM_GROUP.DRAGON);
-		registerResearch(ENDER_KNOWLEDGE, "   ", " S ", "   ", 'S', Items.NETHER_STAR);
+		registerResearch(ENDER_KNOWLEDGE, "WWW", " S ", " E ", 'S', Items.NETHER_STAR, 'W', new ItemStack(Items.SKULL, 1, 1), 'E', Blocks.END_STONE);
 
 		registerIdea(UNDECIPHERED_RESEARCH, "B", 'B', ITEM_GROUP.UNDECIPHERED);
 		registerResearch(UNDECIPHERED_RESEARCH, "ONO", "NGN", "ONO", 'O', Blocks.OBSIDIAN, 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE);
@@ -423,7 +428,7 @@ public class TechnologyHandler {
 			METAL_HELMET = new ITEM_GROUP("metal_helmet", Items.GOLDEN_HELMET, Items.IRON_HELMET);
 			PRESSURE_PLATE = new ITEM_GROUP("pressure_plate", Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Blocks.STONE_PRESSURE_PLATE, Blocks.WOODEN_PRESSURE_PLATE);
 			RECORD = new ITEM_GROUP("record", Items.RECORD_11, Items.RECORD_13, Items.RECORD_BLOCKS, Items.RECORD_CAT, Items.RECORD_CHIRP, Items.RECORD_FAR, Items.RECORD_MALL, Items.RECORD_MELLOHI, Items.RECORD_STAL, Items.RECORD_STRAD, Items.RECORD_WAIT, Items.RECORD_WARD);
-			DRAGON = new ITEM_GROUP("dragon", Blocks.DRAGON_EGG, Items.DRAGON_BREATH, new ItemStack(Blocks.SKULL, 1, 5));
+			DRAGON = new ITEM_GROUP("dragon", Blocks.DRAGON_EGG, Items.DRAGON_BREATH, new ItemStack(Items.SKULL, 1, 5));
 			UNDECIPHERED = new ITEM_GROUP("undeciphered");
 		}
 

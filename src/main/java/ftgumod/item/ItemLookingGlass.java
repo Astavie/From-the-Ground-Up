@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
 import org.lwjgl.input.Keyboard;
 import ftgumod.Decipher;
@@ -27,6 +28,7 @@ import ftgumod.Decipher.DecipherGroup;
 import ftgumod.ResearchRecipe;
 import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyUtil;
+import ftgumod.event.PlayerInspectEvent;
 
 public class ItemLookingGlass extends Item {
 
@@ -40,7 +42,7 @@ public class ItemLookingGlass extends Item {
 		List<String> list = new ArrayList<String>();
 		NBTTagList blocks = TechnologyUtil.getItemData(item).getTagList("FTGU", NBT.TAG_STRING);
 		for (int i = 0; i < blocks.tagCount(); i++) {
-			list.add(blocks.getStringTagAt(i));
+			list.add(blocks.getStringTagAt(i).replace("item.", "tile."));
 		}
 		return list;
 	}
@@ -62,12 +64,19 @@ public class ItemLookingGlass extends Item {
 								need = true;
 			}
 
+			boolean evt = false;
 			if (!need) {
-				if (!world.isRemote) {
-					player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
-					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				evt = true;
+				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, getItems(item), pos, face, stack, false);
+				MinecraftForge.EVENT_BUS.post(event);
+
+				if (!event.isUseful()) {
+					if (!world.isRemote) {
+						player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					}
+					return EnumActionResult.SUCCESS;
 				}
-				return EnumActionResult.SUCCESS;
 			}
 
 			Item b_item = Item.getItemFromBlock(block);
@@ -87,6 +96,18 @@ public class ItemLookingGlass extends Item {
 					}
 					return EnumActionResult.SUCCESS;
 				}
+			if (!evt) {
+				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, getItems(item), pos, face, stack, true);
+				MinecraftForge.EVENT_BUS.post(event);
+				if (!event.isUseful()) {
+					if (!world.isRemote) {
+						player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					}
+					return EnumActionResult.SUCCESS;
+				}
+			}
+
 			if (!world.isRemote) {
 				player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.flawless")));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);

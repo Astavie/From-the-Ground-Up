@@ -1,9 +1,9 @@
 package ftgumod.packet.server;
 
 import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.Technology;
 import ftgumod.TechnologyHandler;
-import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,10 +39,12 @@ public class UnlockTechMessage implements IMessage {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				Technology t = TechnologyHandler.getTechnology(message.tech);
 
-				if (t.isResearched(player))
+				if (t.isResearched(player)) {
 					cap.removeResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName());
-				else
+					cap.removeResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName() + ".unlock");
+				} else {
 					cap.setResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName());
+				}
 			}
 			return new TechnologyMessage(player);
 		}

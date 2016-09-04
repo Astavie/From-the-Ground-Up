@@ -2,6 +2,7 @@ package ftgumod;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -31,15 +32,15 @@ public class Technology {
 
 	private String name;
 
-	public Technology(PAGE page, Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
 		this(page, prev, null, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		this(page, prev, null, icon, hide, x, y, name, item);
 	}
 
-	public Technology(PAGE page, Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
 		this(page, prev, secret, icon, false, x, y, name, item);
 	}
 
@@ -63,7 +64,7 @@ public class Technology {
 		cap.setResearched(name);
 	}
 
-	public Technology(PAGE page, Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		ID = TechnologyHandler.getID();
 
 		this.x = x;
@@ -123,12 +124,33 @@ public class Technology {
 		return cap.isResearched(name) || researched;
 	}
 
+	public boolean isUnlocked(EntityPlayer player) {
+		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+		return customUnlock ? cap.isResearched(name + ".unlock") : true;
+	}
+
 	public boolean canResearch(EntityPlayer player) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 
 		if (isResearched(player))
 			return false;
 		if (customUnlock && !cap.isResearched(name + ".unlock"))
+			return false;
+		if (prev != null && !prev.isResearched(player))
+			return false;
+		if (secret == null)
+			return true;
+		else
+			for (Technology t : secret)
+				if (!t.isResearched(player))
+					return false;
+		return true;
+	}
+
+	public boolean canResearchIgnoreCustomUnlock(EntityPlayer player) {
+		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+
+		if (isResearched(player))
 			return false;
 		if (prev != null && !prev.isResearched(player))
 			return false;

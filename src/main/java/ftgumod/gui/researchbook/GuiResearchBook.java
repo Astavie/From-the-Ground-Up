@@ -16,7 +16,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.AchievementList;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
@@ -417,10 +416,7 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			String s = selected.getLocalisedName();
-
 			String s1 = selected.getDescription();
-			//if (player.worldObj.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND)
-			//	s1 = "SOULSAND";
 
 			int i7 = x + 12;
 			int k7 = y - 4;

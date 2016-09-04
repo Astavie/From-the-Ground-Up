@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -13,6 +14,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import ftgumod.CapabilityTechnology;
@@ -133,12 +135,13 @@ public class ContainerResearchTable extends Container {
 					recipe = null;
 				}
 
-				if (recipe != null && !invPlayer.player.worldObj.isRemote && TechnologyHandler.unlock.containsKey(recipe)) {
-					ITechnology cap = invPlayer.player.getCapability(CapabilityTechnology.TECH_CAP, null);
+				if (recipe != null && !player.worldObj.isRemote && TechnologyHandler.unlock.containsKey(recipe)) {
+					ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 					if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
 						cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
 						invPlayer.player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName() + "\"!"));
-						PacketDispatcher.sendTo(new TechnologyMessage(invPlayer.player), (EntityPlayerMP) invPlayer.player);
+						player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 					}
 				}
 			} else {
