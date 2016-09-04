@@ -43,6 +43,7 @@ public class ItemParchmentResearch extends Item {
 					t.setResearched(player);
 					player.addChatMessage(new TextComponentString("\"" + t.getLocalisedName() + "\" " + I18n.translateToLocal("technology.complete.flawless")));
 					player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 					return new ItemStack(FTGUAPI.i_parchmentEmpty);
 				} else {
 					player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
