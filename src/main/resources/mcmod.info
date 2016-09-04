@@ -1,0 +1,16 @@
+[
+{
+  "modid": "ftgumod",
+  "name": "From the Ground Up",
+  "description": "A mod which adds research to Minecraft.",
+  "version": "b0.1",
+  "mcversion": "1.9.4",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["TheRActivator", "Thaumatarge"],
+  "credits": "Coded by TheRActivator, credit to Thaumatarge for extra ideas and the artwork",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
