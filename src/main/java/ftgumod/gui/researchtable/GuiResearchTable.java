@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
@@ -56,7 +57,7 @@ public class GuiResearchTable extends GuiContainer {
 						DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
 						if (g != null) {
 							if (!table.inventorySlots.get(table.glass).getHasStack()) {
-								hint = "§k" + hint;
+								hint = TextFormatting.OBFUSCATED + hint;
 							} else {
 								List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
 								boolean perms = false;
@@ -66,7 +67,7 @@ public class GuiResearchTable extends GuiContainer {
 											perms = true;
 									}
 								if (!perms)
-									hint = "§k" + hint;
+									hint = TextFormatting.OBFUSCATED + hint;
 							}
 						}
 					}

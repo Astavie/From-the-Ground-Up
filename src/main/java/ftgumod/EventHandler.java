@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
@@ -52,7 +53,7 @@ public class EventHandler {
 				evt.setUseful(true);
 				cap.setResearched(TechnologyHandler.GLOWING_EYES.getUnlocalisedName() + ".unlock");
 
-				evt.getEntityPlayer().addChatMessage(new TextComponentString("§8" + I18n.translateToLocal("technology.noise.whisper2")));
+				evt.getEntityPlayer().addChatMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper2")));
 				evt.getEntityPlayer().addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.GLOWING_EYES.getLocalisedName() + "\"!"));
 				evt.getEntityPlayer().worldObj.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
@@ -77,7 +78,7 @@ public class EventHandler {
 				} else {
 					int tick = ticks.get(uuid);
 					if (tick == t) {
-						player.addChatMessage(new TextComponentString("§8" + I18n.translateToLocal("technology.noise.whisper1")));
+						player.addChatMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper1")));
 						player.worldObj.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					if (!(tick > t)) {
@@ -151,7 +152,7 @@ public class EventHandler {
 			NBTTagList blocks = TechnologyUtil.getItemData(evt.getItemStack()).getTagList("FTGU", NBT.TAG_STRING);
 			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				for (int i = 0; i < blocks.tagCount(); i++)
-					evt.getToolTip().add("§5§o" + I18n.translateToLocal(blocks.getStringTagAt(i) + ".name"));
+					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + I18n.translateToLocal(blocks.getStringTagAt(i) + ".name"));
 				if (blocks.tagCount() > 0)
 					evt.getToolTip().add("");
 			} else if (blocks.tagCount() > 0) {
@@ -159,19 +160,19 @@ public class EventHandler {
 				evt.getToolTip().add("");
 			}
 
-			evt.getToolTip().add("§4" + I18n.translateToLocal("technology.decipher.tooltip"));
+			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "§k";
-			evt.getToolTip().add("§6" + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
-			evt.getToolTip().add("§5§o" + k + tech.getDescription());
+			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
+			evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
+			evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 		} else if (item == FTGUAPI.i_parchmentResearch) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "§k";
-			evt.getToolTip().add("§6" + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
-			evt.getToolTip().add("§5§o" + k + tech.getDescription());
+			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
+			evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
+			evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 			evt.getToolTip().add("");
-			evt.getToolTip().add("§4" + I18n.translateToLocal("item.parchment_research.complete"));
+			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("item.parchment_research.complete"));
 		}
 	}
 
