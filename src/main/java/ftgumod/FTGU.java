@@ -39,7 +39,7 @@ import ftgumod.proxy.ProxyCommon;
 public class FTGU {
 
 	public static final String MODID = "ftgumod";
-	public static final String VERSION = "Minecraft 1.9.4";
+	public static final String VERSION = "Minecraft 1.10.2";
 
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
