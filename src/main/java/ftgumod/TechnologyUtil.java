@@ -20,6 +20,7 @@ public class TechnologyUtil {
 			return false;
 		}
 
+		stack.stackSize = 1;
 		if (obj instanceof ItemStack) {
 			return ItemStack.areItemStacksEqual((ItemStack) obj, stack);
 		} else if (obj instanceof String) {
