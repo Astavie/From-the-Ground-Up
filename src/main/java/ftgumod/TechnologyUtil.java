@@ -13,12 +13,14 @@ import ftgumod.TechnologyHandler.ITEM_GROUP;
 
 public class TechnologyUtil {
 
-	public static boolean isEqual(Object obj, ItemStack stack) {
-		if (obj == null && stack == null) {
+	public static boolean isEqual(Object obj, ItemStack stack1) {
+		if (obj == null && stack1 == null) {
 			return true;
-		} else if (stack == null || obj == null) {
+		} else if (stack1 == null || obj == null) {
 			return false;
 		}
+
+		ItemStack stack = stack1.copy();
 
 		stack.stackSize = 1;
 		if (obj instanceof ItemStack) {
