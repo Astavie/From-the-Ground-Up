@@ -128,20 +128,22 @@ public class ContainerResearchTable extends Container {
 				String s = tag.getString("FTGU");
 				recipe = TechnologyHandler.getResearch(s);
 
-				Technology tech = recipe.output;
-				EntityPlayer player = invPlayer.player;
+				if (recipe != null) {
+					Technology tech = recipe.output;
+					EntityPlayer player = invPlayer.player;
 
-				if (tech.researched || tech.isResearched(player) || (tech.prev != null && !tech.prev.isResearched(player))) {
-					recipe = null;
-				}
+					if (tech.researched || tech.isResearched(player) || (tech.prev != null && !tech.prev.isResearched(player))) {
+						recipe = null;
+					}
 
-				if (recipe != null && !player.worldObj.isRemote && TechnologyHandler.unlock.containsKey(recipe)) {
-					ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-					if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
-						cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
-						invPlayer.player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName() + "\"!"));
-						player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+					if (recipe != null && !player.worldObj.isRemote && TechnologyHandler.unlock.containsKey(recipe)) {
+						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
+							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
+							invPlayer.player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName() + "\"!"));
+							player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+							PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+						}
 					}
 				}
 			} else {
