@@ -35,21 +35,23 @@ public class ItemParchmentResearch extends Item {
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
 		if (!player.worldObj.isRemote) {
 			Technology t = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(item).getString("FTGU"));
-			if (t.isResearched(player)) {
-				if (already)
-					player.addChatMessage(new TextComponentString("\"" + t.getLocalisedName() + "\" " + I18n.translateToLocal("technology.complete.already")));
-			} else {
-				if (t.canResearch(player)) {
-					t.setResearched(player);
-					player.addChatMessage(new TextComponentString("\"" + t.getLocalisedName() + "\" " + I18n.translateToLocal("technology.complete.flawless")));
-					player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-					PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
-					return new ItemStack(FTGUAPI.i_parchmentEmpty);
+			if (t != null) {
+				if (t.isResearched(player)) {
+					if (already)
+						player.addChatMessage(new TextComponentString("\"" + t.getLocalisedName() + "\" " + I18n.translateToLocal("technology.complete.already")));
 				} else {
-					player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
+					if (t.canResearch(player)) {
+						t.setResearched(player);
+						player.addChatMessage(new TextComponentString("\"" + t.getLocalisedName() + "\" " + I18n.translateToLocal("technology.complete.flawless")));
+						player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+						return new ItemStack(FTGUAPI.i_parchmentEmpty);
+					} else {
+						player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
+					}
 				}
+				PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 			}
-			PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 		}
 		return item;
 	}

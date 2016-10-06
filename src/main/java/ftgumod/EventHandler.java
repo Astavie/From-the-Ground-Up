@@ -163,16 +163,22 @@ public class EventHandler {
 			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-			evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
-			evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
+			
+			if (tech != null) {
+				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
+			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-			evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
-			evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
-			evt.getToolTip().add("");
-			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("item.parchment_research.complete"));
+			
+			if (tech != null) {
+				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
+				evt.getToolTip().add("");
+				evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("item.parchment_research.complete"));
+			}
 		}
 	}
 
