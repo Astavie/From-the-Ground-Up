@@ -1,5 +1,3 @@
-import groovy.io.FileType
-
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -61,7 +59,7 @@ processResources
         include 'mcmod.info'
                 
         // replace version and mcversion
-        expand 'version':project.version, 'mcversion':project.minecraft.version
+        expand 'version':"${mod_status}${mod_version}", 'mcversion':mc_version
     }
         
     // copy everything else, thats not the mcmod.info
