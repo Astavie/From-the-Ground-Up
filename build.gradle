@@ -42,17 +42,16 @@ minecraft {
 }
 
 repositories {
-    maven {
-        // location of the maven that hosts JEI files
-        url "http://dvs1.progwml6.com/files/maven"
-    }
+    maven { url "http://dvs1.progwml6.com/files/maven" }
+    maven { url "http://blamejared.com/maven" }
 }
 
 dependencies {
-    // compile against the JEI API
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    // at runtime, use the full JEI jar
     runtime "mezz.jei:jei_${mc_version}:${jei_version}"
+    
+    deobfCompile "MineTweaker3:MineTweaker3-API:${crafttweaker_version}"
+    runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:${mc_version}-${crafttweaker_version}"
 }
 
 processResources
