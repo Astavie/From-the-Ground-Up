@@ -376,6 +376,13 @@ public class TechnologyHandler {
 			return pages.get(index);
 		}
 
+		public static PAGE get(String name) {
+			for (PAGE p: pages)
+				if (p.name.equals(name))
+					return p;
+			return null;
+		}
+
 		public static int size() {
 			return pages.size();
 		}

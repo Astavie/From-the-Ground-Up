@@ -10,9 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -32,6 +33,7 @@ import ftgumod.item.ItemParchmentEmpty;
 import ftgumod.item.ItemParchmentIdea;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.item.ItemResearchBook;
+import ftgumod.minetweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 
@@ -142,6 +144,13 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+		if (Loader.isModLoaded("MineTweaker3")) {
+			try {
+				FTGUTweaker.class.newInstance();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }
