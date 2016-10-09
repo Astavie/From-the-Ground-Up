@@ -17,7 +17,7 @@ import ftgumod.minetweaker.util.InputHelper;
 @ZenClass("mods.ftgu.Technology")
 public class Technology {
 
-	protected static final String name = "FTGU Technology";
+	protected static final String name = FTGUTweaker.name + " Technology";
 
 	@ZenMethod
 	public static void addTechnology(String page, String prev, IItemStack icon, int x, int y, String name, IIngredient[] item) {
@@ -118,6 +118,9 @@ public class Technology {
 
 		@Override
 		public boolean remove(ftgumod.Technology recipe) {
+			TechnologyHandler.ideas.remove(TechnologyHandler.getIdea(recipe));
+			TechnologyHandler.researches.remove(TechnologyHandler.getResearch(recipe));
+
 			TechnologyHandler.locked.remove(recipe);
 			return TechnologyHandler.technologies.remove(recipe);
 		}

@@ -8,9 +8,14 @@ public class IdeaRecipe {
 	public final Object[] recipe;
 	public final Technology output;
 
+	public IdeaRecipe(Object[] recipe, Technology output) {
+		this.output = output;
+		this.recipe = recipe;
+	}
+
 	public IdeaRecipe(Technology output, Object... obj) {
 		this.output = output;
-
+		
 		recipe = new Object[((String) obj[0]).length()];
 
 		char[] recipe = ((String) obj[0]).toCharArray();

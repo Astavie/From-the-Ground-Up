@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ResearchRecipe {
 
-	public final Object[] recipe = new Object[9];
+	public final Object[] recipe = new Object[9];;
 	public final Technology output;
 
 	public ResearchRecipe(Technology output, Object... obj) {

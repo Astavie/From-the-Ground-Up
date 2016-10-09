@@ -330,9 +330,27 @@ public class TechnologyHandler {
 		return null;
 	}
 
+	public static IdeaRecipe getIdea(Technology tech) {
+		for (IdeaRecipe i : ideas) {
+			if (i.output == tech) {
+				return i;
+			}
+		}
+		return null;
+	}
+
 	public static ResearchRecipe getResearch(String name) {
 		for (ResearchRecipe r : researches) {
 			if (r.output.getUnlocalisedName().equalsIgnoreCase(name)) {
+				return r;
+			}
+		}
+		return null;
+	}
+
+	public static ResearchRecipe getResearch(Technology tech) {
+		for (ResearchRecipe r : researches) {
+			if (r.output == tech) {
 				return r;
 			}
 		}
