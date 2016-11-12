@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import ftgumod.Decipher.DecipherGroup;
+import ftgumod.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import ftgumod.Decipher.DecipherGroup;
 
 public class TechnologyHandler {
 
@@ -134,6 +135,8 @@ public class TechnologyHandler {
 		registerTechnology(COOKING);
 		registerTechnology(GILDED_CUISINE);
 		registerTechnology(BREWING);
+		BREWING.setCustomUnlock(true);
+
 		registerTechnology(GEM_CUTTING);
 		registerTechnology(GEM_ARMOR);
 		registerTechnology(BASIC_REDSTONE);
@@ -269,6 +272,10 @@ public class TechnologyHandler {
 		ITEM_GROUP.UNDECIPHERED.addItem(i);
 	}
 
+	public static boolean hasDecipher(ResearchRecipe r) {
+		return unlock.containsKey(r) && unlock.get(r).list.size() > 0;
+	}
+
 	public static void registerTechnology(Technology tech) {
 		technologies.add(tech);
 		List<ItemStack> l = tech.getItems();
@@ -395,7 +402,7 @@ public class TechnologyHandler {
 		}
 
 		public static PAGE get(String name) {
-			for (PAGE p: pages)
+			for (PAGE p : pages)
 				if (p.name.equals(name))
 					return p;
 			return null;
@@ -514,6 +521,10 @@ public class TechnologyHandler {
 			}
 			itm[item.length] = obj;
 			item = itm;
+		}
+
+		public void clearItems() {
+			item = new Object[0];
 		}
 
 	}

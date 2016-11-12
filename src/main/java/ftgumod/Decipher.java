@@ -1,21 +1,17 @@
 package ftgumod;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import net.minecraft.item.ItemStack;
 
 public class Decipher {
 
-	public final DecipherGroup[] unlock = new DecipherGroup[9];
+	public DecipherGroup[] unlock = new DecipherGroup[9];
 	public final List<DecipherGroup> list;
 
 	public Decipher(DecipherGroup... unlock) {
-		for (DecipherGroup d : unlock) {
-			for (int i : d.slots) {
-				this.unlock[i] = d;
-			}
-		}
-		list = Arrays.asList(unlock);
+		list = new LinkedList<DecipherGroup>(Arrays.asList(unlock));
 	}
 
 	public static class DecipherGroup {
@@ -28,6 +24,15 @@ public class Decipher {
 			this.slots = Arrays.asList(slots);
 		}
 
+	}
+
+	public void recalculateSlots() {
+		unlock = new DecipherGroup[9];
+		for (DecipherGroup d : list) {
+			for (int i : d.slots) {
+				this.unlock[i] = d;
+			}
+		}
 	}
 
 }

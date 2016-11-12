@@ -10,6 +10,7 @@ public class FTGUTweaker {
 		MineTweakerAPI.registerClass(Technology.class);
 		MineTweakerAPI.registerClass(Idea.class);
 		MineTweakerAPI.registerClass(Research.class);
+		MineTweakerAPI.registerClass(Scramble.class);
 	}
 
 }

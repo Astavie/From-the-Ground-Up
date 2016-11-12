@@ -1,6 +1,20 @@
 package ftgumod.gui.researchtable;
 
 import java.util.List;
+import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.Decipher;
+import ftgumod.Decipher.DecipherGroup;
+import ftgumod.FTGUAPI;
+import ftgumod.ResearchRecipe;
+import ftgumod.Technology;
+import ftgumod.TechnologyHandler;
+import ftgumod.TechnologyUtil;
+import ftgumod.gui.SlotSpecial;
+import ftgumod.gui.TileEntityInventory;
+import ftgumod.item.ItemLookingGlass;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -17,20 +31,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
-import ftgumod.CapabilityTechnology;
-import ftgumod.CapabilityTechnology.ITechnology;
-import ftgumod.Decipher;
-import ftgumod.Decipher.DecipherGroup;
-import ftgumod.FTGUAPI;
-import ftgumod.ResearchRecipe;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
-import ftgumod.gui.SlotSpecial;
-import ftgumod.gui.TileEntityInventory;
-import ftgumod.item.ItemLookingGlass;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.TechnologyMessage;
 
 public class ContainerResearchTable extends Container {
 
@@ -136,7 +136,7 @@ public class ContainerResearchTable extends Container {
 						recipe = null;
 					}
 
-					if (recipe != null && !player.worldObj.isRemote && TechnologyHandler.unlock.containsKey(recipe)) {
+					if (recipe != null && !player.worldObj.isRemote && TechnologyHandler.hasDecipher(recipe)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
 							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
@@ -158,7 +158,7 @@ public class ContainerResearchTable extends Container {
 					Technology tech = recipe.output;
 					EntityPlayer player = invPlayer.player;
 					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
-						if (TechnologyHandler.unlock.containsKey(recipe)) {
+						if (TechnologyHandler.hasDecipher(recipe)) {
 							if (!inventorySlots.get(glass).getHasStack()) {
 								inventorySlots.get(output).putStack(null);
 								return;

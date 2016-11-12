@@ -2,6 +2,17 @@ package ftgumod.gui.ideatable;
 
 import java.util.ArrayList;
 import java.util.List;
+import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.FTGUAPI;
+import ftgumod.IdeaRecipe;
+import ftgumod.Technology;
+import ftgumod.TechnologyHandler;
+import ftgumod.TechnologyUtil;
+import ftgumod.gui.SlotSpecial;
+import ftgumod.gui.TileEntityInventory;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.server.RequestTechMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -12,13 +23,6 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import ftgumod.FTGUAPI;
-import ftgumod.IdeaRecipe;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
-import ftgumod.gui.SlotSpecial;
-import ftgumod.gui.TileEntityInventory;
 
 public class ContainerIdeaTable extends Container {
 
@@ -52,6 +56,7 @@ public class ContainerIdeaTable extends Container {
 		}
 
 		onCraftMatrixChanged(tileEntity);
+		ITechnology cap = invPlayer.player.getCapability(CapabilityTechnology.TECH_CAP, null);
 	}
 
 	protected int addSlots(TileEntityInventory tileEntity) {

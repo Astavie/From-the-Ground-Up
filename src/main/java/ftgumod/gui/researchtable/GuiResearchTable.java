@@ -2,15 +2,6 @@ package ftgumod.gui.researchtable;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;
@@ -21,6 +12,15 @@ import ftgumod.gui.TileEntityInventory;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 
 public class GuiResearchTable extends GuiContainer {
 
@@ -52,7 +52,7 @@ public class GuiResearchTable extends GuiContainer {
 					List<String> text = new ArrayList<String>();
 
 					String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
-					if (TechnologyHandler.unlock.containsKey(table.recipe)) {
+					if (TechnologyHandler.hasDecipher(table.recipe)) {
 						Decipher d = TechnologyHandler.unlock.get(table.recipe);
 						DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
 						if (g != null) {

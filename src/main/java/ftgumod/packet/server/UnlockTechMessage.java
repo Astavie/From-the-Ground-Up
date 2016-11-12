@@ -35,6 +35,7 @@ public class UnlockTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
+			player = ctx.getServerHandler().playerEntity;
 			if (player != null && player.capabilities.isCreativeMode) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				Technology t = TechnologyHandler.getTechnology(message.tech);

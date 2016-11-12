@@ -1,5 +1,22 @@
 package ftgumod;
 
+import ftgumod.CapabilityTechnology.DefaultImpl;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.CapabilityTechnology.Storage;
+import ftgumod.TechnologyHandler.ITEM_GROUP;
+import ftgumod.block.BlockIdeaTable;
+import ftgumod.block.BlockResearchTable;
+import ftgumod.gui.GuiHandler;
+import ftgumod.gui.ideatable.TileEntityIdeaTable;
+import ftgumod.gui.researchtable.TileEntityResearchTable;
+import ftgumod.item.ItemLookingGlass;
+import ftgumod.item.ItemParchmentEmpty;
+import ftgumod.item.ItemParchmentIdea;
+import ftgumod.item.ItemParchmentResearch;
+import ftgumod.item.ItemResearchBook;
+import ftgumod.minetweaker.FTGUTweaker;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.proxy.ProxyCommon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -20,22 +37,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import ftgumod.CapabilityTechnology.DefaultImpl;
-import ftgumod.CapabilityTechnology.ITechnology;
-import ftgumod.CapabilityTechnology.Storage;
-import ftgumod.block.BlockIdeaTable;
-import ftgumod.block.BlockResearchTable;
-import ftgumod.gui.GuiHandler;
-import ftgumod.gui.ideatable.TileEntityIdeaTable;
-import ftgumod.gui.researchtable.TileEntityResearchTable;
-import ftgumod.item.ItemLookingGlass;
-import ftgumod.item.ItemParchmentEmpty;
-import ftgumod.item.ItemParchmentIdea;
-import ftgumod.item.ItemParchmentResearch;
-import ftgumod.item.ItemResearchBook;
-import ftgumod.minetweaker.FTGUTweaker;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.proxy.ProxyCommon;
 
 @Mod(modid = FTGU.MODID, version = FTGU.VERSION)
 public class FTGU {
