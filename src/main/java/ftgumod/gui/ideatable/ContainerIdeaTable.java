@@ -56,7 +56,6 @@ public class ContainerIdeaTable extends Container {
 		}
 
 		onCraftMatrixChanged(tileEntity);
-		ITechnology cap = invPlayer.player.getCapability(CapabilityTechnology.TECH_CAP, null);
 	}
 
 	protected int addSlots(TileEntityInventory tileEntity) {
