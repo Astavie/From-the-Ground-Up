@@ -9,4 +9,7 @@ public class ProxyCommon {
 		return ctx.getServerHandler().playerEntity;
 	}
 
+	public void registerRenderers() {
+	}
+
 }

@@ -28,7 +28,7 @@ import ftgumod.gui.ideatable.TileEntityIdeaTable;
 public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	
+
 	private String name;
 
 	public BlockIdeaTable(String name) {

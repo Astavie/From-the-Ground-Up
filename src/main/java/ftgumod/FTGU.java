@@ -3,27 +3,19 @@ package ftgumod;
 import ftgumod.CapabilityTechnology.DefaultImpl;
 import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.CapabilityTechnology.Storage;
-import ftgumod.TechnologyHandler.ITEM_GROUP;
-import ftgumod.block.BlockIdeaTable;
-import ftgumod.block.BlockResearchTable;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
 import ftgumod.gui.researchtable.TileEntityResearchTable;
-import ftgumod.item.ItemLookingGlass;
-import ftgumod.item.ItemParchmentEmpty;
-import ftgumod.item.ItemParchmentIdea;
-import ftgumod.item.ItemParchmentResearch;
-import ftgumod.item.ItemResearchBook;
 import ftgumod.minetweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
@@ -36,7 +28,6 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
 @Mod(modid = FTGU.MODID, version = FTGU.VERSION)
 public class FTGU {
@@ -53,28 +44,31 @@ public class FTGU {
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon proxy;
 
+	private void registerItem(Item item, String name) {
+		item.setRegistryName(name);
+		GameRegistry.register(item);
+	}
+
+	private void registerBlock(Block block, ItemBlock item, String name) {
+		block.setRegistryName(name);
+		GameRegistry.register(block);
+
+		registerItem(item, name);
+	}
+
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		GameRegistry.registerTileEntity(TileEntityIdeaTable.class, FTGUAPI.n_ideaTable);
 		GameRegistry.registerTileEntity(TileEntityResearchTable.class, FTGUAPI.n_researchTable);
 
-		FTGUAPI.b_ideaTable = new BlockIdeaTable(FTGUAPI.n_ideaTable);
-		FTGUAPI.b_researchTable = new BlockResearchTable(FTGUAPI.n_researchTable);
+		registerBlock(FTGUAPI.b_ideaTable, FTGUAPI.i_ideaTable, FTGUAPI.n_ideaTable);
+		registerBlock(FTGUAPI.b_researchTable, FTGUAPI.i_researchTable, FTGUAPI.n_researchTable);
 
-		FTGUAPI.i_parchmentEmpty = new ItemParchmentEmpty(FTGUAPI.n_parchmentEmpty);
-		FTGUAPI.i_parchmentIdea = new ItemParchmentIdea(FTGUAPI.n_parchmentIdea);
-		FTGUAPI.i_parchmentResearch = new ItemParchmentResearch(FTGUAPI.n_parchmentResearch);
-		FTGUAPI.i_researchBook = new ItemResearchBook(FTGUAPI.n_researchBook);
-		FTGUAPI.i_lookingGlass = new ItemLookingGlass(FTGUAPI.n_lookingGlass);
-
-		GameRegistry.registerBlock(FTGUAPI.b_ideaTable, FTGUAPI.n_ideaTable);
-		GameRegistry.registerBlock(FTGUAPI.b_researchTable, FTGUAPI.n_researchTable);
-
-		GameRegistry.registerItem(FTGUAPI.i_parchmentEmpty, FTGUAPI.n_parchmentEmpty);
-		GameRegistry.registerItem(FTGUAPI.i_parchmentIdea, FTGUAPI.n_parchmentIdea);
-		GameRegistry.registerItem(FTGUAPI.i_parchmentResearch, FTGUAPI.n_parchmentResearch);
-		GameRegistry.registerItem(FTGUAPI.i_researchBook, FTGUAPI.n_researchBook);
-		GameRegistry.registerItem(FTGUAPI.i_lookingGlass, FTGUAPI.n_lookingGlass);
+		registerItem(FTGUAPI.i_parchmentEmpty, FTGUAPI.n_parchmentEmpty);
+		registerItem(FTGUAPI.i_parchmentIdea, FTGUAPI.n_parchmentIdea);
+		registerItem(FTGUAPI.i_parchmentResearch, FTGUAPI.n_parchmentResearch);
+		registerItem(FTGUAPI.i_researchBook, FTGUAPI.n_researchBook);
+		registerItem(FTGUAPI.i_lookingGlass, FTGUAPI.n_lookingGlass);
 
 		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl.class);
 
@@ -121,18 +115,7 @@ public class FTGU {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
 
-		if (event.getSide() == Side.CLIENT) {
-			RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-
-			renderItem.getItemModelMesher().register(Item.getItemFromBlock(FTGUAPI.b_ideaTable), 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_ideaTable, "inventory"));
-			renderItem.getItemModelMesher().register(Item.getItemFromBlock(FTGUAPI.b_researchTable), 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_researchTable, "inventory"));
-
-			renderItem.getItemModelMesher().register(FTGUAPI.i_parchmentEmpty, 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_parchmentEmpty, "inventory"));
-			renderItem.getItemModelMesher().register(FTGUAPI.i_parchmentIdea, 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_parchmentIdea, "inventory"));
-			renderItem.getItemModelMesher().register(FTGUAPI.i_parchmentResearch, 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_parchmentResearch, "inventory"));
-			renderItem.getItemModelMesher().register(FTGUAPI.i_researchBook, 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_researchBook, "inventory"));
-			renderItem.getItemModelMesher().register(FTGUAPI.i_lookingGlass, 0, new ModelResourceLocation(MODID + ":" + FTGUAPI.n_lookingGlass, "inventory"));
-		}
+		proxy.registerRenderers();
 
 		TechnologyHandler.init();
 

@@ -12,7 +12,6 @@ public class BaseList<T> implements IBaseInterface<T> {
 
 	@Override
 	public boolean add(T recipe) {
-		System.out.println(list + ", okay here!");
 		return list.add(recipe);
 	}
 
