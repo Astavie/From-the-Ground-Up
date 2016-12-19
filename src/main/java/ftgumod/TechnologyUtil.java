@@ -3,13 +3,13 @@ package ftgumod;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import ftgumod.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-import ftgumod.TechnologyHandler.ITEM_GROUP;
 
 public class TechnologyUtil {
 
@@ -28,6 +28,8 @@ public class TechnologyUtil {
 		} else if (obj instanceof String) {
 			List<ItemStack> item = OreDictionary.getOres((String) obj);
 			for (ItemStack s : item) {
+				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem())
+					return true;
 				if (ItemStack.areItemStacksEqual(stack, s)) {
 					return true;
 				}

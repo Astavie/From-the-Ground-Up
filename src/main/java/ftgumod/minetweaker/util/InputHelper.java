@@ -1,29 +1,25 @@
 package ftgumod.minetweaker.util;
 
+import java.util.ArrayList;
+import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.MineTweakerAPI;
-import minetweaker.api.entity.IEntity;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.liquid.ILiquidStack;
 import minetweaker.api.oredict.IOreDictEntry;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import ftgumod.FTGU;
-import ftgumod.minetweaker.FTGUTweaker;
 
 public class InputHelper {
 
 	public static boolean isABlock(ItemStack block) {
 		return block.getItem() instanceof ItemBlock;
 	}
-	
+
 	public static ItemStack getStack(IItemStack iStack) {
 		if (iStack == null) {
 			return null;
@@ -36,7 +32,7 @@ public class InputHelper {
 			return (ItemStack) internal;
 		}
 	}
-	
+
 	public static Object toStack(IItemStack iStack) {
 		if (iStack == null) {
 			return null;
@@ -80,7 +76,6 @@ public class InputHelper {
 				} else
 					output[i] = "";
 			}
-
 			return output;
 		}
 	}

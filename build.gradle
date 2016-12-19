@@ -47,11 +47,10 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}:api"
-    runtime "mezz.jei:jei_${mc_version}:${jei_version}"
-    
-    deobfCompile "MineTweaker3:MineTweaker3-API:${crafttweaker_version}"
-    runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:${mc_version}-${crafttweaker_version}"
+    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
+    deobfCompile "slimeknights.mantle:Mantle:${mc_version}-${mantle_version}"
+    deobfCompile "slimeknights:TConstruct:${mc_version}-${tc_version}"
+    deobfCompile "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:${mc_version}-${crafttweaker_version}"
 }
 
 processResources
