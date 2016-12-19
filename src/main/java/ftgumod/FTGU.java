@@ -1,8 +1,12 @@
 package ftgumod;
 
+import java.util.HashMap;
+import java.util.Map;
 import ftgumod.CapabilityTechnology.DefaultImpl;
 import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.CapabilityTechnology.Storage;
+import ftgumod.compat.CompatTC;
+import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
 import ftgumod.gui.researchtable.TileEntityResearchTable;
@@ -37,6 +41,8 @@ public class FTGU {
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
 
+	public final Map<String, ICompat> compat = new HashMap<String, ICompat>();
+
 	@Instance(value = FTGU.MODID)
 	public static FTGU instance;
 
@@ -53,6 +59,12 @@ public class FTGU {
 		GameRegistry.register(block);
 
 		registerItem(item, name);
+	}
+
+	public void runCompat(String name, Object... arg) {
+		ICompat compat = this.compat.get(name);
+		if (compat != null)
+			compat.run(arg);
 	}
 
 	@Mod.EventHandler
@@ -127,13 +139,14 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		if (Loader.isModLoaded("MineTweaker3")) {
+		if (Loader.isModLoaded("MineTweaker3"))
 			try {
 				FTGUTweaker.class.newInstance();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
+		if (Loader.isModLoaded("tconstruct"))
+			compat.put("tconstruct", new CompatTC());
 	}
 
 }

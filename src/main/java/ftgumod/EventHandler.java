@@ -26,6 +26,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
@@ -197,7 +199,13 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent evt) {
 		if (!evt.player.worldObj.isRemote) {
-			((ContainerPlayer) evt.player.openContainer).craftResult = new FTGUCraftResult(evt.player);
+			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
+
+			// SLOT
+			Slot slot = inv.inventorySlots.get(0);
+			inv.craftResult = new FTGUCraftResult(evt.player);
+			inv.inventorySlots.set(0, new SlotCrafting(evt.player, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+
 			ticks.remove(evt.player.getUniqueID());
 		}
 
@@ -220,7 +228,13 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone evt) {
 		if (!evt.getEntity().worldObj.isRemote) {
-			((ContainerPlayer) evt.getEntityPlayer().openContainer).craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
+
+			// SLOT
+			Slot slot = inv.inventorySlots.get(0);
+			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+
 			ticks.remove(evt.getOriginal().getUniqueID());
 		}
 	}
@@ -228,22 +242,49 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
 		Container work = evt.getEntityPlayer().openContainer;
-		if (work instanceof ContainerWorkbench)
-			((ContainerWorkbench) work).craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+		if (work instanceof ContainerWorkbench) {
+			ContainerWorkbench inv = (ContainerWorkbench) evt.getEntityPlayer().openContainer;
+
+			// SLOT
+			Slot slot = inv.inventorySlots.get(0);
+			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+		} else
+			FTGU.instance.runCompat("tconstruct", work, evt.getEntityPlayer());
 	}
 
 	@SubscribeEvent
 	public void onPlayerCloseContainer(PlayerContainerEvent.Close evt) {
-		((ContainerPlayer) evt.getEntityPlayer().openContainer).craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+		if (evt.getEntityPlayer().openContainer instanceof ContainerPlayer) {
+			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
+
+			// SLOT
+			Slot slot = inv.inventorySlots.get(0);
+			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerOpenGui(GuiOpenEvent evt) {
 		Gui work = evt.getGui();
-		if (work instanceof GuiCrafting)
-			((ContainerWorkbench) ((GuiContainer) work).inventorySlots).craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
-		else if (work instanceof GuiInventory)
-			((ContainerPlayer) ((GuiInventory) work).inventorySlots).craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
+		if (work instanceof GuiContainer)
+			if (work instanceof GuiCrafting) {
+				ContainerWorkbench inv = (ContainerWorkbench) ((GuiCrafting) evt.getGui()).inventorySlots;
+
+				// SLOT
+				Slot slot = inv.inventorySlots.get(0);
+				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
+				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().thePlayer, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			} else if (work instanceof GuiInventory) {
+				ContainerPlayer inv = (ContainerPlayer) ((GuiInventory) evt.getGui()).inventorySlots;
+
+				// SLOT
+				Slot slot = inv.inventorySlots.get(0);
+				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
+				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().thePlayer, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			} else
+				FTGU.instance.runCompat("tconstruct", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().thePlayer);
 	}
 
 	@SubscribeEvent
