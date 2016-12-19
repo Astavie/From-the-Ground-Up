@@ -11,8 +11,6 @@ public class CompatTC implements ICompat {
 	@Override
 	public void run(Object... arg) {
 		if (arg[0] instanceof ContainerCraftingStation && arg[1] instanceof EntityPlayer) {
-			System.out.println("I AM HERE");
-
 			ContainerCraftingStation inv = (ContainerCraftingStation) arg[0];
 			EntityPlayer player = (EntityPlayer) arg[1];
 
