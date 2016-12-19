@@ -5,13 +5,26 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.lwjgl.input.Keyboard;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.event.PlayerInspectEvent;
+import ftgumod.item.ItemParchmentResearch;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.workbench.FTGUCraftResult;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.inventory.GuiCrafting;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +37,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -34,14 +48,6 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import org.lwjgl.input.Keyboard;
-import ftgumod.CapabilityTechnology.ITechnology;
-import ftgumod.TechnologyHandler.GUI;
-import ftgumod.event.PlayerInspectEvent;
-import ftgumod.item.ItemParchmentResearch;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.workbench.ContainerWorkbenchTech;
 
 public class EventHandler {
 
@@ -140,12 +146,6 @@ public class EventHandler {
 	}
 
 	@SubscribeEvent
-	public void onPlayerClone(PlayerEvent.Clone evt) {
-		if (!evt.getOriginal().worldObj.isRemote)
-			ticks.remove(evt.getOriginal().getUniqueID());
-	}
-
-	@SubscribeEvent
 	public void onItemTooltip(ItemTooltipEvent evt) {
 		Item item = evt.getItemStack().getItem();
 		if (item == FTGUAPI.i_lookingGlass) {
@@ -163,7 +163,7 @@ public class EventHandler {
 			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			
+
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
 				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
@@ -171,7 +171,7 @@ public class EventHandler {
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
-			
+
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
 				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
@@ -196,8 +196,10 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent evt) {
-		if (!evt.player.worldObj.isRemote)
+		if (!evt.player.worldObj.isRemote) {
+			((ContainerPlayer) evt.player.openContainer).craftResult = new FTGUCraftResult(evt.player);
 			ticks.remove(evt.player.getUniqueID());
+		}
 
 		List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalisedName(), TechnologyHandler.STONEWORKING.getUnlocalisedName(), TechnologyHandler.CARPENTRY.getUnlocalisedName(), TechnologyHandler.REFINEMENT.getUnlocalisedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalisedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalisedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalisedName(), TechnologyHandler.COOKING.getUnlocalisedName());
 		ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
@@ -216,11 +218,32 @@ public class EventHandler {
 	}
 
 	@SubscribeEvent
+	public void onPlayerClone(PlayerEvent.Clone evt) {
+		if (!evt.getEntity().worldObj.isRemote) {
+			((ContainerPlayer) evt.getEntityPlayer().openContainer).craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+			ticks.remove(evt.getOriginal().getUniqueID());
+		}
+	}
+
+	@SubscribeEvent
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
 		Container work = evt.getEntityPlayer().openContainer;
-		if (work instanceof ContainerWorkbench && !(work instanceof ContainerWorkbenchTech)) {
-			evt.getEntityPlayer().openGui(FTGU.instance, GUI.CRAFTINGTABLETECH.ordinal(), evt.getEntity().worldObj, 0, 0, 0);
-		}
+		if (work instanceof ContainerWorkbench)
+			((ContainerWorkbench) work).craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+	}
+
+	@SubscribeEvent
+	public void onPlayerCloseContainer(PlayerContainerEvent.Close evt) {
+		((ContainerPlayer) evt.getEntityPlayer().openContainer).craftResult = new FTGUCraftResult(evt.getEntityPlayer());
+	}
+
+	@SubscribeEvent
+	public void onPlayerOpenGui(GuiOpenEvent evt) {
+		Gui work = evt.getGui();
+		if (work instanceof GuiCrafting)
+			((ContainerWorkbench) ((GuiContainer) work).inventorySlots).craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
+		else if (work instanceof GuiInventory)
+			((ContainerPlayer) ((GuiInventory) work).inventorySlots).craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
 	}
 
 	@SubscribeEvent

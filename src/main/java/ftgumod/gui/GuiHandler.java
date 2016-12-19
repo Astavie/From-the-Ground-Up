@@ -1,17 +1,15 @@
 package ftgumod.gui;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.IGuiHandler;
 import ftgumod.TechnologyHandler.GUI;
 import ftgumod.gui.ideatable.ContainerIdeaTable;
 import ftgumod.gui.ideatable.GuiIdeaTable;
 import ftgumod.gui.researchtable.ContainerResearchTable;
 import ftgumod.gui.researchtable.GuiResearchTable;
-import ftgumod.workbench.ContainerWorkbenchTech;
-import ftgumod.workbench.GuiWorkbenchTech;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -25,8 +23,6 @@ public class GuiHandler implements IGuiHandler {
 			} else if (ID == GUI.RESEARCHTABLE.ordinal()) {
 				return new ContainerResearchTable((TileEntityInventory) tileEntity, player.inventory);
 			}
-		} else if (ID == GUI.CRAFTINGTABLETECH.ordinal()) {
-			return new ContainerWorkbenchTech(player.inventory, world, new BlockPos(x, y, z));
 		}
 
 		return null;
@@ -42,8 +38,6 @@ public class GuiHandler implements IGuiHandler {
 			} else if (ID == GUI.RESEARCHTABLE.ordinal()) {
 				return new GuiResearchTable(player.inventory, (TileEntityInventory) tileEntity);
 			}
-		} else if (ID == GUI.CRAFTINGTABLETECH.ordinal()) {
-			return new GuiWorkbenchTech(player.inventory, world, new BlockPos(x, y, z));
 		}
 
 		return null;

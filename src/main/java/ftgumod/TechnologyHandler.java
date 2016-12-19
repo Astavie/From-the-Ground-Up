@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import ftgumod.Decipher.DecipherGroup;
-import ftgumod.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -14,7 +13,7 @@ import net.minecraft.item.ItemStack;
 public class TechnologyHandler {
 
 	public enum GUI {
-		IDEATABLE, RESEARCHTABLE, CRAFTINGTABLETECH;
+		IDEATABLE, RESEARCHTABLE;
 	}
 
 	public static int minX = 0;
@@ -374,6 +373,8 @@ public class TechnologyHandler {
 	}
 
 	public static Technology getLocked(ItemStack item) {
+		if (item == null)
+			return null;
 		for (Technology t : locked.keySet()) {
 			List l = locked.get(t);
 			for (Object o : l)
