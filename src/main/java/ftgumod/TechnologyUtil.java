@@ -6,6 +6,7 @@ import java.util.List;
 import ftgumod.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -30,9 +31,8 @@ public class TechnologyUtil {
 			for (ItemStack s : item) {
 				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem())
 					return true;
-				if (ItemStack.areItemStacksEqual(stack, s)) {
+				if (ItemStack.areItemStacksEqual(stack, s))
 					return true;
-				}
 			}
 		} else if (obj instanceof ITEM_GROUP) {
 			return ((ITEM_GROUP) obj).contains(stack);
@@ -139,9 +139,17 @@ public class TechnologyUtil {
 
 		if (obj instanceof ItemStack)
 			item.add((ItemStack) obj);
-		else if (obj instanceof String)
-			item.addAll(OreDictionary.getOres((String) obj));
-		else if (obj instanceof Item || obj instanceof Block)
+		else if (obj instanceof String) {
+			List<ItemStack> ore = OreDictionary.getOres((String) obj);
+			for (ItemStack s : ore)
+				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
+					if (s.getItem() instanceof ItemBlock)
+						item.addAll(getItems(((ItemBlock) s.getItem()).block));
+					else
+						item.addAll(getItems(s.getItem()));
+				else
+					item.add(s);
+		} else if (obj instanceof Item || obj instanceof Block)
 			item.addAll(getItems(obj));
 		else if (obj instanceof ITEM_GROUP)
 			item.addAll(((ITEM_GROUP) obj).toItems());

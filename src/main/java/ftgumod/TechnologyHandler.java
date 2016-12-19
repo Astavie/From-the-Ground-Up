@@ -135,7 +135,6 @@ public class TechnologyHandler {
 		registerTechnology(COOKING);
 		registerTechnology(GILDED_CUISINE);
 		registerTechnology(BREWING);
-		BREWING.setCustomUnlock(true);
 
 		registerTechnology(GEM_CUTTING);
 		registerTechnology(GEM_ARMOR);
