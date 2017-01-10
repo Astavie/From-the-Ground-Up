@@ -1,19 +1,20 @@
 package ftgumod.packet;
 
+import ftgumod.packet.client.ClientMessageHandler;
+import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.packet.client.TechnologyMessage.TechnologyMessageHandler;
+import ftgumod.packet.server.CopyTechMessage;
+import ftgumod.packet.server.CopyTechMessage.CopyTechMessageHandler;
+import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.packet.server.RequestTechMessage.RequestTechMessageHandler;
+import ftgumod.packet.server.UnlockTechMessage;
+import ftgumod.packet.server.UnlockTechMessage.UnlockTechMessageHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
-import ftgumod.packet.client.ClientMessageHandler;
-import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.packet.client.TechnologyMessage.TechnologyMessageHandler;
-import ftgumod.packet.server.RequestTechMessage;
-import ftgumod.packet.server.UnlockTechMessage;
-import ftgumod.packet.server.RequestTechMessage.RequestTechMessageHandler;
-import ftgumod.packet.server.UnlockTechMessage.UnlockTechMessageHandler;
 
 public class PacketDispatcher {
 
@@ -25,6 +26,7 @@ public class PacketDispatcher {
 		dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel("ftgu");
 		PacketDispatcher.registerMessage(RequestTechMessageHandler.class, RequestTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(UnlockTechMessageHandler.class, UnlockTechMessage.class, Side.SERVER);
+		PacketDispatcher.registerMessage(CopyTechMessageHandler.class, CopyTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);
 	}
 

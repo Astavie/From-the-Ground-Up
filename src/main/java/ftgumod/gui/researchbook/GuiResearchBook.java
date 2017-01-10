@@ -1,8 +1,22 @@
 package ftgumod.gui.researchbook;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.input.Mouse;
+import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.FTGUAPI;
+import ftgumod.Technology;
+import ftgumod.TechnologyHandler;
+import ftgumod.TechnologyUtil;
+import ftgumod.TechnologyHandler.PAGE;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.server.CopyTechMessage;
+import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.packet.server.UnlockTechMessage;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -11,22 +25,18 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.input.Mouse;
-import ftgumod.CapabilityTechnology;
-import ftgumod.CapabilityTechnology.ITechnology;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyHandler.PAGE;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.server.RequestTechMessage;
-import ftgumod.packet.server.UnlockTechMessage;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class GuiResearchBook extends GuiScreen {
 
@@ -78,10 +88,21 @@ public class GuiResearchBook extends GuiScreen {
 
 		buttonList.clear();
 		if (state == 0) {
+			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, name);
+			if (PAGE.size() < 2)
+				page.enabled = false;
+
 			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
-			buttonList.add(new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, name));
+			buttonList.add(page);
 		} else {
+			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy", new Object[0]));
+			copy.enabled = false;
+			for (int i = 0; i < player.inventory.getSizeInventory(); i++)
+				if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+					copy.enabled = true;
+
 			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
+			buttonList.add(copy);
 			selected = null;
 			scroll = 1;
 		}
@@ -97,12 +118,15 @@ public class GuiResearchBook extends GuiScreen {
 				state = 0;
 				initGui();
 			}
-		}
-		if (button.id == 2) {
-			currentPage++;
-			if (currentPage >= PAGE.size())
-				currentPage = 0;
-			button.displayString = PAGE.get(currentPage).name;
+		} else if (button.id == 2) {
+			if (state == 0) {
+				currentPage++;
+				if (currentPage >= PAGE.size())
+					currentPage = 0;
+				button.displayString = PAGE.get(currentPage).name;
+			} else {
+				PacketDispatcher.sendToServer(new CopyTechMessage(state));
+			}
 		}
 	}
 
@@ -190,6 +214,7 @@ public class GuiResearchBook extends GuiScreen {
 			PacketDispatcher.sendToServer(new UnlockTechMessage(selected.getID()));
 		if (b == 0 && selected != null && selected.isResearched(player)) {
 			state = selected.getID();
+			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			initGui();
 		}
 		super.mouseClicked(x, y, b);
@@ -205,8 +230,8 @@ public class GuiResearchBook extends GuiScreen {
 			xScrollP += d0;
 			yScrollP += d1;
 		} else {
-			xScrollP += d0 * 0.84999999999999998D;
-			yScrollP += d1 * 0.84999999999999998D;
+			xScrollP += d0 * 0.85D;
+			yScrollP += d1 * 0.85D;
 		}
 	}
 
@@ -366,7 +391,26 @@ public class GuiResearchBook extends GuiScreen {
 			}
 		} else {
 			Technology tech = TechnologyHandler.getTechnology(state);
-			List<ItemStack> unlock = TechnologyHandler.locked.get(tech);
+			List<ItemStack> list = TechnologyHandler.locked.get(tech);
+
+			List<ItemStack> unlock = new ArrayList<ItemStack>();
+			for (ItemStack s : list)
+				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
+					for (CreativeTabs tab : s.getItem().getCreativeTabs())
+						s.getItem().getSubItems(s.getItem(), tab, unlock);
+				else
+					unlock.add(s);
+			
+			for (int q = unlock.size() - 1; q >= 0; q--) {
+				ItemStack stack = unlock.get(q);
+				boolean remove = true;
+				for (IRecipe r : CraftingManager.getInstance().getRecipeList())
+					if (r != null && r.getRecipeOutput() != null && TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
+						remove = false;
+				if (remove)
+					unlock.remove(q);
+			}
+
 			int num = 4;
 			pages = (int) Math.max(Math.ceil(((double) unlock.size()) / num), 1);
 
@@ -467,7 +511,7 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public boolean doesGuiPauseGame() {
-		return true;
+		return false;
 	}
 
 }

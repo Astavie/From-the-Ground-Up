@@ -1,12 +1,10 @@
 package ftgumod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import ftgumod.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -25,15 +23,12 @@ public class TechnologyUtil {
 
 		stack.stackSize = 1;
 		if (obj instanceof ItemStack) {
-			return ItemStack.areItemStacksEqual((ItemStack) obj, stack);
+			return (((ItemStack) obj).getMetadata() == OreDictionary.WILDCARD_VALUE && ((ItemStack) obj).getItem() == stack.getItem() || ItemStack.areItemStacksEqual((ItemStack) obj, stack));
 		} else if (obj instanceof String) {
 			List<ItemStack> item = OreDictionary.getOres((String) obj);
-			for (ItemStack s : item) {
-				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem())
+			for (ItemStack s : item)
+				if ((s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(stack, s))
 					return true;
-				if (ItemStack.areItemStacksEqual(stack, s))
-					return true;
-			}
 		} else if (obj instanceof ITEM_GROUP) {
 			return ((ITEM_GROUP) obj).contains(stack);
 		} else if (obj instanceof Item) {
@@ -97,41 +92,6 @@ public class TechnologyUtil {
 		return "";
 	}
 
-	private static List<ItemStack> getSubItems(Item i) {
-		if (!i.getHasSubtypes())
-			return Arrays.asList(new ItemStack(i));
-		else {
-			List<ItemStack> l = new ArrayList<ItemStack>();
-			for (int j = 0; j < i.getMaxDamage(); j++) {
-				l.add(new ItemStack(i, 1, j));
-			}
-			return l;
-		}
-	}
-
-	private static List<ItemStack> getSubBlocks(Block b) {
-		Item i = Item.getItemFromBlock(b);
-		if (i == null || !i.getHasSubtypes())
-			return Arrays.asList(new ItemStack(b));
-		else {
-			List<ItemStack> l = new ArrayList<ItemStack>();
-			for (int j = 0; j < 16; j++) {
-				l.add(new ItemStack(b, 1, j));
-			}
-			return l;
-		}
-	}
-
-	private static List<ItemStack> getItems(Object o) {
-		List<ItemStack> item = new ArrayList<ItemStack>();
-		if (o instanceof Item) {
-			item.addAll(getSubItems((Item) o));
-		} else if (o instanceof Block) {
-			item.addAll(getSubBlocks((Block) o));
-		}
-		return item;
-	}
-
 	public static List<ItemStack> toItems(Object obj) {
 		List<ItemStack> item = new ArrayList<ItemStack>();
 		if (obj == null)
@@ -142,15 +102,11 @@ public class TechnologyUtil {
 		else if (obj instanceof String) {
 			List<ItemStack> ore = OreDictionary.getOres((String) obj);
 			for (ItemStack s : ore)
-				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
-					if (s.getItem() instanceof ItemBlock)
-						item.addAll(getItems(((ItemBlock) s.getItem()).block));
-					else
-						item.addAll(getItems(s.getItem()));
-				else
-					item.add(s);
-		} else if (obj instanceof Item || obj instanceof Block)
-			item.addAll(getItems(obj));
+				item.add(s);
+		} else if (obj instanceof Item)
+			item.add(new ItemStack((Item) obj, 1, OreDictionary.WILDCARD_VALUE));
+		else if (obj instanceof Block)
+			item.add(new ItemStack((Block) obj, 1, OreDictionary.WILDCARD_VALUE));
 		else if (obj instanceof ITEM_GROUP)
 			item.addAll(((ITEM_GROUP) obj).toItems());
 

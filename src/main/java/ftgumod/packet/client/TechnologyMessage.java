@@ -1,14 +1,15 @@
 package ftgumod.packet.client;
 
-import io.netty.buffer.ByteBuf;
 import java.util.ArrayList;
 import java.util.List;
+import ftgumod.CapabilityTechnology;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.TechnologyHandler;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import ftgumod.CapabilityTechnology;
-import ftgumod.TechnologyHandler;
-import ftgumod.CapabilityTechnology.ITechnology;
 
 public class TechnologyMessage implements IMessage {
 
@@ -62,15 +63,14 @@ public class TechnologyMessage implements IMessage {
 
 		@Override
 		public IMessage handleClientMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
-			if (player != null) {
-				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				cap.clear();
-				for (Integer i : message.tech) {
-					if (i < 0)
-						cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalisedName() + ".unlock");
-					else
-						cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalisedName());
-				}
+			player = Minecraft.getMinecraft().thePlayer;
+			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+			cap.clear();
+			for (Integer i : message.tech) {
+				if (i < 0)
+					cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalisedName() + ".unlock");
+				else
+					cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalisedName());
 			}
 			return null;
 		}

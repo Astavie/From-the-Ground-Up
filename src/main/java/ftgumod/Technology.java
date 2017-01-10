@@ -3,13 +3,13 @@ package ftgumod;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
+import ftgumod.CapabilityTechnology.ITechnology;
+import ftgumod.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.text.translation.I18n;
-import ftgumod.CapabilityTechnology.ITechnology;
-import ftgumod.TechnologyHandler.PAGE;
 
 public class Technology {
 
@@ -25,6 +25,8 @@ public class Technology {
 	public Technology prev;
 	public Technology[] secret;
 	public PAGE page;
+
+	public final int level;
 
 	private boolean customUnlock = false;
 
@@ -76,18 +78,14 @@ public class Technology {
 		this.secret = secret;
 		this.hide = hide;
 
+		if (prev == null)
+			level = 1;
+		else
+			level = prev.level + 1;
+
 		List<ItemStack> o = new ArrayList<ItemStack>();
 		for (int i = 0; i < item.length; i++) {
 			o.addAll(TechnologyUtil.toItems(TechnologyUtil.toItem(item[i])));
-		}
-		for (int j = o.size() - 1; j >= 0; j--) {
-			ItemStack stack = o.get(j);
-			boolean remove = true;
-			for (IRecipe r : CraftingManager.getInstance().getRecipeList())
-				if (r != null && r.getRecipeOutput() != null && r.getRecipeOutput().isItemEqual(stack))
-					remove = false;
-			if (remove)
-				o.remove(j);
 		}
 		this.item = new ItemStack[o.size()];
 		for (int j = 0; j < this.item.length; j++) {

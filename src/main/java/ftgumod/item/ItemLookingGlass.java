@@ -22,6 +22,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.input.Keyboard;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
@@ -60,7 +61,7 @@ public class ItemLookingGlass extends Item {
 				if (r.output.canResearch(player))
 					for (DecipherGroup g : d.list)
 						for (ItemStack s : g.unlock)
-							if (ItemStack.areItemStacksEqual(s, stack))
+							if ((s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
 								need = true;
 			}
 

@@ -14,6 +14,8 @@ item.research_book.name=Research Book
 item.looking_glass.name=Looking Glass
 item.looking_glass.shift=Press Shift for more information
 
+gui.copy=Copy
+
 technology.idea=Idea
 technology.research=Research
 
