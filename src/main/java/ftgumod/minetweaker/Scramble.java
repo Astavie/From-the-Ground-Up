@@ -1,6 +1,6 @@
 package ftgumod.minetweaker;
 
-import java.util.List;
+import java.util.Collection;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
@@ -8,9 +8,9 @@ import ftgumod.ResearchRecipe;
 import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyHandler.ITEM_GROUP;
 import ftgumod.TechnologyUtil;
+import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
-import ftgumod.minetweaker.util.BaseList;
 import ftgumod.minetweaker.util.InputHelper;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
@@ -46,7 +46,7 @@ public class Scramble {
 		private final ResearchRecipe key;
 
 		protected Add(ResearchRecipe key, DecipherGroup group) {
-			super(name, group, new BaseList(TechnologyHandler.unlock.get(key).list));
+			super(name, group, new BaseCollection(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
 
@@ -101,8 +101,8 @@ public class Scramble {
 
 		private final ResearchRecipe key;
 
-		protected Remove(ResearchRecipe key, List<DecipherGroup> group) {
-			super(name, group, new BaseList(TechnologyHandler.unlock.get(key).list));
+		protected Remove(ResearchRecipe key, Collection<DecipherGroup> group) {
+			super(name, group, new BaseCollection(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
 

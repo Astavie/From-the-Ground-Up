@@ -31,7 +31,7 @@ compileJava {
 minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -47,6 +47,11 @@ repositories {
 }
 
 dependencies {
+    compile files(
+        'lib/ImmersiveEngineering-deobf.jar',
+        'lib/BetterWithMods-deobf.jar'
+    )
+
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
     deobfCompile "slimeknights.mantle:Mantle:${mc_version}-${mantle_version}"
     deobfCompile "slimeknights:TConstruct:${mc_version}-${tc_version}"
@@ -62,11 +67,11 @@ processResources
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
+
         // replace version and mcversion
         expand 'version':"${mod_status}${mod_version}", 'mcversion':mc_version
     }
-        
+
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'

@@ -1,12 +1,12 @@
 package ftgumod.minetweaker.util;
 
-import java.util.List;
+import java.util.Collection;
 
-public class BaseList<T> implements IBaseInterface<T> {
+public class BaseCollection<T> implements IBaseInterface<T> {
 
-	protected final List<T> list;
+	protected final Collection<T> list;
 
-	public BaseList(List<T> list) {
+	public BaseCollection(Collection<T> list) {
 		this.list = list;
 	}
 

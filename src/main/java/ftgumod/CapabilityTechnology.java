@@ -1,9 +1,9 @@
 package ftgumod;
 
-import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
+import java.util.Set;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -12,8 +12,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.TechnologyMessage;
 
 public class CapabilityTechnology {
 
@@ -42,9 +40,9 @@ public class CapabilityTechnology {
 
 		public void setResearched(String tech);
 
-		public void setResearched(List<String> tech);
+		public void setResearched(Collection<String> tech);
 
-		public List<String> getResearched();
+		public Collection<String> getResearched();
 
 		public void clear();
 
@@ -78,7 +76,7 @@ public class CapabilityTechnology {
 
 	public static class DefaultImpl implements ITechnology {
 
-		private List<String> tech = new ArrayList<String>();
+		private Collection<String> tech = new HashSet<String>();
 		private boolean isNew = true;
 
 		@Override
@@ -98,7 +96,7 @@ public class CapabilityTechnology {
 		}
 
 		@Override
-		public List<String> getResearched() {
+		public Collection<String> getResearched() {
 			return tech;
 		}
 
@@ -108,7 +106,7 @@ public class CapabilityTechnology {
 		}
 
 		@Override
-		public void setResearched(List<String> tech) {
+		public void setResearched(Collection<String> tech) {
 			this.tech = tech;
 		}
 

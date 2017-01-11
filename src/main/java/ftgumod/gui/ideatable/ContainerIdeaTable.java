@@ -1,9 +1,7 @@
 package ftgumod.gui.ideatable;
 
-import java.util.ArrayList;
-import java.util.List;
-import ftgumod.CapabilityTechnology;
-import ftgumod.CapabilityTechnology.ITechnology;
+import java.util.HashSet;
+import java.util.Set;
 import ftgumod.FTGUAPI;
 import ftgumod.IdeaRecipe;
 import ftgumod.Technology;
@@ -11,8 +9,6 @@ import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyUtil;
 import ftgumod.gui.SlotSpecial;
 import ftgumod.gui.TileEntityInventory;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.server.RequestTechMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -84,7 +80,7 @@ public class ContainerIdeaTable extends Container {
 
 	public IdeaRecipe hasRecipe() {
 		for (IdeaRecipe i : TechnologyHandler.ideas) {
-			List<ItemStack> items = new ArrayList<ItemStack>();
+			Set<ItemStack> items = new HashSet<ItemStack>();
 			for (int j = 0; j < 3; j++) {
 				ItemStack s = inventorySlots.get(combine + j).getStack();
 				if (s != null) {
@@ -93,9 +89,9 @@ public class ContainerIdeaTable extends Container {
 			}
 			boolean recipe[] = new boolean[i.recipe.length];
 			for (int j = 0; j < i.recipe.length; j++) {
-				for (int x = 0; x < items.size(); x++) {
-					if (TechnologyUtil.isEqual(i.recipe[j], items.get(x))) {
-						items.remove(x);
+				for (ItemStack stack: items) {
+					if (TechnologyUtil.isEqual(i.recipe[j], stack)) {
+						items.remove(stack);
 						recipe[j] = true;
 						break;
 					}

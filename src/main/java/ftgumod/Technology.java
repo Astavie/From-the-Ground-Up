@@ -1,14 +1,14 @@
 package ftgumod;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.Nullable;
 import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.text.translation.I18n;
 
 public class Technology {

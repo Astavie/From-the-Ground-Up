@@ -1,18 +1,20 @@
 package ftgumod.minetweaker.util;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
-import ftgumod.minetweaker.FTGUTweaker;
 
 public abstract class BaseInterface<T> implements IUndoableAction {
 
 	private final String name;
-	private List<T> recipes;
+	private Collection<T> recipes;
 	private final IBaseInterface<T> base;
 
-	protected BaseInterface(String name, List<T> recipes, IBaseInterface<T> base) {
+	protected BaseInterface(String name, Collection<T> recipes, IBaseInterface<T> base) {
 		this.name = name;
 		this.recipes = recipes;
 		this.base = base;
@@ -29,7 +31,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 		if (recipes.isEmpty())
 			return;
 
-		List<T> successful = new ArrayList<T>();
+		Set<T> successful = new HashSet<T>();
 
 		for (T recipe : recipes) {
 			if (recipe != null) {
@@ -50,7 +52,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 		if (recipes.isEmpty())
 			return;
 
-		List<T> successful = new ArrayList<T>();
+		Set<T> successful = new HashSet<T>();
 
 		for (T recipe : recipes) {
 			if (recipe != null) {
@@ -116,7 +118,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 
 	public static abstract class BaseInterfaceAdd<T> extends BaseInterface<T> {
 
-		protected BaseInterfaceAdd(String name, List<T> recipes, IBaseInterface<T> base) {
+		protected BaseInterfaceAdd(String name, Collection<T> recipes, IBaseInterface<T> base) {
 			super(name, recipes, base);
 		}
 
@@ -148,7 +150,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 
 	public static abstract class BaseInterfaceRemove<T> extends BaseInterface<T> {
 
-		protected BaseInterfaceRemove(String name, List<T> recipes, IBaseInterface<T> base) {
+		protected BaseInterfaceRemove(String name, Collection<T> recipes, IBaseInterface<T> base) {
 			super(name, recipes, base);
 		}
 

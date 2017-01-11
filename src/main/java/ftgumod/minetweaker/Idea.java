@@ -9,7 +9,7 @@ import ftgumod.Technology;
 import ftgumod.TechnologyHandler;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
-import ftgumod.minetweaker.util.BaseList;
+import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.InputHelper;
 
 @ZenClass("mods.ftgu.Idea")
@@ -31,7 +31,7 @@ public class Idea {
 	private static class Add extends BaseInterfaceAdd<IdeaRecipe> {
 
 		protected Add(IdeaRecipe tech) {
-			super(name, tech, new BaseList(TechnologyHandler.ideas));
+			super(name, tech, new BaseCollection(TechnologyHandler.ideas));
 		}
 
 		@Override
@@ -55,7 +55,7 @@ public class Idea {
 	private static class Remove extends BaseInterfaceRemove<IdeaRecipe> {
 
 		protected Remove(IdeaRecipe tech) {
-			super(name, tech, new BaseList(TechnologyHandler.ideas));
+			super(name, tech, new BaseCollection(TechnologyHandler.ideas));
 		}
 
 		@Override

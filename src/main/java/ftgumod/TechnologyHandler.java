@@ -2,8 +2,10 @@ package ftgumod;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import ftgumod.Decipher.DecipherGroup;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,10 +24,10 @@ public class TechnologyHandler {
 	public static int maxY = 0;
 	private static boolean minecraft = false;
 
-	public static final List<IdeaRecipe> ideas = new ArrayList<IdeaRecipe>();
-	public static final List<ResearchRecipe> researches = new ArrayList<ResearchRecipe>();
-	public static final List<Technology> technologies = new ArrayList<Technology>();
-	public static final List<String> vanilla = new ArrayList<String>();
+	public static final Set<IdeaRecipe> ideas = new HashSet<IdeaRecipe>();
+	public static final Set<ResearchRecipe> researches = new HashSet<ResearchRecipe>();
+	public static final Set<Technology> technologies = new HashSet<Technology>();
+	public static final Set<String> vanilla = new HashSet<String>();
 
 	public static final Map<Technology, List<ItemStack>> locked = new HashMap<Technology, List<ItemStack>>();
 	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<ResearchRecipe, Decipher>();
@@ -412,8 +414,8 @@ public class TechnologyHandler {
 			return pages.size();
 		}
 
-		public List<Technology> getTechnology() {
-			List<Technology> tech = new ArrayList<Technology>();
+		public Set<Technology> getTechnology() {
+			Set<Technology> tech = new HashSet<Technology>();
 			for (Technology t : TechnologyHandler.technologies) {
 				if (t.page == this) {
 					tech.add(t);

@@ -3,14 +3,15 @@ package ftgumod.gui.researchbook;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.lwjgl.input.Mouse;
 import ftgumod.CapabilityTechnology;
 import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.FTGUAPI;
 import ftgumod.Technology;
 import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
 import ftgumod.TechnologyHandler.PAGE;
+import ftgumod.TechnologyUtil;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestTechMessage;
@@ -287,11 +288,9 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.depthFunc(515);
 		if (state == 0) {
 			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
-			List<Technology> tech = PAGE.get(currentPage).getTechnology();
+			Set<Technology> tech = PAGE.get(currentPage).getTechnology();
 
-			for (int j5 = 0; j5 < tech.size(); j5++) {
-				Technology t1 = tech.get(j5);
-
+			for (Technology t1 : tech) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				if (t1.hasCustomUnlock() && !t1.isResearched(player) && !cap.isResearched(t1.getUnlocalisedName() + ".unlock"))
 					continue;
@@ -339,9 +338,8 @@ public class GuiResearchBook extends GuiScreen {
 			GlStateManager.disableLighting();
 			GlStateManager.enableRescaleNormal();
 			GlStateManager.enableColorMaterial();
-			for (int i6 = 0; i6 < tech.size(); i6++) {
-				Technology t2 = tech.get(i6);
-
+			
+			for (Technology t2: tech) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				if (t2.hasCustomUnlock() && !t2.isResearched(player) && !cap.isResearched(t2.getUnlocalisedName() + ".unlock"))
 					continue;

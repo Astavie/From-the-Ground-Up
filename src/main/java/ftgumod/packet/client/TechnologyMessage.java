@@ -1,7 +1,8 @@
 package ftgumod.packet.client;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import ftgumod.CapabilityTechnology;
 import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.TechnologyHandler;
@@ -13,34 +14,32 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class TechnologyMessage implements IMessage {
 
-	public List<Integer> tech;
+	public Collection<Integer> tech;
 
 	public TechnologyMessage() {
 	}
 
-	public TechnologyMessage(List<Integer> tech) {
+	public TechnologyMessage(Collection<Integer> tech) {
 		this.tech = tech;
 	}
 
 	public TechnologyMessage(EntityPlayer player) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		List<Integer> ints = new ArrayList<Integer>();
+		tech = new HashSet<Integer>();
 
 		for (String s : cap.getResearched()) {
 			if (s.endsWith(".unlock")) {
 				String s2 = s.replace(".unlock", "");
-				ints.add(-TechnologyHandler.getTechnology(s2).getID());
+				tech.add(-TechnologyHandler.getTechnology(s2).getID());
 			} else {
-				ints.add(TechnologyHandler.getTechnology(s).getID());
+				tech.add(TechnologyHandler.getTechnology(s).getID());
 			}
 		}
-
-		tech = ints;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buffer) {
-		this.tech = new ArrayList<Integer>();
+		this.tech = new HashSet<Integer>();
 		int size = buffer.readInt();
 		for (int i = 0; i < size; i++) {
 			tech.add(buffer.readInt());
