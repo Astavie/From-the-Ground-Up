@@ -13,7 +13,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return Minecraft.getMinecraft().thePlayer;
+		return Minecraft.getMinecraft().player;
 	}
 
 	@Override

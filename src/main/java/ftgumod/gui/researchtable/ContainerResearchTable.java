@@ -136,12 +136,12 @@ public class ContainerResearchTable extends Container {
 						recipe = null;
 					}
 
-					if (recipe != null && !player.worldObj.isRemote && TechnologyHandler.hasDecipher(recipe)) {
+					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
 							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
-							invPlayer.player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName() + "\"!"));
-							player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+							invPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName())));
+							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 							PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 						}
 					}

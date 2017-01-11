@@ -16,7 +16,7 @@ public class CompatTC implements ICompat {
 
 			Slot slot = inv.inventorySlots.get(0);
 			inv.craftResult = new FTGUCraftResult(player);
-			inv.inventorySlots.set(0, new SlotCrafting(player, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			inv.inventorySlots.set(0, new SlotCrafting(player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 		}
 	}
 

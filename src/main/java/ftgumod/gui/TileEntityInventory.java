@@ -136,7 +136,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer arg0) {
+	public boolean isUsableByPlayer(EntityPlayer arg0) {
 		return true;
 	}
 

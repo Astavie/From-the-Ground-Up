@@ -63,9 +63,9 @@ public class EventHandler {
 				evt.setUseful(true);
 				cap.setResearched(TechnologyHandler.GLOWING_EYES.getUnlocalisedName() + ".unlock");
 
-				evt.getEntityPlayer().addChatMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper2")));
-				evt.getEntityPlayer().addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.GLOWING_EYES.getLocalisedName() + "\"!"));
-				evt.getEntityPlayer().worldObj.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				evt.getEntityPlayer().sendMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper2")));
+				evt.getEntityPlayer().sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.GLOWING_EYES.getLocalisedName() + "\"!"));
+				evt.getEntityPlayer().world.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				PacketDispatcher.sendTo(new TechnologyMessage(evt.getEntityPlayer()), (EntityPlayerMP) evt.getEntityPlayer());
 			}
@@ -79,17 +79,17 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent evt) {
-		if (!evt.getEntity().worldObj.isRemote && evt.getEntity() instanceof EntityPlayer) {
+		if (!evt.getEntity().world.isRemote && evt.getEntity() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) evt.getEntity();
-			if (player.worldObj.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND) {
+			if (player.world.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND) {
 				UUID uuid = player.getUniqueID();
 				if (!ticks.containsKey(uuid)) {
 					ticks.put(uuid, 0);
 				} else {
 					int tick = ticks.get(uuid);
 					if (tick == t) {
-						player.addChatMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper1")));
-						player.worldObj.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper1")));
+						player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					if (!(tick > t)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
@@ -108,8 +108,8 @@ public class EventHandler {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalisedName() + ".unlock");
 
-						player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENCHANTING.getLocalisedName() + "\"!"));
-						player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENCHANTING.getLocalisedName() + "\"!"));
+						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 						break;
@@ -117,12 +117,12 @@ public class EventHandler {
 				}
 			}
 
-			if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.isResearched(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.worldObj)) {
+			if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.isResearched(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world)) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				cap.setResearched(TechnologyHandler.ENDER_KNOWLEDGE.getUnlocalisedName() + ".unlock");
 
-				player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENDER_KNOWLEDGE.getLocalisedName() + "\"!"));
-				player.worldObj.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENDER_KNOWLEDGE.getLocalisedName() + "\"!"));
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 			}
@@ -200,13 +200,13 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent evt) {
-		if (!evt.player.worldObj.isRemote) {
+		if (!evt.player.world.isRemote) {
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
 
 			// SLOT
 			Slot slot = inv.inventorySlots.get(0);
 			inv.craftResult = new FTGUCraftResult(evt.player);
-			inv.inventorySlots.set(0, new SlotCrafting(evt.player, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			inv.inventorySlots.set(0, new SlotCrafting(evt.player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 
 			ticks.remove(evt.player.getUniqueID());
 		}
@@ -229,13 +229,13 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone evt) {
-		if (!evt.getEntity().worldObj.isRemote) {
+		if (!evt.getEntity().world.isRemote) {
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
 
 			// SLOT
 			Slot slot = inv.inventorySlots.get(0);
 			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
-			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 
 			ticks.remove(evt.getOriginal().getUniqueID());
 		}
@@ -250,7 +250,7 @@ public class EventHandler {
 			// SLOT
 			Slot slot = inv.inventorySlots.get(0);
 			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
-			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 		} else
 			FTGU.instance.runCompat("tconstruct", work, evt.getEntityPlayer());
 	}
@@ -263,7 +263,7 @@ public class EventHandler {
 			// SLOT
 			Slot slot = inv.inventorySlots.get(0);
 			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
-			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 		}
 	}
 
@@ -277,17 +277,17 @@ public class EventHandler {
 
 				// SLOT
 				Slot slot = inv.inventorySlots.get(0);
-				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
-				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().thePlayer, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().player);
+				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 			} else if (work instanceof GuiInventory) {
 				ContainerPlayer inv = (ContainerPlayer) ((GuiInventory) evt.getGui()).inventorySlots;
 
 				// SLOT
 				Slot slot = inv.inventorySlots.get(0);
-				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().thePlayer);
-				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().thePlayer, inv.craftMatrix, inv.craftResult, 0, slot.xDisplayPosition, slot.yDisplayPosition));
+				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().player);
+				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
 			} else
-				FTGU.instance.runCompat("tconstruct", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().thePlayer);
+				FTGU.instance.runCompat("tconstruct", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player);
 	}
 
 	@SubscribeEvent

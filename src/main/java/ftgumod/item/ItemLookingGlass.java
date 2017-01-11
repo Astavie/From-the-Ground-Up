@@ -2,6 +2,13 @@ package ftgumod.item;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.input.Keyboard;
+import ftgumod.Decipher;
+import ftgumod.Decipher.DecipherGroup;
+import ftgumod.ResearchRecipe;
+import ftgumod.TechnologyHandler;
+import ftgumod.TechnologyUtil;
+import ftgumod.event.PlayerInspectEvent;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,13 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.oredict.OreDictionary;
-import org.lwjgl.input.Keyboard;
-import ftgumod.Decipher;
-import ftgumod.Decipher.DecipherGroup;
-import ftgumod.ResearchRecipe;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
-import ftgumod.event.PlayerInspectEvent;
 
 public class ItemLookingGlass extends Item {
 
@@ -73,7 +73,7 @@ public class ItemLookingGlass extends Item {
 
 				if (!event.isUseful()) {
 					if (!world.isRemote) {
-						player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -92,7 +92,7 @@ public class ItemLookingGlass extends Item {
 			for (int i = 0; i < blocks.tagCount(); i++)
 				if (blocks.getStringTagAt(i).equalsIgnoreCase(name)) {
 					if (!world.isRemote) {
-						player.addChatMessage(new TextComponentString("\"" + I18n.translateToLocal(name + ".name") + "\" " + I18n.translateToLocal("technology.decipher.already")));
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.decipher.already", I18n.translateToLocal(name + ".name"))));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -102,7 +102,7 @@ public class ItemLookingGlass extends Item {
 				MinecraftForge.EVENT_BUS.post(event);
 				if (!event.isUseful()) {
 					if (!world.isRemote) {
-						player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -110,7 +110,7 @@ public class ItemLookingGlass extends Item {
 			}
 
 			if (!world.isRemote) {
-				player.addChatMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.flawless")));
+				player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.flawless")));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
 			blocks.appendTag(new NBTTagString(name));

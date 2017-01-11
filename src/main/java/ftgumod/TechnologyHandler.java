@@ -388,7 +388,7 @@ public class TechnologyHandler {
 
 	public static class PAGE {
 
-		private static List<PAGE> pages = new ArrayList<PAGE>();
+		public static List<PAGE> pages = new ArrayList<PAGE>();
 
 		public static final PAGE MINECRAFT = new PAGE("Minecraft");
 

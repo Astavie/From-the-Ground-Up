@@ -92,7 +92,7 @@ public class GuiResearchTable extends GuiContainer {
 			for (int i = table.combine; i < table.combine + 9; i++) {
 				Slot slot = inventorySlots.inventorySlots.get(i);
 				if (!slot.getHasStack() && table.recipe.recipe[i - table.combine] != null) {
-					this.drawTexturedModalRect(slot.xDisplayPosition + guiLeft, slot.yDisplayPosition + guiTop, 176, 0, 16, 16);
+					this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
 				}
 			}
 		}

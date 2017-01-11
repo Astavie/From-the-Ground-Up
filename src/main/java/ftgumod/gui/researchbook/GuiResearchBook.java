@@ -172,7 +172,7 @@ public class GuiResearchBook extends GuiScreen {
 				zoom += 0.25F;
 			else if (i1 > 0)
 				zoom -= 0.25F;
-			zoom = MathHelper.clamp_float(zoom, 1.0F, 2.0F);
+			zoom = MathHelper.clamp(zoom, 1.0F, 2.0F);
 
 			if (zoom != f3) {
 				float f5 = f3 - zoom;
@@ -250,8 +250,8 @@ public class GuiResearchBook extends GuiScreen {
 		int split = 211;
 		int pages = 1;
 
-		int i = MathHelper.floor_double(xScrollO + (xScrollP - xScrollO) * (double) z);
-		int j = MathHelper.floor_double(yScrollO + (yScrollP - yScrollO) * (double) z);
+		int i = MathHelper.floor(xScrollO + (xScrollP - xScrollO) * (double) z);
+		int j = MathHelper.floor(yScrollO + (yScrollP - yScrollO) * (double) z);
 
 		if (i < X_MIN)
 			i = X_MIN;
@@ -471,7 +471,7 @@ public class GuiResearchBook extends GuiScreen {
 			drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
 			fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
 			if (selected.isResearched(player))
-				fontRendererObj.drawStringWithShadow(I18n.format("technology.complete.flawless", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
+				fontRendererObj.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
 			fontRendererObj.drawStringWithShadow(s, i7, k7, -1);
 		} else if (state != 0) {
 			Technology tech = TechnologyHandler.getTechnology(state);
