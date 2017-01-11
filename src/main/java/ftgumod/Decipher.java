@@ -13,6 +13,7 @@ public class Decipher {
 
 	public Decipher(DecipherGroup... unlock) {
 		list = new LinkedHashSet<DecipherGroup>(Arrays.asList(unlock));
+		recalculateSlots();
 	}
 
 	public static class DecipherGroup {

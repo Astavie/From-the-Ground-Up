@@ -1,18 +1,22 @@
 package ftgumod.minetweaker;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import minetweaker.MineTweakerAPI;
-import minetweaker.api.item.IIngredient;
-import minetweaker.api.item.IItemStack;
-import stanhebben.zenscript.annotations.ZenClass;
-import stanhebben.zenscript.annotations.ZenMethod;
 import ftgumod.TechnologyHandler;
 import ftgumod.TechnologyHandler.PAGE;
+import ftgumod.TechnologyUtil;
+import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
 import ftgumod.minetweaker.util.IBaseInterface;
 import ftgumod.minetweaker.util.InputHelper;
+import minetweaker.MineTweakerAPI;
+import minetweaker.api.item.IIngredient;
+import minetweaker.api.item.IItemStack;
+import net.minecraft.item.ItemStack;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenClass("mods.ftgu.Technology")
 public class Technology {
@@ -61,15 +65,15 @@ public class Technology {
 				ls2[i] = ls1.get(i);
 			}
 
-			MineTweakerAPI.apply(new Add(new ftgumod.Technology(PAGE.get(page), p, ls2, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
+			MineTweakerAPI.apply(new AddTech(new ftgumod.Technology(PAGE.get(page), p, ls2, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
 		} else {
-			MineTweakerAPI.apply(new Add(new ftgumod.Technology(PAGE.get(page), p, null, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
+			MineTweakerAPI.apply(new AddTech(new ftgumod.Technology(PAGE.get(page), p, null, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
 		}
 	}
 
-	private static class Add extends BaseInterfaceAdd<ftgumod.Technology> {
+	private static class AddTech extends BaseInterfaceAdd<ftgumod.Technology> {
 
-		protected Add(ftgumod.Technology tech) {
+		protected AddTech(ftgumod.Technology tech) {
 			super(name, tech, new BaseTechnology());
 		}
 
@@ -88,12 +92,12 @@ public class Technology {
 			return;
 		}
 
-		MineTweakerAPI.apply(new Remove(p));
+		MineTweakerAPI.apply(new RemoveTech(p));
 	}
 
-	private static class Remove extends BaseInterfaceRemove<ftgumod.Technology> {
+	private static class RemoveTech extends BaseInterfaceRemove<ftgumod.Technology> {
 
-		protected Remove(ftgumod.Technology tech) {
+		protected RemoveTech(ftgumod.Technology tech) {
 			super(name, tech, new BaseTechnology());
 		}
 
@@ -123,6 +127,34 @@ public class Technology {
 
 			TechnologyHandler.locked.remove(recipe);
 			return TechnologyHandler.technologies.remove(recipe);
+		}
+
+	}
+
+	@ZenMethod
+	public static void addItems(String tech, IIngredient[] item) {
+		ftgumod.Technology p = TechnologyHandler.getTechnology(tech);
+		if (p == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+
+		List<ItemStack> list = new ArrayList<ItemStack>();
+		for (Object o : InputHelper.toObjects(item))
+			list.addAll(TechnologyUtil.toItems(TechnologyUtil.toItem(o)));
+
+		MineTweakerAPI.apply(new AddItems(list, p));
+	}
+
+	private static class AddItems extends BaseInterfaceAdd<ItemStack> {
+
+		protected AddItems(Collection<ItemStack> recipes, ftgumod.Technology tech) {
+			super(name, recipes, new BaseCollection(tech.item));
+		}
+
+		@Override
+		protected String getRecipeInfo(ItemStack recipe) {
+			return "<item:" + recipe.getUnlocalizedName() + ">";
 		}
 
 	}

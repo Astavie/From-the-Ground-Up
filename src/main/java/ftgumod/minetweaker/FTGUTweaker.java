@@ -11,6 +11,7 @@ public class FTGUTweaker {
 		MineTweakerAPI.registerClass(Idea.class);
 		MineTweakerAPI.registerClass(Research.class);
 		MineTweakerAPI.registerClass(Scramble.class);
+		MineTweakerAPI.registerClass(Page.class);
 	}
 
 }

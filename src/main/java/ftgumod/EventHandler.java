@@ -170,7 +170,7 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.idea"));
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.translateToLocalFormatted("technology.idea", tech.getLocalisedName()));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
@@ -178,7 +178,7 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalisedName() + " " + I18n.translateToLocal("technology.research"));
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.translateToLocalFormatted("technology.research", tech.getLocalisedName()));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 				evt.getToolTip().add("");
 				evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("item.parchment_research.complete"));

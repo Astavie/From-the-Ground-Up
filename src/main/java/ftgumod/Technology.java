@@ -21,7 +21,7 @@ public class Technology {
 	public final int y;
 
 	public ItemStack icon;
-	public ItemStack[] item;
+	public List<ItemStack> item;
 	public Technology prev;
 	public Technology[] secret;
 	public PAGE page;
@@ -83,13 +83,9 @@ public class Technology {
 		else
 			level = prev.level + 1;
 
-		List<ItemStack> o = new ArrayList<ItemStack>();
-		for (int i = 0; i < item.length; i++) {
-			o.addAll(TechnologyUtil.toItems(TechnologyUtil.toItem(item[i])));
-		}
-		this.item = new ItemStack[o.size()];
-		for (int j = 0; j < this.item.length; j++) {
-			this.item[j] = o.get(j);
+		this.item = new ArrayList<ItemStack>();
+		for (Object o: item) {
+			this.item.addAll(TechnologyUtil.toItems(TechnologyUtil.toItem(o)));
 		}
 	}
 
@@ -106,11 +102,7 @@ public class Technology {
 	}
 
 	public List<ItemStack> getItems() {
-		List<ItemStack> list = new ArrayList<ItemStack>();
-		for (ItemStack i : item) {
-			list.add(i);
-		}
-		return list;
+		return item;
 	}
 
 	public int getID() {

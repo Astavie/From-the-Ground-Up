@@ -392,7 +392,7 @@ public class TechnologyHandler {
 
 		public static final PAGE MINECRAFT = new PAGE("Minecraft");
 
-		public String name;
+		public final String name;
 
 		public PAGE(String name) {
 			pages.add(this);

@@ -16,8 +16,8 @@ item.looking_glass.shift=Press Shift for more information
 
 gui.copy=Copy
 
-technology.idea=Idea
-technology.research=Research
+technology.idea=%s Idea
+technology.research=%s Research
 technology.researched=Researched!
 
 technology.complete.already="%s" is already researched
