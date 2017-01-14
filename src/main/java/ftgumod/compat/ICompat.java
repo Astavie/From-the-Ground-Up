@@ -2,6 +2,6 @@ package ftgumod.compat;
 
 public interface ICompat {
 
-	public void run(Object... arg);
+	public boolean run(Object... arg);
 
 }

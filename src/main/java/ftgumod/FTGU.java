@@ -5,6 +5,7 @@ import java.util.Map;
 import ftgumod.CapabilityTechnology.DefaultImpl;
 import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.CapabilityTechnology.Storage;
+import ftgumod.compat.CompatBWM;
 import ftgumod.compat.CompatTC;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
@@ -61,10 +62,11 @@ public class FTGU {
 		registerItem(item, name);
 	}
 
-	public void runCompat(String name, Object... arg) {
+	public boolean runCompat(String name, Object... arg) {
 		ICompat compat = this.compat.get(name);
 		if (compat != null)
-			compat.run(arg);
+			return compat.run(arg);
+		return false;
 	}
 
 	@Mod.EventHandler
@@ -147,6 +149,8 @@ public class FTGU {
 			}
 		if (Loader.isModLoaded("tconstruct"))
 			compat.put("tconstruct", new CompatTC());
+		if (Loader.isModLoaded("betterwithmods"))
+			compat.put("betterwithmods", new CompatBWM());
 	}
 
 }

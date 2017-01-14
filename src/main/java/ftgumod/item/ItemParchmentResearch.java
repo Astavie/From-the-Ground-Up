@@ -1,5 +1,12 @@
 package ftgumod.item;
 
+import ftgumod.FTGUAPI;
+import ftgumod.Technology;
+import ftgumod.TechnologyHandler;
+import ftgumod.TechnologyUtil;
+import ftgumod.event.PlayerResearchEvent;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -12,12 +19,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import ftgumod.FTGUAPI;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.TechnologyMessage;
+import net.minecraftforge.common.MinecraftForge;
 
 public class ItemParchmentResearch extends Item {
 
@@ -37,19 +39,23 @@ public class ItemParchmentResearch extends Item {
 			Technology t = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(item).getString("FTGU"));
 			if (t != null) {
 				if (t.isResearched(player)) {
-					if (already)
+					if (already) {
 						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.already", t.getLocalisedName())));
+					}
 				} else {
-					if (t.canResearch(player)) {
+					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
+					MinecraftForge.EVENT_BUS.post(event);
+
+					if (event.canResearch()) {
 						t.setResearched(player);
 						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalisedName())));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
-					} else {
+					} else
 						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
-					}
 				}
+
 				PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 			}
 		}
