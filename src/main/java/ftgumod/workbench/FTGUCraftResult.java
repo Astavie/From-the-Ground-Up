@@ -1,11 +1,11 @@
 package ftgumod.workbench;
 
 import javax.annotation.Nullable;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
+import ftgumod.event.PlayerLockEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 
 public class FTGUCraftResult extends InventoryCraftResult {
 
@@ -16,12 +16,11 @@ public class FTGUCraftResult extends InventoryCraftResult {
 	}
 
 	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
-		Technology tech = TechnologyHandler.getLocked(stack);
-		if (tech != null)
-			if (tech.isResearched(player))
-				super.setInventorySlotContents(slot, stack);
-			else
-				super.setInventorySlotContents(slot, null);
+		PlayerLockEvent event = new PlayerLockEvent(player, stack);
+		MinecraftForge.EVENT_BUS.post(event);
+
+		if (event.willLock())
+			super.setInventorySlotContents(slot, null);
 		else
 			super.setInventorySlotContents(slot, stack);
 	}

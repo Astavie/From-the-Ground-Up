@@ -20,10 +20,6 @@ public class PlayerResearchEvent extends PlayerEvent {
 		return tech;
 	}
 
-	public World getWorld() {
-		return getEntityPlayer().getEntityWorld();
-	}
-
 	public boolean canResearch() {
 		return canResearch;
 	}

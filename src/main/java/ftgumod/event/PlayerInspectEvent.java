@@ -44,10 +44,10 @@ public class PlayerInspectEvent extends PlayerEvent {
 	}
 
 	public World getWorld() {
-		return getEntityPlayer().getEntityWorld();
+		return getEntityPlayer().world;
 	}
 
-	public List<String> getInspectionList() {
+	public List<String> getInspectedList() {
 		return glass;
 	}
 
