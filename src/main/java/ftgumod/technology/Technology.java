@@ -1,12 +1,12 @@
-package ftgumod;
+package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
-import ftgumod.CapabilityTechnology.ITechnology;
-import ftgumod.TechnologyHandler.PAGE;
+import ftgumod.technology.CapabilityTechnology.ITechnology;
+import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;

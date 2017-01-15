@@ -1,9 +1,9 @@
 package ftgumod.minetweaker;
 
-import ftgumod.TechnologyHandler.PAGE;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
+import ftgumod.technology.TechnologyHandler.PAGE;
 import minetweaker.MineTweakerAPI;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;

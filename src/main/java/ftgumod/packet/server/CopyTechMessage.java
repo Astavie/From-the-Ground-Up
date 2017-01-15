@@ -1,9 +1,9 @@
 package ftgumod.packet.server;
 
 import ftgumod.FTGUAPI;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

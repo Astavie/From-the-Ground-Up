@@ -1,11 +1,11 @@
 package ftgumod.minetweaker;
 
-import ftgumod.IdeaRecipe;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.minetweaker.util.InputHelper;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;

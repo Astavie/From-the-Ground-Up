@@ -17,12 +17,10 @@ public class FTGUCraftResult extends InventoryCraftResult {
 
 	public void setInventorySlotContents(int slot, @Nullable ItemStack stack) {
 		PlayerLockEvent event = new PlayerLockEvent(player, stack);
-		MinecraftForge.EVENT_BUS.post(event);
+		if (stack != null)
+			MinecraftForge.EVENT_BUS.post(event);
 
-		if (event.willLock())
-			super.setInventorySlotContents(slot, null);
-		else
-			super.setInventorySlotContents(slot, stack);
+		super.setInventorySlotContents(slot, event.willLock() ? null : stack);
 	}
 
 }

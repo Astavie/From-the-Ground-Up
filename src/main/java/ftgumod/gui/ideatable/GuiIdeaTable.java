@@ -7,10 +7,10 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
-import ftgumod.TechnologyHandler;
 import ftgumod.gui.TileEntityInventory;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.technology.TechnologyHandler;
 
 public class GuiIdeaTable extends GuiContainer {
 

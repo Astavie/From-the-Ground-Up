@@ -1,10 +1,10 @@
 package ftgumod.gui;
 
-import ftgumod.TechnologyHandler.GUI;
 import ftgumod.gui.ideatable.ContainerIdeaTable;
 import ftgumod.gui.ideatable.GuiIdeaTable;
 import ftgumod.gui.researchtable.ContainerResearchTable;
 import ftgumod.gui.researchtable.GuiResearchTable;
+import ftgumod.technology.TechnologyHandler.GUI;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;

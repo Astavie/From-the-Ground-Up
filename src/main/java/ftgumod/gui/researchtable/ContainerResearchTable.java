@@ -1,20 +1,20 @@
 package ftgumod.gui.researchtable;
 
 import java.util.List;
-import ftgumod.CapabilityTechnology;
-import ftgumod.CapabilityTechnology.ITechnology;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
-import ftgumod.ResearchRecipe;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
-import ftgumod.TechnologyUtil;
 import ftgumod.gui.SlotSpecial;
 import ftgumod.gui.TileEntityInventory;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.technology.CapabilityTechnology;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyUtil;
+import ftgumod.technology.CapabilityTechnology.ITechnology;
+import ftgumod.technology.recipe.ResearchRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;

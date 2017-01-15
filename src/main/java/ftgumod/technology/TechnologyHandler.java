@@ -1,4 +1,4 @@
-package ftgumod;
+package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,7 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import ftgumod.Decipher;
+import ftgumod.FTGUAPI;
 import ftgumod.Decipher.DecipherGroup;
+import ftgumod.technology.recipe.IdeaRecipe;
+import ftgumod.technology.recipe.ResearchRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

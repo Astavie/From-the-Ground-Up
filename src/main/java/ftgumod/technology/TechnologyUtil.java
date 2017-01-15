@@ -1,8 +1,8 @@
-package ftgumod;
+package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.List;
-import ftgumod.TechnologyHandler.ITEM_GROUP;
+import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

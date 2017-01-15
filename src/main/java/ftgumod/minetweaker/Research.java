@@ -4,11 +4,11 @@ import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import ftgumod.ResearchRecipe;
-import ftgumod.Technology;
-import ftgumod.TechnologyHandler;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.recipe.ResearchRecipe;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.InputHelper;
 

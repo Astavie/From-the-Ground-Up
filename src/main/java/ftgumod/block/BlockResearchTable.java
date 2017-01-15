@@ -21,9 +21,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ftgumod.FTGU;
-import ftgumod.TechnologyHandler.GUI;
 import ftgumod.gui.TileEntityInventory;
 import ftgumod.gui.researchtable.TileEntityResearchTable;
+import ftgumod.technology.TechnologyHandler.GUI;
 
 public class BlockResearchTable extends Block implements ITileEntityProvider {
 

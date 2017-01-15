@@ -1,7 +1,9 @@
-package ftgumod;
+package ftgumod.technology.recipe;
 
 import java.util.HashMap;
 import java.util.Map;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyUtil;
 
 public class IdeaRecipe {
 
