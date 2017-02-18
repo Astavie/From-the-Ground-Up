@@ -2,12 +2,17 @@ package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.List;
+import ftgumod.FTGU;
 import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class TechnologyUtil {
@@ -42,8 +47,8 @@ public class TechnologyUtil {
 	public static Object toItem(Object obj) {
 		if (obj instanceof String && ((String) obj).contains(":")) {
 			String[] itemSplit = ((String) obj).split(":");
-			Item t = GameRegistry.findItem(itemSplit[0], itemSplit[1]);
-			Block b = GameRegistry.findBlock(itemSplit[0], itemSplit[1]);
+			Item t = Item.REGISTRY.getObject(new ResourceLocation(itemSplit[0] + ":" + itemSplit[1]));
+			Block b = Block.REGISTRY.getObject(new ResourceLocation(itemSplit[0] + ":" + itemSplit[1]));
 			if (b != null) {
 				if (itemSplit.length > 2) {
 					int meta = Integer.parseInt(itemSplit[2]);
@@ -111,6 +116,14 @@ public class TechnologyUtil {
 			item.addAll(((ITEM_GROUP) obj).toItems());
 
 		return item;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static boolean hasRecipe(ItemStack stack) {
+		for (IRecipe r : CraftingManager.getInstance().getRecipeList())
+			if (r != null && r.getRecipeOutput() != null && TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
+				return true;
+		return FTGU.INSTANCE.runCompat("betterwithmods", stack);
 	}
 
 }

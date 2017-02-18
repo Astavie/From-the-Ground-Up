@@ -66,6 +66,9 @@ public class GuiResearchBook extends GuiScreen {
 
 	private EntityPlayer player;
 	private Technology selected;
+	private List<ItemStack> unlock;
+	private int num = 4;
+	private int pages;
 
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
@@ -104,8 +107,26 @@ public class GuiResearchBook extends GuiScreen {
 
 			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
 			buttonList.add(copy);
-			selected = null;
 			scroll = 1;
+
+			// Load Items
+			List<ItemStack> list = TechnologyHandler.locked.get(selected);
+
+			unlock = new ArrayList<ItemStack>();
+			for (ItemStack s : list)
+				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
+					for (CreativeTabs tab : s.getItem().getCreativeTabs())
+						s.getItem().getSubItems(s.getItem(), tab, unlock);
+				else
+					unlock.add(s);
+
+			for (int q = unlock.size() - 1; q >= 0; q--) {
+				ItemStack stack = unlock.get(q);
+				if (!TechnologyUtil.hasRecipe(stack))
+					unlock.remove(q);
+			}
+
+			pages = (int) Math.max(Math.ceil(((double) unlock.size()) / num), 1);
 		}
 	}
 
@@ -248,7 +269,6 @@ public class GuiResearchBook extends GuiScreen {
 
 	private void drawResearchScreen(int x, int y, float z) {
 		int split = 211;
-		int pages = 1;
 
 		int i = MathHelper.floor(xScrollO + (xScrollP - xScrollO) * (double) z);
 		int j = MathHelper.floor(yScrollO + (yScrollP - yScrollO) * (double) z);
@@ -338,8 +358,8 @@ public class GuiResearchBook extends GuiScreen {
 			GlStateManager.disableLighting();
 			GlStateManager.enableRescaleNormal();
 			GlStateManager.enableColorMaterial();
-			
-			for (Technology t2: tech) {
+
+			for (Technology t2 : tech) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				if (t2.hasCustomUnlock() && !t2.isResearched(player) && !cap.isResearched(t2.getUnlocalisedName() + ".unlock"))
 					continue;
@@ -388,30 +408,6 @@ public class GuiResearchBook extends GuiScreen {
 					selected = t2;
 			}
 		} else {
-			Technology tech = TechnologyHandler.getTechnology(state);
-			List<ItemStack> list = TechnologyHandler.locked.get(tech);
-
-			List<ItemStack> unlock = new ArrayList<ItemStack>();
-			for (ItemStack s : list)
-				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
-					for (CreativeTabs tab : s.getItem().getCreativeTabs())
-						s.getItem().getSubItems(s.getItem(), tab, unlock);
-				else
-					unlock.add(s);
-			
-			for (int q = unlock.size() - 1; q >= 0; q--) {
-				ItemStack stack = unlock.get(q);
-				boolean remove = true;
-				for (IRecipe r : CraftingManager.getInstance().getRecipeList())
-					if (r != null && r.getRecipeOutput() != null && TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
-						remove = false;
-				if (remove)
-					unlock.remove(q);
-			}
-
-			int num = 4;
-			pages = (int) Math.max(Math.ceil(((double) unlock.size()) / num), 1);
-
 			int wheel = Mouse.getDWheel();
 			if (wheel < 0)
 				scroll = Math.min(scroll + 1, pages);
@@ -457,39 +453,39 @@ public class GuiResearchBook extends GuiScreen {
 
 		super.drawScreen(x, y, z);
 		if (selected != null) {
-			String s = selected.getLocalisedName();
-			String s1 = selected.getDescription();
+			if (state == 0) {
+				String s = selected.getLocalisedName();
+				String s1 = selected.getDescription();
 
-			int i7 = x + 12;
-			int k7 = y - 4;
+				int i7 = x + 12;
+				int k7 = y - 4;
 
-			int j8 = Math.max(fontRendererObj.getStringWidth(s), 120);
-			int i9 = fontRendererObj.splitStringWidth(s1, j8);
-			if (selected.isResearched(player))
-				i9 += 12;
+				int j8 = Math.max(fontRendererObj.getStringWidth(s), 120);
+				int i9 = fontRendererObj.splitStringWidth(s1, j8);
+				if (selected.isResearched(player))
+					i9 += 12;
 
-			drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
-			fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
-			if (selected.isResearched(player))
-				fontRendererObj.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
-			fontRendererObj.drawStringWithShadow(s, i7, k7, -1);
-		} else if (state != 0) {
-			Technology tech = TechnologyHandler.getTechnology(state);
+				drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
+				fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
+				if (selected.isResearched(player))
+					fontRendererObj.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
+				fontRendererObj.drawStringWithShadow(s, i7, k7, -1);
+			} else {
+				String s1 = selected.getLocalisedName();
+				int x1 = (width - fontRendererObj.getStringWidth(s1)) / 2;
+				int y1 = (height - imageHeight) / 2;
+				fontRendererObj.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);
 
-			String s1 = tech.getLocalisedName();
-			int x1 = (width - fontRendererObj.getStringWidth(s1)) / 2;
-			int y1 = (height - imageHeight) / 2;
-			fontRendererObj.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);
+				String s2 = selected.getDescription();
+				int x2 = width / 2;
+				int y2 = (height - imageHeight) / 2;
+				drawSplitString(s2, x2, y2 + 32, split, 0xffa0a0a0, true);
 
-			String s2 = tech.getDescription();
-			int x2 = width / 2;
-			int y2 = (height - imageHeight) / 2;
-			drawSplitString(s2, x2, y2 + 32, split, 0xffa0a0a0, true);
-
-			String s3 = scroll + "/" + pages;
-			int x3 = (width + imageWidth) / 2 - fontRendererObj.getStringWidth(s3);
-			int y3 = (height + imageHeight) / 2;
-			fontRendererObj.drawStringWithShadow(s3, x3 - 21, y3 - 44, 0xffa0a0a0);
+				String s3 = scroll + "/" + pages;
+				int x3 = (width + imageWidth) / 2 - fontRendererObj.getStringWidth(s3);
+				int y3 = (height + imageHeight) / 2;
+				fontRendererObj.drawStringWithShadow(s3, x3 - 21, y3 - 44, 0xffa0a0a0);
+			}
 		}
 
 		GlStateManager.enableDepth();

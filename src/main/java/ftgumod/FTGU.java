@@ -44,13 +44,13 @@ public class FTGU {
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
 
-	public final Map<String, ICompat> compat = new HashMap<String, ICompat>();
+	private final Map<String, ICompat> compat = new HashMap<String, ICompat>();
 
 	@Instance(value = FTGU.MODID)
-	public static FTGU instance;
+	public static FTGU INSTANCE;
 
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
-	public static ProxyCommon proxy;
+	public static ProxyCommon PROXY;
 
 	private void registerItem(Item item, String name) {
 		item.setRegistryName(name);
@@ -128,9 +128,9 @@ public class FTGU {
 		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r);
 		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r, r);
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new GuiHandler());
 
-		proxy.registerRenderers();
+		PROXY.registerRenderers();
 
 		TechnologyHandler.init();
 

@@ -31,11 +31,9 @@ public class Decipher {
 
 	public void recalculateSlots() {
 		unlock = new DecipherGroup[9];
-		for (DecipherGroup d : list) {
-			for (int i : d.slots) {
+		for (DecipherGroup d : list)
+			for (int i : d.slots)
 				this.unlock[i] = d;
-			}
-		}
 	}
 
 }

@@ -61,7 +61,7 @@ public class ItemLookingGlass extends Item {
 				if (r.output.canResearch(player))
 					for (DecipherGroup g : d.list)
 						for (ItemStack s : g.unlock)
-							if ((s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
+							if ((s.getItem() != null && s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
 								need = true;
 			}
 

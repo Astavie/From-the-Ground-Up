@@ -255,8 +255,8 @@ public class EventHandler {
 			Slot slot = inv.inventorySlots.get(0);
 			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
 			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
-		} else if (!FTGU.instance.runCompat("tconstruct", work, evt.getEntityPlayer()))
-			FTGU.instance.runCompat("bettterwithmods", work, evt.getEntityPlayer());
+		} else if (!FTGU.INSTANCE.runCompat("tconstruct", work, evt.getEntityPlayer()))
+			FTGU.INSTANCE.runCompat("bettterwithmods", work, evt.getEntityPlayer());
 	}
 
 	@SubscribeEvent
@@ -290,8 +290,8 @@ public class EventHandler {
 				Slot slot = inv.inventorySlots.get(0);
 				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().player);
 				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
-			} else if (!FTGU.instance.runCompat("tconstruct", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player))
-				FTGU.instance.runCompat("betterwithmods", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player);
+			} else if (!FTGU.INSTANCE.runCompat("tconstruct", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player))
+				FTGU.INSTANCE.runCompat("betterwithmods", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player);
 	}
 
 	@SubscribeEvent

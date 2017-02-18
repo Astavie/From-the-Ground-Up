@@ -18,8 +18,8 @@ public abstract class MessageHandler<T extends IMessage> implements IMessageHand
 	@Override
 	public IMessage onMessage(T message, MessageContext ctx) {
 		if (ctx.side.isClient())
-			return handleClientMessage(FTGU.proxy.getPlayerEntity(ctx), message, ctx);
+			return handleClientMessage(FTGU.PROXY.getPlayerEntity(ctx), message, ctx);
 		else
-			return handleServerMessage(FTGU.proxy.getPlayerEntity(ctx), message, ctx);
+			return handleServerMessage(FTGU.PROXY.getPlayerEntity(ctx), message, ctx);
 	}
 }
