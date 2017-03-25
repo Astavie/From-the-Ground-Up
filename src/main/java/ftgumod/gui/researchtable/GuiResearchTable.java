@@ -44,37 +44,35 @@ public class GuiResearchTable extends GuiContainer {
 		fontRendererObj.drawString(s, xSize / 2 - fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
 		fontRendererObj.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 
-		if (player.getItemStack() == null) {
-			Slot slot = getSlotUnderMouse();
-			if (slot != null && !slot.getHasStack()) {
-				ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-				if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9 && table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
-					List<String> text = new ArrayList<String>();
+		Slot slot = getSlotUnderMouse();
+		if (slot != null && !slot.getHasStack()) {
+			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
+			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9 && table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
+				List<String> text = new ArrayList<String>();
 
-					String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
-					if (TechnologyHandler.hasDecipher(table.recipe)) {
-						Decipher d = TechnologyHandler.unlock.get(table.recipe);
-						DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
-						if (g != null) {
-							if (!table.inventorySlots.get(table.glass).getHasStack()) {
+				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
+				if (TechnologyHandler.hasDecipher(table.recipe)) {
+					Decipher d = TechnologyHandler.unlock.get(table.recipe);
+					DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
+					if (g != null) {
+						if (!table.inventorySlots.get(table.glass).getHasStack()) {
+							hint = TextFormatting.OBFUSCATED + hint;
+						} else {
+							List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
+							boolean perms = false;
+							for (ItemStack stack : g.unlock)
+								for (String t : items) {
+									if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null && stack.getItem().getUnlocalizedName(stack).equals(t)))
+										perms = true;
+								}
+							if (!perms)
 								hint = TextFormatting.OBFUSCATED + hint;
-							} else {
-								List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
-								boolean perms = false;
-								for (ItemStack stack : g.unlock)
-									for (String t : items) {
-										if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null && stack.getItem().getUnlocalizedName(stack).equals(t)))
-											perms = true;
-									}
-								if (!perms)
-									hint = TextFormatting.OBFUSCATED + hint;
-							}
 						}
 					}
-					text.add(hint);
-
-					drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop, fontRendererObj);
 				}
+				text.add(hint);
+
+				drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop, fontRendererObj);
 			}
 		}
 	}

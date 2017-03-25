@@ -19,12 +19,13 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	public TileEntityInventory(int size, String name) {
 		stack = new ItemStack[size];
 		this.name = name;
+		clear();
 	}
 
 	public ItemStack[] copy() {
 		ItemStack[] stack = new ItemStack[this.stack.length];
 		for (int i = 0; i < stack.length; i++)
-			if (this.stack[i] != null)
+			if (this.stack[i] != ItemStack.EMPTY)
 				stack[i] = this.stack[i].copy();
 		return stack;
 	}
@@ -33,7 +34,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 		if (this.stack.length < stack.length)
 			this.stack = new ItemStack[stack.length];
 		for (int i = 0; i < stack.length; i++)
-			if (stack[i] != null)
+			if (stack[i] != ItemStack.EMPTY)
 				this.stack[i] = stack[i].copy();
 	}
 
@@ -59,7 +60,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < stack.length; ++i) {
-			if (stack[i] != null) {
+			if (stack[i] != ItemStack.EMPTY && stack[i] != null) {
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
 				nbtTagCompound.setByte("Slot", (byte) i);
 				stack[i].writeToNBT(nbtTagCompound);
@@ -74,7 +75,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	@Override
 	public void clear() {
 		for (int i = 0; i < stack.length; i++)
-			stack[i] = null;
+			stack[i] = ItemStack.EMPTY;
 	}
 
 	@Override
@@ -84,24 +85,24 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 
 	@Override
 	public ItemStack decrStackSize(int arg0, int arg1) {
-		if (stack[arg0] != null) {
+		if (stack[arg0] != ItemStack.EMPTY) {
 			ItemStack itemstack;
 
 			if (stack[arg0].getCount() <= arg1) {
 				itemstack = stack[arg0];
-				stack[arg0] = null;
+				stack[arg0] = ItemStack.EMPTY;
 				return itemstack;
 			} else {
 				itemstack = stack[arg0].splitStack(arg1);
 
 				if (stack[arg0].getCount() == 0) {
-					stack[arg0] = null;
+					stack[arg0] = ItemStack.EMPTY;
 				}
 
 				return itemstack;
 			}
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -148,7 +149,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	@Override
 	public ItemStack removeStackFromSlot(int arg0) {
 		ItemStack item = stack[arg0].copy();
-		stack[arg0] = null;
+		stack[arg0] = ItemStack.EMPTY;
 		return item;
 	}
 
@@ -161,7 +162,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	public void setInventorySlotContents(int arg0, ItemStack arg1) {
 		stack[arg0] = arg1;
 
-		if (arg1 != null && arg1.getCount() > getInventoryStackLimit()) {
+		if (arg1 != ItemStack.EMPTY && arg1.getCount() > getInventoryStackLimit()) {
 			arg1.setCount(getInventoryStackLimit());
 		}
 	}
@@ -183,7 +184,10 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 
 	@Override
 	public boolean isEmpty() {
-		return false; //TODO: Do stuff
+		for (ItemStack i: stack)
+			if (i != ItemStack.EMPTY)
+				return false;
+		return true;
 	}
 
 }

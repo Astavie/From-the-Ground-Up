@@ -18,9 +18,9 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TechnologyUtil {
 
 	public static boolean isEqual(Object obj, ItemStack stack1) {
-		if (obj == null && stack1 == null) {
+		if ((obj == null || obj == ItemStack.EMPTY) && stack1 == ItemStack.EMPTY) {
 			return true;
-		} else if (stack1 == null || obj == null) {
+		} else if (stack1 == ItemStack.EMPTY || (obj == null || obj == ItemStack.EMPTY)) {
 			return false;
 		}
 
@@ -80,7 +80,7 @@ public class TechnologyUtil {
 	}
 
 	public static String toString(Object obj) {
-		if (obj == null)
+		if (obj == null || obj == ItemStack.EMPTY)
 			return "";
 
 		if (obj instanceof ItemStack)
@@ -99,7 +99,7 @@ public class TechnologyUtil {
 
 	public static List<ItemStack> toItems(Object obj) {
 		List<ItemStack> item = new ArrayList<ItemStack>();
-		if (obj == null)
+		if (obj == null || obj == ItemStack.EMPTY)
 			return item;
 
 		if (obj instanceof ItemStack)
@@ -121,7 +121,7 @@ public class TechnologyUtil {
 	@SideOnly(Side.CLIENT)
 	public static boolean hasRecipe(ItemStack stack) {
 		for (IRecipe r : CraftingManager.getInstance().getRecipeList())
-			if (r != null && r.getRecipeOutput() != null && TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
+			if (r != null && r.getRecipeOutput() != ItemStack.EMPTY && TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
 				return true;
 		return FTGU.INSTANCE.runCompat("betterwithmods", stack);
 	}

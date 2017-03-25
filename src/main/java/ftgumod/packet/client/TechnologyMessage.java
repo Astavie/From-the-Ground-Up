@@ -3,6 +3,7 @@ package ftgumod.packet.client;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import ftgumod.FTGU;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
@@ -62,7 +63,6 @@ public class TechnologyMessage implements IMessage {
 
 		@Override
 		public IMessage handleClientMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
-			player = Minecraft.getMinecraft().player;
 			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			cap.clear();
 			for (Integer i : message.tech) {

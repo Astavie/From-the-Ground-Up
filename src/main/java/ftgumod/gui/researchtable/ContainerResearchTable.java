@@ -160,7 +160,7 @@ public class ContainerResearchTable extends Container {
 					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
 						if (TechnologyHandler.hasDecipher(recipe)) {
 							if (!inventorySlots.get(glass).getHasStack()) {
-								inventorySlots.get(output).putStack(null);
+								inventorySlots.get(output).putStack(ItemStack.EMPTY);
 								return;
 							}
 
@@ -173,7 +173,7 @@ public class ContainerResearchTable extends Container {
 										if ((s.getItem() == null && t.equals("tile.null")) || (s.getItem() != null && s.getItem().getUnlocalizedName(s).equals(t)))
 											perms = true;
 								if (!perms) {
-									inventorySlots.get(output).putStack(null);
+									inventorySlots.get(output).putStack(ItemStack.EMPTY);
 									return;
 								}
 							}
@@ -189,7 +189,7 @@ public class ContainerResearchTable extends Container {
 				}
 			}
 
-			inventorySlots.get(output).putStack(null);
+			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 		}
 	}
 
@@ -200,15 +200,15 @@ public class ContainerResearchTable extends Container {
 		onCraftMatrixChanged(invInput);
 		if (index == output && inventorySlots.get(output).getHasStack()) {
 			inventorySlots.get(parchment).decrStackSize(1);
-			inventorySlots.get(output).putStack(null);
+			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 
 			for (int i = 0; i < 9; i++) {
-				if (inventorySlots.get(combine + i).getStack() != null) {
+				if (inventorySlots.get(combine + i).getStack() != ItemStack.EMPTY) {
 					Item t = inventorySlots.get(combine + i).getStack().getItem();
 					if (t.getContainerItem() != null)
 						inventorySlots.get(combine + i).putStack(new ItemStack(t.getContainerItem()));
 					else
-						inventorySlots.get(combine + i).putStack(null);
+						inventorySlots.get(combine + i).putStack(ItemStack.EMPTY);
 				}
 			}
 			recipe = null;
@@ -219,7 +219,7 @@ public class ContainerResearchTable extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex) {
-		ItemStack itemStack1 = null;
+		ItemStack itemStack1 = ItemStack.EMPTY;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
@@ -228,24 +228,24 @@ public class ContainerResearchTable extends Container {
 
 			if (slotIndex == output) {
 				if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
 			} else if (!(slotIndex < output)) {
-				return null;
+				return ItemStack.EMPTY;
 			} else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			if (itemStack2.getCount() == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 
 			if (itemStack2.getCount() == itemStack1.getCount()) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			slot.onTake(playerIn, itemStack2);

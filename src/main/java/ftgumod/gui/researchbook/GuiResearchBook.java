@@ -103,7 +103,7 @@ public class GuiResearchBook extends GuiScreen {
 			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy", new Object[0]));
 			copy.enabled = false;
 			for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-				if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+				if (player.inventory.getStackInSlot(i) != ItemStack.EMPTY && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
 					copy.enabled = true;
 
 			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));

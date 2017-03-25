@@ -9,7 +9,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
 
 public class PlayerInspectEvent extends PlayerEvent {
 

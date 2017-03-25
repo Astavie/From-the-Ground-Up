@@ -108,7 +108,7 @@ public class EventHandler {
 			if (!TechnologyHandler.ENCHANTING.isUnlocked(player) && TechnologyHandler.ENCHANTING.canResearchIgnoreCustomUnlock(player)) {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if (stack != null && stack.getItem() == Items.ENCHANTED_BOOK) {
+					if (stack != ItemStack.EMPTY && stack.getItem() == Items.ENCHANTED_BOOK) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalisedName() + ".unlock");
 
@@ -195,7 +195,7 @@ public class EventHandler {
 		if (evt.crafting.getItem() == FTGUAPI.i_researchBook) {
 			for (int i = 0; i < evt.craftMatrix.getSizeInventory(); i++) {
 				ItemStack item = evt.craftMatrix.getStackInSlot(i);
-				if (item != null && item.getItem() == FTGUAPI.i_parchmentResearch) {
+				if (item != ItemStack.EMPTY && item.getItem() == FTGUAPI.i_parchmentResearch) {
 					((ItemParchmentResearch) item.getItem()).research(item, evt.player, false);
 				}
 			}

@@ -379,7 +379,7 @@ public class TechnologyHandler {
 	}
 
 	public static Technology getLocked(ItemStack item) {
-		if (item == null)
+		if (item == ItemStack.EMPTY)
 			return null;
 		for (Technology t : locked.keySet()) {
 			List l = locked.get(t);

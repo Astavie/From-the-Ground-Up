@@ -1,5 +1,6 @@
 package ftgumod.packet.server;
 
+import ftgumod.FTGU;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
@@ -35,7 +36,6 @@ public class UnlockTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
-			player = ctx.getServerHandler().playerEntity;
 			if (player != null && player.capabilities.isCreativeMode) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				Technology t = TechnologyHandler.getTechnology(message.tech);

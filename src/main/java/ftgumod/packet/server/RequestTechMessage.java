@@ -1,5 +1,6 @@
 package ftgumod.packet.server;
 
+import ftgumod.FTGU;
 import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +21,6 @@ public class RequestTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, RequestTechMessage message, MessageContext ctx) {
-			player = ctx.getServerHandler().playerEntity;
 			return new TechnologyMessage(player);
 		}
 

@@ -1,5 +1,6 @@
 package ftgumod.packet.server;
 
+import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
@@ -35,13 +36,12 @@ public class CopyTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
-			player = ctx.getServerHandler().playerEntity;
 			Technology tech = TechnologyHandler.getTechnology(message.id);
 
 			if (tech.isResearched(player)) {
 				int index = -1;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-					if (player.inventory.getStackInSlot(i) != null && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+					if (player.inventory.getStackInSlot(i) != ItemStack.EMPTY && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
 						index = i;
 
 				if (index != -1) {

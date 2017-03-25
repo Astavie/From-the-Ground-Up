@@ -83,7 +83,7 @@ public class ContainerIdeaTable extends Container {
 			Set<ItemStack> items = new HashSet<ItemStack>();
 			for (int j = 0; j < 3; j++) {
 				ItemStack s = inventorySlots.get(combine + j).getStack();
-				if (s != null) {
+				if (s != ItemStack.EMPTY) {
 					items.add(s);
 				}
 			}
@@ -133,7 +133,7 @@ public class ContainerIdeaTable extends Container {
 					}
 				}
 			}
-			inventorySlots.get(output).putStack(null);
+			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 		}
 	}
 
@@ -144,15 +144,15 @@ public class ContainerIdeaTable extends Container {
 		onCraftMatrixChanged(invInput);
 		if (index == output && inventorySlots.get(output).getHasStack()) {
 			inventorySlots.get(parchment).decrStackSize(1);
-			inventorySlots.get(output).putStack(null);
+			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 
 			for (int i = 0; i < 3; i++) {
-				if (inventorySlots.get(combine + i).getStack() != null) {
+				if (inventorySlots.get(combine + i).getStack() != ItemStack.EMPTY) {
 					Item t = inventorySlots.get(combine + i).getStack().getItem();
 					if (t.getContainerItem() != null)
 						inventorySlots.get(combine + i).putStack(new ItemStack(t.getContainerItem()));
 					else
-						inventorySlots.get(combine + i).putStack(null);
+						inventorySlots.get(combine + i).putStack(ItemStack.EMPTY);
 				}
 			}
 		}
@@ -162,7 +162,7 @@ public class ContainerIdeaTable extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex) {
-		ItemStack itemStack1 = null;
+		ItemStack itemStack1 = ItemStack.EMPTY;
 		Slot slot = (Slot) inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
@@ -171,24 +171,24 @@ public class ContainerIdeaTable extends Container {
 
 			if (slotIndex == output) {
 				if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 
 				slot.onSlotChange(itemStack2, itemStack1);
 			} else if (!(slotIndex < output)) {
-				return null;
+				return ItemStack.EMPTY;
 			} else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			if (itemStack2.getCount() == 0) {
-				slot.putStack((ItemStack) null);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 
 			if (itemStack2.getCount() == itemStack1.getCount()) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			slot.onTake(playerIn, itemStack2);
