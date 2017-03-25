@@ -35,6 +35,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.AchievementList;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
@@ -66,7 +67,7 @@ public class GuiResearchBook extends GuiScreen {
 
 	private EntityPlayer player;
 	private Technology selected;
-	private List<ItemStack> unlock;
+	private NonNullList<ItemStack> unlock;
 	private int num = 4;
 	private int pages;
 
@@ -112,7 +113,7 @@ public class GuiResearchBook extends GuiScreen {
 			// Load Items
 			List<ItemStack> list = TechnologyHandler.locked.get(selected);
 
-			unlock = new ArrayList<ItemStack>();
+			unlock = NonNullList.create();
 			for (ItemStack s : list)
 				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
 					for (CreativeTabs tab : s.getItem().getCreativeTabs())
@@ -461,7 +462,7 @@ public class GuiResearchBook extends GuiScreen {
 				int k7 = y - 4;
 
 				int j8 = Math.max(fontRendererObj.getStringWidth(s), 120);
-				int i9 = fontRendererObj.splitStringWidth(s1, j8);
+				int i9 = fontRendererObj.getWordWrappedHeight(s1, j8);
 				if (selected.isResearched(player))
 					i9 += 12;
 

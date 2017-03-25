@@ -24,11 +24,11 @@ public class ItemResearchBook extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ActionResult<ItemStack> onItemRightClick(ItemStack item, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, item);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand());
 	}
 
 }

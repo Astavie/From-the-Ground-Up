@@ -39,7 +39,7 @@ public class BlockResearchTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand hand, ItemStack item, EnumFacing parSide, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand hand, EnumFacing parSide, float hitX, float hitY, float hitZ) {
 		if (!parWorld.isRemote) {
 			parPlayer.openGui(FTGU.INSTANCE, GUI.RESEARCHTABLE.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
 		}

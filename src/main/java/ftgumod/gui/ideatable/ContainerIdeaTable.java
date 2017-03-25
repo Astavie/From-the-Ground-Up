@@ -181,17 +181,17 @@ public class ContainerIdeaTable extends Container {
 				return null;
 			}
 
-			if (itemStack2.stackSize == 0) {
+			if (itemStack2.getCount() == 0) {
 				slot.putStack((ItemStack) null);
 			} else {
 				slot.onSlotChanged();
 			}
 
-			if (itemStack2.stackSize == itemStack1.stackSize) {
+			if (itemStack2.getCount() == itemStack1.getCount()) {
 				return null;
 			}
 
-			slot.onPickupFromSlot(playerIn, itemStack2);
+			slot.onTake(playerIn, itemStack2);
 		}
 
 		return itemStack1;

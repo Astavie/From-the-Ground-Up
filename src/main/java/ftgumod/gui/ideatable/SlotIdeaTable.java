@@ -23,9 +23,9 @@ public class SlotIdeaTable extends Slot {
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
-		super.onPickupFromSlot(player, stack);
+	public ItemStack onTake(EntityPlayer player, ItemStack stack) {
 		onCrafting(stack);
+		return super.onTake(player, stack);
 	}
 
 	@Override

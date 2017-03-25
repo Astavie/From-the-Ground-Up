@@ -26,7 +26,7 @@ public class TechnologyUtil {
 
 		ItemStack stack = stack1.copy();
 
-		stack.stackSize = 1;
+		stack.setCount(1);
 		if (obj instanceof ItemStack) {
 			return (((ItemStack) obj).getMetadata() == OreDictionary.WILDCARD_VALUE && ((ItemStack) obj).getItem() == stack.getItem() || ItemStack.areItemStacksEqual((ItemStack) obj, stack));
 		} else if (obj instanceof String) {

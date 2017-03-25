@@ -49,8 +49,10 @@ public class ItemLookingGlass extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
+			
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 			ItemStack stack = new ItemStack(block, 1, block.getMetaFromState(state));

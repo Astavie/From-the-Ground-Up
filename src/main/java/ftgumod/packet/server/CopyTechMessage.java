@@ -46,10 +46,10 @@ public class CopyTechMessage implements IMessage {
 
 				if (index != -1) {
 					ItemStack stack = player.inventory.getStackInSlot(index);
-					if (stack.stackSize < 2)
+					if (stack.getCount() < 2)
 						player.inventory.removeStackFromSlot(index);
 					else
-						stack.stackSize--;
+						stack.setCount(stack.getCount() - 1);
 
 					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
 					TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalisedName());

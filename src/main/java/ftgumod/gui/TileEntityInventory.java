@@ -48,7 +48,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 			byte b0 = nbtTagCompound.getByte("Slot");
 
 			if (b0 >= 0 && b0 < stack.length) {
-				stack[b0] = ItemStack.loadItemStackFromNBT(nbtTagCompound);
+				stack[b0] = new ItemStack(nbtTagCompound);
 			}
 		}
 	}
@@ -87,14 +87,14 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 		if (stack[arg0] != null) {
 			ItemStack itemstack;
 
-			if (stack[arg0].stackSize <= arg1) {
+			if (stack[arg0].getCount() <= arg1) {
 				itemstack = stack[arg0];
 				stack[arg0] = null;
 				return itemstack;
 			} else {
 				itemstack = stack[arg0].splitStack(arg1);
 
-				if (stack[arg0].stackSize == 0) {
+				if (stack[arg0].getCount() == 0) {
 					stack[arg0] = null;
 				}
 
@@ -161,8 +161,8 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	public void setInventorySlotContents(int arg0, ItemStack arg1) {
 		stack[arg0] = arg1;
 
-		if (arg1 != null && arg1.stackSize > getInventoryStackLimit()) {
-			arg1.stackSize = getInventoryStackLimit();
+		if (arg1 != null && arg1.getCount() > getInventoryStackLimit()) {
+			arg1.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -179,6 +179,11 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	@Override
 	public String getGuiID() {
 		return FTGU.MODID + ":" + name;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return false; //TODO: Do stuff
 	}
 
 }

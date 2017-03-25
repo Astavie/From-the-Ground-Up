@@ -24,24 +24,20 @@ compileJava {
 minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
-    mappings = "stable_29"
+    mappings = "snapshot_20161220"
 }
 
 repositories {
     maven { url "http://dvs1.progwml6.com/files/maven" }
-    maven { url "http://blamejared.com/maven" }
 }
 
 dependencies {
     compile files(
-        'lib/ImmersiveEngineering-deobf.jar',
-        'lib/BetterWithMods-deobf.jar'
+        'lib/BetterWithMods-deobf.jar',
+        'lib/CraftTweaker-deobf.jar'
     )
 
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
-    deobfCompile "slimeknights.mantle:Mantle:${mc_version}-${mantle_version}"
-    deobfCompile "slimeknights:TConstruct:${mc_version}-${tc_version}"
-    deobfCompile "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:${mc_version}-${crafttweaker_version}"
 }
 
 processResources
