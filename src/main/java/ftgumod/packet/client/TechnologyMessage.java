@@ -62,7 +62,6 @@ public class TechnologyMessage implements IMessage {
 
 		@Override
 		public IMessage handleClientMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
-			player = Minecraft.getMinecraft().player;
 			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			cap.clear();
 			for (Integer i : message.tech) {
