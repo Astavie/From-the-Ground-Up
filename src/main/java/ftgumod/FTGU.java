@@ -2,8 +2,8 @@ package ftgumod;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import ftgumod.compat.CompatBWM;
+import ftgumod.compat.CompatJEI;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
@@ -44,7 +44,7 @@ public class FTGU {
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
 
-	private final Map<String, ICompat> compat = new HashMap<String, ICompat>();
+	public final Map<String, ICompat> compat = new HashMap<String, ICompat>();
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -151,6 +151,7 @@ public class FTGU {
 			}
 		if (Loader.isModLoaded("betterwithmods"))
 			compat.put("betterwithmods", new CompatBWM());
+		PROXY.postInit();
 	}
 
 }

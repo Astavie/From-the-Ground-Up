@@ -71,6 +71,7 @@ public class TechnologyMessage implements IMessage {
 				else
 					cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalisedName());
 			}
+			FTGU.INSTANCE.runCompat("jei", message.tech);
 			return null;
 		}
 
