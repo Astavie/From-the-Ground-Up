@@ -12,4 +12,7 @@ public class ProxyCommon {
 	public void registerRenderers() {
 	}
 
+	public void postInit() {
+	}
+
 }

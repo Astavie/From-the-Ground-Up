@@ -269,6 +269,10 @@ public class TechnologyHandler {
 		return ID;
 	}
 
+	public static int getTotalTechnologies() {
+		return ID;
+	}
+
 	public static void registerDecipher(ResearchRecipe r, Decipher d) {
 		unlock.put(r, d);
 		ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);

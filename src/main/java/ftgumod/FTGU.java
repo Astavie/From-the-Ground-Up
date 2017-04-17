@@ -43,7 +43,7 @@ public class FTGU {
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
 
-	private final Map<String, ICompat> compat = new HashMap<String, ICompat>();
+	public final Map<String, ICompat> compat = new HashMap<String, ICompat>();
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -150,6 +150,7 @@ public class FTGU {
 			}
 		if (Loader.isModLoaded("betterwithmods"))
 			compat.put("betterwithmods", new CompatBWM());
+		PROXY.postInit();
 	}
 
 }
