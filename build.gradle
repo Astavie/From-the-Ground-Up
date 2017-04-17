@@ -35,7 +35,9 @@ repositories {
 dependencies {
     compile files(
         'lib/ImmersiveEngineering-deobf.jar',
-        'lib/BetterWithMods-deobf.jar'
+        'lib/BetterWithMods-deobf.jar',
+        'lib/RefinedStorage-deobf.jar',
+        'lib/MCMultiPart-deobf.jar'
     )
 
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"

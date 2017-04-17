@@ -41,7 +41,6 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		NBTTagList nbttaglist = compound.getTagList("Items", 10);
-		stack = new ItemStack[getSizeInventory()];
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 			NBTTagCompound nbtTagCompound = nbttaglist.getCompoundTagAt(i);
