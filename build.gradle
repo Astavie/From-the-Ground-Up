@@ -34,7 +34,8 @@ repositories {
 dependencies {
     compile files(
         'lib/BetterWithMods-deobf.jar',
-        'lib/CraftTweaker-deobf.jar'
+        'lib/CraftTweaker-deobf.jar',
+        'lib/RefinedStorage-deobf.jar'
     )
 
     deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"

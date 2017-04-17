@@ -2,8 +2,8 @@ package ftgumod;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import ftgumod.compat.CompatBWM;
-import ftgumod.compat.CompatTC;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
@@ -12,10 +12,10 @@ import ftgumod.minetweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
-import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.CapabilityTechnology.DefaultImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.CapabilityTechnology.Storage;
+import ftgumod.technology.TechnologyHandler;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -149,8 +149,6 @@ public class FTGU {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		if (Loader.isModLoaded("tconstruct"))
-			compat.put("tconstruct", new CompatTC());
 		if (Loader.isModLoaded("betterwithmods"))
 			compat.put("betterwithmods", new CompatBWM());
 	}

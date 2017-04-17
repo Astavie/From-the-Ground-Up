@@ -7,21 +7,19 @@ import java.util.Map;
 import java.util.UUID;
 import org.lwjgl.input.Keyboard;
 import ftgumod.event.PlayerInspectEvent;
+import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.CapabilityTechnology;
+import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
-import ftgumod.workbench.FTGUCraftResult;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.gui.inventory.GuiCrafting;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -30,8 +28,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
+import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotCrafting;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
@@ -43,7 +41,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.GuiOpenEvent;
+import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.common.util.Constants.NBT;
@@ -76,7 +75,7 @@ public class EventHandler {
 		}
 	}
 
-	private static final Map<UUID, Integer> ticks = new HashMap<UUID, Integer>();
+	private final Map<UUID, Integer> ticks = new HashMap<UUID, Integer>();
 
 	public int s = 5;
 	public int t = s * 20;
@@ -206,11 +205,7 @@ public class EventHandler {
 	public void onPlayerJoin(net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent evt) {
 		if (!evt.player.world.isRemote) {
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
-
-			// SLOT
-			Slot slot = inv.inventorySlots.get(0);
-			inv.craftResult = new FTGUCraftResult(evt.player);
-			inv.inventorySlots.set(0, new SlotCrafting(evt.player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
+			inv.addListener(new CraftingListener(evt.player));
 
 			ticks.remove(evt.player.getUniqueID());
 		}
@@ -235,11 +230,7 @@ public class EventHandler {
 	public void onPlayerClone(PlayerEvent.Clone evt) {
 		if (!evt.getEntity().world.isRemote) {
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
-
-			// SLOT
-			Slot slot = inv.inventorySlots.get(0);
-			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
-			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
+			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 
 			ticks.remove(evt.getOriginal().getUniqueID());
 		}
@@ -248,50 +239,39 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
 		Container work = evt.getEntityPlayer().openContainer;
-		if (work instanceof ContainerWorkbench) {
-			ContainerWorkbench inv = (ContainerWorkbench) evt.getEntityPlayer().openContainer;
-
-			// SLOT
-			Slot slot = inv.inventorySlots.get(0);
-			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
-			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
-		} else if (!FTGU.INSTANCE.runCompat("tconstruct", work, evt.getEntityPlayer()))
-			FTGU.INSTANCE.runCompat("bettterwithmods", work, evt.getEntityPlayer());
+		work.addListener(new CraftingListener(evt.getEntityPlayer()));
 	}
 
 	@SubscribeEvent
 	public void onPlayerCloseContainer(PlayerContainerEvent.Close evt) {
-		if (evt.getEntityPlayer().openContainer instanceof ContainerPlayer) {
-			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
-
-			// SLOT
-			Slot slot = inv.inventorySlots.get(0);
-			inv.craftResult = new FTGUCraftResult(evt.getEntityPlayer());
-			inv.inventorySlots.set(0, new SlotCrafting(evt.getEntityPlayer(), inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
-		}
+		Container inv = evt.getEntityPlayer().openContainer;
+		inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 	}
+
+	@SideOnly(Side.CLIENT)
+	private ItemStack stack = ItemStack.EMPTY;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
-	public void onPlayerOpenGui(GuiOpenEvent evt) {
+	public void onPlayerInGui(DrawScreenEvent.Pre evt) {
 		Gui work = evt.getGui();
-		if (work instanceof GuiContainer)
-			if (work instanceof GuiCrafting) {
-				ContainerWorkbench inv = (ContainerWorkbench) ((GuiCrafting) evt.getGui()).inventorySlots;
+		if (work instanceof GuiContainer) {
+			Container inv = ((GuiContainer) work).inventorySlots;
+			for (Slot s : inv.inventorySlots) {
+				if (s.inventory instanceof InventoryCraftResult) {
+					ItemStack stack = s.inventory.getStackInSlot(0);
+					if (stack != this.stack) {
+						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack);
+						if (stack != ItemStack.EMPTY)
+							MinecraftForge.EVENT_BUS.post(event);
 
-				// SLOT
-				Slot slot = inv.inventorySlots.get(0);
-				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().player);
-				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
-			} else if (work instanceof GuiInventory) {
-				ContainerPlayer inv = (ContainerPlayer) ((GuiInventory) evt.getGui()).inventorySlots;
-
-				// SLOT
-				Slot slot = inv.inventorySlots.get(0);
-				inv.craftResult = new FTGUCraftResult(Minecraft.getMinecraft().player);
-				inv.inventorySlots.set(0, new SlotCrafting(Minecraft.getMinecraft().player, inv.craftMatrix, inv.craftResult, 0, slot.xPos, slot.yPos));
-			} else if (!FTGU.INSTANCE.runCompat("tconstruct", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player))
-				FTGU.INSTANCE.runCompat("betterwithmods", ((GuiContainer) work).inventorySlots, Minecraft.getMinecraft().player);
+						this.stack = event.willLock() ? ItemStack.EMPTY : stack;
+						s.inventory.setInventorySlotContents(0, this.stack);
+					}
+					return;
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
