@@ -50,7 +50,6 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -249,7 +248,6 @@ public class EventHandler {
 		inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 	}
 
-	@SideOnly(Side.CLIENT)
 	private ItemStack stack = ItemStack.EMPTY;
 
 	@SubscribeEvent
