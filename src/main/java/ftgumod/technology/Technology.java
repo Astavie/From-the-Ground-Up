@@ -1,10 +1,10 @@
 package ftgumod.technology;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 import javax.annotation.Nullable;
+
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
@@ -138,8 +138,6 @@ public class Technology {
 	}
 
 	public boolean canResearchIgnoreCustomUnlock(EntityPlayer player) {
-		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-
 		if (isResearched(player))
 			return false;
 		if (prev != null && !prev.isResearched(player))

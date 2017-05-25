@@ -386,9 +386,9 @@ public class TechnologyHandler {
 		if (item == null)
 			return null;
 		for (Technology t : locked.keySet()) {
-			List l = locked.get(t);
-			for (Object o : l)
-				if (TechnologyUtil.isEqual(o, item))
+			List<ItemStack> l = locked.get(t);
+			for (ItemStack s : l)
+				if (TechnologyUtil.isEqual(s, item))
 					return t;
 		}
 		return null;

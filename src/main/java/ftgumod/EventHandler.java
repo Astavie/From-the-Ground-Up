@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import org.lwjgl.input.Keyboard;
+
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemParchmentResearch;
@@ -50,7 +52,6 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -276,7 +277,7 @@ public class EventHandler {
 	}
 
 	@SubscribeEvent
-	public void onEntityConstruct(AttachCapabilitiesEvent evt) {
+	public void onEntityConstruct(AttachCapabilitiesEvent<?> evt) {
 		if (evt.getObject() instanceof EntityPlayer) {
 			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagList>() {
 

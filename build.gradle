@@ -34,16 +34,21 @@ repositories {
 
 dependencies {
     compile files(
-        'lib/ImmersiveEngineering-deobf.jar',
-        'lib/BetterWithMods-deobf.jar',
-        'lib/RefinedStorage-deobf.jar',
-        'lib/MCMultiPart-deobf.jar'
+        'lib/BetterWithMods-deobf.jar'
     )
 
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
-    deobfCompile "slimeknights.mantle:Mantle:${mc_version}-${mantle_version}"
-    deobfCompile "slimeknights:TConstruct:${mc_version}-${tc_version}"
-    deobfCompile "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:${mc_version}-${crafttweaker_version}"
+    // Mod APIs
+    deobfCompile "mezz.jei:jei_${mc_version}:+:api"
+    deobfCompile "MineTweaker3:MineTweaker3-API:+"
+    deobfCompile "blusunrize:ImmersiveEngineering:+:api"
+
+    // Runtime Mods
+    runtime "slimeknights.mantle:Mantle:${mc_version}+"
+    runtime "slimeknights:TConstruct:${mc_version}+"
+
+    runtime "mezz.jei:jei_${mc_version}:+"
+    runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
+    runtime "blusunrize:ImmersiveEngineering:0.10+"
 }
 
 processResources

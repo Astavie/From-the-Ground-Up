@@ -1,5 +1,6 @@
 package ftgumod.item;
 
+import ftgumod.gui.researchbook.GuiResearchBook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,8 +12,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ftgumod.FTGUAPI;
-import ftgumod.gui.researchbook.GuiResearchBook;
 
 public class ItemResearchBook extends Item {
 

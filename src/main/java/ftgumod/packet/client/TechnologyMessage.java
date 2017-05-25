@@ -1,14 +1,13 @@
 package ftgumod.packet.client;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+
 import ftgumod.FTGU;
 import ftgumod.technology.CapabilityTechnology;
-import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
+import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;

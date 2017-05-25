@@ -24,6 +24,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	private Collection<Integer> tech;
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean run(Object... arg) {
 		if (tech == null) {
@@ -33,14 +34,14 @@ public class CompatJEI implements ICompat, IModPlugin {
 		}
 
 		if (arg[0] instanceof Collection) {
-			Collection<Integer> add = new HashSet<Integer>((Collection) arg[0]);
+			Collection<Integer> add = new HashSet<Integer>((Collection<Integer>) arg[0]);
 			Collection<Integer> remove = new HashSet<Integer>(tech);
 			add.removeAll(tech);
-			remove.removeAll((Collection) arg[0]);
+			remove.removeAll((Collection<Integer>) arg[0]);
 
 			for (int i : add)
 				for (ItemStack stack : TechnologyHandler.getTechnology(i).getItems())
-					jeiHelpers.getItemBlacklist().removeItemFromBlacklist(stack);
+					jeiHelpers.getIngredientBlacklist().removeIngredientFromBlacklist(stack);
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
@@ -48,14 +49,14 @@ public class CompatJEI implements ICompat, IModPlugin {
 					continue;
 
 				for (ItemStack stack : tech.getItems())
-					jeiHelpers.getItemBlacklist().addItemToBlacklist(stack);
+					jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(stack);
 			}
 
 			JeiRuntime runtime = Internal.getRuntime();
 			if (runtime != null)
 				runtime.getItemListOverlay().rebuildItemFilter();
 
-			tech = new HashSet<Integer>((Collection) arg[0]);
+			tech = new HashSet<Integer>((Collection<Integer>) arg[0]);
 
 			return true;
 		}

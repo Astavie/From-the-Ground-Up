@@ -2,7 +2,6 @@ package ftgumod.event;
 
 import ftgumod.technology.Technology;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerResearchEvent extends PlayerEvent {

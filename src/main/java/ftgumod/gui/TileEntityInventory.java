@@ -1,10 +1,7 @@
 package ftgumod.gui;
 
 import ftgumod.FTGU;
-import ftgumod.gui.researchtable.ContainerResearchTable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
