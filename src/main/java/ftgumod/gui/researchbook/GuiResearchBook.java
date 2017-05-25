@@ -1,21 +1,22 @@
 package ftgumod.gui.researchbook;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import org.lwjgl.input.Mouse;
+
 import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.technology.CapabilityTechnology;
+import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
+import ftgumod.technology.TechnologyUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -32,8 +33,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.AchievementList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -80,7 +79,6 @@ public class GuiResearchBook extends GuiScreen {
 		currentPage = 0;
 
 		int i = 141;
-		int j = 141;
 		xScrollO = xScrollP = xScrollTarget = AchievementList.OPEN_INVENTORY.displayColumn * 24 - i / 2 - 12;
 		yScrollO = yScrollP = yScrollTarget = AchievementList.OPEN_INVENTORY.displayRow * 24 - i / 2 - 12;
 
@@ -197,7 +195,6 @@ public class GuiResearchBook extends GuiScreen {
 			zoom = MathHelper.clamp(zoom, 1.0F, 2.0F);
 
 			if (zoom != f3) {
-				float f5 = f3 - zoom;
 				float f4 = f3 * (float) imageWidth;
 				float f = f3 * (float) imageHeight;
 				float f1 = zoom * (float) imageWidth;
@@ -264,6 +261,7 @@ public class GuiResearchBook extends GuiScreen {
 		fontRendererObj.drawString(I18n.format("item.research_book.name", new Object[0]), i + 15, j + 5, 0x404040);
 	}
 
+	@SuppressWarnings("deprecation")
 	private TextureAtlasSprite getTexture(ItemStack itemStack) {
 		return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(((ItemBlock) itemStack.getItem()).block.getStateFromMeta(itemStack.getItemDamage()));
 	}

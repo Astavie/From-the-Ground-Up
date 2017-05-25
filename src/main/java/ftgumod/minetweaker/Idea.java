@@ -31,7 +31,7 @@ public class Idea {
 	private static class Add extends BaseInterfaceAdd<IdeaRecipe> {
 
 		protected Add(IdeaRecipe tech) {
-			super(name, tech, new BaseCollection(TechnologyHandler.ideas));
+			super(name, tech, new BaseCollection<IdeaRecipe>(TechnologyHandler.ideas));
 		}
 
 		@Override
@@ -55,7 +55,7 @@ public class Idea {
 	private static class Remove extends BaseInterfaceRemove<IdeaRecipe> {
 
 		protected Remove(IdeaRecipe tech) {
-			super(name, tech, new BaseCollection(TechnologyHandler.ideas));
+			super(name, tech, new BaseCollection<IdeaRecipe>(TechnologyHandler.ideas));
 		}
 
 		@Override

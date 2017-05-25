@@ -2,8 +2,8 @@ package ftgumod;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import ftgumod.compat.CompatBWM;
-import ftgumod.compat.CompatJEI;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
@@ -95,8 +95,8 @@ public class FTGU {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
-		headstart = config.get(config.CATEGORY_GENERAL, "Headstart", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
-		moddedOnly = config.get(config.CATEGORY_GENERAL, "Modded", false, "Set this to true to automatically research all vanilla technologies").getBoolean();
+		headstart = config.get(Configuration.CATEGORY_GENERAL, "Headstart", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
+		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded", false, "Set this to true to automatically research all vanilla technologies").getBoolean();
 
 		config.save();
 	}

@@ -1,27 +1,23 @@
 package ftgumod.gui.ideatable;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.util.ResourceLocation;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.gui.TileEntityInventory;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
-import ftgumod.technology.TechnologyHandler;
+import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.util.ResourceLocation;
 
 public class GuiIdeaTable extends GuiContainer {
 
 	private final ResourceLocation texture;
 	private final InventoryPlayer player;
-	private final IInventory tileentity;
 
 	public GuiIdeaTable(InventoryPlayer player, TileEntityInventory tileentity) {
 		super(tileentity.createContainer(player, player.player));
 		this.player = player;
-		this.tileentity = tileentity;
 
 		texture = new ResourceLocation(FTGU.MODID + ":textures/gui/container/" + tileentity.getName() + ".png");
 

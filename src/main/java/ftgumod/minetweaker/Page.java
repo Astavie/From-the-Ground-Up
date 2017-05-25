@@ -21,7 +21,7 @@ public class Page {
 	private static class Add extends BaseInterfaceAdd<PAGE> {
 
 		protected Add(PAGE page) {
-			super(name, page, new BaseCollection(PAGE.pages));
+			super(name, page, new BaseCollection<PAGE>(PAGE.pages));
 		}
 
 		@Override
@@ -44,7 +44,7 @@ public class Page {
 	private static class Remove extends BaseInterfaceRemove<PAGE> {
 
 		protected Remove(PAGE page) {
-			super(name, page, new BaseCollection(PAGE.pages));
+			super(name, page, new BaseCollection<PAGE>(PAGE.pages));
 		}
 
 		@Override

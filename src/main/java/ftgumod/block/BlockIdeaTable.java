@@ -29,8 +29,6 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
-	private String name;
-
 	public BlockIdeaTable(String name) {
 		super(Material.WOOD);
 		setHardness(2.5F);
@@ -38,7 +36,6 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 		setUnlocalizedName(name);
 		setCreativeTab(CreativeTabs.DECORATIONS);
 		isBlockContainer = true;
-		this.name = name;
 	}
 
 	@Override

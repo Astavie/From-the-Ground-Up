@@ -29,16 +29,26 @@ minecraft {
 
 repositories {
     maven { url "http://dvs1.progwml6.com/files/maven" }
+    maven { url "http://blamejared.com/maven" }
 }
 
 dependencies {
     compile files(
-        'lib/BetterWithMods-deobf.jar',
-        'lib/CraftTweaker-deobf.jar',
-        'lib/RefinedStorage-deobf.jar'
+        'lib/BetterWithMods-deobf.jar'
     )
 
-    deobfCompile "mezz.jei:jei_${mc_version}:${jei_version}"
+    // Mod APIs
+    deobfCompile "mezz.jei:jei_${mc_version}:+:api"
+    deobfCompile "MineTweaker3:MineTweaker3-API:+"
+    deobfCompile "blusunrize:ImmersiveEngineering:+:api"
+
+    // Runtime Mods
+    runtime "slimeknights.mantle:Mantle:${mc_version}+"
+    runtime "slimeknights:TConstruct:${mc_version}+"
+
+    runtime "mezz.jei:jei_${mc_version}:+"
+    runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
+    runtime "blusunrize:ImmersiveEngineering:0.11+"
 }
 
 processResources

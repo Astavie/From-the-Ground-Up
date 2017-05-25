@@ -1,6 +1,5 @@
 package ftgumod.packet.server;
 
-import ftgumod.FTGU;
 import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;

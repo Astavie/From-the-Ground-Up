@@ -46,7 +46,7 @@ public class Scramble {
 		private final ResearchRecipe key;
 
 		protected Add(ResearchRecipe key, DecipherGroup group) {
-			super(name, group, new BaseCollection(TechnologyHandler.unlock.get(key).list));
+			super(name, group, new BaseCollection<DecipherGroup>(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
 
@@ -102,7 +102,7 @@ public class Scramble {
 		private final ResearchRecipe key;
 
 		protected Remove(ResearchRecipe key, Collection<DecipherGroup> group) {
-			super(name, group, new BaseCollection(TechnologyHandler.unlock.get(key).list));
+			super(name, group, new BaseCollection<DecipherGroup>(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
 

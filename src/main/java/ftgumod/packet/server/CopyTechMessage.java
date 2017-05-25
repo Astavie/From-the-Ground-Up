@@ -1,6 +1,5 @@
 package ftgumod.packet.server;
 
-import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;

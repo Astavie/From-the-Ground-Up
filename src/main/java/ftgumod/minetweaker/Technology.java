@@ -149,7 +149,7 @@ public class Technology {
 	private static class AddItems extends BaseInterfaceAdd<ItemStack> {
 
 		protected AddItems(Collection<ItemStack> recipes, ftgumod.technology.Technology tech) {
-			super(name, recipes, new BaseCollection(tech.item));
+			super(name, recipes, new BaseCollection<ItemStack>(tech.item));
 		}
 
 		@Override

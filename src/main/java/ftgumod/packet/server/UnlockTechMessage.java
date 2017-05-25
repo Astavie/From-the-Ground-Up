@@ -1,11 +1,10 @@
 package ftgumod.packet.server;
 
-import ftgumod.FTGU;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.CapabilityTechnology;
+import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
