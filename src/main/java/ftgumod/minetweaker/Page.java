@@ -35,8 +35,7 @@ public class Page {
 	public static void removePage(String name) {
 		PAGE page = PAGE.get(name);
 		if (page == null) {
-			MineTweakerAPI.logWarning(
-					"[" + FTGUTweaker.name + "] No " + Page.name + " found for " + name + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Page.name + " found for " + name + ". Command ignored!");
 			return;
 		}
 		MineTweakerAPI.apply(new Remove(page));

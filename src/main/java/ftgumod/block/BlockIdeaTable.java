@@ -39,22 +39,17 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState,
-			EntityPlayer parPlayer, EnumHand hand, ItemStack item, EnumFacing parSide, float hitX, float hitY,
-			float hitZ) {
+	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand hand, ItemStack item, EnumFacing parSide, float hitX, float hitY, float hitZ) {
 		if (!parWorld.isRemote) {
-			parPlayer.openGui(FTGU.INSTANCE, GUI.IDEATABLE.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(),
-					parBlockPos.getZ());
+			parPlayer.openGui(FTGU.INSTANCE, GUI.IDEATABLE.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
 		}
 		return true;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos blockPos, IBlockState blockState, EntityLivingBase player,
-			ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos blockPos, IBlockState blockState, EntityLivingBase player, ItemStack stack) {
 		if (!world.isRemote) {
-			world.setBlockState(blockPos, blockState.withProperty(FACING, player.getHorizontalFacing().getOpposite()),
-					2);
+			world.setBlockState(blockPos, blockState.withProperty(FACING, player.getHorizontalFacing().getOpposite()), 2);
 		}
 	}
 

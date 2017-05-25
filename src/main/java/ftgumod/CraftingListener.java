@@ -1,7 +1,6 @@
 package ftgumod;
 
 import java.util.List;
-
 import ftgumod.event.PlayerLockEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

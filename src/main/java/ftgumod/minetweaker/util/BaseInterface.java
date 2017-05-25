@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
 import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
@@ -39,8 +38,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 				if (base.add(recipe)) {
 					successful.add(recipe);
 				} else {
-					MineTweakerAPI.logError(
-							"[" + FTGUTweaker.name + "] Error adding " + name + " Recipe for " + getRecipeInfo(recipe));
+					MineTweakerAPI.logError("[" + FTGUTweaker.name + "] Error adding " + name + " Recipe for " + getRecipeInfo(recipe));
 				}
 			} else {
 				MineTweakerAPI.logError("[" + FTGUTweaker.name + "] Error adding " + name + " Recipe: null object");
@@ -61,8 +59,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 				if (base.remove(recipe)) {
 					successful.add(recipe);
 				} else {
-					MineTweakerAPI.logError("[" + FTGUTweaker.name + "] Error removing " + name + " Recipe for "
-							+ getRecipeInfo(recipe));
+					MineTweakerAPI.logError("[" + FTGUTweaker.name + "] Error removing " + name + " Recipe for " + getRecipeInfo(recipe));
 				}
 			} else {
 				MineTweakerAPI.logError("[" + FTGUTweaker.name + "] Error removing " + name + " Recipe: null object");
@@ -77,8 +74,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 	}
 
 	protected String describeRemove() {
-		return "[" + FTGUTweaker.name + "] Removing " + recipes.size() + " " + name + " Recipe(s) for "
-				+ getRecipeInfo();
+		return "[" + FTGUTweaker.name + "] Removing " + recipes.size() + " " + name + " Recipe(s) for " + getRecipeInfo();
 	}
 
 	protected String getRecipeInfo() {

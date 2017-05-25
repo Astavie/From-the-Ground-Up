@@ -2,7 +2,6 @@ package ftgumod.gui.researchtable;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;
@@ -48,13 +47,10 @@ public class GuiResearchTable extends GuiContainer {
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine
-					&& slot.getSlotIndex() < table.combine + 9
-					&& table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
+			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9 && table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
 				List<String> text = new ArrayList<String>();
 
-				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "."
-						+ TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
+				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
 				if (TechnologyHandler.hasDecipher(table.recipe)) {
 					Decipher d = TechnologyHandler.unlock.get(table.recipe);
 					DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
@@ -62,13 +58,11 @@ public class GuiResearchTable extends GuiContainer {
 						if (!table.inventorySlots.get(table.glass).getHasStack()) {
 							hint = TextFormatting.OBFUSCATED + hint;
 						} else {
-							List<String> items = ItemLookingGlass
-									.getItems(table.inventorySlots.get(table.glass).getStack());
+							List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
 							boolean perms = false;
 							for (ItemStack stack : g.unlock)
 								for (String t : items) {
-									if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null
-											&& stack.getItem().getUnlocalizedName(stack).equals(t)))
+									if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null && stack.getItem().getUnlocalizedName(stack).equals(t)))
 										perms = true;
 								}
 							if (!perms)

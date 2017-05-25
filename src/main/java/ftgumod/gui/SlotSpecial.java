@@ -11,8 +11,7 @@ public class SlotSpecial extends Slot {
 	private int limit;
 	public Container container;
 
-	public SlotSpecial(Container container, IInventory inventory, int index, int x, int y, int limit,
-			ItemStack... special) {
+	public SlotSpecial(Container container, IInventory inventory, int index, int x, int y, int limit, ItemStack... special) {
 		super(inventory, index, x, y);
 		this.special = special;
 		this.limit = limit;
