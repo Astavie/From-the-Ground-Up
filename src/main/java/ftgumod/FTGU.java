@@ -2,6 +2,7 @@ package ftgumod;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import ftgumod.compat.CompatBWM;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;

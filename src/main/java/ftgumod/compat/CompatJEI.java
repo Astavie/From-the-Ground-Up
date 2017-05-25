@@ -2,6 +2,7 @@ package ftgumod.compat;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import mezz.jei.Internal;

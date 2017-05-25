@@ -2,6 +2,7 @@ package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import ftgumod.FTGU;
 import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;

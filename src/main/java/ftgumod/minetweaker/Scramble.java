@@ -1,6 +1,7 @@
 package ftgumod.minetweaker;
 
 import java.util.Collection;
+
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;

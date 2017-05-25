@@ -2,6 +2,7 @@ package ftgumod.gui.ideatable;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import ftgumod.FTGUAPI;
 import ftgumod.gui.SlotSpecial;
 import ftgumod.gui.TileEntityInventory;
