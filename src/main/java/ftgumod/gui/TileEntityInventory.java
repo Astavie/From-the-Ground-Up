@@ -180,7 +180,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 
 	@Override
 	public boolean isEmpty() {
-		for (ItemStack i: stack)
+		for (ItemStack i : stack)
 			if (i != ItemStack.EMPTY)
 				return false;
 		return true;

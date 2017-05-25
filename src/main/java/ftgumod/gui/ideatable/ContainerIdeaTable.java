@@ -2,6 +2,7 @@ package ftgumod.gui.ideatable;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import ftgumod.FTGUAPI;
 import ftgumod.gui.SlotSpecial;
 import ftgumod.gui.TileEntityInventory;
@@ -89,7 +90,7 @@ public class ContainerIdeaTable extends Container {
 			}
 			boolean recipe[] = new boolean[i.recipe.length];
 			for (int j = 0; j < i.recipe.length; j++) {
-				for (ItemStack stack: items) {
+				for (ItemStack stack : items) {
 					if (TechnologyUtil.isEqual(i.recipe[j], stack)) {
 						items.remove(stack);
 						recipe[j] = true;
@@ -123,7 +124,8 @@ public class ContainerIdeaTable extends Container {
 				if (recipe != null) {
 					Technology tech = recipe.output;
 					EntityPlayer player = invPlayer.player;
-					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
+					if (!tech.researched && !tech.isResearched(player)
+							&& (tech.prev == null || tech.prev.isResearched(player))) {
 						ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
 
 						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalisedName());
@@ -163,7 +165,7 @@ public class ContainerIdeaTable extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int slotIndex) {
 		ItemStack itemStack1 = ItemStack.EMPTY;
-		Slot slot = (Slot) inventorySlots.get(slotIndex);
+		Slot slot = inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemStack2 = slot.getStack();

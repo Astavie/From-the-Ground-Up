@@ -1,10 +1,10 @@
 package ftgumod.gui.ideatable;
 
+import ftgumod.FTGUAPI;
+import ftgumod.gui.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import ftgumod.FTGUAPI;
-import ftgumod.gui.TileEntityInventory;
 
 public class TileEntityIdeaTable extends TileEntityInventory {
 

@@ -1,16 +1,16 @@
 package ftgumod.minetweaker;
 
+import ftgumod.minetweaker.util.BaseCollection;
+import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
+import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
+import ftgumod.minetweaker.util.InputHelper;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.recipe.ResearchRecipe;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
-import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
-import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.recipe.ResearchRecipe;
-import ftgumod.minetweaker.util.BaseCollection;
-import ftgumod.minetweaker.util.InputHelper;
 
 @ZenClass("mods.ftgu.Research")
 public class Research {
@@ -21,7 +21,8 @@ public class Research {
 	public static void addResearch(String tech, IIngredient[][] recipe) {
 		Technology t = TechnologyHandler.getTechnology(tech);
 		if (t == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name + " found for " + tech + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name
+					+ " found for " + tech + ". Command ignored!");
 			return;
 		}
 
@@ -45,7 +46,8 @@ public class Research {
 	public static void removeResearch(String tech) {
 		ResearchRecipe i = TechnologyHandler.getResearch(tech);
 		if (i == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			MineTweakerAPI
+					.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
 			return;
 		}
 

@@ -2,6 +2,7 @@ package ftgumod.technology.recipe;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyUtil;
 
@@ -17,7 +18,7 @@ public class IdeaRecipe {
 
 	public IdeaRecipe(Technology output, Object... obj) {
 		this.output = output;
-		
+
 		recipe = new Object[((String) obj[0]).length()];
 
 		char[] recipe = ((String) obj[0]).toCharArray();
