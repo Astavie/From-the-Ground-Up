@@ -2,7 +2,9 @@ package ftgumod.item;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.lwjgl.input.Keyboard;
+
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.event.PlayerInspectEvent;
@@ -49,7 +51,8 @@ public class ItemLookingGlass extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
+	public EnumActionResult onItemUse(ItemStack item, EntityPlayer player, World world, BlockPos pos, EnumHand hand,
+			EnumFacing face, float f1, float f2, float f3) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
@@ -61,20 +64,24 @@ public class ItemLookingGlass extends Item {
 				if (r.output.canResearch(player))
 					for (DecipherGroup g : d.list)
 						for (ItemStack s : g.unlock)
-							if ((s.getItem() != null && s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
+							if ((s.getItem() != null && s.getMetadata() == OreDictionary.WILDCARD_VALUE
+									&& s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
 								need = true;
 			}
 
 			boolean evt = false;
 			if (!need) {
 				evt = true;
-				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, getItems(item), pos, face, stack, false);
+				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, getItems(item), pos, face, stack,
+						false);
 				MinecraftForge.EVENT_BUS.post(event);
 
 				if (!event.isUseful()) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
-						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(
+								new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK,
+								SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
 				}
@@ -92,8 +99,10 @@ public class ItemLookingGlass extends Item {
 			for (int i = 0; i < blocks.tagCount(); i++)
 				if (blocks.getStringTagAt(i).equalsIgnoreCase(name)) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.decipher.already", I18n.translateToLocal(name + ".name"))));
-						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted(
+								"technology.decipher.already", I18n.translateToLocal(name + ".name"))));
+						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK,
+								SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
 				}
@@ -102,8 +111,10 @@ public class ItemLookingGlass extends Item {
 				MinecraftForge.EVENT_BUS.post(event);
 				if (!event.isUseful()) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
-						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(
+								new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK,
+								SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
 				}
@@ -111,7 +122,8 @@ public class ItemLookingGlass extends Item {
 
 			if (!world.isRemote) {
 				player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.flawless")));
-				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS,
+						1.0F, 1.0F);
 			}
 			blocks.appendTag(new NBTTagString(name));
 			tag.setTag("FTGU", blocks);

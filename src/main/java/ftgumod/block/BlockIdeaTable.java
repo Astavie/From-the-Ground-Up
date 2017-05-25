@@ -1,5 +1,9 @@
 package ftgumod.block;
 
+import ftgumod.FTGU;
+import ftgumod.gui.TileEntityInventory;
+import ftgumod.gui.ideatable.TileEntityIdeaTable;
+import ftgumod.technology.TechnologyHandler.GUI;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -20,10 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ftgumod.FTGU;
-import ftgumod.gui.TileEntityInventory;
-import ftgumod.gui.ideatable.TileEntityIdeaTable;
-import ftgumod.technology.TechnologyHandler.GUI;
 
 public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
@@ -39,17 +39,22 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand hand, ItemStack item, EnumFacing parSide, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState,
+			EntityPlayer parPlayer, EnumHand hand, ItemStack item, EnumFacing parSide, float hitX, float hitY,
+			float hitZ) {
 		if (!parWorld.isRemote) {
-			parPlayer.openGui(FTGU.INSTANCE, GUI.IDEATABLE.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
+			parPlayer.openGui(FTGU.INSTANCE, GUI.IDEATABLE.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(),
+					parBlockPos.getZ());
 		}
 		return true;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, BlockPos blockPos, IBlockState blockState, EntityLivingBase player, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos blockPos, IBlockState blockState, EntityLivingBase player,
+			ItemStack stack) {
 		if (!world.isRemote) {
-			world.setBlockState(blockPos, blockState.withProperty(FACING, player.getHorizontalFacing().getOpposite()), 2);
+			world.setBlockState(blockPos, blockState.withProperty(FACING, player.getHorizontalFacing().getOpposite()),
+					2);
 		}
 	}
 
@@ -83,7 +88,7 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing) state.getValue(FACING)).getIndex();
+		return state.getValue(FACING).getIndex();
 	}
 
 	@Override

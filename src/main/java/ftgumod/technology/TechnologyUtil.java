@@ -2,6 +2,7 @@ package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import ftgumod.FTGU;
 import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
@@ -28,11 +29,14 @@ public class TechnologyUtil {
 
 		stack.stackSize = 1;
 		if (obj instanceof ItemStack) {
-			return (((ItemStack) obj).getMetadata() == OreDictionary.WILDCARD_VALUE && ((ItemStack) obj).getItem() == stack.getItem() || ItemStack.areItemStacksEqual((ItemStack) obj, stack));
+			return (((ItemStack) obj).getMetadata() == OreDictionary.WILDCARD_VALUE
+					&& ((ItemStack) obj).getItem() == stack.getItem()
+					|| ItemStack.areItemStacksEqual((ItemStack) obj, stack));
 		} else if (obj instanceof String) {
 			List<ItemStack> item = OreDictionary.getOres((String) obj);
 			for (ItemStack s : item)
-				if ((s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(stack, s))
+				if ((s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem())
+						|| ItemStack.areItemStacksEqual(stack, s))
 					return true;
 		} else if (obj instanceof ITEM_GROUP) {
 			return ((ITEM_GROUP) obj).contains(stack);
@@ -117,7 +121,7 @@ public class TechnologyUtil {
 
 		return item;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static boolean hasRecipe(ItemStack stack) {
 		for (IRecipe r : CraftingManager.getInstance().getRecipeList())

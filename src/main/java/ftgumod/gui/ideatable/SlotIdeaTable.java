@@ -11,7 +11,8 @@ public class SlotIdeaTable extends Slot {
 	@SuppressWarnings("unused")
 	private EntityPlayer player;
 
-	public SlotIdeaTable(EntityPlayer player, IInventory inventory, int index, int x, int y, TileEntityInventory tileEntity) {
+	public SlotIdeaTable(EntityPlayer player, IInventory inventory, int index, int x, int y,
+			TileEntityInventory tileEntity) {
 		super(inventory, index, x, y);
 		this.player = player;
 	}

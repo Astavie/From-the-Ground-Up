@@ -1,6 +1,7 @@
 package ftgumod.minetweaker.util;
 
 import java.util.ArrayList;
+
 import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
@@ -48,7 +49,7 @@ public class InputHelper {
 					return stack.getItem();
 			}
 
-			return (ItemStack) internal;
+			return internal;
 		}
 	}
 
@@ -105,7 +106,7 @@ public class InputHelper {
 	}
 
 	public static String toString(IOreDictEntry entry) {
-		return ((IOreDictEntry) entry).getName();
+		return entry.getName();
 	}
 
 	public static FluidStack toFluid(ILiquidStack iStack) {
@@ -124,7 +125,7 @@ public class InputHelper {
 	}
 
 	public static FluidStack[] toFluids(IIngredient[] input) {
-		return toFluids((IItemStack[]) input);
+		return toFluids(input);
 	}
 
 	public static FluidStack[] toFluids(ILiquidStack[] iStack) {
