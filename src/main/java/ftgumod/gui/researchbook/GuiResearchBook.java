@@ -3,7 +3,9 @@ package ftgumod.gui.researchbook;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+
 import org.lwjgl.input.Mouse;
+
 import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;

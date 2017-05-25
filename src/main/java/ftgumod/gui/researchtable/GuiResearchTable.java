@@ -2,6 +2,7 @@ package ftgumod.gui.researchtable;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;

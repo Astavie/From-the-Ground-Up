@@ -1,6 +1,7 @@
 package ftgumod.gui.researchtable;
 
 import java.util.List;
+
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;

@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import org.lwjgl.input.Keyboard;
+
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemParchmentResearch;

@@ -2,7 +2,9 @@ package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.annotation.Nullable;
+
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;

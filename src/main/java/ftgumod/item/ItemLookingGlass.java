@@ -2,7 +2,9 @@ package ftgumod.item;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.lwjgl.input.Keyboard;
+
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.event.PlayerInspectEvent;
