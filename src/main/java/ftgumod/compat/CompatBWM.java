@@ -12,8 +12,7 @@ public class CompatBWM implements ICompat {
 		if (arg[0] instanceof ItemStack) {
 			ItemStack stack = (ItemStack) arg[0];
 			for (IRecipe r : SteelCraftingManager.getInstance().getRecipeList())
-				if (r != null && r.getRecipeOutput() != ItemStack.EMPTY
-						&& TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
+				if (r != null && r.getRecipeOutput() != ItemStack.EMPTY && TechnologyUtil.isEqual(stack, r.getRecipeOutput()))
 					return true;
 		}
 		return false;

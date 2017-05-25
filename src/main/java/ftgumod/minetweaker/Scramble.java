@@ -1,7 +1,6 @@
 package ftgumod.minetweaker;
 
 import java.util.Collection;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
@@ -28,8 +27,7 @@ public class Scramble {
 	public static void addScrambled(String tech, IIngredient ingredient, int[] slots) {
 		ResearchRecipe research = TechnologyHandler.getResearch(tech);
 		if (research == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name
-					+ " found for " + tech + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name + " found for " + tech + ". Command ignored!");
 			return;
 		}
 		Object item = InputHelper.toObject(ingredient);
@@ -89,13 +87,11 @@ public class Scramble {
 	public static void removeScrambled(String tech) {
 		ResearchRecipe research = TechnologyHandler.getResearch(tech);
 		if (research == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name
-					+ " found for " + tech + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name + " found for " + tech + ". Command ignored!");
 			return;
 		}
 		if (!TechnologyHandler.unlock.containsKey(research)) {
-			MineTweakerAPI
-					.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
 			return;
 		}
 		MineTweakerAPI.apply(new Remove(research, TechnologyHandler.unlock.get(research).list));

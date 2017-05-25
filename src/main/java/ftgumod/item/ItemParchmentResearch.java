@@ -31,8 +31,7 @@ public class ItemParchmentResearch extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, research(
-				hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand(), player, true));
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, research(hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand(), player, true));
 	}
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
@@ -41,8 +40,7 @@ public class ItemParchmentResearch extends Item {
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already) {
-						player.sendMessage(new TextComponentString(
-								I18n.translateToLocalFormatted("technology.complete.already", t.getLocalisedName())));
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.already", t.getLocalisedName())));
 					}
 				} else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
@@ -50,15 +48,12 @@ public class ItemParchmentResearch extends Item {
 
 					if (event.canResearch()) {
 						t.setResearched(player);
-						player.sendMessage(new TextComponentString(
-								I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalisedName())));
-						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP,
-								SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalisedName())));
+						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
 					} else
-						player.sendMessage(
-								new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
+						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
 				}
 
 				PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);

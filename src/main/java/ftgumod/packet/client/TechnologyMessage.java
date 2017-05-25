@@ -2,7 +2,6 @@ package ftgumod.packet.client;
 
 import java.util.Collection;
 import java.util.HashSet;
-
 import ftgumod.FTGU;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;

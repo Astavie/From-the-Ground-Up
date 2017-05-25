@@ -2,9 +2,7 @@ package ftgumod.technology;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,13 +36,11 @@ public class Technology {
 		this(page, prev, null, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name,
-			Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		this(page, prev, null, icon, hide, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y,
-			String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
 		this(page, prev, secret, icon, false, x, y, name, item);
 	}
 
@@ -68,8 +64,7 @@ public class Technology {
 		cap.setResearched(name);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x,
-			int y, String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		ID = TechnologyHandler.getID();
 
 		this.x = x;

@@ -21,8 +21,7 @@ public class Research {
 	public static void addResearch(String tech, IIngredient[][] recipe) {
 		Technology t = TechnologyHandler.getTechnology(tech);
 		if (t == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name
-					+ " found for " + tech + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name + " found for " + tech + ". Command ignored!");
 			return;
 		}
 
@@ -46,8 +45,7 @@ public class Research {
 	public static void removeResearch(String tech) {
 		ResearchRecipe i = TechnologyHandler.getResearch(tech);
 		if (i == null) {
-			MineTweakerAPI
-					.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
 			return;
 		}
 

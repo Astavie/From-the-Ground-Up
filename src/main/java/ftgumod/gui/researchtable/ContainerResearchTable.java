@@ -1,7 +1,6 @@
 package ftgumod.gui.researchtable;
 
 import java.util.List;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
@@ -133,21 +132,16 @@ public class ContainerResearchTable extends Container {
 					Technology tech = recipe.output;
 					EntityPlayer player = invPlayer.player;
 
-					if (tech.researched || tech.isResearched(player)
-							|| (tech.prev != null && !tech.prev.isResearched(player))) {
+					if (tech.researched || tech.isResearched(player) || (tech.prev != null && !tech.prev.isResearched(player))) {
 						recipe = null;
 					}
 
 					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						if (!cap.isResearched(
-								TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
+						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
 							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
-							invPlayer.player.sendMessage(
-									new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock",
-											TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName())));
-							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP,
-									SoundCategory.PLAYERS, 1.0F, 1.0F);
+							invPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName())));
+							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 							PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 						}
 					}
@@ -163,8 +157,7 @@ public class ContainerResearchTable extends Container {
 				if (recipe != null && recipe == this.recipe) {
 					Technology tech = recipe.output;
 					EntityPlayer player = invPlayer.player;
-					if (!tech.researched && !tech.isResearched(player)
-							&& (tech.prev == null || tech.prev.isResearched(player))) {
+					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
 						if (TechnologyHandler.hasDecipher(recipe)) {
 							if (!inventorySlots.get(glass).getHasStack()) {
 								inventorySlots.get(output).putStack(ItemStack.EMPTY);
@@ -177,8 +170,7 @@ public class ContainerResearchTable extends Container {
 								boolean perms = false;
 								for (ItemStack s : g.unlock)
 									for (String t : items)
-										if ((s.getItem() == null && t.equals("tile.null"))
-												|| (s.getItem() != null && s.getItem().getUnlocalizedName(s).equals(t)))
+										if ((s.getItem() == null && t.equals("tile.null")) || (s.getItem() != null && s.getItem().getUnlocalizedName(s).equals(t)))
 											perms = true;
 								if (!perms) {
 									inventorySlots.get(output).putStack(ItemStack.EMPTY);

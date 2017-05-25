@@ -30,8 +30,7 @@ public class PacketDispatcher {
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);
 	}
 
-	public static final <R extends IMessage> void registerMessage(Class<? extends IMessageHandler<R, ?>> handlerClass,
-			Class<R> messageClass, Side side) {
+	public static final <R extends IMessage> void registerMessage(Class<? extends IMessageHandler<R, ?>> handlerClass, Class<R> messageClass, Side side) {
 		PacketDispatcher.dispatcher.registerMessage(handlerClass, messageClass, packetId++, side);
 	}
 
@@ -43,14 +42,12 @@ public class PacketDispatcher {
 		PacketDispatcher.dispatcher.sendToAllAround(message, point);
 	}
 
-	public static final void sendToAllAround(IMessage message, int dimension, double x, double y, double z,
-			double range) {
+	public static final void sendToAllAround(IMessage message, int dimension, double x, double y, double z, double range) {
 		PacketDispatcher.sendToAllAround(message, new NetworkRegistry.TargetPoint(dimension, x, y, z, range));
 	}
 
 	public static final void sendToAllAround(IMessage message, EntityPlayer player, double range) {
-		PacketDispatcher.sendToAllAround(message, player.world.provider.getDimension(), player.posX, player.posY,
-				player.posZ, range);
+		PacketDispatcher.sendToAllAround(message, player.world.provider.getDimension(), player.posX, player.posY, player.posZ, range);
 	}
 
 	public static final void sendToDimension(IMessage message, int dimensionId) {

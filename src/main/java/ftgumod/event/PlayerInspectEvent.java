@@ -1,9 +1,7 @@
 package ftgumod.event;
 
 import java.util.List;
-
 import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -21,8 +19,7 @@ public class PlayerInspectEvent extends PlayerEvent {
 	private final ItemStack block;
 	private boolean useful;
 
-	public PlayerInspectEvent(EntityPlayer player, EnumHand hand, List<String> glass, BlockPos pos, EnumFacing face,
-			ItemStack block, boolean useful) {
+	public PlayerInspectEvent(EntityPlayer player, EnumHand hand, List<String> glass, BlockPos pos, EnumFacing face, ItemStack block, boolean useful) {
 		super(player);
 		this.hand = hand;
 		this.glass = glass;

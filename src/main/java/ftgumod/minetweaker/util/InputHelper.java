@@ -1,7 +1,6 @@
 package ftgumod.minetweaker.util;
 
 import java.util.ArrayList;
-
 import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;

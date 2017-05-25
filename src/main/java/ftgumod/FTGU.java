@@ -2,7 +2,6 @@ package ftgumod;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import ftgumod.compat.CompatBWM;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
@@ -95,26 +94,18 @@ public class FTGU {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
-		headstart = config
-				.get(Configuration.CATEGORY_GENERAL, "Headstart", false,
-						"Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking")
-				.getBoolean();
-		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded", false,
-				"Set this to true to automatically research all vanilla technologies").getBoolean();
+		headstart = config.get(Configuration.CATEGORY_GENERAL, "Headstart", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
+		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded", false, "Set this to true to automatically research all vanilla technologies").getBoolean();
 
 		config.save();
 	}
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.b_ideaTable), "F P", "SSS", "WBW", 'S', Blocks.WOODEN_SLAB, 'W',
-				Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'F', Items.FEATHER, 'P', FTGUAPI.i_parchmentEmpty);
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.b_researchTable), "SSS", "CBC", "CWC", 'S', Blocks.WOODEN_SLAB,
-				'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'C', Blocks.COBBLESTONE);
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.i_parchmentEmpty), "S", "P", "S", 'S', Items.STICK, 'P',
-				Items.PAPER);
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.i_lookingGlass), " N ", "NGN", "SN ", 'N', Items.GOLD_NUGGET, 'G',
-				Blocks.GLASS_PANE, 'S', Items.STICK);
+		GameRegistry.addRecipe(new ItemStack(FTGUAPI.b_ideaTable), "F P", "SSS", "WBW", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'F', Items.FEATHER, 'P', FTGUAPI.i_parchmentEmpty);
+		GameRegistry.addRecipe(new ItemStack(FTGUAPI.b_researchTable), "SSS", "CBC", "CWC", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'C', Blocks.COBBLESTONE);
+		GameRegistry.addRecipe(new ItemStack(FTGUAPI.i_parchmentEmpty), "S", "P", "S", 'S', Items.STICK, 'P', Items.PAPER);
+		GameRegistry.addRecipe(new ItemStack(FTGUAPI.i_lookingGlass), " N ", "NGN", "SN ", 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE, 'S', Items.STICK);
 
 		Item r = FTGUAPI.i_parchmentResearch;
 
@@ -132,12 +123,9 @@ public class FTGU {
 		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r);
 		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r);
 		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r,
-				r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r,
-				r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r,
-				r, r);
+		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r);
+		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r);
+		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r, r);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new GuiHandler());
 
