@@ -45,8 +45,10 @@ public class UnlockTechMessage implements IMessage {
 				} else {
 					cap.setResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName());
 				}
+
+				return new TechnologyMessage(player, true);
 			}
-			return new TechnologyMessage(player);
+			return null;
 		}
 
 	}

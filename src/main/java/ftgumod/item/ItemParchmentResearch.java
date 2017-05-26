@@ -50,13 +50,11 @@ public class ItemParchmentResearch extends Item {
 						t.setResearched(player);
 						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalisedName())));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
 					} else
 						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
 				}
-
-				PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
 			}
 		}
 		return item;

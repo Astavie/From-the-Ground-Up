@@ -143,7 +143,7 @@ public class ContainerResearchTable extends Container {
 							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
 							invPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName())));
 							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-							PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+							PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						}
 					}
 				}
