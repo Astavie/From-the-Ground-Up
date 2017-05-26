@@ -276,8 +276,9 @@ public class EventHandler {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@SubscribeEvent
-	public void onEntityConstruct(AttachCapabilitiesEvent<?> evt) {
+	public void onEntityConstruct(AttachCapabilitiesEvent evt) {
 		if (evt.getObject() instanceof EntityPlayer) {
 			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagList>() {
 

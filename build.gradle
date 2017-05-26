@@ -12,6 +12,11 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
+ext {
+	mc_version = "1.${mc_major}.${mc_minor}"
+	mc_version2 = "1${mc_major}${mc_minor}"
+}
+
 version = "${mc_version}-${mod_status}${mod_version}"
 group = mod_package
 archivesBaseName = mod_id
@@ -48,7 +53,7 @@ dependencies {
 
     runtime "mezz.jei:jei_${mc_version}:+"
     runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
-    runtime "blusunrize:ImmersiveEngineering:0.10+"
+    runtime "blusunrize:ImmersiveEngineering:0.${mc_major}+"
 }
 
 processResources

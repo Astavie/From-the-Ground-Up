@@ -62,6 +62,9 @@ public class TechnologyMessage implements IMessage {
 
 		@Override
 		public IMessage handleClientMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
+			if (player == null)
+				return null;
+
 			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			cap.clear();
 			for (Integer i : message.tech) {
@@ -71,6 +74,7 @@ public class TechnologyMessage implements IMessage {
 					cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalisedName());
 			}
 			FTGU.INSTANCE.runCompat("jei", message.tech);
+
 			return null;
 		}
 
