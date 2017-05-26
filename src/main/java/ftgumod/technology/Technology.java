@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import ftgumod.ItemList;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,7 @@ public class Technology {
 	public final int y;
 
 	public ItemStack icon;
-	public List<ItemStack> item;
+	public List<ItemList> item;
 	public Technology prev;
 	public Technology[] secret;
 	public PAGE page;
@@ -83,9 +84,9 @@ public class Technology {
 		else
 			level = prev.level + 1;
 
-		this.item = new ArrayList<ItemStack>();
+		this.item = new ArrayList<ItemList>();
 		for (Object o : item) {
-			this.item.addAll(TechnologyUtil.toItems(TechnologyUtil.toItem(o)));
+			this.item.add(new ItemList(TechnologyUtil.toItem(o)));
 		}
 	}
 
@@ -101,7 +102,7 @@ public class Technology {
 		return I18n.translateToLocal("technology." + name + ".desc");
 	}
 
-	public List<ItemStack> getItems() {
+	public List<ItemList> getItems() {
 		return item;
 	}
 

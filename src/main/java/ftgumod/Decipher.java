@@ -2,11 +2,9 @@ package ftgumod;
 
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import ftgumod.technology.TechnologyUtil;
-import net.minecraft.item.ItemStack;
 
 public class Decipher {
 
@@ -20,11 +18,11 @@ public class Decipher {
 
 	public static class DecipherGroup {
 
-		public final List<ItemStack> unlock;
+		public final ItemList unlock;
 		public final Set<Integer> slots;
 
 		public DecipherGroup(Object unlock, Integer... slots) {
-			this.unlock = TechnologyUtil.toItems(TechnologyUtil.toItem(unlock));
+			this.unlock = new ItemList(TechnologyUtil.toItem(unlock));
 			this.slots = new LinkedHashSet<Integer>(Arrays.asList(slots));
 		}
 

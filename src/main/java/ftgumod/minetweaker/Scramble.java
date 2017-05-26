@@ -76,10 +76,7 @@ public class Scramble {
 
 		@Override
 		protected String getRecipeInfo(DecipherGroup group) {
-			if (group.unlock.size() == 1)
-				return "<item:" + group.unlock.get(0).getUnlocalizedName() + ">";
-			else
-				return "<item:" + group.unlock.get(0).getItem().getUnlocalizedName() + ">";
+			return "<item:" + group.unlock.toString() + ">";
 		}
 
 	}
@@ -132,10 +129,7 @@ public class Scramble {
 
 		@Override
 		protected String getRecipeInfo(DecipherGroup group) {
-			if (group.unlock.size() == 1)
-				return "<item:" + group.unlock.get(0).getUnlocalizedName() + ">";
-			else
-				return "<item:" + group.unlock.get(0).getItem().getUnlocalizedName() + ">";
+			return "<item:" + group.unlock.toString() + ">";
 		}
 
 	}

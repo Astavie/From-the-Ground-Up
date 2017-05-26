@@ -1,14 +1,17 @@
 package ftgumod.technology.recipe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import ftgumod.ItemList;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyUtil;
 
 public class ResearchRecipe {
 
-	public final Object[] recipe = new Object[9];
+	public final List<ItemList> recipe = new ArrayList<ItemList>();
 	public final Technology output;
 
 	public ResearchRecipe(Technology output, Object... obj) {
@@ -29,14 +32,13 @@ public class ResearchRecipe {
 		recipe[7] = r3[1];
 		recipe[8] = r3[2];
 
-		Map<Character, Object> items = new HashMap<Character, Object>();
+		Map<Character, ItemList> items = new HashMap<Character, ItemList>();
 
-		for (int i = 3; i < obj.length; i += 2) {
-			items.put((Character) obj[i], TechnologyUtil.toItem(obj[i + 1]));
-		}
+		for (int i = 3; i < obj.length; i += 2)
+			items.put((Character) obj[i], new ItemList(TechnologyUtil.toItem(obj[i + 1])));
 
-		for (int i = 0; i < recipe.length; i++) {
-			this.recipe[i] = items.get(new Character(recipe[i]));
+		for (char c : recipe) {
+			this.recipe.add(items.get(new Character(c)));
 		}
 	}
 

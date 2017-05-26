@@ -103,7 +103,7 @@ public class ContainerResearchTable extends Container {
 		for (ResearchRecipe i : TechnologyHandler.researches) {
 			boolean recipe[] = new boolean[9];
 			for (int j = 0; j < 9; j++) {
-				if (TechnologyUtil.isEqual(i.recipe[j], inventorySlots.get(combine + j).getStack())) {
+				if (i.recipe.get(j).contains(inventorySlots.get(combine + j).getStack())) {
 					recipe[j] = true;
 				}
 			}

@@ -75,7 +75,7 @@ public class InputHelper {
 				if (ingredient[i] != null) {
 					output[i] = toObject(ingredient[i]);
 				} else
-					output[i] = "";
+					output[i] = null;
 			}
 			return output;
 		}

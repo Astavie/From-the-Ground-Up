@@ -10,6 +10,7 @@ import java.util.Set;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
+import ftgumod.ItemList;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +35,7 @@ public class TechnologyHandler {
 	public static final Set<Technology> technologies = new HashSet<Technology>();
 	public static final Set<String> vanilla = new HashSet<String>();
 
-	public static final Map<Technology, List<ItemStack>> locked = new HashMap<Technology, List<ItemStack>>();
+	public static final Map<Technology, List<ItemList>> locked = new HashMap<Technology, List<ItemList>>();
 	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<ResearchRecipe, Decipher>();
 
 	public static Technology BASIC_CRAFTING;
@@ -287,8 +288,7 @@ public class TechnologyHandler {
 
 	public static void registerTechnology(Technology tech) {
 		technologies.add(tech);
-		List<ItemStack> l = tech.getItems();
-		locked.put(tech, l);
+		locked.put(tech, tech.getItems());
 
 		if (tech.x > maxX)
 			maxX = tech.x;
@@ -387,9 +387,9 @@ public class TechnologyHandler {
 		if (item == ItemStack.EMPTY)
 			return null;
 		for (Technology t : locked.keySet()) {
-			List<ItemStack> l = locked.get(t);
-			for (ItemStack s : l)
-				if (TechnologyUtil.isEqual(s, item))
+			List<ItemList> l = locked.get(t);
+			for (ItemList o : l)
+				if (o.contains(item))
 					return t;
 		}
 		return null;
@@ -491,33 +491,22 @@ public class TechnologyHandler {
 			UNDECIPHERED = new ITEM_GROUP("undeciphered");
 		}
 
-		public Object[] item;
+		public List<ItemList> item = new ArrayList<ItemList>();
 		private String name;
 
 		private ITEM_GROUP(String name, Object... item) {
 			this.name = name;
-			this.item = new Object[item.length];
 
-			for (int i = 0; i < item.length; i++) {
-				this.item[i] = TechnologyUtil.toItem(item[i]);
+			for (Object o : item) {
+				this.item.add(new ItemList(TechnologyUtil.toItem(o)));
 			}
 		}
 
 		public boolean contains(ItemStack stack) {
-			for (int i = 0; i < item.length; i++) {
-				if (TechnologyUtil.isEqual(item[i], stack)) {
+			for (ItemList l : item)
+				if (l.contains(stack))
 					return true;
-				}
-			}
 			return false;
-		}
-
-		public List<ItemStack> toItems() {
-			List<ItemStack> list = new ArrayList<ItemStack>();
-			for (Object o : item) {
-				list.addAll(TechnologyUtil.toItems(o));
-			}
-			return list;
 		}
 
 		public String getName() {
@@ -525,17 +514,11 @@ public class TechnologyHandler {
 		}
 
 		public void addItem(Object o) {
-			Object obj = TechnologyUtil.toItem(o);
-			Object[] itm = new Object[item.length + 1];
-			for (int i = 0; i < item.length; i++) {
-				itm[i] = item[i];
-			}
-			itm[item.length] = obj;
-			item = itm;
+			item.add(new ItemList(TechnologyUtil.toItem(o)));
 		}
 
 		public void clearItems() {
-			item = new Object[0];
+			item = new ArrayList<ItemList>();
 		}
 
 	}

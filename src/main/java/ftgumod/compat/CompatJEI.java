@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import org.apache.logging.log4j.Level;
 
+import ftgumod.ItemList;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import mezz.jei.api.IItemListOverlay;
@@ -44,16 +45,18 @@ public class CompatJEI implements ICompat, IModPlugin {
 			remove.removeAll((Collection<Integer>) arg[0]);
 
 			for (int i : add)
-				for (ItemStack stack : TechnologyHandler.getTechnology(i).getItems())
-					helpers.getIngredientBlacklist().removeIngredientFromBlacklist(stack);
+				for (ItemList list : TechnologyHandler.getTechnology(i).getItems())
+					for (ItemStack stack : list)
+						helpers.getIngredientBlacklist().removeIngredientFromBlacklist(stack);
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
 				if (tech.researched)
 					continue;
 
-				for (ItemStack stack : tech.getItems())
-					helpers.getIngredientBlacklist().addIngredientToBlacklist(stack);
+				for (ItemList list : tech.getItems())
+					for (ItemStack stack : list)
+						helpers.getIngredientBlacklist().addIngredientToBlacklist(stack);
 			}
 
 			// TODO: Remove non-API code when IIngredientRegistry#removeIngredientsAtRuntime gets implemented
@@ -61,7 +64,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 				IItemListOverlay overlay = runtime.getItemListOverlay();
 				overlay.getClass().getMethod("rebuildItemFilter").invoke(overlay);
 			} catch (Exception e) {
-				FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "[ftgumod] Could not reload the JEI item filter!");
+				FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "[FTGU] Could not reload the JEI item filter!");
 			}
 
 			tech = new HashSet<Integer>((Collection<Integer>) arg[0]);

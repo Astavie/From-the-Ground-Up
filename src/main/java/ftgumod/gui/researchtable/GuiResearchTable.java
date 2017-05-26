@@ -12,7 +12,6 @@ import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -48,10 +47,10 @@ public class GuiResearchTable extends GuiContainer {
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9 && table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
+			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9) {
 				List<String> text = new ArrayList<String>();
 
-				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
+				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + table.recipe.recipe.get(slot.getSlotIndex() - table.combine).toString());
 				if (TechnologyHandler.hasDecipher(table.recipe)) {
 					Decipher d = TechnologyHandler.unlock.get(table.recipe);
 					DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
@@ -90,9 +89,8 @@ public class GuiResearchTable extends GuiContainer {
 		if (table.recipe != null) {
 			for (int i = table.combine; i < table.combine + 9; i++) {
 				Slot slot = inventorySlots.inventorySlots.get(i);
-				if (!slot.getHasStack() && table.recipe.recipe[i - table.combine] != null) {
+				if (!slot.getHasStack())
 					this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
-				}
 			}
 		}
 	}

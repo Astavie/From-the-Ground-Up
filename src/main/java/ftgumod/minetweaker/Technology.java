@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ftgumod.ItemList;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
@@ -15,7 +16,6 @@ import ftgumod.technology.TechnologyUtil;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
-import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -140,22 +140,22 @@ public class Technology {
 			return;
 		}
 
-		List<ItemStack> list = new ArrayList<ItemStack>();
+		List<ItemList> list = new ArrayList<ItemList>();
 		for (Object o : InputHelper.toObjects(item))
-			list.addAll(TechnologyUtil.toItems(TechnologyUtil.toItem(o)));
+			list.add(new ItemList(TechnologyUtil.toItem(o)));
 
 		MineTweakerAPI.apply(new AddItems(list, p));
 	}
 
-	private static class AddItems extends BaseInterfaceAdd<ItemStack> {
+	private static class AddItems extends BaseInterfaceAdd<ItemList> {
 
-		protected AddItems(Collection<ItemStack> recipes, ftgumod.technology.Technology tech) {
-			super(name, recipes, new BaseCollection<ItemStack>(tech.item));
+		protected AddItems(Collection<ItemList> recipes, ftgumod.technology.Technology tech) {
+			super(name, recipes, new BaseCollection<ItemList>(tech.item));
 		}
 
 		@Override
-		protected String getRecipeInfo(ItemStack recipe) {
-			return "<item:" + recipe.getUnlocalizedName() + ">";
+		protected String getRecipeInfo(ItemList recipe) {
+			return "<item:" + recipe.toString().split(".")[1] + ">";
 		}
 
 	}

@@ -1,5 +1,9 @@
 package ftgumod.minetweaker;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ftgumod.ItemList;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
@@ -25,7 +29,12 @@ public class Idea {
 			return;
 		}
 
-		MineTweakerAPI.apply(new Add(new IdeaRecipe(InputHelper.toObjects(recipe), t)));
+		List<ItemList> list = new ArrayList<ItemList>();
+		for (Object o : InputHelper.toObjects(recipe))
+			if (o != null)
+				list.add(new ItemList(o));
+
+		MineTweakerAPI.apply(new Add(new IdeaRecipe(list, t)));
 	}
 
 	private static class Add extends BaseInterfaceAdd<IdeaRecipe> {

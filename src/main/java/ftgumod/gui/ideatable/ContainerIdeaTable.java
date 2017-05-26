@@ -88,10 +88,10 @@ public class ContainerIdeaTable extends Container {
 					items.add(s);
 				}
 			}
-			boolean recipe[] = new boolean[i.recipe.length];
-			for (int j = 0; j < i.recipe.length; j++) {
+			boolean recipe[] = new boolean[i.recipe.size()];
+			for (int j = 0; j < i.recipe.size(); j++) {
 				for (ItemStack stack : items) {
-					if (TechnologyUtil.isEqual(i.recipe[j], stack)) {
+					if (i.recipe.get(j).contains(stack)) {
 						items.remove(stack);
 						recipe[j] = true;
 						break;

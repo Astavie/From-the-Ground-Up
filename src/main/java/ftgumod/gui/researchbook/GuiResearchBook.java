@@ -7,6 +7,8 @@ import java.util.Set;
 import org.lwjgl.input.Mouse;
 
 import ftgumod.FTGUAPI;
+import ftgumod.ItemList;
+import ftgumod.ItemListWildcard;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestTechMessage;
@@ -16,7 +18,6 @@ import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
-import ftgumod.technology.TechnologyUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -27,7 +28,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -37,7 +37,6 @@ import net.minecraft.stats.AchievementList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class GuiResearchBook extends GuiScreen {
 
@@ -66,9 +65,11 @@ public class GuiResearchBook extends GuiScreen {
 
 	private EntityPlayer player;
 	private Technology selected;
-	private NonNullList<ItemStack> unlock;
+	private NonNullList<ItemListWildcard> unlock;
 	private int num = 4;
 	private int pages;
+
+	private long tick = 0;
 
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
@@ -109,20 +110,13 @@ public class GuiResearchBook extends GuiScreen {
 			scroll = 1;
 
 			// Load Items
-			List<ItemStack> list = TechnologyHandler.locked.get(selected);
+			List<ItemList> list = TechnologyHandler.locked.get(selected);
 
 			unlock = NonNullList.create();
-			for (ItemStack s : list)
-				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
-					for (CreativeTabs tab : s.getItem().getCreativeTabs())
-						s.getItem().getSubItems(s.getItem(), tab, unlock);
-				else
-					unlock.add(s);
-
-			for (int q = unlock.size() - 1; q >= 0; q--) {
-				ItemStack stack = unlock.get(q);
-				if (!TechnologyUtil.hasRecipe(stack))
-					unlock.remove(q);
+			for (ItemList s : list) {
+				ItemListWildcard l = new ItemListWildcard(s);
+				if (l.size() > 0)
+					unlock.add(l);
 			}
 
 			pages = (int) Math.max(Math.ceil(((double) unlock.size()) / num), 1);
@@ -422,7 +416,14 @@ public class GuiResearchBook extends GuiScreen {
 				if (n >= unlock.size())
 					break;
 
-				ItemStack item = unlock.get(n);
+				ItemListWildcard list = unlock.get(n);
+
+				long tick = this.tick / 20L;
+				int index = (int) (tick % list.size());
+
+				ItemStack item = list.get(index);
+
+				this.tick++;
 
 				mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 				GlStateManager.enableBlend();
@@ -435,7 +436,7 @@ public class GuiResearchBook extends GuiScreen {
 				GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 				GlStateManager.disableLighting();
 
-				fontRendererObj.drawStringWithShadow(item.getDisplayName(), 35, 45 + (pos * 28), 0xFFFFFF);
+				fontRendererObj.drawStringWithShadow(I18n.format(list.toString() + ".name"), 35, 45 + (pos * 28), 0xFFFFFF);
 			}
 		}
 
