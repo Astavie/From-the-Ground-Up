@@ -20,7 +20,7 @@ public class RequestTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleServerMessage(EntityPlayer player, RequestTechMessage message, MessageContext ctx) {
-			return new TechnologyMessage(player);
+			return new TechnologyMessage(player, false);
 		}
 
 	}

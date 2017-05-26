@@ -72,7 +72,7 @@ public class EventHandler {
 				evt.getEntityPlayer().sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.GLOWING_EYES.getLocalisedName() + "\"!"));
 				evt.getEntityPlayer().world.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-				PacketDispatcher.sendTo(new TechnologyMessage(evt.getEntityPlayer()), (EntityPlayerMP) evt.getEntityPlayer());
+				PacketDispatcher.sendTo(new TechnologyMessage(evt.getEntityPlayer(), true), (EntityPlayerMP) evt.getEntityPlayer());
 			}
 		}
 	}
@@ -116,7 +116,7 @@ public class EventHandler {
 						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENCHANTING.getLocalisedName() + "\"!"));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-						PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						break;
 					}
 				}
@@ -129,7 +129,7 @@ public class EventHandler {
 				player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENDER_KNOWLEDGE.getLocalisedName() + "\"!"));
 				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-				PacketDispatcher.sendTo(new TechnologyMessage(player), (EntityPlayerMP) player);
+				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 			}
 		}
 	}
@@ -225,7 +225,7 @@ public class EventHandler {
 
 			cap.setOld();
 		} else
-			PacketDispatcher.sendTo(new TechnologyMessage(evt.player), (EntityPlayerMP) evt.player);
+			PacketDispatcher.sendTo(new TechnologyMessage(evt.player, false), (EntityPlayerMP) evt.player);
 	}
 
 	@SubscribeEvent
