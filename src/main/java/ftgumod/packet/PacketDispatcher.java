@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -30,7 +29,8 @@ public class PacketDispatcher {
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);
 	}
 
-	public static final <R extends IMessage> void registerMessage(Class<? extends IMessageHandler<R, ?>> handlerClass, Class<R> messageClass, Side side) {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static final void registerMessage(Class handlerClass, Class messageClass, Side side) {
 		PacketDispatcher.dispatcher.registerMessage(handlerClass, messageClass, packetId++, side);
 	}
 

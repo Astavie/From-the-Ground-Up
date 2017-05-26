@@ -3,17 +3,19 @@ package ftgumod.compat;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.apache.logging.log4j.Level;
+
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import mezz.jei.Internal;
+import mezz.jei.api.IItemListOverlay;
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.IJeiRuntime;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ISubtypeRegistry;
 import mezz.jei.api.ingredients.IModIngredientRegistration;
-import mezz.jei.runtime.JeiRuntime;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -21,7 +23,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @mezz.jei.api.JEIPlugin
 public class CompatJEI implements ICompat, IModPlugin {
 
-	private static IJeiHelpers jeiHelpers;
+	private static IJeiHelpers helpers;
+	private static IJeiRuntime runtime;
 
 	private Collection<Integer> tech;
 
@@ -42,7 +45,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 			for (int i : add)
 				for (ItemStack stack : TechnologyHandler.getTechnology(i).getItems())
-					jeiHelpers.getIngredientBlacklist().removeIngredientFromBlacklist(stack);
+					helpers.getIngredientBlacklist().removeIngredientFromBlacklist(stack);
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
@@ -50,12 +53,16 @@ public class CompatJEI implements ICompat, IModPlugin {
 					continue;
 
 				for (ItemStack stack : tech.getItems())
-					jeiHelpers.getIngredientBlacklist().addIngredientToBlacklist(stack);
+					helpers.getIngredientBlacklist().addIngredientToBlacklist(stack);
 			}
 
-			JeiRuntime runtime = Internal.getRuntime();
-			if (runtime != null)
-				runtime.getItemListOverlay().rebuildItemFilter();
+			// TODO: Remove non-API code when IIngredientRegistry#removeIngredientsAtRuntime gets implemented
+			try {
+				IItemListOverlay overlay = runtime.getItemListOverlay();
+				overlay.getClass().getMethod("rebuildItemFilter").invoke(overlay);
+			} catch (Exception e) {
+				FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "[ftgumod] Could not reload the JEI item filter!");
+			}
 
 			tech = new HashSet<Integer>((Collection<Integer>) arg[0]);
 
@@ -74,11 +81,12 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		jeiHelpers = registry.getJeiHelpers();
+		CompatJEI.helpers = registry.getJeiHelpers();
 	}
 
 	@Override
-	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+	public void onRuntimeAvailable(IJeiRuntime runtime) {
+		CompatJEI.runtime = runtime;
 	}
 
 }
