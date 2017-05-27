@@ -1,72 +1,123 @@
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-    }
+	repositories {
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+	}
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
 
 ext {
 	mc_version = "1.${mc_major}.${mc_minor}"
 	mc_version2 = "1${mc_major}${mc_minor}"
 }
 
-version = "${mc_version}-${mod_status}${mod_version}"
+version = "${mc_version}-${mod_status}${major}.${minor}.${patch}"
 group = mod_package
 archivesBaseName = mod_id
 
 sourceCompatibility = targetCompatibility = "1.8"
 compileJava {
-    sourceCompatibility = targetCompatibility = "1.8"
+	sourceCompatibility = targetCompatibility = "1.8"
 }
 
 minecraft {
-    version = "${mc_version}-${forge_version}"
-    runDir = "run"
-    mappings = "snapshot_20161220"
+	version = "${mc_version}-${forge_version}"
+	runDir = "run"
+	mappings = "snapshot_20161220"
 }
 
 repositories {
-    maven { url "http://dvs1.progwml6.com/files/maven" }
-    maven { url "http://blamejared.com/maven" }
+	maven { url "http://dvs1.progwml6.com/files/maven" }
+	maven { url "http://blamejared.com/maven" }
 }
 
 dependencies {
-    compile files(
-        'lib/BetterWithMods-deobf.jar'
-    )
+	compile files(
+		'lib/BetterWithMods-deobf.jar'
+	)
 
-    // Mod APIs
-    deobfCompile "mezz.jei:jei_${mc_version}:+:api"
-    deobfCompile "MineTweaker3:MineTweaker3-API:+"
-    deobfCompile "blusunrize:ImmersiveEngineering:+:api"
+	// Mod APIs
+	deobfCompile "mezz.jei:jei_${mc_version}:+:api"
+	deobfCompile "MineTweaker3:MineTweaker3-API:+"
+	deobfCompile "blusunrize:ImmersiveEngineering:+:api"
 
-    // Runtime Mods
-    runtime "slimeknights.mantle:Mantle:${mc_version}+"
-    runtime "slimeknights:TConstruct:${mc_version}+"
+	// Runtime Mods
+	runtime "slimeknights.mantle:Mantle:${mc_version}+"
+	runtime "slimeknights:TConstruct:${mc_version}+"
 
-    runtime "mezz.jei:jei_${mc_version}:+"
-    runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
-    runtime "blusunrize:ImmersiveEngineering:0.${mc_major}+"
+	runtime "mezz.jei:jei_${mc_version}:+"
+	runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
+	runtime "blusunrize:ImmersiveEngineering:0.${mc_major}+"
 }
 
 processResources
 {
-    inputs.property "version", "${mod_status}${mod_version}"
-    inputs.property "mcversion", mc_version
+	inputs.property "version", project.version
+	inputs.property "mcversion", mc_version
 
-    from(sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':"${mod_status}${mod_version}", 'mcversion':mc_version
-    }
+	from(sourceSets.main.resources.srcDirs) {
+		include 'mcmod.info'
+		expand 'version':project.version, 'mcversion':mc_version
+	}
 
-    from(sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
+	from(sourceSets.main.resources.srcDirs) {
+		exclude 'mcmod.info'
+	}
 }
+
+install {
+	repositories.mavenInstaller {
+		dependsOn 'build'
+		pom {
+			groupId = "theractivator"
+			artifactId = mod_package
+			version = project.version
+		}
+	}
+}
+
+task pushMaven(type:Exec) {
+	workingDir '/home/arie/Code/Maven'
+	commandLine 'bash', 'push.sh', mod_package, "Maven, ${mod_id}, ${project.version}"
+}
+
+task increaseVersion {
+	doLast {
+		def variable = 'patch'
+
+		if (project.hasProperty('variable')) {
+			def tmp = project.getProperty('variable')
+			if (tmp == 'major' || tmp == 'minor') {
+				variable = tmp
+			}
+		}
+
+		def file = file('gradle.properties')
+		if (file.canRead()) {
+			def Properties versions = new Properties()
+			versions.load(new FileInputStream(file))
+
+			def version = versions[variable].toInteger() + 1
+			versions[variable] = version.toString()
+
+			if (variable != 'patch') {
+				versions['patch'] = '0'
+
+				if (variable != 'minor') {
+					versions['minor'] = '0'
+				}
+			}
+
+			versions.store(file.newWriter(), null)
+		}
+	}
+}
+
+pushMaven.dependsOn install
