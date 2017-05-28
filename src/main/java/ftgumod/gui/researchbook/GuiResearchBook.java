@@ -1,7 +1,6 @@
 package ftgumod.gui.researchbook;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Set;
 
 import org.lwjgl.input.Mouse;
@@ -110,10 +109,8 @@ public class GuiResearchBook extends GuiScreen {
 			scroll = 1;
 
 			// Load Items
-			List<ItemList> list = TechnologyHandler.locked.get(selected);
-
 			unlock = NonNullList.create();
-			for (ItemList s : list) {
+			for (ItemList s : selected.item) {
 				ItemListWildcard l = new ItemListWildcard(s);
 				if (l.size() > 0)
 					unlock.add(l);

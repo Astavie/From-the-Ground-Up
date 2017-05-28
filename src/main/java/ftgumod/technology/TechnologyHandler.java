@@ -35,7 +35,6 @@ public class TechnologyHandler {
 	public static final Set<Technology> technologies = new HashSet<Technology>();
 	public static final Set<String> vanilla = new HashSet<String>();
 
-	public static final Map<Technology, List<ItemList>> locked = new HashMap<Technology, List<ItemList>>();
 	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<ResearchRecipe, Decipher>();
 
 	public static Technology BASIC_CRAFTING;
@@ -286,9 +285,9 @@ public class TechnologyHandler {
 		return unlock.containsKey(r) && unlock.get(r).list.size() > 0;
 	}
 
-	public static void registerTechnology(Technology tech) {
-		technologies.add(tech);
-		locked.put(tech, tech.getItems());
+	public static boolean registerTechnology(Technology tech) {
+		if (!technologies.add(tech))
+			return false;
 
 		if (tech.x > maxX)
 			maxX = tech.x;
@@ -301,6 +300,8 @@ public class TechnologyHandler {
 
 		if (minecraft)
 			vanilla.add(tech.getUnlocalizedName());
+
+		return true;
 	}
 
 	public static void registerIdea(Technology tech, Object... pars) {
@@ -386,12 +387,10 @@ public class TechnologyHandler {
 	public static Technology getLocked(ItemStack item) {
 		if (item == ItemStack.EMPTY)
 			return null;
-		for (Technology t : locked.keySet()) {
-			List<ItemList> l = locked.get(t);
-			for (ItemList o : l)
+		for (Technology t : technologies)
+			for (ItemList o : t.item)
 				if (o.contains(item))
 					return t;
-		}
 		return null;
 	}
 
