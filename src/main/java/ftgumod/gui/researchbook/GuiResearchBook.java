@@ -305,7 +305,7 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.depthFunc(515);
 		if (state == 0) {
 			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
-			Set<Technology> tech = PAGE.get(currentPage).getTechnology();
+			Set<Technology> tech = TechnologyHandler.technologies.get(PAGE.get(currentPage));
 
 			for (Technology t1 : tech) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
