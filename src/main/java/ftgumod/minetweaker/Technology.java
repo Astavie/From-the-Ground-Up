@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import ftgumod.minetweaker.util.BaseCollection;
+import ftgumod.minetweaker.util.ClearCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
 import ftgumod.minetweaker.util.IBaseInterface;
@@ -163,7 +164,7 @@ public class Technology {
 	private static class AddItems extends BaseInterfaceAdd<ItemStack> {
 
 		protected AddItems(Collection<ItemStack> recipes, ftgumod.technology.Technology tech) {
-			super(name, recipes, new BaseCollection<ItemStack>(tech.item));
+			super(name + " Unlock", recipes, new BaseCollection<ItemStack>(tech.item));
 		}
 
 		@Override
@@ -171,6 +172,17 @@ public class Technology {
 			return "<item:" + recipe.getUnlocalizedName() + ">";
 		}
 
+	}
+
+	@ZenMethod
+	public static void clearItems(String tech) {
+		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
+		if (p == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+
+		MineTweakerAPI.apply(new ClearCollection(name + " Unlock", p.item));
 	}
 
 }

@@ -12,7 +12,6 @@ import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -371,16 +370,6 @@ public class TechnologyHandler {
 			}
 		}
 		return null;
-	}
-
-	@Deprecated
-	public static boolean isResearched(String tech, EntityPlayer player) {
-		return getTechnology(tech).isResearched(player);
-	}
-
-	@Deprecated
-	public static void setResearched(String tech, EntityPlayer player) {
-		getTechnology(tech).setResearched(player);
 	}
 
 	public static Technology getLocked(ItemStack item) {
