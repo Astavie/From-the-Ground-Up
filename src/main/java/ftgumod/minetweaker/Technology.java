@@ -12,6 +12,8 @@ import ftgumod.minetweaker.util.InputHelper;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import ftgumod.technology.TechnologyUtil;
+import ftgumod.technology.recipe.IdeaRecipe;
+import ftgumod.technology.recipe.ResearchRecipe;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
@@ -111,23 +113,34 @@ public class Technology {
 
 	private static class BaseTechnology implements IBaseInterface<ftgumod.technology.Technology> {
 
+		private IdeaRecipe idea;
+		private ResearchRecipe research;
+
 		@Override
 		public boolean add(ftgumod.technology.Technology recipe) {
-			try {
-				TechnologyHandler.registerTechnology(recipe);
-				return true;
-			} catch (Exception e) {
+			if (!TechnologyHandler.registerTechnology(recipe))
 				return false;
-			}
+
+			if (idea != null)
+				TechnologyHandler.registerIdea(idea);
+			if (research != null)
+				TechnologyHandler.registerResearch(research);
+
+			return true;
 		}
 
 		@Override
 		public boolean remove(ftgumod.technology.Technology recipe) {
-			TechnologyHandler.ideas.remove(TechnologyHandler.getIdea(recipe));
-			TechnologyHandler.researches.remove(TechnologyHandler.getResearch(recipe));
+			if (!TechnologyHandler.technologies.remove(recipe))
+				return false;
 
-			TechnologyHandler.locked.remove(recipe);
-			return TechnologyHandler.technologies.remove(recipe);
+			idea = TechnologyHandler.getIdea(recipe);
+			research = TechnologyHandler.getResearch(recipe);
+
+			TechnologyHandler.ideas.remove(idea);
+			TechnologyHandler.researches.remove(research);
+
+			return true;
 		}
 
 	}

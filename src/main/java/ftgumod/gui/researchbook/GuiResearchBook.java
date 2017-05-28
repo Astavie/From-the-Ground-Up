@@ -109,10 +109,8 @@ public class GuiResearchBook extends GuiScreen {
 			scroll = 1;
 
 			// Load Items
-			List<ItemStack> list = TechnologyHandler.locked.get(selected);
-
 			unlock = new ArrayList<ItemStack>();
-			for (ItemStack s : list)
+			for (ItemStack s : selected.item)
 				if (s.getMetadata() == OreDictionary.WILDCARD_VALUE)
 					for (CreativeTabs tab : s.getItem().getCreativeTabs())
 						s.getItem().getSubItems(s.getItem(), tab, unlock);
