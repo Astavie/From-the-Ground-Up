@@ -11,7 +11,7 @@ public class ClearCollection implements IUndoableAction {
 
 	private final String name;
 	private final Collection collection;
-	private Collection removed;
+	private Collection removed = new HashSet();
 
 	public ClearCollection(String name, Collection<?> collection) {
 		this.name = name;
@@ -47,6 +47,7 @@ public class ClearCollection implements IUndoableAction {
 	@Override
 	public void undo() {
 		collection.addAll(removed);
+		removed = new HashSet();
 	}
 
 }
