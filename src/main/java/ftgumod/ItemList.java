@@ -14,7 +14,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemList implements Iterable<ItemStack> {
 
 	protected final NonNullList<ItemStack> list = NonNullList.create();
-	private final String name;
+	protected String name;
 
 	public ItemList(Object obj) {
 		name = TechnologyUtil.toString(obj);

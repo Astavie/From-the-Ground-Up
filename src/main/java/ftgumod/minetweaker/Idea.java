@@ -45,7 +45,7 @@ public class Idea {
 
 		@Override
 		protected String getRecipeInfo(IdeaRecipe recipe) {
-			return "<tech:" + recipe.output.getUnlocalisedName() + ">";
+			return "<tech:" + recipe.output.getUnlocalizedName() + ">";
 		}
 
 	}
@@ -69,7 +69,7 @@ public class Idea {
 
 		@Override
 		protected String getRecipeInfo(IdeaRecipe recipe) {
-			return "<tech:" + recipe.output.getUnlocalisedName() + ">";
+			return "<tech:" + recipe.output.getUnlocalizedName() + ">";
 		}
 
 	}

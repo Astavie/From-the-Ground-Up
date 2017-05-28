@@ -1,6 +1,7 @@
 package ftgumod;
 
 import ftgumod.technology.TechnologyUtil;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,10 @@ public class ItemListWildcard extends ItemList {
 				list.remove(stack);
 				i--;
 			}
+		}
+
+		if (obj instanceof String && !list.isEmpty() && !I18n.hasKey(name + ".name")) {
+			name = list.get(0).getUnlocalizedName();
 		}
 	}
 

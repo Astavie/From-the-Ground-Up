@@ -64,12 +64,12 @@ public class EventHandler {
 	public void onPlayerInspect(PlayerInspectEvent evt) {
 		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer().getUniqueID()) > t) {
 			ITechnology cap = evt.getEntityPlayer().getCapability(CapabilityTechnology.TECH_CAP, null);
-			if (cap.isResearched(TechnologyHandler.ENCHANTING.getUnlocalisedName()) && !cap.isResearched(TechnologyHandler.GLOWING_EYES.getUnlocalisedName() + ".unlock")) {
+			if (cap.isResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName()) && !cap.isResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock")) {
 				evt.setUseful(true);
-				cap.setResearched(TechnologyHandler.GLOWING_EYES.getUnlocalisedName() + ".unlock");
+				cap.setResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock");
 
 				evt.getEntityPlayer().sendMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper2")));
-				evt.getEntityPlayer().sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.GLOWING_EYES.getLocalisedName() + "\"!"));
+				evt.getEntityPlayer().sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.GLOWING_EYES.getLocalizedName(true))));
 				evt.getEntityPlayer().world.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				PacketDispatcher.sendTo(new TechnologyMessage(evt.getEntityPlayer(), true), (EntityPlayerMP) evt.getEntityPlayer());
@@ -98,7 +98,7 @@ public class EventHandler {
 					}
 					if (!(tick > t)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						if (cap.isResearched(TechnologyHandler.ENCHANTING.getUnlocalisedName()) && !cap.isResearched(TechnologyHandler.GLOWING_EYES.getUnlocalisedName() + ".unlock")) {
+						if (cap.isResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName()) && !cap.isResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock")) {
 							ticks.remove(uuid);
 							ticks.put(uuid, tick + 1);
 						}
@@ -111,9 +111,9 @@ public class EventHandler {
 					ItemStack stack = player.inventory.getStackInSlot(i);
 					if (stack != ItemStack.EMPTY && stack.getItem() == Items.ENCHANTED_BOOK) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalisedName() + ".unlock");
+						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName() + ".unlock");
 
-						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENCHANTING.getLocalisedName() + "\"!"));
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.ENCHANTING.getLocalizedName(true))));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
@@ -124,9 +124,9 @@ public class EventHandler {
 
 			if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.isResearched(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world)) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				cap.setResearched(TechnologyHandler.ENDER_KNOWLEDGE.getUnlocalisedName() + ".unlock");
+				cap.setResearched(TechnologyHandler.ENDER_KNOWLEDGE.getUnlocalizedName() + ".unlock");
 
-				player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.unlock") + " \"" + TechnologyHandler.ENDER_KNOWLEDGE.getLocalisedName() + "\"!"));
+				player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.ENDER_KNOWLEDGE.getLocalizedName(true))));
 				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
@@ -175,7 +175,7 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.translateToLocalFormatted("technology.idea", tech.getLocalisedName()));
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.translateToLocalFormatted("technology.idea", tech.getLocalizedName(false)));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
@@ -183,7 +183,7 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.translateToLocalFormatted("technology.research", tech.getLocalisedName()));
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 				evt.getToolTip().add("");
 				evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("item.parchment_research.complete"));
@@ -212,7 +212,7 @@ public class EventHandler {
 			ticks.remove(evt.player.getUniqueID());
 		}
 
-		List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalisedName(), TechnologyHandler.STONEWORKING.getUnlocalisedName(), TechnologyHandler.CARPENTRY.getUnlocalisedName(), TechnologyHandler.REFINEMENT.getUnlocalisedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalisedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalisedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalisedName(), TechnologyHandler.COOKING.getUnlocalisedName());
+		List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalizedName(), TechnologyHandler.STONEWORKING.getUnlocalizedName(), TechnologyHandler.CARPENTRY.getUnlocalizedName(), TechnologyHandler.REFINEMENT.getUnlocalizedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalizedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalizedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalizedName(), TechnologyHandler.COOKING.getUnlocalizedName());
 		ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap.isNew()) {
 			evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));

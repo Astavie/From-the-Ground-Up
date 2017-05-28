@@ -40,10 +40,10 @@ public class UnlockTechMessage implements IMessage {
 				Technology t = TechnologyHandler.getTechnology(message.tech);
 
 				if (t.isResearched(player)) {
-					cap.removeResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName());
-					cap.removeResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName() + ".unlock");
+					cap.removeResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalizedName());
+					cap.removeResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalizedName() + ".unlock");
 				} else {
-					cap.setResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalisedName());
+					cap.setResearched(TechnologyHandler.getTechnology(message.tech).getUnlocalizedName());
 				}
 
 				return new TechnologyMessage(player, true);

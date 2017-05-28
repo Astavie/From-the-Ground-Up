@@ -57,8 +57,7 @@ dependencies {
 	runtime "blusunrize:ImmersiveEngineering:0.${mc_major}+"
 }
 
-processResources
-{
+processResources {
 	inputs.property "version", project.version
 	inputs.property "mcversion", mc_version
 

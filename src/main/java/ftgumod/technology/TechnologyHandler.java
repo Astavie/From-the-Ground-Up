@@ -278,7 +278,7 @@ public class TechnologyHandler {
 	public static void registerDecipher(ResearchRecipe r, Decipher d) {
 		unlock.put(r, d);
 		ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);
-		TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalisedName());
+		TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalizedName());
 		ITEM_GROUP.UNDECIPHERED.addItem(i);
 	}
 
@@ -300,7 +300,7 @@ public class TechnologyHandler {
 			minY = tech.y;
 
 		if (minecraft)
-			vanilla.add(tech.getUnlocalisedName());
+			vanilla.add(tech.getUnlocalizedName());
 	}
 
 	public static void registerIdea(Technology tech, Object... pars) {
@@ -321,7 +321,7 @@ public class TechnologyHandler {
 
 	public static Technology getTechnology(String name) {
 		for (Technology t : technologies) {
-			if (t.getUnlocalisedName().equalsIgnoreCase(name)) {
+			if (t.getUnlocalizedName().equalsIgnoreCase(name)) {
 				return t;
 			}
 		}
@@ -339,7 +339,7 @@ public class TechnologyHandler {
 
 	public static IdeaRecipe getIdea(String name) {
 		for (IdeaRecipe i : ideas) {
-			if (i.output.getUnlocalisedName().equalsIgnoreCase(name)) {
+			if (i.output.getUnlocalizedName().equalsIgnoreCase(name)) {
 				return i;
 			}
 		}
@@ -357,7 +357,7 @@ public class TechnologyHandler {
 
 	public static ResearchRecipe getResearch(String name) {
 		for (ResearchRecipe r : researches) {
-			if (r.output.getUnlocalisedName().equalsIgnoreCase(name)) {
+			if (r.output.getUnlocalizedName().equalsIgnoreCase(name)) {
 				return r;
 			}
 		}

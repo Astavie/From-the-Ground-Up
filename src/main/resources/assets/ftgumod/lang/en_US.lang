@@ -17,15 +17,16 @@ item.looking_glass.shift=Press Shift for more information
 gui.copy=Copy
 
 technology.idea=%s Idea
-technology.research=%s Research
+technology.technology=%s Technology
+technology.theory=%s Theory
 technology.researched=Researched!
 
-technology.complete.already="%s" is already researched
-technology.complete.flawless="%s" Researched!
+technology.complete.already="%s" has already been researched
+technology.complete.flawless="%s" researched!
 technology.complete.understand=You do not understand this technology
 technology.complete.unlock=Unlocked the research for "%s"!
 
-technology.decipher.already="%s" is already looked at
+technology.decipher.already="%s" has already been looked at
 technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
 technology.decipher.tooltip=Shift Right-click to find hidden meaning in blocks

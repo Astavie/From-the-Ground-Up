@@ -36,7 +36,7 @@ public class Research {
 
 		@Override
 		protected String getRecipeInfo(ResearchRecipe recipe) {
-			return "<tech:" + recipe.output.getUnlocalisedName() + ">";
+			return "<tech:" + recipe.output.getUnlocalizedName() + ">";
 		}
 
 	}
@@ -60,7 +60,7 @@ public class Research {
 
 		@Override
 		protected String getRecipeInfo(ResearchRecipe recipe) {
-			return "<tech:" + recipe.output.getUnlocalisedName() + ">";
+			return "<tech:" + recipe.output.getUnlocalizedName() + ">";
 		}
 
 	}

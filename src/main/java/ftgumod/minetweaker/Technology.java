@@ -57,7 +57,7 @@ public class Technology {
 				if (t != null)
 					ls1.add(t);
 				else
-					MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Technology.name + " found for " + s + " in " + Technology.name + " " + p.getLocalisedName() + ". Secret unlock ignored!");
+					MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Technology.name + " found for " + s + " in " + Technology.name + " " + p.getLocalizedName(false) + ". Secret unlock ignored!");
 			}
 
 			ftgumod.technology.Technology[] ls2 = new ftgumod.technology.Technology[ls1.size()];
@@ -80,7 +80,7 @@ public class Technology {
 
 		@Override
 		protected String getRecipeInfo(ftgumod.technology.Technology recipe) {
-			return "<tech:" + recipe.getUnlocalisedName() + ">";
+			return "<tech:" + recipe.getUnlocalizedName() + ">";
 		}
 
 	}
@@ -104,7 +104,7 @@ public class Technology {
 
 		@Override
 		protected String getRecipeInfo(ftgumod.technology.Technology recipe) {
-			return "<tech:" + recipe.getUnlocalisedName() + ">";
+			return "<tech:" + recipe.getUnlocalizedName() + ">";
 		}
 
 	}
