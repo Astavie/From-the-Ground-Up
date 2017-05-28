@@ -311,7 +311,7 @@ public class GuiResearchBook extends GuiScreen {
 
 			for (Technology t1 : tech) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				if (t1.hasCustomUnlock() && !t1.isResearched(player) && !cap.isResearched(t1.getUnlocalisedName() + ".unlock"))
+				if (t1.hasCustomUnlock() && !t1.isResearched(player) && !cap.isResearched(t1.getUnlocalizedName() + ".unlock"))
 					continue;
 				if (t1.hide && !t1.hasCustomUnlock() && !t1.isResearched(player))
 					continue;
@@ -360,7 +360,7 @@ public class GuiResearchBook extends GuiScreen {
 
 			for (Technology t2 : tech) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				if (t2.hasCustomUnlock() && !t2.isResearched(player) && !cap.isResearched(t2.getUnlocalisedName() + ".unlock"))
+				if (t2.hasCustomUnlock() && !t2.isResearched(player) && !cap.isResearched(t2.getUnlocalizedName() + ".unlock"))
 					continue;
 				if (t2.hide && !t2.hasCustomUnlock() && !t2.isResearched(player))
 					continue;
@@ -453,7 +453,7 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			if (state == 0) {
-				String s = selected.getLocalisedName();
+				String s = selected.getLocalizedName(true);
 				String s1 = selected.getDescription();
 
 				int i7 = x + 12;
@@ -470,7 +470,7 @@ public class GuiResearchBook extends GuiScreen {
 					fontRendererObj.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
 				fontRendererObj.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getLocalisedName();
+				String s1 = selected.getLocalizedName(true);
 				int x1 = (width - fontRendererObj.getStringWidth(s1)) / 2;
 				int y1 = (height - imageHeight) / 2;
 				fontRendererObj.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);

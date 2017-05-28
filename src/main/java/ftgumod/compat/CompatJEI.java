@@ -61,7 +61,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 				IItemListOverlay overlay = runtime.getItemListOverlay();
 				overlay.getClass().getMethod("rebuildItemFilter").invoke(overlay);
 			} catch (Exception e) {
-				FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "[ftgumod] Could not reload the JEI item filter!");
+				FMLCommonHandler.instance().getFMLLogger().log(Level.ERROR, "[FTGU] Could not reload the JEI item filter!");
 			}
 
 			tech = new HashSet<Integer>((Collection<Integer>) arg[0]);

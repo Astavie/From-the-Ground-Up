@@ -51,7 +51,7 @@ public class GuiResearchTable extends GuiContainer {
 			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9 && table.recipe.recipe[slot.getSlotIndex() - table.combine] != null) {
 				List<String> text = new ArrayList<String>();
 
-				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalisedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
+				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalizedName() + "." + TechnologyUtil.toString(table.recipe.recipe[slot.getSlotIndex() - table.combine]));
 				if (TechnologyHandler.hasDecipher(table.recipe)) {
 					Decipher d = TechnologyHandler.unlock.get(table.recipe);
 					DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];

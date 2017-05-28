@@ -127,7 +127,7 @@ public class ContainerIdeaTable extends Container {
 					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
 						ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
 
-						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalisedName());
+						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalizedName());
 
 						inventorySlots.get(output).putStack(result);
 						return;

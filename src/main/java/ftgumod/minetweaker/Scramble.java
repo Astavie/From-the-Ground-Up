@@ -69,7 +69,7 @@ public class Scramble {
 					continue;
 
 				ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);
-				TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalisedName());
+				TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalizedName());
 				ITEM_GROUP.UNDECIPHERED.addItem(i);
 			}
 		}
@@ -125,7 +125,7 @@ public class Scramble {
 					continue;
 
 				ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);
-				TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalisedName());
+				TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalizedName());
 				ITEM_GROUP.UNDECIPHERED.addItem(i);
 			}
 		}

@@ -80,9 +80,9 @@ public class TechnologyMessage implements IMessage {
 			cap.clear();
 			for (Integer i : message.tech) {
 				if (i < 0)
-					cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalisedName() + ".unlock");
+					cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalizedName() + ".unlock");
 				else
-					cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalisedName());
+					cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalizedName());
 			}
 			FTGU.INSTANCE.runCompat("jei", message.tech);
 

@@ -40,7 +40,7 @@ public class ItemParchmentResearch extends Item {
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.already", t.getLocalisedName())));
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.already", t.getLocalizedName(true))));
 					}
 				} else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
@@ -48,7 +48,7 @@ public class ItemParchmentResearch extends Item {
 
 					if (event.canResearch()) {
 						t.setResearched(player);
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalisedName())));
+						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalizedName(true))));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);

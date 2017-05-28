@@ -139,9 +139,9 @@ public class ContainerResearchTable extends Container {
 
 					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock")) {
-							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalisedName() + ".unlock");
-							invPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalisedName())));
+						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock")) {
+							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock");
+							invPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true))));
 							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 							PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						}
@@ -182,7 +182,7 @@ public class ContainerResearchTable extends Container {
 
 						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
 
-						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalisedName());
+						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalizedName());
 
 						inventorySlots.get(output).putStack(result);
 						return;

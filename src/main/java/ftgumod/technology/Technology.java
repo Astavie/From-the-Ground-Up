@@ -27,6 +27,7 @@ public class Technology {
 	public PAGE page;
 
 	public final int level;
+	private int next = 0;
 
 	private boolean customUnlock = false;
 
@@ -80,8 +81,10 @@ public class Technology {
 
 		if (prev == null)
 			level = 1;
-		else
+		else {
 			level = prev.level + 1;
+			prev.next += 1;
+		}
 
 		this.item = new ArrayList<ItemStack>();
 		for (Object o : item) {
@@ -89,12 +92,17 @@ public class Technology {
 		}
 	}
 
-	public String getUnlocalisedName() {
+	public boolean isTheory() {
+		return next > item.size();
+	}
+
+	public String getUnlocalizedName() {
 		return name;
 	}
 
-	public String getLocalisedName() {
-		return I18n.translateToLocal("technology." + name + ".name");
+	public String getLocalizedName(boolean suffix) {
+		String name = I18n.translateToLocal("technology." + this.name + ".name");
+		return suffix ? I18n.translateToLocalFormatted(isTheory() ? "technology.theory" : "technology.technology", name) : name;
 	}
 
 	public String getDescription() {
