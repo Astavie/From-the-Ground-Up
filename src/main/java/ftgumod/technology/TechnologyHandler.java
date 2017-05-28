@@ -23,10 +23,6 @@ public class TechnologyHandler {
 		IDEATABLE, RESEARCHTABLE;
 	}
 
-	public static int minX = 0;
-	public static int maxX = 0;
-	public static int minY = 0;
-	public static int maxY = 0;
 	private static boolean minecraft = false;
 
 	public static final Set<IdeaRecipe> ideas = new HashSet<IdeaRecipe>();
@@ -288,14 +284,14 @@ public class TechnologyHandler {
 		if (!technologies.get(tech.page).add(tech))
 			return false;
 
-		if (tech.x > maxX)
-			maxX = tech.x;
-		if (tech.x < minX)
-			minX = tech.x;
-		if (tech.y > maxY)
-			maxY = tech.y;
-		if (tech.y < minY)
-			minY = tech.y;
+		if (tech.x > tech.page.maxX)
+			tech.page.maxX = tech.x;
+		if (tech.x < tech.page.minX)
+			tech.page.minX = tech.x;
+		if (tech.y > tech.page.maxY)
+			tech.page.maxY = tech.y;
+		if (tech.y < tech.page.minY)
+			tech.page.minY = tech.y;
 
 		if (minecraft)
 			vanilla.add(tech.getUnlocalizedName());
@@ -383,6 +379,11 @@ public class TechnologyHandler {
 	}
 
 	public static class PAGE {
+
+		public int minX = 0;
+		public int maxX = 0;
+		public int minY = 0;
+		public int maxY = 0;
 
 		public static List<PAGE> pages = new ArrayList<PAGE>();
 

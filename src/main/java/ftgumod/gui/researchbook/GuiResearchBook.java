@@ -32,7 +32,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -41,10 +40,10 @@ public class GuiResearchBook extends GuiScreen {
 
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation("textures/gui/achievement/achievement_background.png");
 
-	private static final int X_MIN = TechnologyHandler.minX * 24 - 112;
-	private static final int Y_MIN = TechnologyHandler.minY * 24 - 112;
-	private static final int X_MAX = TechnologyHandler.maxX * 24 - 77;
-	private static final int Y_MAX = TechnologyHandler.maxY * 24 - 77;
+	private int x_min;
+	private int y_min;
+	private int x_max;
+	private int y_max;
 
 	private int imageWidth;
 	private int imageHeight;
@@ -79,19 +78,24 @@ public class GuiResearchBook extends GuiScreen {
 		currentPage = 0;
 
 		int i = 141;
-		xScrollO = xScrollP = xScrollTarget = AchievementList.OPEN_INVENTORY.displayColumn * 24 - i / 2 - 12;
-		yScrollO = yScrollP = yScrollTarget = AchievementList.OPEN_INVENTORY.displayRow * 24 - i / 2 - 12;
+		xScrollO = xScrollP = xScrollTarget = TechnologyHandler.BASIC_CRAFTING.x * 24 - i / 2 - 12;
+		yScrollO = yScrollP = yScrollTarget = TechnologyHandler.BASIC_CRAFTING.y * 24 - i / 2 - 12;
 
 		PacketDispatcher.sendToServer(new RequestTechMessage());
 	}
 
 	@Override
 	public void initGui() {
-		String name = PAGE.get(currentPage).name;
+		PAGE p = PAGE.get(currentPage);
 
 		buttonList.clear();
 		if (state == 0) {
-			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, name);
+			x_min = p.minX * 24 - 112;
+			y_min = p.minY * 24 - 112;
+			x_max = p.maxX * 24 - 77;
+			y_max = p.maxY * 24 - 77;
+
+			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, p.name);
 			if (PAGE.size() < 2)
 				page.enabled = false;
 
@@ -197,14 +201,14 @@ public class GuiResearchBook extends GuiScreen {
 				yScrollTarget = yScrollO = yScrollP;
 			}
 
-			if (xScrollTarget < X_MIN)
-				xScrollTarget = X_MIN;
-			if (yScrollTarget < Y_MIN)
-				yScrollTarget = Y_MIN;
-			if (xScrollTarget >= X_MAX)
-				xScrollTarget = X_MAX - 1;
-			if (yScrollTarget >= Y_MAX)
-				yScrollTarget = Y_MAX - 1;
+			if (xScrollTarget < x_min)
+				xScrollTarget = x_min;
+			if (yScrollTarget < y_min)
+				yScrollTarget = y_min;
+			if (xScrollTarget >= x_max)
+				xScrollTarget = x_max - 1;
+			if (yScrollTarget >= y_max)
+				yScrollTarget = y_max - 1;
 		}
 
 		drawDefaultBackground();
@@ -263,14 +267,14 @@ public class GuiResearchBook extends GuiScreen {
 		int i = MathHelper.floor(xScrollO + (xScrollP - xScrollO) * z);
 		int j = MathHelper.floor(yScrollO + (yScrollP - yScrollO) * z);
 
-		if (i < X_MIN)
-			i = X_MIN;
-		if (j < Y_MIN)
-			j = Y_MIN;
-		if (i >= X_MAX)
-			i = X_MAX - 1;
-		if (j >= Y_MAX)
-			j = Y_MAX - 1;
+		if (i < x_min)
+			i = x_min;
+		if (j < y_min)
+			j = y_min;
+		if (i >= x_max)
+			i = x_max - 1;
+		if (j >= y_max)
+			j = y_max - 1;
 
 		int k = (width - imageWidth) / 2;
 		int l = (height - imageHeight) / 2;
