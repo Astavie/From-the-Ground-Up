@@ -31,7 +31,7 @@ public class TechnologyHandler {
 
 	public static final Set<IdeaRecipe> ideas = new HashSet<IdeaRecipe>();
 	public static final Set<ResearchRecipe> researches = new HashSet<ResearchRecipe>();
-	public static final Set<Technology> technologies = new HashSet<Technology>();
+	public static final Map<PAGE, Set<Technology>> technologies = new HashMap<PAGE, Set<Technology>>();
 	public static final Set<String> vanilla = new HashSet<String>();
 
 	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<ResearchRecipe, Decipher>();
@@ -285,7 +285,7 @@ public class TechnologyHandler {
 	}
 
 	public static boolean registerTechnology(Technology tech) {
-		if (!technologies.add(tech))
+		if (!technologies.get(tech.page).add(tech))
 			return false;
 
 		if (tech.x > maxX)
@@ -320,20 +320,18 @@ public class TechnologyHandler {
 	}
 
 	public static Technology getTechnology(String name) {
-		for (Technology t : technologies) {
-			if (t.getUnlocalizedName().equalsIgnoreCase(name)) {
-				return t;
-			}
-		}
+		for (Set<Technology> s : technologies.values())
+			for (Technology t : s)
+				if (t.getUnlocalizedName().equalsIgnoreCase(name))
+					return t;
 		return null;
 	}
 
 	public static Technology getTechnology(int ID) {
-		for (Technology t : technologies) {
-			if (t.getID() == ID) {
-				return t;
-			}
-		}
+		for (Set<Technology> s : technologies.values())
+			for (Technology t : s)
+				if (t.getID() == ID)
+					return t;
 		return null;
 	}
 
@@ -376,10 +374,11 @@ public class TechnologyHandler {
 	public static Technology getLocked(ItemStack item) {
 		if (item == ItemStack.EMPTY)
 			return null;
-		for (Technology t : technologies)
-			for (ItemList o : t.item)
-				if (o.contains(item))
-					return t;
+		for (Set<Technology> s : technologies.values())
+			for (Technology t : s)
+				for (ItemList o : t.item)
+					if (o.contains(item))
+						return t;
 		return null;
 	}
 
@@ -392,6 +391,7 @@ public class TechnologyHandler {
 		public final String name;
 
 		public PAGE(String name) {
+			technologies.put(this, new HashSet<Technology>());
 			pages.add(this);
 			this.name = name;
 		}
@@ -409,16 +409,6 @@ public class TechnologyHandler {
 
 		public static int size() {
 			return pages.size();
-		}
-
-		public Set<Technology> getTechnology() {
-			Set<Technology> tech = new HashSet<Technology>();
-			for (Technology t : TechnologyHandler.technologies) {
-				if (t.page == this) {
-					tech.add(t);
-				}
-			}
-			return tech;
 		}
 
 	}

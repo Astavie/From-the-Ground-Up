@@ -8,9 +8,9 @@ import ftgumod.ItemList;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
+import ftgumod.minetweaker.util.ClearCollection;
 import ftgumod.minetweaker.util.IBaseInterface;
 import ftgumod.minetweaker.util.InputHelper;
-import ftgumod.minetweaker.util.ClearCollection;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import ftgumod.technology.TechnologyUtil;
@@ -132,7 +132,7 @@ public class Technology {
 
 		@Override
 		public boolean remove(ftgumod.technology.Technology recipe) {
-			if (!TechnologyHandler.technologies.remove(recipe))
+			if (!TechnologyHandler.technologies.get(recipe.page).remove(recipe))
 				return false;
 
 			idea = TechnologyHandler.getIdea(recipe);
