@@ -16,6 +16,7 @@ import ftgumod.technology.recipe.ResearchRecipe;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class TechnologyHandler {
 
@@ -284,13 +285,13 @@ public class TechnologyHandler {
 		if (!technologies.get(tech.page).add(tech))
 			return false;
 
-		if (tech.x > tech.page.maxX)
+		if (tech.page.maxX == OreDictionary.WILDCARD_VALUE || tech.x > tech.page.maxX)
 			tech.page.maxX = tech.x;
-		if (tech.x < tech.page.minX)
+		if (tech.page.minX == OreDictionary.WILDCARD_VALUE || tech.x < tech.page.minX)
 			tech.page.minX = tech.x;
-		if (tech.y > tech.page.maxY)
+		if (tech.page.maxY == OreDictionary.WILDCARD_VALUE || tech.y > tech.page.maxY)
 			tech.page.maxY = tech.y;
-		if (tech.y < tech.page.minY)
+		if (tech.page.minY == OreDictionary.WILDCARD_VALUE || tech.y < tech.page.minY)
 			tech.page.minY = tech.y;
 
 		if (minecraft)
@@ -380,10 +381,10 @@ public class TechnologyHandler {
 
 	public static class PAGE {
 
-		public int minX = 0;
-		public int maxX = 0;
-		public int minY = 0;
-		public int maxY = 0;
+		public int minX = OreDictionary.WILDCARD_VALUE;
+		public int maxX = OreDictionary.WILDCARD_VALUE;
+		public int minY = OreDictionary.WILDCARD_VALUE;
+		public int maxY = OreDictionary.WILDCARD_VALUE;
 
 		public static List<PAGE> pages = new ArrayList<PAGE>();
 

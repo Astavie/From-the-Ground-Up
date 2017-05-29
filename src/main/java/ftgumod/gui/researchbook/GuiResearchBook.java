@@ -18,7 +18,6 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -29,7 +28,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -66,8 +64,6 @@ public class GuiResearchBook extends GuiScreen {
 	private NonNullList<ItemListWildcard> unlock;
 	private int num = 4;
 	private int pages;
-
-	private long tick = 0;
 
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
@@ -229,7 +225,6 @@ public class GuiResearchBook extends GuiScreen {
 			PacketDispatcher.sendToServer(new UnlockTechMessage(selected.getID()));
 		if (b == 0 && selected != null && selected.isResearched(player)) {
 			state = selected.getID();
-			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			initGui();
 		}
 		super.mouseClicked(x, y, b);
@@ -419,12 +414,10 @@ public class GuiResearchBook extends GuiScreen {
 
 				ItemListWildcard list = unlock.get(n);
 
-				long tick = this.tick / 20L;
+				long tick = mc.world.getWorldTime() / 20;
 				int index = (int) (tick % list.size());
 
 				ItemStack item = list.get(index);
-
-				this.tick++;
 
 				mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 				GlStateManager.enableBlend();
