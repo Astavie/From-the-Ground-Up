@@ -19,7 +19,6 @@ import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import ftgumod.technology.TechnologyUtil;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -31,7 +30,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -236,7 +234,6 @@ public class GuiResearchBook extends GuiScreen {
 			PacketDispatcher.sendToServer(new UnlockTechMessage(selected.getID()));
 		if (b == 0 && selected != null && selected.isResearched(player)) {
 			state = selected.getID();
-			Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			initGui();
 		}
 		super.mouseClicked(x, y, b);
