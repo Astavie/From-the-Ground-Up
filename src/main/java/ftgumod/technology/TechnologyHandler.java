@@ -67,6 +67,8 @@ public class TechnologyHandler {
 	private static int ID = 0;
 
 	public static void init() {
+		PAGE.pages.add(PAGE.MINECRAFT);
+
 		ITEM_GROUP.init();
 
 		BASIC_CRAFTING = new Technology(PAGE.MINECRAFT, null, new ItemStack(Blocks.GRASS), 0, 0, "basic_crafting", Items.WHEAT, Blocks.HAY_BLOCK, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, new ItemStack(Items.DYE, 1, 5), new ItemStack(Items.DYE, 1, 6), new ItemStack(Items.DYE, 1, 7), new ItemStack(Items.DYE, 1, 8), new ItemStack(Items.DYE, 1, 9), new ItemStack(Items.DYE, 1, 10), new ItemStack(Items.DYE, 1, 12), new ItemStack(Items.DYE, 1, 13), new ItemStack(Items.DYE, 1, 14), Items.SUGAR, Blocks.SLIME_BLOCK);
@@ -280,6 +282,9 @@ public class TechnologyHandler {
 	}
 
 	public static boolean registerTechnology(Technology tech) {
+		if (!technologies.containsKey(tech.page))
+			technologies.put(tech.page, new HashSet<Technology>());
+
 		if (!technologies.get(tech.page).add(tech))
 			return false;
 
@@ -391,8 +396,6 @@ public class TechnologyHandler {
 		public final String name;
 
 		public PAGE(String name) {
-			technologies.put(this, new HashSet<Technology>());
-			pages.add(this);
 			this.name = name;
 		}
 
@@ -443,10 +446,10 @@ public class TechnologyHandler {
 
 		public static void init() {
 			COLORFUL = new ITEM_GROUP("colorful", Blocks.WOOL, Blocks.STAINED_HARDENED_CLAY);
-			WOODEN_STAIRS = new ITEM_GROUP("wooden_stairs", Blocks.ACACIA_STAIRS, Blocks.BIRCH_STAIRS, Blocks.DARK_OAK_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS);
-			WOODEN_DOOR = new ITEM_GROUP("wooden_door", Items.ACACIA_DOOR, Items.BIRCH_DOOR, Items.DARK_OAK_DOOR, Items.JUNGLE_DOOR, Items.OAK_DOOR, Items.SPRUCE_DOOR);
-			WOODEN_FENCE = new ITEM_GROUP("wooden_fence", Blocks.ACACIA_FENCE, Blocks.BIRCH_FENCE, Blocks.DARK_OAK_FENCE, Blocks.JUNGLE_FENCE, Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE);
-			WOODEN_FENCE_GATE = new ITEM_GROUP("wooden_fence_gate", Blocks.ACACIA_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE);
+			WOODEN_STAIRS = new ITEM_GROUP("wooden_stairs", Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.BIRCH_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.ACACIA_STAIRS, Blocks.DARK_OAK_STAIRS);
+			WOODEN_DOOR = new ITEM_GROUP("wooden_door", Items.OAK_DOOR, Items.SPRUCE_DOOR, Items.BIRCH_DOOR, Items.JUNGLE_DOOR, Items.ACACIA_DOOR, Items.DARK_OAK_DOOR);
+			WOODEN_FENCE = new ITEM_GROUP("wooden_fence", Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE);
+			WOODEN_FENCE_GATE = new ITEM_GROUP("wooden_fence_gate", Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE);
 			PICKAXE = new ITEM_GROUP("pickaxe", Items.WOODEN_PICKAXE, Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE);
 			UNSMOOTH_STONE = new ITEM_GROUP("unsmooth_stone", Blocks.SANDSTONE, Blocks.COBBLESTONE);
 			CRAFTING = new ITEM_GROUP("crafting", Blocks.CRAFTING_TABLE, Blocks.ANVIL);
