@@ -1,4 +1,4 @@
-# From-the-Ground-Up
+# From the Ground Up
 A Minecraft mod that adds research
 
 ## Downloads
