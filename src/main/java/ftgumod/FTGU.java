@@ -39,7 +39,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class FTGU {
 
 	public static final String MODID = "ftgumod";
-	public static final String VERSION = "Minecraft 1.10.2";
+	public static final String VERSION = "Minecraft 1.11.2";
 
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
@@ -143,7 +143,7 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		if (Loader.isModLoaded("MineTweaker3"))
+		if (Loader.isModLoaded("crafttweaker"))
 			try {
 				FTGUTweaker.class.newInstance();
 			} catch (Exception e) {

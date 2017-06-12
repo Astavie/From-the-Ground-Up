@@ -69,6 +69,8 @@ public class TechnologyHandler {
 	private static int ID = 0;
 
 	public static void init() {
+		PAGE.pages.add(PAGE.MINECRAFT);
+
 		ITEM_GROUP.init();
 
 		BASIC_CRAFTING = new Technology(PAGE.MINECRAFT, null, new ItemStack(Blocks.GRASS), 0, 0, "basic_crafting", Items.WHEAT, Blocks.HAY_BLOCK, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, new ItemStack(Items.DYE, 1, 5), new ItemStack(Items.DYE, 1, 6), new ItemStack(Items.DYE, 1, 7), new ItemStack(Items.DYE, 1, 8), new ItemStack(Items.DYE, 1, 9), new ItemStack(Items.DYE, 1, 10), new ItemStack(Items.DYE, 1, 12), new ItemStack(Items.DYE, 1, 13), new ItemStack(Items.DYE, 1, 14), Items.SUGAR, Blocks.SLIME_BLOCK);
@@ -282,6 +284,9 @@ public class TechnologyHandler {
 	}
 
 	public static boolean registerTechnology(Technology tech) {
+		if (!technologies.containsKey(tech.page))
+			technologies.put(tech.page, new HashSet<Technology>());
+
 		if (!technologies.get(tech.page).add(tech))
 			return false;
 
@@ -393,8 +398,6 @@ public class TechnologyHandler {
 		public final String name;
 
 		public PAGE(String name) {
-			technologies.put(this, new HashSet<Technology>());
-			pages.add(this);
 			this.name = name;
 		}
 
