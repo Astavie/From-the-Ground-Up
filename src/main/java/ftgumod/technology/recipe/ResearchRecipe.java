@@ -38,7 +38,8 @@ public class ResearchRecipe {
 			items.put((Character) obj[i], new ItemList(TechnologyUtil.toItem(obj[i + 1])));
 
 		for (char c : recipe) {
-			this.recipe.add(items.get(new Character(c)));
+			ItemList list = items.get(c);
+			this.recipe.add(list != null ? list : new ItemList());
 		}
 	}
 

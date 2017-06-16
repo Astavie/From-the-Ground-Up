@@ -16,6 +16,10 @@ public class ItemList implements Iterable<ItemStack> {
 	protected final NonNullList<ItemStack> list = NonNullList.create();
 	protected String name;
 
+	public ItemList() {
+		name = "";
+	}
+
 	public ItemList(Object obj) {
 		name = TechnologyUtil.toString(obj);
 
