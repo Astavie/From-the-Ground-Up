@@ -100,22 +100,11 @@ public class ContainerResearchTable extends Container {
 	}
 
 	public ResearchRecipe hasRecipe() {
-		for (ResearchRecipe i : TechnologyHandler.researches) {
-			boolean recipe[] = new boolean[9];
-			for (int j = 0; j < 9; j++) {
-				if (i.recipe.get(j).contains(inventorySlots.get(combine + j).getStack())) {
-					recipe[j] = true;
-				}
-			}
-			boolean r = true;
-			for (boolean b : recipe) {
-				if (!b) {
-					r = false;
-				}
-			}
-			if (r) {
-				return i;
-			}
+		outer: for (ResearchRecipe i : TechnologyHandler.researches) {
+			for (int j = 0; j < 9; j++)
+				if (!i.recipe.get(j).contains(inventorySlots.get(combine + j).getStack()))
+					continue outer;
+			return i;
 		}
 		return null;
 	}
@@ -204,7 +193,7 @@ public class ContainerResearchTable extends Container {
 			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 
 			for (int i = 0; i < 9; i++) {
-				if (inventorySlots.get(combine + i).getStack() != ItemStack.EMPTY) {
+				if (!inventorySlots.get(combine + i).getStack().isEmpty()) {
 					Item t = inventorySlots.get(combine + i).getStack().getItem();
 					if (t.getContainerItem() != null)
 						inventorySlots.get(combine + i).putStack(new ItemStack(t.getContainerItem()));

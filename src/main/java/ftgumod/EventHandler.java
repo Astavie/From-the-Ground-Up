@@ -109,7 +109,7 @@ public class EventHandler {
 			if (!TechnologyHandler.ENCHANTING.isUnlocked(player) && TechnologyHandler.ENCHANTING.canResearchIgnoreCustomUnlock(player)) {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
-					if (stack != ItemStack.EMPTY && stack.getItem() == Items.ENCHANTED_BOOK) {
+					if (!stack.isEmpty() && stack.getItem() == Items.ENCHANTED_BOOK) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName() + ".unlock");
 
@@ -196,7 +196,7 @@ public class EventHandler {
 		if (evt.crafting.getItem() == FTGUAPI.i_researchBook) {
 			for (int i = 0; i < evt.craftMatrix.getSizeInventory(); i++) {
 				ItemStack item = evt.craftMatrix.getStackInSlot(i);
-				if (item != ItemStack.EMPTY && item.getItem() == FTGUAPI.i_parchmentResearch) {
+				if (!item.isEmpty() && item.getItem() == FTGUAPI.i_parchmentResearch) {
 					((ItemParchmentResearch) item.getItem()).research(item, evt.player, false);
 				}
 			}
@@ -263,7 +263,7 @@ public class EventHandler {
 					ItemStack stack = s.inventory.getStackInSlot(0);
 					if (stack != this.stack) {
 						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack);
-						if (stack != ItemStack.EMPTY)
+						if (!stack.isEmpty())
 							MinecraftForge.EVENT_BUS.post(event);
 
 						this.stack = event.willLock() ? ItemStack.EMPTY : stack;

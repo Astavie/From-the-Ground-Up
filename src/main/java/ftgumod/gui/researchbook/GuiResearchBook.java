@@ -101,7 +101,7 @@ public class GuiResearchBook extends GuiScreen {
 			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy", new Object[0]));
 			copy.enabled = false;
 			for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-				if (player.inventory.getStackInSlot(i) != ItemStack.EMPTY && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+				if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
 					copy.enabled = true;
 
 			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
@@ -312,23 +312,23 @@ public class GuiResearchBook extends GuiScreen {
 					int yStart = (t1.y * 24 - j) + 11;
 					int xStop = (t1.prev.x * 24 - i) + 11;
 					int yStop = (t1.prev.y * 24 - j) + 11;
-	
+
 					boolean flag = t1.isResearched(player);
 					boolean flag1 = t1.canResearchIgnoreResearched(player);
 					int k4 = t1.requirementsUntilAvailible(player);
-	
+
 					if (k4 > 2)
 						continue;
-	
+
 					int l4 = 0xff000000;
 					if (flag)
 						l4 = 0xffa0a0a0;
 					else if (flag1)
 						l4 = 0xff00ff00;
-	
+
 					drawHorizontalLine(xStart, xStop, yStart, l4);
 					drawVerticalLine(xStop, yStart, yStop, l4);
-	
+
 					if (xStart > xStop)
 						drawTexturedModalRect(xStart - 11 - 7, yStart - 5, 114, 234, 7, 11);
 					else if (xStart < xStop)
@@ -338,17 +338,17 @@ public class GuiResearchBook extends GuiScreen {
 					else if (yStart < yStop)
 						drawTexturedModalRect(xStart - 5, yStart + 11, 96, 241, 11, 7);
 				}
-	
+
 				selected = null;
-	
+
 				float f3 = (x - i1) * zoom;
 				float f4 = (y - j1) * zoom;
-	
+
 				RenderHelper.enableGUIStandardItemLighting();
 				GlStateManager.disableLighting();
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.enableColorMaterial();
-	
+
 				for (Technology t2 : tech) {
 					ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 					if (t2.hasCustomUnlock() && !t2.isResearched(player) && !cap.isResearched(t2.getUnlocalizedName() + ".unlock"))
@@ -359,11 +359,11 @@ public class GuiResearchBook extends GuiScreen {
 					int j7 = t2.y * 24 - j;
 					if (l6 < -24 || j7 < -24 || l6 > 224F * zoom || j7 > 155F * zoom)
 						continue;
-	
+
 					int l7 = t2.requirementsUntilAvailible(player);
 					if (l7 > 2)
 						continue;
-	
+
 					boolean flag = t2.canResearchIgnoreResearched(player);
 					if (t2.isResearched(player))
 						GlStateManager.color(0.75F, 0.75F, 0.75F, 1.0F);
@@ -371,7 +371,7 @@ public class GuiResearchBook extends GuiScreen {
 						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					else
 						GlStateManager.color(0.1F, 0.1F, 0.1F, 1.0F);
-	
+
 					mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 					GlStateManager.enableBlend();
 					if (t2.hasCustomUnlock())
@@ -379,18 +379,18 @@ public class GuiResearchBook extends GuiScreen {
 					else
 						drawTexturedModalRect(l6 - 2, j7 - 2, 0, 202, 26, 26);
 					GlStateManager.disableBlend();
-	
+
 					if (!flag) {
 						GlStateManager.color(0.1F, 0.1F, 0.1F, 1.0F);
 						itemRender.isNotRenderingEffectsInGUI(false);
 					}
-	
+
 					GlStateManager.disableLighting();
 					GlStateManager.enableCull();
 					itemRender.renderItemAndEffectIntoGUI(t2.icon, l6 + 3, j7 + 3);
 					GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 					GlStateManager.disableLighting();
-	
+
 					if (!flag)
 						itemRender.isNotRenderingEffectsInGUI(true);
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

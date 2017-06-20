@@ -40,7 +40,7 @@ public class CopyTechMessage implements IMessage {
 			if (tech.isResearched(player)) {
 				int index = -1;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-					if (player.inventory.getStackInSlot(i) != ItemStack.EMPTY && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
 						index = i;
 
 				if (index != -1) {

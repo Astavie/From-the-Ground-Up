@@ -19,22 +19,6 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 		clear();
 	}
 
-	public ItemStack[] copy() {
-		ItemStack[] stack = new ItemStack[this.stack.length];
-		for (int i = 0; i < stack.length; i++)
-			if (this.stack[i] != ItemStack.EMPTY)
-				stack[i] = this.stack[i].copy();
-		return stack;
-	}
-
-	public void copy(ItemStack... stack) {
-		if (this.stack.length < stack.length)
-			this.stack = new ItemStack[stack.length];
-		for (int i = 0; i < stack.length; i++)
-			if (stack[i] != ItemStack.EMPTY)
-				this.stack[i] = stack[i].copy();
-	}
-
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
@@ -56,7 +40,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 		NBTTagList nbttaglist = new NBTTagList();
 
 		for (int i = 0; i < stack.length; ++i) {
-			if (stack[i] != ItemStack.EMPTY && stack[i] != null) {
+			if (stack[i] != null && !stack[i].isEmpty()) {
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
 				nbtTagCompound.setByte("Slot", (byte) i);
 				stack[i].writeToNBT(nbtTagCompound);
@@ -81,7 +65,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 
 	@Override
 	public ItemStack decrStackSize(int arg0, int arg1) {
-		if (stack[arg0] != ItemStack.EMPTY) {
+		if (!stack[arg0].isEmpty()) {
 			ItemStack itemstack;
 
 			if (stack[arg0].getCount() <= arg1) {
@@ -158,7 +142,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	public void setInventorySlotContents(int arg0, ItemStack arg1) {
 		stack[arg0] = arg1;
 
-		if (arg1 != ItemStack.EMPTY && arg1.getCount() > getInventoryStackLimit()) {
+		if (!arg1.isEmpty() && arg1.getCount() > getInventoryStackLimit()) {
 			arg1.setCount(getInventoryStackLimit());
 		}
 	}
@@ -181,7 +165,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	@Override
 	public boolean isEmpty() {
 		for (ItemStack i : stack)
-			if (i != ItemStack.EMPTY)
+			if (!i.isEmpty())
 				return false;
 		return true;
 	}

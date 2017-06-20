@@ -374,7 +374,7 @@ public class TechnologyHandler {
 	}
 
 	public static Technology getLocked(ItemStack item) {
-		if (item == ItemStack.EMPTY)
+		if (item.isEmpty())
 			return null;
 		for (Set<Technology> s : technologies.values())
 			for (Technology t : s)

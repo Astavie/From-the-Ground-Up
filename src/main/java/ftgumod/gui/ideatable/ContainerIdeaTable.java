@@ -80,36 +80,24 @@ public class ContainerIdeaTable extends Container {
 	}
 
 	public IdeaRecipe hasRecipe() {
-		for (IdeaRecipe i : TechnologyHandler.ideas) {
+		outer: for (IdeaRecipe i : TechnologyHandler.ideas) {
 			Set<ItemStack> items = new HashSet<ItemStack>();
 			for (int j = 0; j < 3; j++) {
 				ItemStack s = inventorySlots.get(combine + j).getStack();
-				if (s != ItemStack.EMPTY) {
+				if (!s.isEmpty())
 					items.add(s);
-				}
 			}
-			boolean recipe[] = new boolean[i.recipe.size()];
 			for (int j = 0; j < i.recipe.size(); j++) {
 				for (ItemStack stack : items) {
 					if (i.recipe.get(j).contains(stack)) {
 						items.remove(stack);
-						recipe[j] = true;
 						break;
-					}
+					} else
+						continue outer;
 				}
 			}
-			if (items.size() > 0) {
-				continue;
-			}
-			boolean r = true;
-			for (boolean b : recipe) {
-				if (!b) {
-					r = false;
-				}
-			}
-			if (r) {
+			if (items.size() == 0)
 				return i;
-			}
 		}
 		return null;
 	}
@@ -148,7 +136,7 @@ public class ContainerIdeaTable extends Container {
 			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 
 			for (int i = 0; i < 3; i++) {
-				if (inventorySlots.get(combine + i).getStack() != ItemStack.EMPTY) {
+				if (!inventorySlots.get(combine + i).getStack().isEmpty()) {
 					Item t = inventorySlots.get(combine + i).getStack().getItem();
 					if (t.getContainerItem() != null)
 						inventorySlots.get(combine + i).putStack(new ItemStack(t.getContainerItem()));

@@ -47,13 +47,14 @@ public class GuiResearchTable extends GuiContainer {
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-			if (slot.inventory == tileentity && table.recipe != null && slot.getSlotIndex() >= table.combine && slot.getSlotIndex() < table.combine + 9) {
+			int index = slot.getSlotIndex() - table.combine;
+			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && !table.recipe.recipe.get(index).isEmpty()) {
 				List<String> text = new ArrayList<String>();
 
-				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalizedName() + "." + table.recipe.recipe.get(slot.getSlotIndex() - table.combine).toString());
+				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalizedName() + "." + table.recipe.recipe.get(index).toString());
 				if (TechnologyHandler.hasDecipher(table.recipe)) {
 					Decipher d = TechnologyHandler.unlock.get(table.recipe);
-					DecipherGroup g = d.unlock[slot.getSlotIndex() - table.combine];
+					DecipherGroup g = d.unlock[index];
 					if (g != null) {
 						if (!table.inventorySlots.get(table.glass).getHasStack()) {
 							hint = TextFormatting.OBFUSCATED + hint;
@@ -61,10 +62,9 @@ public class GuiResearchTable extends GuiContainer {
 							List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
 							boolean perms = false;
 							for (ItemStack stack : g.unlock)
-								for (String t : items) {
+								for (String t : items)
 									if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null && stack.getItem().getUnlocalizedName(stack).equals(t)))
 										perms = true;
-								}
 							if (!perms)
 								hint = TextFormatting.OBFUSCATED + hint;
 						}
@@ -87,10 +87,12 @@ public class GuiResearchTable extends GuiContainer {
 
 		ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 		if (table.recipe != null) {
-			for (int i = table.combine; i < table.combine + 9; i++) {
-				Slot slot = inventorySlots.inventorySlots.get(i);
-				if (!slot.getHasStack())
-					this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
+			for (int i = 0; i < 9; i++) {
+				if (!table.recipe.recipe.get(i).isEmpty()) {
+					Slot slot = inventorySlots.inventorySlots.get(i + table.combine);
+					if (!slot.getHasStack())
+						this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
+				}
 			}
 		}
 	}

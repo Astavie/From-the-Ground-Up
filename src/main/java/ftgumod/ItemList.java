@@ -17,7 +17,7 @@ public class ItemList implements Iterable<ItemStack> {
 	protected String name;
 
 	public ItemList() {
-		name = "";
+		name = "null";
 	}
 
 	public ItemList(Object obj) {
@@ -46,6 +46,8 @@ public class ItemList implements Iterable<ItemStack> {
 	}
 
 	public boolean contains(ItemStack item) {
+		if (isEmpty() && item.isEmpty())
+			return true;
 		for (ItemStack s : list)
 			if (OreDictionary.itemMatches(s, item, false) && (!s.hasTagCompound() || ItemStack.areItemStackTagsEqual(s, item)))
 				return true;
@@ -55,6 +57,10 @@ public class ItemList implements Iterable<ItemStack> {
 	@Override
 	public Iterator<ItemStack> iterator() {
 		return list.iterator();
+	}
+
+	public boolean isEmpty() {
+		return list.isEmpty();
 	}
 
 	/**
