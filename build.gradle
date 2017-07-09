@@ -14,8 +14,13 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven'
 
 ext {
-	mc_version = "1.${mc_major}.${mc_minor}"
-	mc_version2 = "1${mc_major}${mc_minor}"
+    if (mc_minor == "0") {
+	    mc_version = "1.${mc_major}"
+	    mc_version2 = "1${mc_major}"
+	} else {
+	    mc_version = "1.${mc_major}.${mc_minor}"
+	    mc_version2 = "1${mc_major}${mc_minor}"
+	}
 }
 
 version = "${mc_version}-${mod_status}${major}.${minor}.${patch}"
@@ -30,7 +35,7 @@ compileJava {
 minecraft {
 	version = "${mc_version}-${forge_version}"
 	runDir = "run"
-	mappings = "snapshot_20161220"
+	mappings = "snapshot_20170624"
 }
 
 repositories {
@@ -39,21 +44,17 @@ repositories {
 }
 
 dependencies {
-	compile files(
-		'lib/BetterWithMods-deobf.jar'
-	)
-
 	// Mod APIs
 	deobfCompile "mezz.jei:jei_${mc_version}:+:api"
 	deobfCompile "MineTweaker3:MineTweaker3-API:+"
 	deobfCompile "blusunrize:ImmersiveEngineering:+:api"
 
 	// Runtime Mods
-	runtime "slimeknights.mantle:Mantle:${mc_version}+"
-	runtime "slimeknights:TConstruct:${mc_version}+"
+	// runtime "slimeknights.mantle:Mantle:${mc_version}+"
+	// runtime "slimeknights:TConstruct:${mc_version}+"
 
 	runtime "mezz.jei:jei_${mc_version}:+"
-	runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
+	// runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
 	runtime "blusunrize:ImmersiveEngineering:0.${mc_major}+"
 }
 

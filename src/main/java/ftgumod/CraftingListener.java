@@ -36,11 +36,11 @@ public class CraftingListener implements IContainerListener {
 	}
 
 	@Override
-	public void sendProgressBarUpdate(Container arg0, int arg1, int arg2) {
+	public void sendAllContents(Container containerToSend, NonNullList<ItemStack> itemsList) {
 	}
 
 	@Override
-	public void updateCraftingInventory(Container arg0, NonNullList<ItemStack> arg1) {
+	public void sendWindowProperty(Container containerIn, int varToUpdate, int newValue) {
 	}
 
 }

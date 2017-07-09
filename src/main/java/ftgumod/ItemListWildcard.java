@@ -19,7 +19,7 @@ public class ItemListWildcard extends ItemList {
 			if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
 				Item item = stack.getItem();
 				for (CreativeTabs tab : item.getCreativeTabs())
-					stack.getItem().getSubItems(item, tab, list);
+					stack.getItem().getSubItems(tab, list);
 
 				list.remove(stack);
 				i--;

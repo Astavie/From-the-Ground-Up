@@ -19,7 +19,6 @@ import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
@@ -95,7 +94,7 @@ public class GuiResearchBook extends GuiScreen {
 			if (PAGE.size() < 2)
 				page.enabled = false;
 
-			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
+			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
 			buttonList.add(page);
 		} else {
 			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy", new Object[0]));
@@ -104,7 +103,7 @@ public class GuiResearchBook extends GuiScreen {
 				if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
 					copy.enabled = true;
 
-			buttonList.add(new GuiOptionButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
+			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
 			buttonList.add(copy);
 			scroll = 1;
 
@@ -248,12 +247,12 @@ public class GuiResearchBook extends GuiScreen {
 	private void drawTitle() {
 		int i = (width - imageWidth) / 2;
 		int j = (height - imageHeight) / 2;
-		fontRendererObj.drawString(I18n.format("item.research_book.name", new Object[0]), i + 15, j + 5, 0x404040);
+		fontRenderer.drawString(I18n.format("item.research_book.name", new Object[0]), i + 15, j + 5, 0x404040);
 	}
 
 	@SuppressWarnings("deprecation")
 	private TextureAtlasSprite getTexture(ItemStack itemStack) {
-		return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(((ItemBlock) itemStack.getItem()).block.getStateFromMeta(itemStack.getItemDamage()));
+		return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(((ItemBlock) itemStack.getItem()).getBlock().getStateFromMeta(itemStack.getMetadata()));
 	}
 
 	private void drawResearchScreen(int x, int y, float z) {
@@ -380,10 +379,8 @@ public class GuiResearchBook extends GuiScreen {
 						drawTexturedModalRect(l6 - 2, j7 - 2, 0, 202, 26, 26);
 					GlStateManager.disableBlend();
 
-					if (!flag) {
+					if (!flag)
 						GlStateManager.color(0.1F, 0.1F, 0.1F, 1.0F);
-						itemRender.isNotRenderingEffectsInGUI(false);
-					}
 
 					GlStateManager.disableLighting();
 					GlStateManager.enableCull();
@@ -391,8 +388,6 @@ public class GuiResearchBook extends GuiScreen {
 					GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 					GlStateManager.disableLighting();
 
-					if (!flag)
-						itemRender.isNotRenderingEffectsInGUI(true);
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					if (f3 >= l6 && f3 <= l6 + 22 && f4 >= j7 && f4 <= j7 + 22 && t2.canResearchIgnoreResearched(player))
 						selected = t2;
@@ -432,7 +427,7 @@ public class GuiResearchBook extends GuiScreen {
 				GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 				GlStateManager.disableLighting();
 
-				fontRendererObj.drawStringWithShadow(I18n.format(list.toString() + ".name"), 35, 45 + (pos * 28), 0xFFFFFF);
+				fontRenderer.drawStringWithShadow(I18n.format(list.toString() + ".name"), 35, 45 + (pos * 28), 0xFFFFFF);
 			}
 		}
 
@@ -450,37 +445,37 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			if (state == 0) {
-				String s = selected.getLocalizedName(true);
-				String s1 = selected.getDescription();
+				String s = selected.getLocalizedName(true).getFormattedText();
+				String s1 = selected.getDescription().getFormattedText();
 
 				int i7 = x + 12;
 				int k7 = y - 4;
 
-				int j8 = Math.max(fontRendererObj.getStringWidth(s), 120);
-				int i9 = fontRendererObj.getWordWrappedHeight(s1, j8);
+				int j8 = Math.max(fontRenderer.getStringWidth(s), 120);
+				int i9 = fontRenderer.getWordWrappedHeight(s1, j8);
 				if (selected.isResearched(player))
 					i9 += 12;
 
 				drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
-				fontRendererObj.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
+				fontRenderer.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
 				if (selected.isResearched(player))
-					fontRendererObj.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
-				fontRendererObj.drawStringWithShadow(s, i7, k7, -1);
+					fontRenderer.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
+				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getLocalizedName(true);
-				int x1 = (width - fontRendererObj.getStringWidth(s1)) / 2;
+				String s1 = selected.getLocalizedName(true).getFormattedText();
+				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
 				int y1 = (height - imageHeight) / 2;
-				fontRendererObj.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);
+				fontRenderer.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);
 
-				String s2 = selected.getDescription();
+				String s2 = selected.getDescription().getFormattedText();
 				int x2 = width / 2;
 				int y2 = (height - imageHeight) / 2;
 				drawSplitString(s2, x2, y2 + 32, split, 0xffa0a0a0, true);
 
 				String s3 = scroll + "/" + pages;
-				int x3 = (width + imageWidth) / 2 - fontRendererObj.getStringWidth(s3);
+				int x3 = (width + imageWidth) / 2 - fontRenderer.getStringWidth(s3);
 				int y3 = (height + imageHeight) / 2;
-				fontRendererObj.drawStringWithShadow(s3, x3 - 21, y3 - 44, 0xffa0a0a0);
+				fontRenderer.drawStringWithShadow(s3, x3 - 21, y3 - 44, 0xffa0a0a0);
 			}
 		}
 
@@ -490,12 +485,12 @@ public class GuiResearchBook extends GuiScreen {
 	}
 
 	public void drawSplitString(String string, int x, int y, int split, int color, boolean shadow) {
-		for (String s : fontRendererObj.listFormattedStringToWidth(string, split)) {
+		for (String s : fontRenderer.listFormattedStringToWidth(string, split)) {
 			if (shadow)
-				fontRendererObj.drawStringWithShadow(s, x - (fontRendererObj.getStringWidth(s) / 2), y, color);
+				fontRenderer.drawStringWithShadow(s, x - (fontRenderer.getStringWidth(s) / 2), y, color);
 			else
-				fontRendererObj.drawString(s, x - (fontRendererObj.getStringWidth(s) / 2), y, color);
-			y += fontRendererObj.FONT_HEIGHT;
+				fontRenderer.drawString(s, x - (fontRenderer.getStringWidth(s) / 2), y, color);
+			y += fontRenderer.FONT_HEIGHT;
 		}
 	}
 

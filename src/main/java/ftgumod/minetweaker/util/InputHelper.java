@@ -44,7 +44,7 @@ public class InputHelper {
 			} else if (((ItemStack) internal).getItemDamage() == OreDictionary.WILDCARD_VALUE) {
 				ItemStack stack = (ItemStack) internal;
 				if (isABlock(stack))
-					return ((ItemBlock) stack.getItem()).block;
+					return ((ItemBlock) stack.getItem()).getBlock();
 				else
 					return stack.getItem();
 			}

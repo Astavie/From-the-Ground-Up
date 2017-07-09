@@ -67,9 +67,11 @@ public class TechnologyUtil {
 	}
 
 	public static boolean hasRecipe(ItemStack stack) {
-		for (IRecipe r : CraftingManager.getInstance().getRecipeList())
+		for (ResourceLocation l : CraftingManager.REGISTRY.getKeys()) {
+			IRecipe r = CraftingManager.REGISTRY.getObject(l);
 			if (OreDictionary.itemMatches(r.getRecipeOutput(), stack, false) && (!r.getRecipeOutput().hasTagCompound() || ItemStack.areItemStackTagsEqual(r.getRecipeOutput(), stack)))
 				return true;
+		}
 		return FTGU.INSTANCE.runCompat("betterwithmods", stack);
 	}
 

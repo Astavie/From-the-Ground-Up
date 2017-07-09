@@ -6,7 +6,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 public class ProxyCommon {
 
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return ctx.getServerHandler().playerEntity;
+		return ctx.getServerHandler().player;
 	}
 
 	public void registerRenderers() {

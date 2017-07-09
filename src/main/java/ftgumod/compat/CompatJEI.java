@@ -6,7 +6,7 @@ import java.util.HashSet;
 import ftgumod.ItemList;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import net.minecraft.item.ItemStack;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 @mezz.jei.api.JEIPlugin
-public class CompatJEI extends BlankModPlugin implements ICompat {
+public class CompatJEI implements ICompat, IModPlugin {
 
 	private static IIngredientRegistry registry;
 

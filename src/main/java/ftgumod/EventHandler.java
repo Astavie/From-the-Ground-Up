@@ -22,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -38,9 +39,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -68,8 +68,8 @@ public class EventHandler {
 				evt.setUseful(true);
 				cap.setResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock");
 
-				evt.getEntityPlayer().sendMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper2")));
-				evt.getEntityPlayer().sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.GLOWING_EYES.getLocalizedName(true))));
+				evt.getEntityPlayer().sendMessage(new TextComponentTranslation("technology.noise.whisper2"));
+				evt.getEntityPlayer().sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.GLOWING_EYES.getLocalizedName(true)));
 				evt.getEntityPlayer().world.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				PacketDispatcher.sendTo(new TechnologyMessage(evt.getEntityPlayer(), true), (EntityPlayerMP) evt.getEntityPlayer());
@@ -93,7 +93,7 @@ public class EventHandler {
 				} else {
 					int tick = ticks.get(uuid);
 					if (tick == t) {
-						player.sendMessage(new TextComponentString(TextFormatting.DARK_GRAY + I18n.translateToLocal("technology.noise.whisper1")));
+						player.sendMessage(new TextComponentTranslation("technology.noise.whisper1"));
 						player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					if (!(tick > t)) {
@@ -113,7 +113,7 @@ public class EventHandler {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName() + ".unlock");
 
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.ENCHANTING.getLocalizedName(true))));
+						player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.ENCHANTING.getLocalizedName(true)));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
@@ -126,7 +126,7 @@ public class EventHandler {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				cap.setResearched(TechnologyHandler.ENDER_KNOWLEDGE.getUnlocalizedName() + ".unlock");
 
-				player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.ENDER_KNOWLEDGE.getLocalizedName(true))));
+				player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.ENDER_KNOWLEDGE.getLocalizedName(true)));
 				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
@@ -155,27 +155,28 @@ public class EventHandler {
 	}
 
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
 	public void onItemTooltip(ItemTooltipEvent evt) {
 		Item item = evt.getItemStack().getItem();
 		if (item == FTGUAPI.i_lookingGlass) {
 			NBTTagList blocks = TechnologyUtil.getItemData(evt.getItemStack()).getTagList("FTGU", NBT.TAG_STRING);
 			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				for (int i = 0; i < blocks.tagCount(); i++)
-					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + I18n.translateToLocal(blocks.getStringTagAt(i) + ".name"));
+					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + I18n.format(blocks.getStringTagAt(i) + ".name"));
 				if (blocks.tagCount() > 0)
 					evt.getToolTip().add("");
 			} else if (blocks.tagCount() > 0) {
-				evt.getToolTip().add(I18n.translateToLocal("item.looking_glass.shift"));
+				evt.getToolTip().add(I18n.format("item.looking_glass.shift"));
 				evt.getToolTip().add("");
 			}
 
-			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("technology.decipher.tooltip"));
+			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.translateToLocalFormatted("technology.idea", tech.getLocalizedName(false)));
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getLocalizedName(false)));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
@@ -183,10 +184,10 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true));
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true).getFormattedText());
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
 				evt.getToolTip().add("");
-				evt.getToolTip().add(TextFormatting.DARK_RED + I18n.translateToLocal("item.parchment_research.complete"));
+				evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("item.parchment_research.complete"));
 			}
 		}
 	}

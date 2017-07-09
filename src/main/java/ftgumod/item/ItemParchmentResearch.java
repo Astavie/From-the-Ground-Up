@@ -16,8 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -40,7 +39,7 @@ public class ItemParchmentResearch extends Item {
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.already", t.getLocalizedName(true))));
+						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getLocalizedName(true)));
 					}
 				} else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
@@ -48,12 +47,12 @@ public class ItemParchmentResearch extends Item {
 
 					if (event.canResearch()) {
 						t.setResearched(player);
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.flawless", t.getLocalizedName(true))));
+						player.sendMessage(new TextComponentTranslation("technology.complete.flawless", t.getLocalizedName(true)));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
 					} else
-						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.complete.understand")));
+						player.sendMessage(new TextComponentTranslation("technology.complete.understand"));
 				}
 			}
 		}

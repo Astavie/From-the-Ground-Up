@@ -16,6 +16,7 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.ResearchRecipe;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -31,7 +32,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.translation.I18n;
 
 public class ContainerResearchTable extends Container {
 
@@ -130,7 +130,7 @@ public class ContainerResearchTable extends Container {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock")) {
 							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock");
-							invPlayer.player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true))));
+							invPlayer.player.sendMessage(new TextComponentString(I18n.format("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true))));
 							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 							PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 						}

@@ -14,13 +14,13 @@ import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.technology.TechnologyHandler;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 
 public class GuiResearchTable extends GuiContainer {
 
@@ -41,8 +41,8 @@ public class GuiResearchTable extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String s = FTGUAPI.b_researchTable.getLocalizedName();
-		fontRendererObj.drawString(s, xSize / 2 - fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
-		fontRendererObj.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
+		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+		fontRenderer.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
@@ -51,7 +51,7 @@ public class GuiResearchTable extends GuiContainer {
 			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && !table.recipe.recipe.get(index).isEmpty()) {
 				List<String> text = new ArrayList<String>();
 
-				String hint = I18n.translateToLocal("research." + table.recipe.output.getUnlocalizedName() + "." + table.recipe.recipe.get(index).toString());
+				String hint = I18n.format("research." + table.recipe.output.getUnlocalizedName() + "." + table.recipe.recipe.get(index).toString());
 				if (TechnologyHandler.hasDecipher(table.recipe)) {
 					Decipher d = TechnologyHandler.unlock.get(table.recipe);
 					DecipherGroup g = d.unlock[index];
@@ -72,7 +72,7 @@ public class GuiResearchTable extends GuiContainer {
 				}
 				text.add(hint);
 
-				drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop, fontRendererObj);
+				drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 			}
 		}
 	}

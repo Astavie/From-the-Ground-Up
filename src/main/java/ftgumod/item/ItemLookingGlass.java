@@ -26,13 +26,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.oredict.OreDictionary;
 
+@SuppressWarnings("deprecation")
 public class ItemLookingGlass extends Item {
 
 	public ItemLookingGlass(String name) {
@@ -77,7 +78,7 @@ public class ItemLookingGlass extends Item {
 
 				if (!event.isUseful()) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -96,7 +97,7 @@ public class ItemLookingGlass extends Item {
 			for (int i = 0; i < blocks.tagCount(); i++)
 				if (blocks.getStringTagAt(i).equalsIgnoreCase(name)) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocalFormatted("technology.decipher.already", I18n.translateToLocal(name + ".name"))));
+						player.sendMessage(new TextComponentTranslation("technology.decipher.already", new TextComponentTranslation(name + ".name")));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -106,7 +107,7 @@ public class ItemLookingGlass extends Item {
 				MinecraftForge.EVENT_BUS.post(event);
 				if (!event.isUseful()) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.understand")));
+						player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -114,7 +115,7 @@ public class ItemLookingGlass extends Item {
 			}
 
 			if (!world.isRemote) {
-				player.sendMessage(new TextComponentString(I18n.translateToLocal("technology.decipher.flawless")));
+				player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
 			blocks.appendTag(new NBTTagString(name));

@@ -3,7 +3,6 @@ package ftgumod;
 import java.util.HashMap;
 import java.util.Map;
 
-import ftgumod.compat.CompatBWM;
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
@@ -22,6 +21,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
@@ -33,7 +33,10 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 @Mod(modid = FTGU.MODID, version = FTGU.VERSION)
 public class FTGU {
@@ -52,14 +55,34 @@ public class FTGU {
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon PROXY;
 
+	private ResourceLocation getRecipeGroup(ItemStack output) {
+		String s = output.getUnlocalizedName();
+		int idx = s.lastIndexOf(":");
+		if (idx >= 0)
+			s = s.substring(idx + 1);
+		return new ResourceLocation(MODID, s);
+	}
+
+	private ShapedOreRecipe addShapedRecipe(ItemStack output, Object... recipe) {
+		ShapedOreRecipe r = new ShapedOreRecipe(getRecipeGroup(output), output, recipe);
+		ForgeRegistries.RECIPES.register(r.setRegistryName(r.getGroup()));
+		return r;
+	}
+
+	private ShapelessOreRecipe addShapelessRecipe(ItemStack output, Object... recipe) {
+		ShapelessOreRecipe r = new ShapelessOreRecipe(getRecipeGroup(output), output, recipe);
+		ForgeRegistries.RECIPES.register(r.setRegistryName(r.getGroup()));
+		return r;
+	}
+
 	private void registerItem(Item item, String name) {
 		item.setRegistryName(name);
-		GameRegistry.register(item);
+		ForgeRegistries.ITEMS.register(item);
 	}
 
 	private void registerBlock(Block block, ItemBlock item, String name) {
 		block.setRegistryName(name);
-		GameRegistry.register(block);
+		ForgeRegistries.BLOCKS.register(block);
 
 		registerItem(item, name);
 	}
@@ -103,30 +126,30 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.b_ideaTable), "F P", "SSS", "WBW", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'F', Items.FEATHER, 'P', FTGUAPI.i_parchmentEmpty);
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.b_researchTable), "SSS", "CBC", "CWC", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'C', Blocks.COBBLESTONE);
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.i_parchmentEmpty), "S", "P", "S", 'S', Items.STICK, 'P', Items.PAPER);
-		GameRegistry.addRecipe(new ItemStack(FTGUAPI.i_lookingGlass), " N ", "NGN", "SN ", 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE, 'S', Items.STICK);
+		addShapedRecipe(new ItemStack(FTGUAPI.b_ideaTable), "F P", "SSS", "WBW", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'F', Items.FEATHER, 'P', FTGUAPI.i_parchmentEmpty);
+		addShapedRecipe(new ItemStack(FTGUAPI.b_researchTable), "SSS", "CBC", "CWC", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'C', Blocks.COBBLESTONE);
+		addShapedRecipe(new ItemStack(FTGUAPI.i_parchmentEmpty), "S", "P", "S", 'S', Items.STICK, 'P', Items.PAPER);
+		addShapedRecipe(new ItemStack(FTGUAPI.i_lookingGlass), " N ", "NGN", "SN ", 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE, 'S', Items.STICK);
 
 		Item r = FTGUAPI.i_parchmentResearch;
 
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r, r, r);
 
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r);
-		GameRegistry.addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r);
+		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r, r);
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new GuiHandler());
 
@@ -149,8 +172,6 @@ public class FTGU {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		if (Loader.isModLoaded("betterwithmods"))
-			compat.put("betterwithmods", new CompatBWM());
 		PROXY.postInit();
 	}
 

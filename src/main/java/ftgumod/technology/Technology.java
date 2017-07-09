@@ -10,7 +10,7 @@ import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class Technology {
 
@@ -101,13 +101,13 @@ public class Technology {
 		return name;
 	}
 
-	public String getLocalizedName(boolean suffix) {
-		String name = I18n.translateToLocal("technology." + this.name + ".name");
-		return suffix ? I18n.translateToLocalFormatted(isTheory() ? "technology.theory" : "technology.technology", name) : name;
+	public TextComponentTranslation getLocalizedName(boolean suffix) {
+		TextComponentTranslation name = new TextComponentTranslation("technology." + this.name + ".name");
+		return suffix ? new TextComponentTranslation(isTheory() ? "technology.theory" : "technology.technology", name) : name;
 	}
 
-	public String getDescription() {
-		return I18n.translateToLocal("technology." + name + ".desc");
+	public TextComponentTranslation getDescription() {
+		return new TextComponentTranslation("technology." + name + ".desc");
 	}
 
 	public List<ItemList> getItems() {
