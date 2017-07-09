@@ -4,3 +4,7 @@
 /From the Ground Up 1.12_Client.launch
 /From the Ground Up 1.12_Server.launch
 /eclipse/
+
+.classpath
+.project
+.gitignore
