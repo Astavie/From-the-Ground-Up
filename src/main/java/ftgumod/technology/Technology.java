@@ -161,8 +161,12 @@ public class Technology {
 	}
 
 	public boolean canResearchIgnoreResearched(EntityPlayer player) {
+		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+
 		if (isResearched(player))
 			return true;
+		if (customUnlock && !cap.isResearched(name + ".unlock"))
+			return false;
 		if (prev != null && !prev.isResearched(player))
 			return false;
 		if (secret == null)

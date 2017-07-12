@@ -38,11 +38,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-@Mod(modid = FTGU.MODID, version = FTGU.VERSION)
+@Mod(modid = FTGU.MODID)
 public class FTGU {
 
 	public static final String MODID = "ftgumod";
-	public static final String VERSION = "Minecraft 1.11.2";
 
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;

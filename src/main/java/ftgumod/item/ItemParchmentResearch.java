@@ -37,11 +37,10 @@ public class ItemParchmentResearch extends Item {
 		if (!player.world.isRemote) {
 			Technology t = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(item).getString("FTGU"));
 			if (t != null) {
-				if (t.isResearched(player)) {
-					if (already) {
+				if (t.isResearched(player))
+					if (already)
 						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getLocalizedName(true)));
-					}
-				} else {
+				else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
 					MinecraftForge.EVENT_BUS.post(event);
 

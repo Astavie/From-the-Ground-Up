@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.lwjgl.input.Mouse;
 
+import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.ItemList;
 import ftgumod.ItemListWildcard;
@@ -35,7 +36,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class GuiResearchBook extends GuiScreen {
 
-	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation("textures/gui/achievement/achievement_background.png");
+	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID + ":textures/gui/achievement/achievement_background.png");
 
 	private int x_min;
 	private int y_min;

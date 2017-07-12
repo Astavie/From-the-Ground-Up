@@ -63,55 +63,52 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerInspect(PlayerInspectEvent evt) {
 		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer().getUniqueID()) > t) {
-			ITechnology cap = evt.getEntityPlayer().getCapability(CapabilityTechnology.TECH_CAP, null);
-			if (cap.isResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName()) && !cap.isResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock")) {
+			EntityPlayer player = evt.getEntityPlayer();
+			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
 				evt.setUseful(true);
-				cap.setResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock");
 
-				evt.getEntityPlayer().sendMessage(new TextComponentTranslation("technology.noise.whisper2"));
-				evt.getEntityPlayer().sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.GLOWING_EYES.getLocalizedName(true)));
-				evt.getEntityPlayer().world.playSound(null, evt.getEntityPlayer().getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				TechnologyHandler.GLOWING_EYES.setUnlocked(player);
 
-				PacketDispatcher.sendTo(new TechnologyMessage(evt.getEntityPlayer(), true), (EntityPlayerMP) evt.getEntityPlayer());
+				player.sendMessage(new TextComponentTranslation("technology.noise.whisper2"));
+				player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.GLOWING_EYES.getLocalizedName(true)));
+				player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 			}
 		}
 	}
 
 	private final Map<UUID, Integer> ticks = new HashMap<UUID, Integer>();
 
-	public int s = 5;
-	public int t = s * 20;
+	public int s = 5; // 5 seconds
+	public int t = s * 20; // 5 * 20 ticks
 
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent evt) {
 		if (!evt.getEntity().world.isRemote && evt.getEntity() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) evt.getEntity();
-			if (player.world.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND) {
-				UUID uuid = player.getUniqueID();
-				if (!ticks.containsKey(uuid)) {
-					ticks.put(uuid, 0);
-				} else {
-					int tick = ticks.get(uuid);
-					if (tick == t) {
-						player.sendMessage(new TextComponentTranslation("technology.noise.whisper1"));
-						player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-					}
-					if (!(tick > t)) {
-						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						if (cap.isResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName()) && !cap.isResearched(TechnologyHandler.GLOWING_EYES.getUnlocalizedName() + ".unlock")) {
-							ticks.remove(uuid);
-							ticks.put(uuid, tick + 1);
-						}
-					}
-				}
-			}
+			UUID uuid = player.getUniqueID();
 
-			if (!TechnologyHandler.ENCHANTING.isUnlocked(player) && TechnologyHandler.ENCHANTING.canResearchIgnoreCustomUnlock(player)) {
+			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
+				if (player.world.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND) {
+					if (!ticks.containsKey(uuid)) {
+						ticks.put(uuid, 0);
+					} else {
+						int tick = ticks.get(uuid);
+						if (tick == t) {
+							player.sendMessage(new TextComponentTranslation("technology.noise.whisper1"));
+							player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						}
+						if (!(tick > t))
+							ticks.put(uuid, tick + 1);
+					}
+				} else if (ticks.containsKey(uuid) && ticks.get(uuid) < t)
+					ticks.remove(uuid);
+			} else if (!TechnologyHandler.ENCHANTING.isUnlocked(player) && TechnologyHandler.ENCHANTING.canResearchIgnoreCustomUnlock(player)) {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
 					if (!stack.isEmpty() && stack.getItem() == Items.ENCHANTED_BOOK) {
-						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						cap.setResearched(TechnologyHandler.ENCHANTING.getUnlocalizedName() + ".unlock");
+						TechnologyHandler.ENCHANTING.setUnlocked(player);
 
 						player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.ENCHANTING.getLocalizedName(true)));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -120,11 +117,8 @@ public class EventHandler {
 						break;
 					}
 				}
-			}
-
-			if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.isResearched(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world)) {
-				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				cap.setResearched(TechnologyHandler.ENDER_KNOWLEDGE.getUnlocalizedName() + ".unlock");
+			} else if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.ENDER_KNOWLEDGE.canResearchIgnoreCustomUnlock(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world)) {
+				TechnologyHandler.ENDER_KNOWLEDGE.setUnlocked(player);
 
 				player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.ENDER_KNOWLEDGE.getLocalizedName(true)));
 				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -176,32 +170,35 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getLocalizedName(false)));
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getLocalizedName(false).getFormattedText()));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getFormattedText());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
 
 			if (tech != null) {
-				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
+				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());
+				String k = can ? "" : "" + TextFormatting.OBFUSCATED;
+
 				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true).getFormattedText());
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription());
-				evt.getToolTip().add("");
-				evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("item.parchment_research.complete"));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getFormattedText());
+
+				if (can && !tech.isResearched(evt.getEntityPlayer())) {
+					evt.getToolTip().add("");
+					evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("item.parchment_research.complete"));
+				}
 			}
 		}
 	}
 
 	@SubscribeEvent
 	public void onItemCraft(ItemCraftedEvent evt) {
-		if (evt.crafting.getItem() == FTGUAPI.i_researchBook) {
+		if (evt.crafting.getItem() == FTGUAPI.i_researchBook)
 			for (int i = 0; i < evt.craftMatrix.getSizeInventory(); i++) {
 				ItemStack item = evt.craftMatrix.getStackInSlot(i);
-				if (!item.isEmpty() && item.getItem() == FTGUAPI.i_parchmentResearch) {
+				if (!item.isEmpty() && item.getItem() == FTGUAPI.i_parchmentResearch)
 					((ItemParchmentResearch) item.getItem()).research(item, evt.player, false);
-				}
 			}
-		}
 	}
 
 	@SubscribeEvent
@@ -241,8 +238,8 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
-		Container work = evt.getEntityPlayer().openContainer;
-		work.addListener(new CraftingListener(evt.getEntityPlayer()));
+		Container inv = evt.getEntityPlayer().openContainer;
+		inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 	}
 
 	@SubscribeEvent
