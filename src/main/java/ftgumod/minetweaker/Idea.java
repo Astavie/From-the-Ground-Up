@@ -1,8 +1,5 @@
 package ftgumod.minetweaker;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ftgumod.ItemList;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
@@ -15,6 +12,9 @@ import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @ZenClass("mods.ftgu.Idea")
 public class Idea {
@@ -29,25 +29,12 @@ public class Idea {
 			return;
 		}
 
-		List<ItemList> list = new ArrayList<ItemList>();
+		List<ItemList> list = new ArrayList<>();
 		for (Object o : InputHelper.toObjects(recipe))
 			if (o != null)
 				list.add(new ItemList(o));
 
 		MineTweakerAPI.apply(new Add(new IdeaRecipe(list, t)));
-	}
-
-	private static class Add extends BaseInterfaceAdd<IdeaRecipe> {
-
-		protected Add(IdeaRecipe tech) {
-			super(name, tech, new BaseCollection<IdeaRecipe>(TechnologyHandler.ideas));
-		}
-
-		@Override
-		protected String getRecipeInfo(IdeaRecipe recipe) {
-			return "<tech:" + recipe.output.getUnlocalizedName() + ">";
-		}
-
 	}
 
 	@ZenMethod
@@ -61,10 +48,23 @@ public class Idea {
 		MineTweakerAPI.apply(new Remove(i));
 	}
 
+	private static class Add extends BaseInterfaceAdd<IdeaRecipe> {
+
+		protected Add(IdeaRecipe tech) {
+			super(name, tech, new BaseCollection<>(TechnologyHandler.ideas));
+		}
+
+		@Override
+		protected String getRecipeInfo(IdeaRecipe recipe) {
+			return "<tech:" + recipe.output.getUnlocalizedName() + ">";
+		}
+
+	}
+
 	private static class Remove extends BaseInterfaceRemove<IdeaRecipe> {
 
 		protected Remove(IdeaRecipe tech) {
-			super(name, tech, new BaseCollection<IdeaRecipe>(TechnologyHandler.ideas));
+			super(name, tech, new BaseCollection<>(TechnologyHandler.ideas));
 		}
 
 		@Override

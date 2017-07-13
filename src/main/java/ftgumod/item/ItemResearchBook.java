@@ -27,7 +27,7 @@ public class ItemResearchBook extends Item {
 		if (world.isRemote) {
 			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand());
+		return new ActionResult<>(EnumActionResult.SUCCESS, hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand());
 	}
 
 }

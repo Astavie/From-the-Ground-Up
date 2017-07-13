@@ -1,8 +1,5 @@
 package ftgumod.gui.researchtable;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;
@@ -21,6 +18,9 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiResearchTable extends GuiContainer {
 
@@ -56,7 +56,7 @@ public class GuiResearchTable extends GuiContainer {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 			int index = slot.getSlotIndex() - table.combine;
 			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && !table.recipe.recipe.get(index).isEmpty()) {
-				List<String> text = new ArrayList<String>();
+				List<String> text = new ArrayList<>();
 
 				String hint = I18n.format("research." + table.recipe.output.getUnlocalizedName() + "." + table.recipe.recipe.get(index).toString());
 				if (TechnologyHandler.hasDecipher(table.recipe)) {
@@ -70,7 +70,7 @@ public class GuiResearchTable extends GuiContainer {
 							boolean perms = false;
 							for (ItemStack stack : g.unlock)
 								for (String t : items)
-									if ((stack.getItem() == null && t.equals("tile.null")) || (stack.getItem() != null && stack.getItem().getUnlocalizedName(stack).equals(t)))
+									if ((stack.isEmpty() && t.equals("tile.null")) || (!stack.isEmpty() && stack.getItem().getUnlocalizedName(stack).equals(t)))
 										perms = true;
 							if (!perms)
 								hint = TextFormatting.OBFUSCATED + hint;

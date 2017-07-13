@@ -16,7 +16,7 @@ public class PlayerLockEvent extends PlayerEvent {
 		this.stack = stack;
 
 		Technology tech = TechnologyHandler.getLocked(stack);
-		this.willLock = tech == null ? false : !tech.isResearched(player);
+		this.willLock = tech != null && !tech.isResearched(player);
 	}
 
 	public ItemStack getStack() {

@@ -1,8 +1,5 @@
 package ftgumod.packet.client;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import ftgumod.FTGU;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
@@ -11,6 +8,9 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import java.util.Collection;
+import java.util.HashSet;
 
 public class TechnologyMessage implements IMessage {
 
@@ -27,25 +27,29 @@ public class TechnologyMessage implements IMessage {
 
 	public TechnologyMessage(EntityPlayer player, boolean force) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		tech = new HashSet<Integer>();
+		if (cap != null) {
+			tech = new HashSet<>();
 
-		for (String s : cap.getResearched()) {
-			if (s.endsWith(".unlock")) {
-				String s2 = s.replace(".unlock", "");
-				tech.add(-TechnologyHandler.getTechnology(s2).getID());
-			} else {
-				tech.add(TechnologyHandler.getTechnology(s).getID());
+			for (String s : cap.getResearched()) {
+				if (s.endsWith(".unlock")) {
+					//noinspection ConstantConditions
+					tech.add(-TechnologyHandler.getTechnology(s.replace(".unlock", "")).getID());
+				} else {
+					//noinspection ConstantConditions
+					tech.add(TechnologyHandler.getTechnology(s).getID());
+				}
 			}
-		}
 
-		this.force = force;
+			this.force = force;
+		} else
+			throw new IllegalArgumentException();
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buffer) {
 		force = buffer.readBoolean();
 
-		this.tech = new HashSet<Integer>();
+		this.tech = new HashSet<>();
 		int size = buffer.readInt();
 		for (int i = 0; i < size; i++) {
 			tech.add(buffer.readInt());
@@ -74,17 +78,21 @@ public class TechnologyMessage implements IMessage {
 				return null;
 
 			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-			if (!message.force && cap.getResearched().size() == message.tech.size())
-				return null;
+			if (cap != null) {
+				if (!message.force && cap.getResearched().size() == message.tech.size())
+					return null;
 
-			cap.clear();
-			for (Integer i : message.tech) {
-				if (i < 0)
-					cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalizedName() + ".unlock");
-				else
-					cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalizedName());
+				cap.clear();
+				for (Integer i : message.tech) {
+					if (i < 0)
+						//noinspection ConstantConditions
+						cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalizedName() + ".unlock");
+					else
+						//noinspection ConstantConditions
+						cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalizedName());
+				}
+				FTGU.INSTANCE.runCompat("jei", message.tech);
 			}
-			FTGU.INSTANCE.runCompat("jei", message.tech);
 
 			return null;
 		}

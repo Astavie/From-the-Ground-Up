@@ -19,12 +19,22 @@ public class Page {
 		MineTweakerAPI.apply(new Add(new PAGE(name)));
 	}
 
+	@ZenMethod
+	public static void removePage(String name) {
+		PAGE page = PAGE.get(name);
+		if (page == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Page.name + " found for " + name + ". Command ignored!");
+			return;
+		}
+		MineTweakerAPI.apply(new Remove(page));
+	}
+
 	private static class Add extends BaseInterfaceAdd<PAGE> {
 
 		private final PAGE page;
 
 		protected Add(PAGE page) {
-			super(name, page, new BaseCollection<PAGE>(PAGE.pages));
+			super(name, page, new BaseCollection<>(PAGE.pages));
 			this.page = page;
 		}
 
@@ -41,22 +51,12 @@ public class Page {
 
 	}
 
-	@ZenMethod
-	public static void removePage(String name) {
-		PAGE page = PAGE.get(name);
-		if (page == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Page.name + " found for " + name + ". Command ignored!");
-			return;
-		}
-		MineTweakerAPI.apply(new Remove(page));
-	}
-
 	private static class Remove extends BaseInterfaceRemove<PAGE> {
 
 		private final PAGE page;
 
 		protected Remove(PAGE page) {
-			super(name, page, new BaseCollection<PAGE>(PAGE.pages));
+			super(name, page, new BaseCollection<>(PAGE.pages));
 			this.page = page;
 		}
 

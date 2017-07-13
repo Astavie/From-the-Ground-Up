@@ -1,8 +1,5 @@
 package ftgumod.gui.ideatable;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import ftgumod.FTGUAPI;
 import ftgumod.ItemList;
 import ftgumod.gui.SlotSpecial;
@@ -14,13 +11,12 @@ import ftgumod.technology.recipe.IdeaRecipe;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class ContainerIdeaTable extends Container {
 
@@ -82,7 +78,7 @@ public class ContainerIdeaTable extends Container {
 
 	public IdeaRecipe hasRecipe() {
 		for (IdeaRecipe i : TechnologyHandler.ideas) {
-			Set<ItemList> items = new HashSet<ItemList>();
+			Set<ItemList> items = new HashSet<>();
 			items.addAll(i.recipe);
 			for (int j = 0; j < 3; j++) {
 				ItemStack stack = inventorySlots.get(combine + j).getStack();

@@ -1,7 +1,5 @@
 package ftgumod.minetweaker;
 
-import java.util.Collection;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
@@ -18,6 +16,8 @@ import minetweaker.api.item.IIngredient;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.Collection;
 
 @ZenClass("mods.ftgu.Scramble")
 public class Scramble {
@@ -37,9 +37,23 @@ public class Scramble {
 		}
 		Integer[] s = new Integer[slots.length];
 		for (int i = 0; i < s.length; i++) {
-			s[i] = new Integer(slots[i]);
+			s[i] = slots[i];
 		}
 		MineTweakerAPI.apply(new Add(research, new DecipherGroup(item, s)));
+	}
+
+	@ZenMethod
+	public static void removeScrambled(String tech) {
+		ResearchRecipe research = TechnologyHandler.getResearch(tech);
+		if (research == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+		if (!TechnologyHandler.unlock.containsKey(research)) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+		MineTweakerAPI.apply(new Remove(research, TechnologyHandler.unlock.get(research).list));
 	}
 
 	private static class Add extends BaseInterfaceAdd<DecipherGroup> {
@@ -47,7 +61,7 @@ public class Scramble {
 		private final ResearchRecipe key;
 
 		protected Add(ResearchRecipe key, DecipherGroup group) {
-			super(name, group, new BaseCollection<DecipherGroup>(TechnologyHandler.unlock.get(key).list));
+			super(name, group, new BaseCollection<>(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
 
@@ -81,26 +95,12 @@ public class Scramble {
 
 	}
 
-	@ZenMethod
-	public static void removeScrambled(String tech) {
-		ResearchRecipe research = TechnologyHandler.getResearch(tech);
-		if (research == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + ftgumod.minetweaker.Technology.name + " found for " + tech + ". Command ignored!");
-			return;
-		}
-		if (!TechnologyHandler.unlock.containsKey(research)) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
-			return;
-		}
-		MineTweakerAPI.apply(new Remove(research, TechnologyHandler.unlock.get(research).list));
-	}
-
 	private static class Remove extends BaseInterfaceRemove<DecipherGroup> {
 
 		private final ResearchRecipe key;
 
 		protected Remove(ResearchRecipe key, Collection<DecipherGroup> group) {
-			super(name, group, new BaseCollection<DecipherGroup>(TechnologyHandler.unlock.get(key).list));
+			super(name, group, new BaseCollection<>(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
 

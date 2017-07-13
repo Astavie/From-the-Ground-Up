@@ -1,8 +1,5 @@
 package ftgumod;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ftgumod.compat.ICompat;
 import ftgumod.gui.GuiHandler;
 import ftgumod.gui.ideatable.TileEntityIdeaTable;
@@ -38,6 +35,9 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Mod(modid = FTGU.MODID)
 public class FTGU {
 
@@ -45,14 +45,11 @@ public class FTGU {
 
 	public static boolean headstart = false;
 	public static boolean moddedOnly = false;
-
-	public final Map<String, ICompat> compat = new HashMap<String, ICompat>();
-
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
-
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon PROXY;
+	public final Map<String, ICompat> compat = new HashMap<>();
 
 	private ResourceLocation getRecipeGroup(ItemStack output) {
 		String s = output.getUnlocalizedName();
@@ -88,9 +85,7 @@ public class FTGU {
 
 	public boolean runCompat(String name, Object... arg) {
 		ICompat compat = this.compat.get(name);
-		if (compat != null)
-			return compat.run(arg);
-		return false;
+		return compat != null && compat.run(arg);
 	}
 
 	@Mod.EventHandler

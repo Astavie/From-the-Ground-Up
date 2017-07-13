@@ -1,7 +1,5 @@
 package ftgumod.minetweaker.util;
 
-import java.util.ArrayList;
-
 import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IIngredient;
@@ -14,6 +12,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
 
 public class InputHelper {
 
@@ -28,8 +28,8 @@ public class InputHelper {
 			Object internal = iStack.getInternal();
 			if (!(internal instanceof ItemStack)) {
 				MineTweakerAPI.logError("[" + FTGUTweaker.name + "] Not a valid item stack: " + iStack);
+				return null;
 			}
-
 			return (ItemStack) internal;
 		}
 	}
@@ -81,7 +81,7 @@ public class InputHelper {
 		}
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public static Object[] toShapedObjects(IIngredient[][] ingredients) {
 		if (ingredients == null)
 			return null;
@@ -90,7 +90,7 @@ public class InputHelper {
 			prep.add("abc");
 			prep.add("def");
 			prep.add("ghi");
-			char[][] map = new char[][] { { 'a', 'b', 'c' }, { 'd', 'e', 'f' }, { 'g', 'h', 'i' } };
+			char[][] map = new char[][]{{'a', 'b', 'c'}, {'d', 'e', 'f'}, {'g', 'h', 'i'}};
 			for (int x = 0; x < ingredients.length; x++) {
 				if (ingredients[x] != null) {
 					for (int y = 0; y < ingredients[x].length; y++) {
@@ -122,10 +122,6 @@ public class InputHelper {
 		} else
 			return FluidRegistry.getFluid(iStack.getName());
 
-	}
-
-	public static FluidStack[] toFluids(IIngredient[] input) {
-		return toFluids(input);
 	}
 
 	public static FluidStack[] toFluids(ILiquidStack[] iStack) {

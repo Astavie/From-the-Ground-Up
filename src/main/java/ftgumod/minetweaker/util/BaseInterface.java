@@ -1,19 +1,19 @@
 package ftgumod.minetweaker.util;
 
+import ftgumod.minetweaker.FTGUTweaker;
+import minetweaker.IUndoableAction;
+import minetweaker.MineTweakerAPI;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import ftgumod.minetweaker.FTGUTweaker;
-import minetweaker.IUndoableAction;
-import minetweaker.MineTweakerAPI;
-
 public abstract class BaseInterface<T> implements IUndoableAction {
 
 	private final String name;
-	private Collection<T> recipes;
 	private final IBaseInterface<T> base;
+	private Collection<T> recipes;
 
 	protected BaseInterface(String name, Collection<T> recipes, IBaseInterface<T> base) {
 		this.name = name;
@@ -23,7 +23,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 
 	public BaseInterface(String name, T tech, IBaseInterface<T> base) {
 		this.name = name;
-		this.recipes = new ArrayList<T>();
+		this.recipes = new ArrayList<>();
 		recipes.add(tech);
 		this.base = base;
 	}
@@ -32,7 +32,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 		if (recipes.isEmpty())
 			return;
 
-		Set<T> successful = new HashSet<T>();
+		Set<T> successful = new HashSet<>();
 
 		for (T recipe : recipes) {
 			if (recipe != null) {
@@ -53,7 +53,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 		if (recipes.isEmpty())
 			return;
 
-		Set<T> successful = new HashSet<T>();
+		Set<T> successful = new HashSet<>();
 
 		for (T recipe : recipes) {
 			if (recipe != null) {
@@ -106,15 +106,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 	}
 
 	protected boolean equals(T recipe1, T recipe2) {
-		if (recipe1 == recipe2) {
-			return true;
-		}
-
-		if (!recipe1.equals(recipe2)) {
-			return false;
-		}
-
-		return true;
+		return recipe1 == recipe2 || recipe1.equals(recipe2);
 	}
 
 	public static abstract class BaseInterfaceAdd<T> extends BaseInterface<T> {

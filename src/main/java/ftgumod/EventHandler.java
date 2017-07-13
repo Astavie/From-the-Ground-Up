@@ -1,13 +1,5 @@
 package ftgumod;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.lwjgl.input.Keyboard;
-
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemParchmentResearch;
@@ -57,8 +49,36 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+
+import java.util.*;
 
 public class EventHandler {
+
+	private final Map<UUID, Integer> ticks = new HashMap<>();
+	public int s = 5; // 5 seconds
+	public int t = s * 20; // 5 * 20 ticks
+	private ItemStack stack = ItemStack.EMPTY;
+
+	private static boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+
+		x -= radius / 2;
+		y -= 1;
+		z -= radius / 2;
+		for (int y1 = y; y1 < y + 2; y1++) {
+			for (int x1 = x; x1 < x + radius; x1++) {
+				for (int z1 = z; z1 < z + radius; z1++) {
+					Block b = world.getBlockState(new BlockPos(x1, y1, z1)).getBlock();
+					if (b == block)
+						return true;
+				}
+			}
+		}
+		return false;
+	}
 
 	@SubscribeEvent
 	public void onPlayerInspect(PlayerInspectEvent evt) {
@@ -77,11 +97,6 @@ public class EventHandler {
 			}
 		}
 	}
-
-	private final Map<UUID, Integer> ticks = new HashMap<UUID, Integer>();
-
-	public int s = 5; // 5 seconds
-	public int t = s * 20; // 5 * 20 ticks
 
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent evt) {
@@ -126,26 +141,6 @@ public class EventHandler {
 				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 			}
 		}
-	}
-
-	private static boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-
-		x -= radius / 2;
-		y -= 1;
-		z -= radius / 2;
-		for (int y1 = y; y1 < y + 2; y1++) {
-			for (int x1 = x; x1 < x + radius; x1++) {
-				for (int z1 = z; z1 < z + radius; z1++) {
-					Block b = world.getBlockState(new BlockPos(x1, y1, z1)).getBlock();
-					if (b == block)
-						return true;
-				}
-			}
-		}
-		return false;
 	}
 
 	@SubscribeEvent
@@ -212,7 +207,7 @@ public class EventHandler {
 
 		List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalizedName(), TechnologyHandler.STONEWORKING.getUnlocalizedName(), TechnologyHandler.CARPENTRY.getUnlocalizedName(), TechnologyHandler.REFINEMENT.getUnlocalizedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalizedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalizedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalizedName(), TechnologyHandler.COOKING.getUnlocalizedName());
 		ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		if (cap.isNew()) {
+		if (cap != null && cap.isNew()) {
 			evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
 
 			if (FTGU.moddedOnly) {
@@ -247,8 +242,6 @@ public class EventHandler {
 		Container inv = evt.getEntityPlayer().openContainer;
 		inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 	}
-
-	private ItemStack stack = ItemStack.EMPTY;
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -288,7 +281,7 @@ public class EventHandler {
 
 				@Override
 				public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-					return capability == CapabilityTechnology.TECH_CAP ? CapabilityTechnology.TECH_CAP.<T> cast(inst) : null;
+					return capability == CapabilityTechnology.TECH_CAP ? CapabilityTechnology.TECH_CAP.<T>cast(inst) : null;
 				}
 
 				@Override

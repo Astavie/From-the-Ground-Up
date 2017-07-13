@@ -1,8 +1,5 @@
 package ftgumod.technology;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -12,40 +9,46 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 public class CapabilityTechnology {
 
 	@CapabilityInject(ITechnology.class)
-	public static final Capability<ITechnology> TECH_CAP = null;
+	public static Capability<ITechnology> TECH_CAP;
 
 	@SubscribeEvent
 	public void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone evt) {
 		if (evt.isWasDeath()) {
 			ITechnology cap1 = evt.getOriginal().getCapability(TECH_CAP, null);
 			ITechnology cap2 = evt.getEntityPlayer().getCapability(TECH_CAP, null);
-			cap2.setResearched(cap1.getResearched());
 
-			if (!cap1.isNew())
-				cap2.setOld();
+			if (cap1 != null && cap2 != null) {
+				cap2.setResearched(cap1.getResearched());
+
+				if (!cap1.isNew())
+					cap2.setOld();
+			}
 		}
 	}
 
 	public interface ITechnology {
 
-		public boolean isResearched(String tech);
+		boolean isResearched(String tech);
 
-		public boolean isNew();
+		boolean isNew();
 
-		public void setOld();
+		void setOld();
 
-		public void setResearched(String tech);
+		void setResearched(String tech);
 
-		public void setResearched(Collection<String> tech);
+		Collection<String> getResearched();
 
-		public Collection<String> getResearched();
+		void setResearched(Collection<String> tech);
 
-		public void clear();
+		void clear();
 
-		public void removeResearched(String tech);
+		void removeResearched(String tech);
 
 	}
 
@@ -54,7 +57,7 @@ public class CapabilityTechnology {
 		@Override
 		public NBTBase writeNBT(Capability<ITechnology> capability, ITechnology instance, EnumFacing side) {
 			NBTTagList list = new NBTTagList();
-			list.appendTag(new NBTTagString(new Boolean(instance.isNew()).toString()));
+			list.appendTag(new NBTTagString(Boolean.toString(instance.isNew())));
 			for (String s : instance.getResearched()) {
 				list.appendTag(new NBTTagString(s));
 			}
@@ -75,7 +78,7 @@ public class CapabilityTechnology {
 
 	public static class DefaultImpl implements ITechnology {
 
-		private Collection<String> tech = new HashSet<String>();
+		private Collection<String> tech = new HashSet<>();
 		private boolean isNew = true;
 
 		@Override
@@ -100,13 +103,13 @@ public class CapabilityTechnology {
 		}
 
 		@Override
-		public void clear() {
-			tech.clear();
+		public void setResearched(Collection<String> tech) {
+			this.tech = tech;
 		}
 
 		@Override
-		public void setResearched(Collection<String> tech) {
-			this.tech = tech;
+		public void clear() {
+			tech.clear();
 		}
 
 		@Override

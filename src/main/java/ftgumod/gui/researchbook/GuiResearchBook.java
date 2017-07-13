@@ -1,10 +1,5 @@
 package ftgumod.gui.researchbook;
 
-import java.io.IOException;
-import java.util.Set;
-
-import org.lwjgl.input.Mouse;
-
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.ItemList;
@@ -33,6 +28,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Mouse;
+
+import java.io.IOException;
+import java.util.Set;
 
 public class GuiResearchBook extends GuiScreen {
 
@@ -95,16 +94,16 @@ public class GuiResearchBook extends GuiScreen {
 			if (PAGE.size() < 2)
 				page.enabled = false;
 
-			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
+			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
 			buttonList.add(page);
 		} else {
-			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy", new Object[0]));
+			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
 			copy.enabled = false;
 			for (int i = 0; i < player.inventory.getSizeInventory(); i++)
 				if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
 					copy.enabled = true;
 
-			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done", new Object[0])));
+			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
 			buttonList.add(copy);
 			scroll = 1;
 
@@ -124,7 +123,7 @@ public class GuiResearchBook extends GuiScreen {
 	protected void actionPerformed(GuiButton button) {
 		if (button.id == 1) {
 			if (state == 0) {
-				mc.displayGuiScreen((GuiScreen) null);
+				mc.displayGuiScreen(null);
 				mc.setIngameFocus();
 			} else {
 				state = 0;
@@ -145,7 +144,7 @@ public class GuiResearchBook extends GuiScreen {
 	@Override
 	protected void keyTyped(char key, int id) throws IOException {
 		if (mc.gameSettings.keyBindInventory.isActiveAndMatches(id)) {
-			mc.displayGuiScreen((GuiScreen) null);
+			mc.displayGuiScreen(null);
 			mc.setIngameFocus();
 		} else {
 			super.keyTyped(key, id);
@@ -248,7 +247,7 @@ public class GuiResearchBook extends GuiScreen {
 	private void drawTitle() {
 		int i = (width - imageWidth) / 2;
 		int j = (height - imageHeight) / 2;
-		fontRenderer.drawString(I18n.format("item.research_book.name", new Object[0]), i + 15, j + 5, 0x404040);
+		fontRenderer.drawString(I18n.format("item.research_book.name"), i + 15, j + 5, 0x404040);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -301,8 +300,7 @@ public class GuiResearchBook extends GuiScreen {
 
 			if (tech != null) {
 				for (Technology t1 : tech) {
-					ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-					if (t1.hasCustomUnlock() && !t1.isResearched(player) && !cap.isResearched(t1.getUnlocalizedName() + ".unlock"))
+					if (t1.hasCustomUnlock() && !t1.isResearched(player) && t1.isUnlocked(player))
 						continue;
 					if (t1.hide && !t1.hasCustomUnlock() && !t1.isResearched(player))
 						continue;
@@ -315,7 +313,7 @@ public class GuiResearchBook extends GuiScreen {
 
 					boolean flag = t1.isResearched(player);
 					boolean flag1 = t1.canResearchIgnoreResearched(player);
-					int k4 = t1.requirementsUntilAvailible(player);
+					int k4 = t1.requirementsUntilAvailable(player);
 
 					if (k4 > 2)
 						continue;
@@ -350,8 +348,7 @@ public class GuiResearchBook extends GuiScreen {
 				GlStateManager.enableColorMaterial();
 
 				for (Technology t2 : tech) {
-					ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-					if (t2.hasCustomUnlock() && !t2.isResearched(player) && !cap.isResearched(t2.getUnlocalizedName() + ".unlock"))
+					if (t2.hasCustomUnlock() && !t2.isResearched(player) && t2.isUnlocked(player))
 						continue;
 					if (t2.hide && !t2.hasCustomUnlock() && !t2.isResearched(player))
 						continue;
@@ -360,7 +357,7 @@ public class GuiResearchBook extends GuiScreen {
 					if (l6 < -24 || j7 < -24 || l6 > 224F * zoom || j7 > 155F * zoom)
 						continue;
 
-					int l7 = t2.requirementsUntilAvailible(player);
+					int l7 = t2.requirementsUntilAvailable(player);
 					if (l7 > 2)
 						continue;
 
@@ -460,7 +457,7 @@ public class GuiResearchBook extends GuiScreen {
 				drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
 				fontRenderer.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
 				if (selected.isResearched(player))
-					fontRenderer.drawStringWithShadow(I18n.format("technology.researched", new Object[0]), i7, k7 + i9 + 4, 0xff9090ff);
+					fontRenderer.drawStringWithShadow(I18n.format("technology.researched"), i7, k7 + i9 + 4, 0xff9090ff);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
 				String s1 = selected.getLocalizedName(true).getFormattedText();

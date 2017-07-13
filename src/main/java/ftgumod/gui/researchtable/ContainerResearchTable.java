@@ -1,7 +1,5 @@
 package ftgumod.gui.researchtable;
 
-import java.util.List;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
@@ -21,16 +19,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.ClickType;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
+
+import java.util.List;
 
 public class ContainerResearchTable extends Container {
 
@@ -99,7 +95,8 @@ public class ContainerResearchTable extends Container {
 	}
 
 	public ResearchRecipe hasRecipe() {
-		outer: for (ResearchRecipe i : TechnologyHandler.researches) {
+		outer:
+		for (ResearchRecipe i : TechnologyHandler.researches) {
 			for (int j = 0; j < 9; j++)
 				if (!i.recipe.get(j).contains(inventorySlots.get(combine + j).getStack()))
 					continue outer;
@@ -127,7 +124,7 @@ public class ContainerResearchTable extends Container {
 
 					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe)) {
 						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						if (!cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock")) {
+						if (cap != null && !cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock")) {
 							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock");
 							invPlayer.player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true)));
 							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -159,7 +156,7 @@ public class ContainerResearchTable extends Container {
 								boolean perms = false;
 								for (ItemStack s : g.unlock)
 									for (String t : items)
-										if ((s.getItem() == null && t.equals("tile.null")) || (s.getItem() != null && s.getItem().getUnlocalizedName(s).equals(t)))
+										if ((s.isEmpty() && t.equals("tile.null")) || (!s.isEmpty() && s.getItem().getUnlocalizedName(s).equals(t)))
 											perms = true;
 								if (!perms) {
 									inventorySlots.get(output).putStack(ItemStack.EMPTY);

@@ -2,11 +2,7 @@ package ftgumod;
 
 import ftgumod.event.PlayerLockEvent;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryCraftResult;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
@@ -15,7 +11,7 @@ public class CraftingListener implements IContainerListener {
 
 	private EntityPlayer player;
 
-	public CraftingListener(EntityPlayer player) {
+	CraftingListener(EntityPlayer player) {
 		this.player = player;
 	}
 

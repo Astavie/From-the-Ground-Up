@@ -30,7 +30,7 @@ public class ItemParchmentResearch extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, research(hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand(), player, true));
+		return new ActionResult<>(EnumActionResult.SUCCESS, research(hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand(), player, true));
 	}
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {

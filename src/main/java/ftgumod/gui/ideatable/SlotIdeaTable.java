@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 
 public class SlotIdeaTable extends Slot {
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({"unused", "FieldCanBeLocal"})
 	private EntityPlayer player;
 
 	public SlotIdeaTable(EntityPlayer player, IInventory inventory, int index, int x, int y, TileEntityInventory tileEntity) {

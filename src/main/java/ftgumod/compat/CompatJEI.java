@@ -1,8 +1,5 @@
 package ftgumod.compat;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import ftgumod.ItemList;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
@@ -13,6 +10,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 @SideOnly(Side.CLIENT)
 @mezz.jei.api.JEIPlugin
 public class CompatJEI implements ICompat, IModPlugin {
@@ -21,35 +21,40 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	private Collection<Integer> tech;
 
-	@SuppressWarnings({ "unchecked", "deprecation" })
+	@SuppressWarnings({"unchecked", "deprecation"})
 	@Override
 	public boolean run(Object... arg) {
 		if (tech == null) {
-			tech = new HashSet<Integer>();
+			tech = new HashSet<>();
 			for (int i = TechnologyHandler.getTotalTechnologies(); i > 0; i--)
 				tech.add(i);
 		}
 
 		if (arg[0] instanceof Collection) {
-			Collection<Integer> add = new HashSet<Integer>((Collection<Integer>) arg[0]);
-			Collection<Integer> remove = new HashSet<Integer>(tech);
+			Collection<Integer> add = new HashSet<>((Collection<Integer>) arg[0]);
+			Collection<Integer> remove = new HashSet<>(tech);
 			add.removeAll(tech);
 			remove.removeAll((Collection<Integer>) arg[0]);
 
-			for (int i : add)
-				for (ItemList list : TechnologyHandler.getTechnology(i).getItems())
-					registry.removeIngredientsAtRuntime(ItemStack.class, list.getRaw());
+			for (int i : add) {
+				Technology t = TechnologyHandler.getTechnology(i);
+				if (t != null)
+					for (ItemList list : t.getItems())
+						registry.removeIngredientsAtRuntime(ItemStack.class, list.getRaw());
+			}
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
-				if (tech.researched)
-					continue;
+				if (tech != null) {
+					if (tech.researched)
+						continue;
 
-				for (ItemList list : tech.getItems())
-					registry.addIngredientsAtRuntime(ItemStack.class, list.getRaw());
+					for (ItemList list : tech.getItems())
+						registry.addIngredientsAtRuntime(ItemStack.class, list.getRaw());
+				}
 			}
 
-			tech = new HashSet<Integer>((Collection<Integer>) arg[0]);
+			tech = new HashSet<>((Collection<Integer>) arg[0]);
 
 			return true;
 		}

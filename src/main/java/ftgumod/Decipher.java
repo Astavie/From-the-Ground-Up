@@ -1,19 +1,26 @@
 package ftgumod;
 
+import ftgumod.technology.TechnologyUtil;
+
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import ftgumod.technology.TechnologyUtil;
-
 public class Decipher {
 
-	public DecipherGroup[] unlock = new DecipherGroup[9];
 	public final Set<DecipherGroup> list;
+	public DecipherGroup[] unlock = new DecipherGroup[9];
 
 	public Decipher(DecipherGroup... unlock) {
-		list = new LinkedHashSet<DecipherGroup>(Arrays.asList(unlock));
+		list = new LinkedHashSet<>(Arrays.asList(unlock));
 		recalculateSlots();
+	}
+
+	public void recalculateSlots() {
+		unlock = new DecipherGroup[9];
+		for (DecipherGroup d : list)
+			for (int i : d.slots)
+				this.unlock[i] = d;
 	}
 
 	public static class DecipherGroup {
@@ -23,16 +30,9 @@ public class Decipher {
 
 		public DecipherGroup(Object unlock, Integer... slots) {
 			this.unlock = new ItemList(TechnologyUtil.toItem(unlock));
-			this.slots = new LinkedHashSet<Integer>(Arrays.asList(slots));
+			this.slots = new LinkedHashSet<>(Arrays.asList(slots));
 		}
 
-	}
-
-	public void recalculateSlots() {
-		unlock = new DecipherGroup[9];
-		for (DecipherGroup d : list)
-			for (int i : d.slots)
-				this.unlock[i] = d;
 	}
 
 }

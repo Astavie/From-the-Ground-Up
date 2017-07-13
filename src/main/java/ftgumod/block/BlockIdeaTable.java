@@ -8,7 +8,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -22,8 +21,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
@@ -70,6 +67,7 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 		return new TileEntityIdeaTable();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.getFront(meta);
@@ -88,38 +86,7 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FACING });
+		return new BlockStateContainer(this, FACING);
 	}
 
-	@SideOnly(Side.CLIENT)
-	static final class SwitchEnumFacing {
-
-		static final int[] enumFacingArray = new int[EnumFacing.values().length];
-
-		static {
-			try {
-				enumFacingArray[EnumFacing.WEST.ordinal()] = 1;
-			} catch (NoSuchFieldError var4) {
-				;
-			}
-
-			try {
-				enumFacingArray[EnumFacing.EAST.ordinal()] = 2;
-			} catch (NoSuchFieldError var3) {
-				;
-			}
-
-			try {
-				enumFacingArray[EnumFacing.NORTH.ordinal()] = 3;
-			} catch (NoSuchFieldError var2) {
-				;
-			}
-
-			try {
-				enumFacingArray[EnumFacing.SOUTH.ordinal()] = 4;
-			} catch (NoSuchFieldError var1) {
-				;
-			}
-		}
-	}
 }

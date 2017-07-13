@@ -1,10 +1,5 @@
 package ftgumod.item;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.event.PlayerInspectEvent;
@@ -15,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +28,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class ItemLookingGlass extends Item {
@@ -43,7 +43,7 @@ public class ItemLookingGlass extends Item {
 	}
 
 	public static List<String> getItems(ItemStack item) {
-		List<String> list = new ArrayList<String>();
+		List<String> list = new ArrayList<>();
 		NBTTagList blocks = TechnologyUtil.getItemData(item).getTagList("FTGU", NBT.TAG_STRING);
 		for (int i = 0; i < blocks.tagCount(); i++) {
 			list.add(blocks.getStringTagAt(i).replace("item.", "tile."));
@@ -66,7 +66,7 @@ public class ItemLookingGlass extends Item {
 				if (r.output.canResearch(player))
 					for (DecipherGroup g : d.list)
 						for (ItemStack s : g.unlock)
-							if ((s.getItem() != null && s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
+							if ((!s.isEmpty() && s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack))
 								need = true;
 			}
 
@@ -87,7 +87,7 @@ public class ItemLookingGlass extends Item {
 
 			Item b_item = Item.getItemFromBlock(block);
 			String name = block.getUnlocalizedName();
-			if (b_item != null)
+			if (b_item != Items.AIR)
 				name = Item.getItemFromBlock(block).getUnlocalizedName(stack);
 			if (!I18n.canTranslate(name + ".name"))
 				name = name.replace("tile.", "item.");

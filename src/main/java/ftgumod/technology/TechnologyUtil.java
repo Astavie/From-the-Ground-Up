@@ -3,6 +3,7 @@ package ftgumod.technology;
 import ftgumod.FTGU;
 import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -18,7 +19,7 @@ public class TechnologyUtil {
 			String[] itemSplit = ((String) obj).split(":");
 			Item t = Item.REGISTRY.getObject(new ResourceLocation(itemSplit[0] + ":" + itemSplit[1]));
 			Block b = Block.REGISTRY.getObject(new ResourceLocation(itemSplit[0] + ":" + itemSplit[1]));
-			if (b != null) {
+			if (b != Blocks.AIR) {
 				if (itemSplit.length > 2) {
 					int meta = Integer.parseInt(itemSplit[2]);
 					return new ItemStack(b, 1, meta);
@@ -46,7 +47,7 @@ public class TechnologyUtil {
 		if (obj instanceof ItemStack)
 			return ((ItemStack) obj).getUnlocalizedName();
 		else if (obj instanceof String)
-			return "ore." + (String) obj;
+			return "ore." + obj;
 		else if (obj instanceof ITEM_GROUP)
 			return "group." + ((ITEM_GROUP) obj).getName();
 		else if (obj instanceof Item)
@@ -69,7 +70,7 @@ public class TechnologyUtil {
 	public static boolean hasRecipe(ItemStack stack) {
 		for (ResourceLocation l : CraftingManager.REGISTRY.getKeys()) {
 			IRecipe r = CraftingManager.REGISTRY.getObject(l);
-			if (OreDictionary.itemMatches(r.getRecipeOutput(), stack, false) && (!r.getRecipeOutput().hasTagCompound() || ItemStack.areItemStackTagsEqual(r.getRecipeOutput(), stack)))
+			if (r != null && OreDictionary.itemMatches(r.getRecipeOutput(), stack, false) && (!r.getRecipeOutput().hasTagCompound() || ItemStack.areItemStackTagsEqual(r.getRecipeOutput(), stack)))
 				return true;
 		}
 		return FTGU.INSTANCE.runCompat("betterwithmods", stack);

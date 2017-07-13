@@ -1,9 +1,5 @@
 package ftgumod.minetweaker;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import ftgumod.ItemList;
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
@@ -21,6 +17,10 @@ import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 @ZenClass("mods.ftgu.Technology")
 public class Technology {
@@ -54,13 +54,13 @@ public class Technology {
 		}
 
 		if (secret != null) {
-			List<ftgumod.technology.Technology> ls1 = new ArrayList<ftgumod.technology.Technology>();
+			List<ftgumod.technology.Technology> ls1 = new ArrayList<>();
 			for (String s : secret) {
 				ftgumod.technology.Technology t = TechnologyHandler.getTechnology(s);
 				if (t != null)
 					ls1.add(t);
 				else
-					MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Technology.name + " found for " + s + " in " + Technology.name + " " + p.getLocalizedName(false) + ". Secret unlock ignored!");
+					MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Technology.name + " found for " + s + ". Secret unlock ignored!");
 			}
 
 			ftgumod.technology.Technology[] ls2 = new ftgumod.technology.Technology[ls1.size()];
@@ -75,6 +75,43 @@ public class Technology {
 		}
 	}
 
+	@ZenMethod
+	public static void removeTechnology(String tech) {
+		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
+		if (p == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+
+		MineTweakerAPI.apply(new RemoveTech(p));
+	}
+
+	@ZenMethod
+	public static void addItems(String tech, IIngredient[] item) {
+		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
+		if (p == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+
+		List<ItemList> list = new ArrayList<>();
+		for (Object o : InputHelper.toObjects(item))
+			list.add(new ItemList(TechnologyUtil.toItem(o)));
+
+		MineTweakerAPI.apply(new AddItems(list, p));
+	}
+
+	@ZenMethod
+	public static void clearItems(String tech) {
+		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
+		if (p == null) {
+			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
+			return;
+		}
+
+		MineTweakerAPI.apply(new ClearCollection(name + " Unlock", p.item));
+	}
+
 	private static class AddTech extends BaseInterfaceAdd<ftgumod.technology.Technology> {
 
 		protected AddTech(ftgumod.technology.Technology tech) {
@@ -86,17 +123,6 @@ public class Technology {
 			return "<tech:" + recipe.getUnlocalizedName() + ">";
 		}
 
-	}
-
-	@ZenMethod
-	public static void removeTechnology(String tech) {
-		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
-		if (p == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
-			return;
-		}
-
-		MineTweakerAPI.apply(new RemoveTech(p));
 	}
 
 	private static class RemoveTech extends BaseInterfaceRemove<ftgumod.technology.Technology> {
@@ -146,25 +172,10 @@ public class Technology {
 
 	}
 
-	@ZenMethod
-	public static void addItems(String tech, IIngredient[] item) {
-		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
-		if (p == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
-			return;
-		}
-
-		List<ItemList> list = new ArrayList<ItemList>();
-		for (Object o : InputHelper.toObjects(item))
-			list.add(new ItemList(TechnologyUtil.toItem(o)));
-
-		MineTweakerAPI.apply(new AddItems(list, p));
-	}
-
 	private static class AddItems extends BaseInterfaceAdd<ItemList> {
 
 		protected AddItems(Collection<ItemList> recipes, ftgumod.technology.Technology tech) {
-			super(name + " Unlock", recipes, new BaseCollection<ItemList>(tech.item));
+			super(name + " Unlock", recipes, new BaseCollection<>(tech.item));
 		}
 
 		@Override
@@ -172,17 +183,6 @@ public class Technology {
 			return "<item:" + recipe.toString().split(".")[1] + ">";
 		}
 
-	}
-
-	@ZenMethod
-	public static void clearItems(String tech) {
-		ftgumod.technology.Technology p = TechnologyHandler.getTechnology(tech);
-		if (p == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + name + " found for " + tech + ". Command ignored!");
-			return;
-		}
-
-		MineTweakerAPI.apply(new ClearCollection(name + " Unlock", p.item));
 	}
 
 }

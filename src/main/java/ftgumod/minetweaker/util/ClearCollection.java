@@ -1,12 +1,12 @@
 package ftgumod.minetweaker.util;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 import ftgumod.minetweaker.FTGUTweaker;
 import minetweaker.IUndoableAction;
 
-@SuppressWarnings({ "unchecked", "rawtypes" })
+import java.util.Collection;
+import java.util.HashSet;
+
+@SuppressWarnings({"unchecked", "rawtypes"})
 public class ClearCollection implements IUndoableAction {
 
 	private final String name;

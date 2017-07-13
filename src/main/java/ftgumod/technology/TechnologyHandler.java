@@ -1,12 +1,5 @@
 package ftgumod.technology;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
@@ -18,21 +11,15 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.*;
+
 public class TechnologyHandler {
 
-	public enum GUI {
-		IDEATABLE, RESEARCHTABLE;
-	}
-
-	private static boolean minecraft = false;
-
-	public static final Set<IdeaRecipe> ideas = new HashSet<IdeaRecipe>();
-	public static final Set<ResearchRecipe> researches = new HashSet<ResearchRecipe>();
-	public static final Map<PAGE, Set<Technology>> technologies = new HashMap<PAGE, Set<Technology>>();
-	public static final Set<String> vanilla = new HashSet<String>();
-
-	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<ResearchRecipe, Decipher>();
-
+	public static final Set<IdeaRecipe> ideas = new HashSet<>();
+	public static final Set<ResearchRecipe> researches = new HashSet<>();
+	public static final Map<PAGE, Set<Technology>> technologies = new HashMap<>();
+	public static final Set<String> vanilla = new HashSet<>();
+	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<>();
 	public static Technology BASIC_CRAFTING;
 	public static Technology WOODWORKING;
 	public static Technology WRITING;
@@ -65,7 +52,7 @@ public class TechnologyHandler {
 	public static Technology GLOWING_EYES;
 	public static Technology ENDER_KNOWLEDGE;
 	public static Technology UNDECIPHERED_RESEARCH;
-
+	private static boolean minecraft = false;
 	private static int ID = 0;
 
 	public static void init() {
@@ -83,13 +70,13 @@ public class TechnologyHandler {
 		CARPENTRY = new Technology(PAGE.MINECRAFT, WOODEN_TOOLS, new ItemStack(Blocks.CHEST), 4, -3, "carpentry", ITEM_GROUP.WOODEN_DOOR, Blocks.TRAPDOOR, ITEM_GROUP.WOODEN_FENCE, ITEM_GROUP.WOODEN_FENCE_GATE, Blocks.CHEST, Items.BED, Items.WOODEN_AXE, Items.WOODEN_SHOVEL, Items.WOODEN_SWORD, Blocks.CARPET, Items.BANNER, Items.BOWL);
 		STONEWORKING = new Technology(PAGE.MINECRAFT, WOODEN_TOOLS, new ItemStack(Items.STONE_PICKAXE), 6, -1, "stoneworking", Items.STONE_AXE, Items.STONE_HOE, Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_SWORD);
 
-		Technology[] a_stoneworking = { STONEWORKING };
+		Technology[] a_stoneworking = {STONEWORKING};
 
 		REFINEMENT = new Technology(PAGE.MINECRAFT, STONECRAFT, a_stoneworking, new ItemStack(Items.IRON_INGOT), 6, 1, "refinement", Blocks.FURNACE, Items.IRON_INGOT, Items.GOLD_INGOT, Items.COAL, Items.REDSTONE, Items.DIAMOND, Items.EMERALD, new ItemStack(Items.DYE, 1, 4), Items.GOLD_NUGGET, Items.FLINT_AND_STEEL, Items.QUARTZ);
 		BIBLIOGRAPHY = new Technology(PAGE.MINECRAFT, WRITING, new ItemStack(Items.BOOK), 0, -4, "bibliography", Items.BOOK, Items.WRITABLE_BOOK, Items.WRITTEN_BOOK, Blocks.BOOKSHELF);
 		ADVANCED_COMBAT = new Technology(PAGE.MINECRAFT, STONEWORKING, new ItemStack(Items.SHIELD), 6, -3, "advanced_combat", Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.SHIELD);
 
-		Technology[] a_refinement = { REFINEMENT };
+		Technology[] a_refinement = {REFINEMENT};
 
 		METAL_ARMOR = new Technology(PAGE.MINECRAFT, ADVANCED_COMBAT, a_refinement, new ItemStack(Items.IRON_HELMET), 6, -5, "metal_armor", Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS);
 		SMITHING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.ANVIL), 8, 1, "smithing", Blocks.ANVIL, Items.IRON_AXE, Items.IRON_DOOR, Items.IRON_HOE, Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_SWORD, Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL, Items.GOLDEN_SWORD, Blocks.IRON_BARS, Blocks.IRON_TRAPDOOR, Items.BUCKET);
@@ -99,7 +86,7 @@ public class TechnologyHandler {
 		BREWING = new Technology(PAGE.MINECRAFT, GILDED_CUISINE, new ItemStack(Items.BREWING_STAND), 12, 3, "brewing", Items.BREWING_STAND, Items.FERMENTED_SPIDER_EYE, Items.MAGMA_CREAM, Blocks.MAGMA, Items.BLAZE_POWDER, Blocks.NETHER_WART_BLOCK);
 		GEM_CUTTING = new Technology(PAGE.MINECRAFT, SMITHING, new ItemStack(Items.DIAMOND), 8, -1, "gem_cutting", Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD);
 
-		Technology[] a_gemcutting = { GEM_CUTTING };
+		Technology[] a_gemcutting = {GEM_CUTTING};
 
 		GEM_ARMOR = new Technology(PAGE.MINECRAFT, METAL_ARMOR, a_gemcutting, new ItemStack(Items.DIAMOND_HELMET), 6, -7, "gem_armor", Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS);
 		BASIC_REDSTONE = new Technology(PAGE.MINECRAFT, SMITHING, new ItemStack(Items.REDSTONE), 10, 1, "basic_redstone", Blocks.REDSTONE_TORCH, Blocks.WOODEN_PRESSURE_PLATE, Blocks.STONE_PRESSURE_PLATE, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Blocks.LEVER, Blocks.WOODEN_BUTTON, Blocks.STONE_BUTTON);
@@ -112,7 +99,7 @@ public class TechnologyHandler {
 		ADVANCED_RAILS = new Technology(PAGE.MINECRAFT, PLAYER_TRANSPORTATION, new ItemStack(Blocks.GOLDEN_RAIL), 16, 3, "advanced_rails", Blocks.ACTIVATOR_RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL);
 		MUSIC = new Technology(PAGE.MINECRAFT, REDSTONE_MACHINERY, a_gemcutting, new ItemStack(Blocks.JUKEBOX), 14, -1, "music", Blocks.JUKEBOX, Blocks.NOTEBLOCK);
 
-		Technology[] a_redstone = { MUSIC, ITEM_TRANSPORTATION, ADVANCED_RAILS, EXPLOSIVES, TIME_PLACE_DESTINATION, GEM_CUTTING, BREWING };
+		Technology[] a_redstone = {MUSIC, ITEM_TRANSPORTATION, ADVANCED_RAILS, EXPLOSIVES, TIME_PLACE_DESTINATION, GEM_CUTTING, BREWING};
 
 		ENCHANTING = new Technology(PAGE.MINECRAFT, BIBLIOGRAPHY, a_redstone, new ItemStack(Blocks.ENCHANTING_TABLE), 0, -6, "enchanting", Blocks.ENCHANTING_TABLE);
 		GLOWING_EYES = new Technology(PAGE.MINECRAFT, ENCHANTING, new ItemStack(Items.ENDER_EYE), 0, -8, "glowing_eyes", Items.ENDER_EYE);
@@ -285,7 +272,7 @@ public class TechnologyHandler {
 
 	public static boolean registerTechnology(Technology tech) {
 		if (!technologies.containsKey(tech.page))
-			technologies.put(tech.page, new HashSet<Technology>());
+			technologies.put(tech.page, new HashSet<>());
 
 		if (!technologies.get(tech.page).add(tech))
 			return false;
@@ -384,18 +371,19 @@ public class TechnologyHandler {
 		return null;
 	}
 
+	public enum GUI {
+		IDEATABLE, RESEARCHTABLE
+	}
+
 	public static class PAGE {
 
+		public static final PAGE MINECRAFT = new PAGE("Minecraft");
+		public static List<PAGE> pages = new ArrayList<>();
+		public final String name;
 		public int minX = OreDictionary.WILDCARD_VALUE;
 		public int maxX = OreDictionary.WILDCARD_VALUE;
 		public int minY = OreDictionary.WILDCARD_VALUE;
 		public int maxY = OreDictionary.WILDCARD_VALUE;
-
-		public static List<PAGE> pages = new ArrayList<PAGE>();
-
-		public static final PAGE MINECRAFT = new PAGE("Minecraft");
-
-		public final String name;
 
 		public PAGE(String name) {
 			this.name = name;
@@ -445,6 +433,16 @@ public class TechnologyHandler {
 		public static ITEM_GROUP RECORD;
 		public static ITEM_GROUP DRAGON;
 		public static ITEM_GROUP UNDECIPHERED;
+		public List<ItemList> item = new ArrayList<>();
+		private String name;
+
+		private ITEM_GROUP(String name, Object... item) {
+			this.name = name;
+
+			for (Object o : item) {
+				this.item.add(new ItemList(TechnologyUtil.toItem(o)));
+			}
+		}
 
 		public static void init() {
 			COLORFUL = new ITEM_GROUP("colorful", Blocks.WOOL, Blocks.STAINED_HARDENED_CLAY);
@@ -474,17 +472,6 @@ public class TechnologyHandler {
 			UNDECIPHERED = new ITEM_GROUP("undeciphered");
 		}
 
-		public List<ItemList> item = new ArrayList<ItemList>();
-		private String name;
-
-		private ITEM_GROUP(String name, Object... item) {
-			this.name = name;
-
-			for (Object o : item) {
-				this.item.add(new ItemList(TechnologyUtil.toItem(o)));
-			}
-		}
-
 		public boolean contains(ItemStack stack) {
 			for (ItemList l : item)
 				if (l.contains(stack))
@@ -501,7 +488,7 @@ public class TechnologyHandler {
 		}
 
 		public void clearItems() {
-			item = new ArrayList<ItemList>();
+			item = new ArrayList<>();
 		}
 
 	}

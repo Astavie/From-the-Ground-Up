@@ -1,8 +1,5 @@
 package ftgumod;
 
-import java.util.Iterator;
-import java.util.List;
-
 import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import ftgumod.technology.TechnologyUtil;
 import net.minecraft.block.Block;
@@ -10,6 +7,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class ItemList implements Iterable<ItemStack> {
 
@@ -25,11 +25,9 @@ public class ItemList implements Iterable<ItemStack> {
 
 		if (obj instanceof ItemStack)
 			list.add((ItemStack) obj);
-		else if (obj instanceof String) {
-			List<ItemStack> ore = OreDictionary.getOres((String) obj);
-			for (ItemStack s : ore)
-				list.add(s);
-		} else if (obj instanceof Item)
+		else if (obj instanceof String)
+			list.addAll(OreDictionary.getOres((String) obj));
+		else if (obj instanceof Item)
 			list.add(new ItemStack((Item) obj, 1, OreDictionary.WILDCARD_VALUE));
 		else if (obj instanceof Block)
 			list.add(new ItemStack((Block) obj, 1, OreDictionary.WILDCARD_VALUE));
@@ -64,9 +62,10 @@ public class ItemList implements Iterable<ItemStack> {
 	}
 
 	/**
-	 * @deprecated Use {@link ItemList#iterator()} or for-each loops instead.
 	 * @return a list of item stacks
+	 * @deprecated Use {@link ItemList#iterator()} or for-each loops instead.
 	 */
+	@SuppressWarnings("DeprecatedIsStillUsed")
 	@Deprecated
 	public List<ItemStack> getRaw() {
 		return list;
