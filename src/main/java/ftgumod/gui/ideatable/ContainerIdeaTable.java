@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ftgumod.FTGUAPI;
+import ftgumod.ItemList;
 import ftgumod.gui.SlotSpecial;
 import ftgumod.gui.TileEntityInventory;
 import ftgumod.technology.Technology;
@@ -80,20 +81,16 @@ public class ContainerIdeaTable extends Container {
 	}
 
 	public IdeaRecipe hasRecipe() {
-		outer: for (IdeaRecipe i : TechnologyHandler.ideas) {
-			Set<ItemStack> items = new HashSet<ItemStack>();
+		for (IdeaRecipe i : TechnologyHandler.ideas) {
+			Set<ItemList> items = new HashSet<ItemList>();
+			items.addAll(i.recipe);
 			for (int j = 0; j < 3; j++) {
-				ItemStack s = inventorySlots.get(combine + j).getStack();
-				if (!s.isEmpty())
-					items.add(s);
-			}
-			for (int j = 0; j < i.recipe.size(); j++) {
-				for (ItemStack stack : items) {
-					if (i.recipe.get(j).contains(stack)) {
-						items.remove(stack);
+				ItemStack stack = inventorySlots.get(combine + j).getStack();
+				for (ItemList list : items) {
+					if (list.contains(stack)) {
+						items.remove(list);
 						break;
-					} else
-						continue outer;
+					}
 				}
 			}
 			if (items.size() == 0)
