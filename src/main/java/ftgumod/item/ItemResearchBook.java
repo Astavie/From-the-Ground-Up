@@ -1,6 +1,6 @@
 package ftgumod.item;
 
-import ftgumod.gui.researchbook.GuiResearchBook;
+import ftgumod.client.gui.GuiResearchBook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;

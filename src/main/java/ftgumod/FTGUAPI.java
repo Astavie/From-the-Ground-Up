@@ -25,6 +25,7 @@ public final class FTGUAPI {
 	public static final Item i_parchmentResearch = new ItemParchmentResearch(n_parchmentResearch);
 	public static final Item i_researchBook = new ItemResearchBook(n_researchBook);
 	public static final Item i_lookingGlass = new ItemLookingGlass(n_lookingGlass);
+
 	static final ItemBlock i_ideaTable = new ItemBlock(b_ideaTable);
 	static final ItemBlock i_researchTable = new ItemBlock(b_researchTable);
 

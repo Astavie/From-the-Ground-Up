@@ -1,9 +1,8 @@
 package ftgumod;
 
 import ftgumod.compat.ICompat;
-import ftgumod.gui.GuiHandler;
-import ftgumod.gui.ideatable.TileEntityIdeaTable;
-import ftgumod.gui.researchtable.TileEntityResearchTable;
+import ftgumod.tileentity.TileEntityIdeaTable;
+import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.minetweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;

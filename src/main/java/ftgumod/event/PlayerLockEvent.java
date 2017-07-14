@@ -35,7 +35,7 @@ public class PlayerLockEvent extends PlayerEvent {
 		return willLock;
 	}
 
-	public void setIsLocked(boolean willLock) {
+	public void setLocked(boolean willLock) {
 		this.willLock = willLock;
 	}
 
