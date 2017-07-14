@@ -6,7 +6,6 @@ import ftgumod.technology.TechnologyHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.stats.RecipeBook;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerLockEvent extends PlayerEvent {
@@ -18,8 +17,7 @@ public class PlayerLockEvent extends PlayerEvent {
 		super(player);
 		this.stack = stack;
 
-		RecipeBook book = FTGU.PROXY.getRecipeBook(player);
-		if (book.containsRecipe(recipe))
+		if (recipe != null && FTGU.PROXY.getRecipeBook(player).containsRecipe(recipe))
 			this.willLock = false;
 		else {
 			Technology tech = TechnologyHandler.getLocked(stack);

@@ -1,14 +1,17 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
+import ftgumod.client.gui.toast.ToastTechnology;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -16,16 +19,16 @@ public class TechnologyMessage implements IMessage {
 
 	public Collection<Integer> tech;
 	public boolean force;
+	public Integer toast;
 
 	public TechnologyMessage() {
 	}
 
-	public TechnologyMessage(Collection<Integer> tech, boolean force) {
-		this.tech = tech;
-		this.force = force;
+	public TechnologyMessage(EntityPlayer player, boolean force) {
+		this(player, force, null);
 	}
 
-	public TechnologyMessage(EntityPlayer player, boolean force) {
+	public TechnologyMessage(EntityPlayer player, boolean force, @Nullable Integer toast) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
 			tech = new HashSet<>();
@@ -41,6 +44,7 @@ public class TechnologyMessage implements IMessage {
 			}
 
 			this.force = force;
+			this.toast = toast;
 		} else
 			throw new IllegalArgumentException();
 	}
@@ -54,6 +58,9 @@ public class TechnologyMessage implements IMessage {
 		for (int i = 0; i < size; i++) {
 			tech.add(buffer.readInt());
 		}
+
+		if (buffer.readBoolean())
+			toast = buffer.readInt();
 	}
 
 	@Override
@@ -68,6 +75,12 @@ public class TechnologyMessage implements IMessage {
 		} else {
 			buffer.writeInt(0);
 		}
+
+		if (toast != null) {
+			buffer.writeBoolean(true);
+			buffer.writeInt(toast);
+		} else
+			buffer.writeBoolean(false);
 	}
 
 	public static class TechnologyMessageHandler extends ClientMessageHandler<TechnologyMessage> {
@@ -91,6 +104,10 @@ public class TechnologyMessage implements IMessage {
 						//noinspection ConstantConditions
 						cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalizedName());
 				}
+
+				if (message.toast != null)
+					Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(TechnologyHandler.getTechnology(message.toast)));
+
 				FTGU.INSTANCE.runCompat("jei", message.tech);
 			}
 

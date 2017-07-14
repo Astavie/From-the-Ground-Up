@@ -8,7 +8,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.RecipeBookServer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.HoverEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -118,6 +122,28 @@ public class Technology {
 
 	public TextComponentTranslation getDescription() {
 		return new TextComponentTranslation("technology." + name + ".desc");
+	}
+
+	public TextComponentString getDisplayText() {
+		TextComponentString displayText = new TextComponentString("[");
+		displayText.getStyle().setColor(TextFormatting.GREEN);
+
+		ITextComponent itextcomponent = getLocalizedName(true);
+		ITextComponent itextcomponent1 = new TextComponentString("");
+		ITextComponent itextcomponent2 = itextcomponent.createCopy();
+
+		itextcomponent2.getStyle().setColor(TextFormatting.GREEN);
+
+		itextcomponent1.appendSibling(itextcomponent2);
+		itextcomponent1.appendText("\n");
+		itextcomponent1.appendSibling(getDescription());
+
+		itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, itextcomponent1));
+
+		displayText.appendSibling(itextcomponent);
+		displayText.appendText("]");
+
+		return displayText;
 	}
 
 	public List<ItemList> getItems() {

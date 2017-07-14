@@ -21,6 +21,11 @@ technology.technology=%s Technology
 technology.theory=%s Theory
 technology.researched=Researched!
 
+technology.toast.technology=Research Complete!
+technology.toast.theory=Theory Complete!
+
+chat.type.technology=%s has researched %s
+
 technology.complete.already="%s" has already been researched
 technology.complete.flawless="%s" researched!
 technology.complete.understand=You do not understand this technology

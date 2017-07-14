@@ -49,7 +49,7 @@ public class UnlockTechMessage implements IMessage {
 
 						RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
 						if (book instanceof RecipeBookServerImpl)
-							((RecipeBookServerImpl) book).addItems(t.item, (EntityPlayerMP) player);
+							((RecipeBookServerImpl) book).removeItems(t.item, (EntityPlayerMP) player);
 						else
 							Technology.LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes revoked!");
 					} else {
