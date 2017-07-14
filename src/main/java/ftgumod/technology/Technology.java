@@ -1,17 +1,24 @@
 package ftgumod.technology;
 
 import ftgumod.ItemList;
+import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.text.TextComponentTranslation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Technology {
+
+	public static final Logger LOGGER = LogManager.getLogger();
 
 	public final boolean hide;
 	public final int x;
@@ -83,8 +90,17 @@ public class Technology {
 
 	public void setResearched(EntityPlayer player) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		if (cap != null)
+		if (cap != null) {
 			cap.setResearched(name);
+
+			if (!player.world.isRemote) {
+				RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
+				if (book instanceof RecipeBookServerImpl)
+					((RecipeBookServerImpl) book).addItems(item, (EntityPlayerMP) player);
+				else
+					LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
+			}
+		}
 	}
 
 	public boolean isTheory() {

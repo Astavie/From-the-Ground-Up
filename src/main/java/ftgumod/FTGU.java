@@ -43,11 +43,13 @@ public class FTGU {
 
 	public static final String MODID = "ftgumod";
 
-	public static boolean headstart = false;
+	public static boolean headStart = false;
 	public static boolean moddedOnly = false;
+
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
-	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
+
+	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyServer")
 	public static ProxyCommon PROXY;
 	public final Map<String, ICompat> compat = new HashMap<>();
 
@@ -109,10 +111,12 @@ public class FTGU {
 
 		PacketDispatcher.registerPackets();
 
+		PROXY.preInit();
+
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
-		headstart = config.get(Configuration.CATEGORY_GENERAL, "Headstart", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
+		headStart = config.get(Configuration.CATEGORY_GENERAL, "Head-Start", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
 		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded", false, "Set this to true to automatically research all vanilla technologies").getBoolean();
 
 		config.save();
@@ -147,7 +151,7 @@ public class FTGU {
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new GuiHandler());
 
-		PROXY.registerRenderers();
+		PROXY.init();
 
 		TechnologyHandler.init();
 

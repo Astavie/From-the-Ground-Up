@@ -1,12 +1,15 @@
 package ftgumod.packet.server;
 
 import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.stats.RecipeBookServer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
@@ -43,8 +46,14 @@ public class UnlockTechMessage implements IMessage {
 					if (t.isResearched(player)) {
 						cap.removeResearched(t.getUnlocalizedName());
 						cap.removeResearched(t.getUnlocalizedName() + ".unlock");
+
+						RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
+						if (book instanceof RecipeBookServerImpl)
+							((RecipeBookServerImpl) book).addItems(t.item, (EntityPlayerMP) player);
+						else
+							Technology.LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes revoked!");
 					} else {
-						cap.setResearched(t.getUnlocalizedName());
+						t.setResearched(player);
 					}
 
 					return new TechnologyMessage(player, true);

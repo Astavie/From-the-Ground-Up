@@ -19,11 +19,11 @@ public class CraftingListener implements IContainerListener {
 	public void sendSlotContents(Container container, int index, ItemStack stack) {
 		Slot slot = container.getSlot(index);
 		if (slot.inventory instanceof InventoryCraftResult) {
-			PlayerLockEvent event = new PlayerLockEvent(player, stack);
+			PlayerLockEvent event = new PlayerLockEvent(player, stack, ((InventoryCraftResult) slot.inventory).getRecipeUsed());
 			if (!stack.isEmpty())
 				MinecraftForge.EVENT_BUS.post(event);
 
-			slot.inventory.setInventorySlotContents(0, event.willLock() ? ItemStack.EMPTY : stack);
+			slot.inventory.setInventorySlotContents(0, event.isLocked() ? ItemStack.EMPTY : stack);
 		}
 	}
 

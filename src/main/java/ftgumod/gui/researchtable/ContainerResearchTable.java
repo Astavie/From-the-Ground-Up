@@ -8,8 +8,6 @@ import ftgumod.gui.TileEntityInventory;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.technology.CapabilityTechnology;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
@@ -122,14 +120,11 @@ public class ContainerResearchTable extends Container {
 						recipe = null;
 					}
 
-					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe)) {
-						ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-						if (cap != null && !cap.isResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock")) {
-							cap.setResearched(TechnologyHandler.UNDECIPHERED_RESEARCH.getUnlocalizedName() + ".unlock");
-							invPlayer.player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true)));
-							player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-							PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
-						}
+					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe) && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(player)) {
+						TechnologyHandler.UNDECIPHERED_RESEARCH.setUnlocked(player);
+						invPlayer.player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true)));
+						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
 					}
 				}
 			} else {

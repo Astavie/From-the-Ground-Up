@@ -6,10 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class TechnologyUtil {
@@ -68,8 +68,7 @@ public class TechnologyUtil {
 	}
 
 	public static boolean hasRecipe(ItemStack stack) {
-		for (ResourceLocation l : CraftingManager.REGISTRY.getKeys()) {
-			IRecipe r = CraftingManager.REGISTRY.getObject(l);
+		for (IRecipe r: ForgeRegistries.RECIPES) {
 			if (r != null && OreDictionary.itemMatches(r.getRecipeOutput(), stack, false) && (!r.getRecipeOutput().hasTagCompound() || ItemStack.areItemStackTagsEqual(r.getRecipeOutput(), stack)))
 				return true;
 		}

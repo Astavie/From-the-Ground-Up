@@ -5,6 +5,7 @@ import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
@@ -47,17 +48,21 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class EventHandler {
 
+	private static final Field BOOK = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192041_cq");
+
 	private final Map<UUID, Integer> ticks = new HashMap<>();
-	public int s = 5; // 5 seconds
-	public int t = s * 20; // 5 * 20 ticks
+	private int s = 5; // 5 seconds
+	private int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
 	private static boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
@@ -196,34 +201,48 @@ public class EventHandler {
 			}
 	}
 
+	public void replaceRecipeBook(EntityPlayerMP player) {
+		try {
+			RecipeBookServerImpl book = new RecipeBookServerImpl();
+			book.read(player.getRecipeBook().write());
+			BOOK.set(player, book);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerLoggedInEvent evt) {
 		if (!evt.player.world.isRemote) {
+			replaceRecipeBook((EntityPlayerMP) evt.player);
+
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
 			inv.addListener(new CraftingListener(evt.player));
 
 			ticks.remove(evt.player.getUniqueID());
-		}
 
-		List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalizedName(), TechnologyHandler.STONEWORKING.getUnlocalizedName(), TechnologyHandler.CARPENTRY.getUnlocalizedName(), TechnologyHandler.REFINEMENT.getUnlocalizedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalizedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalizedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalizedName(), TechnologyHandler.COOKING.getUnlocalizedName());
-		ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		if (cap != null && cap.isNew()) {
-			evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
+			List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalizedName(), TechnologyHandler.STONEWORKING.getUnlocalizedName(), TechnologyHandler.CARPENTRY.getUnlocalizedName(), TechnologyHandler.REFINEMENT.getUnlocalizedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalizedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalizedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalizedName(), TechnologyHandler.COOKING.getUnlocalizedName());
+			ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
+			if (cap != null && cap.isNew()) {
+				evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
 
-			if (FTGU.moddedOnly) {
-				cap.setResearched(TechnologyHandler.vanilla);
-			} else if (FTGU.headstart) {
-				cap.setResearched(headstart);
+				if (FTGU.moddedOnly) {
+					cap.setResearched(TechnologyHandler.vanilla);
+				} else if (FTGU.headStart) {
+					cap.setResearched(headstart);
+				}
+
+				cap.setOld();
 			}
-
-			cap.setOld();
-		} else
 			PacketDispatcher.sendTo(new TechnologyMessage(evt.player, false), (EntityPlayerMP) evt.player);
+		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone evt) {
 		if (!evt.getEntity().world.isRemote) {
+			replaceRecipeBook((EntityPlayerMP) evt.getEntityPlayer());
+
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
 			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 
@@ -233,14 +252,18 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
-		Container inv = evt.getEntityPlayer().openContainer;
-		inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+		if (!evt.getEntity().world.isRemote) {
+			Container inv = evt.getEntityPlayer().openContainer;
+			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerCloseContainer(PlayerContainerEvent.Close evt) {
-		Container inv = evt.getEntityPlayer().openContainer;
-		inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+		if (!evt.getEntity().world.isRemote) {
+			Container inv = evt.getEntityPlayer().openContainer;
+			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+		}
 	}
 
 	@SubscribeEvent
@@ -253,11 +276,11 @@ public class EventHandler {
 				if (s.inventory instanceof InventoryCraftResult) {
 					ItemStack stack = s.inventory.getStackInSlot(0);
 					if (stack != this.stack) {
-						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack);
+						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack, ((InventoryCraftResult) s.inventory).getRecipeUsed());
 						if (!stack.isEmpty())
 							MinecraftForge.EVENT_BUS.post(event);
 
-						this.stack = event.willLock() ? ItemStack.EMPTY : stack;
+						this.stack = event.isLocked() ? ItemStack.EMPTY : stack;
 						s.inventory.setInventorySlotContents(0, this.stack);
 					}
 					return;

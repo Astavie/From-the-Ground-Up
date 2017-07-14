@@ -1,9 +1,12 @@
 package ftgumod.event;
 
+import ftgumod.FTGU;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.stats.RecipeBook;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 
 public class PlayerLockEvent extends PlayerEvent {
@@ -11,23 +14,28 @@ public class PlayerLockEvent extends PlayerEvent {
 	private final ItemStack stack;
 	private boolean willLock;
 
-	public PlayerLockEvent(EntityPlayer player, ItemStack stack) {
+	public PlayerLockEvent(EntityPlayer player, ItemStack stack, IRecipe recipe) {
 		super(player);
 		this.stack = stack;
 
-		Technology tech = TechnologyHandler.getLocked(stack);
-		this.willLock = tech != null && !tech.isResearched(player);
+		RecipeBook book = FTGU.PROXY.getRecipeBook(player);
+		if (book.containsRecipe(recipe))
+			this.willLock = false;
+		else {
+			Technology tech = TechnologyHandler.getLocked(stack);
+			this.willLock = tech != null && !tech.isResearched(player);
+		}
 	}
 
 	public ItemStack getStack() {
 		return stack;
 	}
 
-	public boolean willLock() {
+	public boolean isLocked() {
 		return willLock;
 	}
 
-	public void setWillLock(boolean willLock) {
+	public void setIsLocked(boolean willLock) {
 		this.willLock = willLock;
 	}
 

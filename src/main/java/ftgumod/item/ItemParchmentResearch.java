@@ -43,9 +43,9 @@ public class ItemParchmentResearch extends Item {
 				} else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
 					MinecraftForge.EVENT_BUS.post(event);
-
 					if (event.canResearch()) {
 						t.setResearched(player);
+
 						player.sendMessage(new TextComponentTranslation("technology.complete.flawless", t.getLocalizedName(true)));
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
