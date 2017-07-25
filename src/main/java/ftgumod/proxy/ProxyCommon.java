@@ -1,10 +1,20 @@
 package ftgumod.proxy;
 
+import ftgumod.GuiHandler;
+import ftgumod.technology.Technology;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.stats.RecipeBook;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public abstract class ProxyCommon {
+
+	public void showTechnologyToast(Technology technology) {
+	}
+
+	public IGuiHandler getGuiHandler() {
+		return new GuiHandler();
+	}
 
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
 		return ctx.getServerHandler().player;
@@ -12,10 +22,13 @@ public abstract class ProxyCommon {
 
 	public abstract RecipeBook getRecipeBook(EntityPlayer player);
 
-	public abstract void preInit();
+	public void preInit() {
+	}
 
-	public abstract void init();
+	public void init() {
+	}
 
-	public abstract void postInit();
+	public void postInit() {
+	}
 
 }

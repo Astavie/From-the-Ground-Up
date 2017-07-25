@@ -25,7 +25,7 @@ import java.util.List;
 @ZenClass("mods.ftgu.Technology")
 public class Technology {
 
-	protected static final String name = FTGUTweaker.name + " Technology";
+	static final String name = FTGUTweaker.name + " Technology";
 
 	@ZenMethod
 	public static void addTechnology(String page, String prev, IItemStack icon, int x, int y, String name, IIngredient[] item) {
@@ -114,7 +114,7 @@ public class Technology {
 
 	private static class AddTech extends BaseInterfaceAdd<ftgumod.technology.Technology> {
 
-		protected AddTech(ftgumod.technology.Technology tech) {
+		private AddTech(ftgumod.technology.Technology tech) {
 			super(name, tech, new BaseTechnology());
 		}
 
@@ -127,7 +127,7 @@ public class Technology {
 
 	private static class RemoveTech extends BaseInterfaceRemove<ftgumod.technology.Technology> {
 
-		protected RemoveTech(ftgumod.technology.Technology tech) {
+		private RemoveTech(ftgumod.technology.Technology tech) {
 			super(name, tech, new BaseTechnology());
 		}
 

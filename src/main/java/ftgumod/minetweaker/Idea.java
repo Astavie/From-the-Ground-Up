@@ -19,7 +19,7 @@ import java.util.List;
 @ZenClass("mods.ftgu.Idea")
 public class Idea {
 
-	protected static final String name = FTGUTweaker.name + " Idea";
+	static final String name = FTGUTweaker.name + " Idea";
 
 	@ZenMethod
 	public static void addIdea(String tech, IIngredient[] recipe) {
@@ -50,7 +50,7 @@ public class Idea {
 
 	private static class Add extends BaseInterfaceAdd<IdeaRecipe> {
 
-		protected Add(IdeaRecipe tech) {
+		private Add(IdeaRecipe tech) {
 			super(name, tech, new BaseCollection<>(TechnologyHandler.ideas));
 		}
 
@@ -63,7 +63,7 @@ public class Idea {
 
 	private static class Remove extends BaseInterfaceRemove<IdeaRecipe> {
 
-		protected Remove(IdeaRecipe tech) {
+		private Remove(IdeaRecipe tech) {
 			super(name, tech, new BaseCollection<>(TechnologyHandler.ideas));
 		}
 

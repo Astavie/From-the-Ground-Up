@@ -1,7 +1,5 @@
 package ftgumod;
 
-import ftgumod.client.gui.GuiIdeaTable;
-import ftgumod.client.gui.GuiResearchTable;
 import ftgumod.inventory.ContainerIdeaTable;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.technology.TechnologyHandler.GUI;
@@ -31,16 +29,6 @@ public class GuiHandler implements IGuiHandler {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-
-		if (tileEntity != null) {
-			if (ID == GUI.IDEATABLE.ordinal()) {
-				return new GuiIdeaTable(player.inventory, (TileEntityInventory) tileEntity);
-			} else if (ID == GUI.RESEARCHTABLE.ordinal()) {
-				return new GuiResearchTable(player.inventory, (TileEntityInventory) tileEntity);
-			}
-		}
-
 		return null;
 	}
 

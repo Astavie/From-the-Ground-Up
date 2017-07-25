@@ -22,7 +22,7 @@ import java.util.Collection;
 @ZenClass("mods.ftgu.Scramble")
 public class Scramble {
 
-	protected static final String name = FTGUTweaker.name + " Scramble";
+	static final String name = FTGUTweaker.name + " Scramble";
 
 	@ZenMethod
 	public static void addScrambled(String tech, IIngredient ingredient, int[] slots) {
@@ -60,7 +60,7 @@ public class Scramble {
 
 		private final ResearchRecipe key;
 
-		protected Add(ResearchRecipe key, DecipherGroup group) {
+		private Add(ResearchRecipe key, DecipherGroup group) {
 			super(name, group, new BaseCollection<>(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}
@@ -99,7 +99,7 @@ public class Scramble {
 
 		private final ResearchRecipe key;
 
-		protected Remove(ResearchRecipe key, Collection<DecipherGroup> group) {
+		private Remove(ResearchRecipe key, Collection<DecipherGroup> group) {
 			super(name, group, new BaseCollection<>(TechnologyHandler.unlock.get(key).list));
 			this.key = key;
 		}

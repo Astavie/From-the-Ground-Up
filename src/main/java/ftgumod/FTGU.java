@@ -1,8 +1,6 @@
 package ftgumod;
 
 import ftgumod.compat.ICompat;
-import ftgumod.tileentity.TileEntityIdeaTable;
-import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.minetweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
@@ -11,6 +9,8 @@ import ftgumod.technology.CapabilityTechnology.DefaultImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.CapabilityTechnology.Storage;
 import ftgumod.technology.TechnologyHandler;
+import ftgumod.tileentity.TileEntityIdeaTable;
+import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -148,7 +148,7 @@ public class FTGU {
 		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r);
 		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r, r);
 
-		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, new GuiHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY.getGuiHandler());
 
 		PROXY.init();
 

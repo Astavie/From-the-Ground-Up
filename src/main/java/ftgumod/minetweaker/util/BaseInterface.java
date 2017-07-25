@@ -21,7 +21,7 @@ public abstract class BaseInterface<T> implements IUndoableAction {
 		this.base = base;
 	}
 
-	public BaseInterface(String name, T tech, IBaseInterface<T> base) {
+	protected BaseInterface(String name, T tech, IBaseInterface<T> base) {
 		this.name = name;
 		this.recipes = new ArrayList<>();
 		recipes.add(tech);

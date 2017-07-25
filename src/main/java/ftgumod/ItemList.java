@@ -65,7 +65,6 @@ public class ItemList implements Iterable<ItemStack> {
 	 * @return a list of item stacks
 	 * @deprecated Use {@link ItemList#iterator()} or for-each loops instead.
 	 */
-	@SuppressWarnings("DeprecatedIsStillUsed")
 	@Deprecated
 	public List<ItemStack> getRaw() {
 		return list;

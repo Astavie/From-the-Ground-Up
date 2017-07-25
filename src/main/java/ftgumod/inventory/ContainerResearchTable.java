@@ -3,7 +3,6 @@ package ftgumod.inventory;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
-import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
@@ -11,6 +10,7 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.ResearchRecipe;
+import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -27,17 +27,17 @@ import java.util.List;
 
 public class ContainerResearchTable extends Container {
 
-	public final TileEntityInventory invInput;
-	public final IInventory invResult = new InventoryCraftResult();
-	public final InventoryPlayer invPlayer;
+	private final TileEntityInventory invInput;
+	private final IInventory invResult = new InventoryCraftResult();
+	private final InventoryPlayer invPlayer;
 
-	public final int sizeInventory;
+	private final int sizeInventory;
 
 	public ResearchRecipe recipe = null;
-	public boolean possible;
 
-	public int feather;
-	public int parchment;
+	private int feather;
+	private int parchment;
+
 	public int combine;
 	public int output;
 	public int glass;
@@ -61,26 +61,26 @@ public class ContainerResearchTable extends Container {
 		onCraftMatrixChanged(tileEntity);
 	}
 
-	protected int addSlots(TileEntityInventory tileEntity) {
+	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlotToContainer(new SlotSpecial(this, tileEntity, c, 8, 46, 1, new ItemStack(Items.FEATHER)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 8, 46, 1, new ItemStack(Items.FEATHER)));
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(this, tileEntity, c, 8, 24, 1, new ItemStack(FTGUAPI.i_parchmentIdea)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 8, 24, 1, new ItemStack(FTGUAPI.i_parchmentIdea)));
 		parchment = c;
 		c++;
 
 		combine = c;
 		for (int sloty = 0; sloty < 3; sloty++) {
 			for (int slotx = 0; slotx < 3; slotx++) {
-				addSlotToContainer(new SlotSpecial(this, tileEntity, c, 30 + slotx * 18, 17 + sloty * 18, 1));
+				addSlotToContainer(new SlotSpecial(tileEntity, c, 30 + slotx * 18, 17 + sloty * 18, 1));
 				c++;
 			}
 		}
 
-		addSlotToContainer(new SlotSpecial(this, tileEntity, c, 150, 35, 1, new ItemStack(FTGUAPI.i_lookingGlass)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 150, 35, 1, new ItemStack(FTGUAPI.i_lookingGlass)));
 		glass = c;
 		c++;
 
@@ -91,7 +91,7 @@ public class ContainerResearchTable extends Container {
 		return c;
 	}
 
-	public ResearchRecipe hasRecipe() {
+	private ResearchRecipe hasRecipe() {
 		outer:
 		for (ResearchRecipe i : TechnologyHandler.researches) {
 			for (int j = 0; j < 9; j++)
@@ -130,8 +130,7 @@ public class ContainerResearchTable extends Container {
 				recipe = null;
 			}
 
-			possible = inventorySlots.get(feather).getHasStack() && parch;
-			if (possible) {
+			if (inventorySlots.get(feather).getHasStack() && parch) {
 				ResearchRecipe recipe = hasRecipe();
 
 				if (recipe != null && recipe == this.recipe) {

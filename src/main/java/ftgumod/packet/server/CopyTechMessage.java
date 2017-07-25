@@ -1,6 +1,7 @@
 package ftgumod.packet.server;
 
 import ftgumod.FTGUAPI;
+import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
@@ -12,7 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class CopyTechMessage implements IMessage {
 
-	public int id;
+	private int id;
 
 	public CopyTechMessage() {
 	}
@@ -31,13 +32,13 @@ public class CopyTechMessage implements IMessage {
 		buf.writeInt(id);
 	}
 
-	public static class CopyTechMessageHandler extends ServerMessageHandler<CopyTechMessage> {
+	public static class CopyTechMessageHandler extends MessageHandler<CopyTechMessage> {
 
 		@Override
-		public IMessage handleServerMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
 			Technology tech = TechnologyHandler.getTechnology(message.id);
 
-			if (tech.isResearched(player)) {
+			if (tech != null && tech.isResearched(player)) {
 				int index = -1;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
 					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)

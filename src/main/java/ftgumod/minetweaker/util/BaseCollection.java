@@ -4,7 +4,7 @@ import java.util.Collection;
 
 public class BaseCollection<T> implements IBaseInterface<T> {
 
-	protected final Collection<T> list;
+	private final Collection<T> list;
 
 	public BaseCollection(Collection<T> list) {
 		this.list = list;

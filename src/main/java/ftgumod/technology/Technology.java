@@ -167,7 +167,7 @@ public class Technology {
 	public boolean canResearch(EntityPlayer player) {
 		if (isResearched(player))
 			return false;
-		if (customUnlock && isUnlocked(player))
+		if (customUnlock && !isUnlocked(player))
 			return false;
 		if (prev != null && !prev.isResearched(player))
 			return false;
@@ -197,7 +197,7 @@ public class Technology {
 	public boolean canResearchIgnoreResearched(EntityPlayer player) {
 		if (isResearched(player))
 			return true;
-		if (customUnlock && isUnlocked(player))
+		if (customUnlock && !isUnlocked(player))
 			return false;
 		if (prev != null && !prev.isResearched(player))
 			return false;

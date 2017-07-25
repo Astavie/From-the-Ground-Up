@@ -201,7 +201,7 @@ public class EventHandler {
 			}
 	}
 
-	public void replaceRecipeBook(EntityPlayerMP player) {
+	private void replaceRecipeBook(EntityPlayerMP player) {
 		try {
 			RecipeBookServerImpl book = new RecipeBookServerImpl();
 			book.read(player.getRecipeBook().write());

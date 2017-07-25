@@ -29,6 +29,6 @@ public class SlotResearchTable extends Slot {
 
 	@Override
 	protected void onCrafting(ItemStack stack) {
-		// TODO: Achievement
+		// TODO: Advancement
 	}
 }

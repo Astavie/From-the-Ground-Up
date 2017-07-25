@@ -1,5 +1,6 @@
 package ftgumod.packet.server;
 
+import ftgumod.packet.MessageHandler;
 import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +17,10 @@ public class RequestTechMessage implements IMessage {
 	public void toBytes(ByteBuf arg0) {
 	}
 
-	public static class RequestTechMessageHandler extends ServerMessageHandler<RequestTechMessage> {
+	public static class RequestTechMessageHandler extends MessageHandler<RequestTechMessage> {
 
 		@Override
-		public IMessage handleServerMessage(EntityPlayer player, RequestTechMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, RequestTechMessage message, MessageContext ctx) {
 			return new TechnologyMessage(player, false);
 		}
 

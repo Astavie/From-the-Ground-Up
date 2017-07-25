@@ -1,5 +1,6 @@
 package ftgumod.packet.server;
 
+import ftgumod.packet.MessageHandler;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
@@ -15,7 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class UnlockTechMessage implements IMessage {
 
-	public int tech;
+	private int tech;
 
 	public UnlockTechMessage() {
 	}
@@ -34,10 +35,10 @@ public class UnlockTechMessage implements IMessage {
 		buffer.writeInt(tech);
 	}
 
-	public static class UnlockTechMessageHandler extends ServerMessageHandler<UnlockTechMessage> {
+	public static class UnlockTechMessageHandler extends MessageHandler<UnlockTechMessage> {
 
 		@Override
-		public IMessage handleServerMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
 			if (player != null && player.capabilities.isCreativeMode) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				Technology t = TechnologyHandler.getTechnology(message.tech);

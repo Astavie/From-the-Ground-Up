@@ -15,7 +15,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenClass("mods.ftgu.Research")
 public class Research {
 
-	protected static final String name = FTGUTweaker.name + " Research";
+	static final String name = FTGUTweaker.name + " Research";
 
 	@ZenMethod
 	public static void addResearch(String tech, IIngredient[][] recipe) {
@@ -41,7 +41,7 @@ public class Research {
 
 	private static class Add extends BaseInterfaceAdd<ResearchRecipe> {
 
-		protected Add(ResearchRecipe tech) {
+		private Add(ResearchRecipe tech) {
 			super(name, tech, new BaseCollection<>(TechnologyHandler.researches));
 		}
 
@@ -54,7 +54,7 @@ public class Research {
 
 	private static class Remove extends BaseInterfaceRemove<ResearchRecipe> {
 
-		protected Remove(ResearchRecipe tech) {
+		private Remove(ResearchRecipe tech) {
 			super(name, tech, new BaseCollection<>(TechnologyHandler.researches));
 		}
 

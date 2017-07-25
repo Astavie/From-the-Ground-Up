@@ -1,12 +1,11 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
-import ftgumod.client.gui.toast.ToastTechnology;
+import ftgumod.packet.MessageHandler;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -17,9 +16,9 @@ import java.util.HashSet;
 
 public class TechnologyMessage implements IMessage {
 
-	public Collection<Integer> tech;
-	public boolean force;
-	public Integer toast;
+	private Collection<Integer> tech;
+	private boolean force;
+	private Integer toast;
 
 	public TechnologyMessage() {
 	}
@@ -83,10 +82,10 @@ public class TechnologyMessage implements IMessage {
 			buffer.writeBoolean(false);
 	}
 
-	public static class TechnologyMessageHandler extends ClientMessageHandler<TechnologyMessage> {
+	public static class TechnologyMessageHandler extends MessageHandler<TechnologyMessage> {
 
 		@Override
-		public IMessage handleClientMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
 			if (player == null)
 				return null;
 
@@ -106,7 +105,7 @@ public class TechnologyMessage implements IMessage {
 				}
 
 				if (message.toast != null)
-					Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(TechnologyHandler.getTechnology(message.toast)));
+					FTGU.PROXY.showTechnologyToast(TechnologyHandler.getTechnology(message.toast));
 
 				FTGU.INSTANCE.runCompat("jei", message.tech);
 			}

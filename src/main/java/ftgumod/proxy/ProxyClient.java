@@ -2,7 +2,10 @@ package ftgumod.proxy;
 
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
+import ftgumod.client.GuiHandlerClient;
+import ftgumod.client.gui.toast.ToastTechnology;
 import ftgumod.compat.CompatJEI;
+import ftgumod.technology.Technology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.RenderItem;
@@ -11,12 +14,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.stats.RecipeBook;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends ProxyCommon {
+
+	@Override
+	public void showTechnologyToast(Technology technology) {
+		Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(technology));
+	}
+
+	@Override
+	public IGuiHandler getGuiHandler() {
+		return new GuiHandlerClient();
+	}
 
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {

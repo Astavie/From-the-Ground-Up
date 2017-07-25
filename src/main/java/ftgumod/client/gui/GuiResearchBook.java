@@ -8,8 +8,6 @@ import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.packet.server.UnlockTechMessage;
-import ftgumod.technology.CapabilityTechnology;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
@@ -300,7 +298,7 @@ public class GuiResearchBook extends GuiScreen {
 
 			if (tech != null) {
 				for (Technology t1 : tech) {
-					if (t1.hasCustomUnlock() && !t1.isResearched(player) && t1.isUnlocked(player))
+					if (t1.hasCustomUnlock() && !t1.isResearched(player) && !t1.isUnlocked(player))
 						continue;
 					if (t1.hide && !t1.hasCustomUnlock() && !t1.isResearched(player))
 						continue;
@@ -348,7 +346,7 @@ public class GuiResearchBook extends GuiScreen {
 				GlStateManager.enableColorMaterial();
 
 				for (Technology t2 : tech) {
-					if (t2.hasCustomUnlock() && !t2.isResearched(player) && t2.isUnlocked(player))
+					if (t2.hasCustomUnlock() && !t2.isResearched(player) && !t2.isUnlocked(player))
 						continue;
 					if (t2.hide && !t2.hasCustomUnlock() && !t2.isResearched(player))
 						continue;
@@ -482,7 +480,7 @@ public class GuiResearchBook extends GuiScreen {
 		RenderHelper.disableStandardItemLighting();
 	}
 
-	public void drawSplitString(String string, int x, int y, int split, int color, boolean shadow) {
+	private void drawSplitString(String string, int x, int y, int split, int color, boolean shadow) {
 		for (String s : fontRenderer.listFormattedStringToWidth(string, split)) {
 			if (shadow)
 				fontRenderer.drawStringWithShadow(s, x - (fontRenderer.getStringWidth(s) / 2), y, color);

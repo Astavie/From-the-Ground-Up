@@ -1,21 +1,18 @@
 package ftgumod.inventory;
 
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public class SlotSpecial extends Slot {
 
-	public Container container;
 	private ItemStack[] special;
 	private int limit;
 
-	public SlotSpecial(Container container, IInventory inventory, int index, int x, int y, int limit, ItemStack... special) {
+	public SlotSpecial(IInventory inventory, int index, int x, int y, int limit, ItemStack... special) {
 		super(inventory, index, x, y);
 		this.special = special;
 		this.limit = limit;
-		this.container = container;
 	}
 
 	@Override

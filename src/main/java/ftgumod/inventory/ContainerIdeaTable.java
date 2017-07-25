@@ -2,11 +2,11 @@ package ftgumod.inventory;
 
 import ftgumod.FTGUAPI;
 import ftgumod.ItemList;
-import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.IdeaRecipe;
+import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -19,18 +19,16 @@ import java.util.Set;
 
 public class ContainerIdeaTable extends Container {
 
-	public final TileEntityInventory invInput;
-	public final IInventory invResult = new InventoryCraftResult();
-	public final InventoryPlayer invPlayer;
+	private final TileEntityInventory invInput;
+	private final IInventory invResult = new InventoryCraftResult();
+	private final InventoryPlayer invPlayer;
 
-	public final int sizeInventory;
+	private final int sizeInventory;
 
-	public boolean possible;
-
-	public int feather;
-	public int parchment;
-	public int combine;
-	public int output;
+	private int feather;
+	private int parchment;
+	private int combine;
+	private int output;
 
 	public ContainerIdeaTable(TileEntityInventory tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
@@ -51,20 +49,20 @@ public class ContainerIdeaTable extends Container {
 		onCraftMatrixChanged(tileEntity);
 	}
 
-	protected int addSlots(TileEntityInventory tileEntity) {
+	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlotToContainer(new SlotSpecial(this, tileEntity, c, 37, 23, 1, new ItemStack(Items.FEATHER)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, new ItemStack(Items.FEATHER)));
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(this, tileEntity, c, 59, 23, 64, new ItemStack(FTGUAPI.i_parchmentEmpty)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(FTGUAPI.i_parchmentEmpty)));
 		parchment = c;
 		c++;
 
 		combine = c;
 		for (int slot = 0; slot < 3; slot++) {
-			addSlotToContainer(new SlotSpecial(this, tileEntity, c, 30 + slot * 18, 45, 1));
+			addSlotToContainer(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1));
 			c++;
 		}
 
@@ -75,7 +73,7 @@ public class ContainerIdeaTable extends Container {
 		return c;
 	}
 
-	public IdeaRecipe hasRecipe() {
+	private IdeaRecipe hasRecipe() {
 		for (IdeaRecipe i : TechnologyHandler.ideas) {
 			Set<ItemList> items = new HashSet<>();
 			items.addAll(i.recipe);
@@ -97,8 +95,7 @@ public class ContainerIdeaTable extends Container {
 	@Override
 	public void onCraftMatrixChanged(IInventory inv) {
 		if (inv == invInput) {
-			possible = inventorySlots.get(feather).getHasStack() && inventorySlots.get(parchment).getHasStack();
-			if (possible) {
+			if (inventorySlots.get(feather).getHasStack() && inventorySlots.get(parchment).getHasStack()) {
 				IdeaRecipe recipe = hasRecipe();
 
 				if (recipe != null) {

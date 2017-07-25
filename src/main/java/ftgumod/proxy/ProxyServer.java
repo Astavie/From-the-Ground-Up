@@ -14,16 +14,4 @@ public class ProxyServer extends ProxyCommon {
 		return ((EntityPlayerMP) player).getRecipeBook();
 	}
 
-	@Override
-	public void preInit() {
-	}
-
-	@Override
-	public void init() {
-	}
-
-	@Override
-	public void postInit() {
-	}
-
 }

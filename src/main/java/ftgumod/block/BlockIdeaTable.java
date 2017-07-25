@@ -1,9 +1,9 @@
 package ftgumod.block;
 
 import ftgumod.FTGU;
-import ftgumod.tileentity.TileEntityInventory;
-import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.technology.TechnologyHandler.GUI;
+import ftgumod.tileentity.TileEntityIdeaTable;
+import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 
 public class BlockIdeaTable extends Block implements ITileEntityProvider {
 
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockIdeaTable(String name) {
 		super(Material.WOOD);
