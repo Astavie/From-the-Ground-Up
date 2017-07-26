@@ -14,13 +14,19 @@ import java.util.List;
 public class ItemList implements Iterable<ItemStack> {
 
 	protected final NonNullList<ItemStack> list = NonNullList.create();
+	protected final boolean forced;
 	protected String name;
 
 	public ItemList() {
 		name = "null";
+		forced = false;
 	}
 
 	public ItemList(Object obj) {
+		this(obj, false);
+	}
+
+	public ItemList(Object obj, boolean forced) {
 		name = TechnologyUtil.toString(obj);
 
 		if (obj instanceof ItemStack)
@@ -34,8 +40,13 @@ public class ItemList implements Iterable<ItemStack> {
 		else if (obj instanceof ITEM_GROUP)
 			for (ItemList l : ((ITEM_GROUP) obj).item)
 				list.addAll(l.list);
-		else if (obj instanceof ItemList)
-			list.addAll(((ItemList) obj).list);
+		else if (obj instanceof ItemList) {
+			ItemList item = (ItemList) obj;
+			list.addAll(item.list);
+			forced = item.forced;
+		}
+
+		this.forced = forced;
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package ftgumod.compat.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.MultiblockHandler;
+import ftgumod.ItemList;
 import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashMap;
@@ -14,26 +14,23 @@ public class CompatIE implements ICompat {
 	private final Map<MultiblockHandler.IMultiblock, Technology> unlock = new HashMap<>();
 
 	@Override
-	public boolean run(Object... arg) {
-		boolean first = true;
-		Technology tech = null;
+	public boolean run(Object... arg) { // Technology, IMultiblock[], Object[]
+		if (arg[0] instanceof Technology && arg[1] instanceof MultiblockHandler.IMultiblock[] && arg[2] instanceof Object[]) {
+			Technology tech = (Technology) arg[0];
+			MultiblockHandler.IMultiblock[] multiblocks = (MultiblockHandler.IMultiblock[]) arg[1];
+			Object[] objects = (Object[]) arg[2];
 
-		for (Object o : arg) {
-			if (first) {
-				tech = TechnologyHandler.getTechnology(o.toString());
-				if (tech == null)
-					return false;
-				first = false;
-			} else {
-				for (MultiblockHandler.IMultiblock multiblock : MultiblockHandler.getMultiblocks())
-					if (o.toString().equals(multiblock.getUniqueName())) {
-						unlock.put(multiblock, tech);
-						break;
-					}
+			int size = Math.min(multiblocks.length, objects.length);
+			for (int i = 0; i < size; i++) {
+				unlock.put(multiblocks[i], tech);
+
+				ItemList list = new ItemList(objects[i], true);
+				if (!list.isEmpty())
+					tech.getUnlock().add(list);
 			}
+			return true;
 		}
-
-		return true;
+		return false;
 	}
 
 	@SubscribeEvent

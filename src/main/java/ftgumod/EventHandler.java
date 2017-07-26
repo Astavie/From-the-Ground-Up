@@ -87,7 +87,7 @@ public class EventHandler {
 		return false;
 	}
 
-	private void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
+	public static void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
 		tech.setUnlocked(player);
 
 		if (!player.world.isRemote) {

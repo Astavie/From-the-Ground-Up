@@ -2,17 +2,15 @@ package ftgumod.inventory;
 
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
+import ftgumod.EventHandler;
 import ftgumod.FTGUAPI;
 import ftgumod.item.ItemLookingGlass;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.ResearchRecipe;
 import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -20,8 +18,6 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextComponentTranslation;
 
 import java.util.List;
 
@@ -117,12 +113,8 @@ public class ContainerResearchTable extends Container {
 						recipe = null;
 					}
 
-					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe) && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(player)) {
-						TechnologyHandler.UNDECIPHERED_RESEARCH.setUnlocked(player);
-						invPlayer.player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.UNDECIPHERED_RESEARCH.getLocalizedName(true)));
-						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
-					}
+					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe) && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(player))
+						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 				}
 			} else {
 				recipe = null;

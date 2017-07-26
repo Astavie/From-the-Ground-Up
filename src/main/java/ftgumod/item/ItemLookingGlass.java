@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -52,9 +53,9 @@ public class ItemLookingGlass extends Item {
 
 			List<ItemStack> items = getInspected(item);
 			for (ItemStack blockstack : items)
-				if (ItemStack.areItemStacksEqual(blockstack, item)) {
+				if (ItemStack.areItemStacksEqual(blockstack, stack)) {
 					if (!world.isRemote) {
-						player.sendMessage(new TextComponentTranslation("technology.decipher.already", TechnologyUtil.getDisplayName(item)));
+						player.sendMessage(new TextComponentTranslation("technology.decipher.already", stack.getTextComponent()));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					}
 					return EnumActionResult.SUCCESS;
@@ -75,7 +76,11 @@ public class ItemLookingGlass extends Item {
 				player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
-			TechnologyUtil.getItemData(item).getTagList("FTGU", NBT.TAG_COMPOUND).appendTag(stack.serializeNBT());
+
+			NBTTagCompound tag = TechnologyUtil.getItemData(item);
+			NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
+			nbt.appendTag(stack.serializeNBT());
+			tag.setTag("FTGU", nbt);
 
 			return EnumActionResult.SUCCESS;
 		} else

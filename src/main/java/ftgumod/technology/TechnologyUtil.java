@@ -73,7 +73,7 @@ public class TechnologyUtil {
 	public static TextComponentBase getDisplayName(ItemStack stack) {
 		if (stack.hasDisplayName())
 			return new TextComponentString(stack.getDisplayName());
-		else return new TextComponentTranslation(stack.getUnlocalizedName());
+		else return new TextComponentTranslation(stack.getUnlocalizedName() + ".name");
 	}
 
 	public static boolean hasRecipe(ItemStack stack) {
@@ -81,7 +81,7 @@ public class TechnologyUtil {
 			if (r != null && OreDictionary.itemMatches(r.getRecipeOutput(), stack, false) && (!r.getRecipeOutput().hasTagCompound() || ItemStack.areItemStackTagsEqual(r.getRecipeOutput(), stack)))
 				return true;
 		}
-		return FTGU.INSTANCE.runCompat("betterwithmods", stack);
+		return FTGU.INSTANCE.runCompat("betterwithmods", stack); // TODO: BetterWithMods support
 	}
 
 }

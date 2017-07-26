@@ -11,7 +11,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
-import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -39,12 +38,13 @@ public class PlayerInspectEvent extends PlayerEvent {
 		for (ResearchRecipe r : TechnologyHandler.unlock.keySet())
 			if (r.output.canResearch(player)) {
 				Decipher d = TechnologyHandler.unlock.get(r);
-				for (Decipher.DecipherGroup g : d.list)
-					for (ItemStack s : g.unlock)
-						if ((!s.isEmpty() && s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == block.getItem()) || ItemStack.areItemStacksEqual(s, block)) {
-							cancel = false;
-							break loop;
-						}
+				for (Decipher.DecipherGroup g : d.list) {
+					System.out.println(g.unlock);
+					if (g.unlock.contains(block)) {
+						cancel = false;
+						break loop;
+					}
+				}
 			}
 		setCanceled(cancel);
 	}

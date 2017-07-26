@@ -15,6 +15,7 @@ public class ItemListClient extends ItemList {
 
 	public ItemListClient(Object obj) {
 		super(obj);
+
 		for (int i = 0; i < list.size(); i++) {
 			ItemStack stack = list.get(i);
 			if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
@@ -24,7 +25,7 @@ public class ItemListClient extends ItemList {
 
 				list.remove(stack);
 				i--;
-			} else if (!TechnologyUtil.hasRecipe(stack)) {
+			} else if (!forced && !TechnologyUtil.hasRecipe(stack)) {
 				list.remove(stack);
 				i--;
 			}

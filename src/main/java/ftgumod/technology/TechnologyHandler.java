@@ -192,7 +192,7 @@ public class TechnologyHandler {
 		ResearchRecipe r_brewing = new ResearchRecipe(BREWING, " W ", " S ", " B ", 'B', new ItemStack(Items.POTIONITEM, 1, 0), 'W', Items.NETHER_WART, 'S', Items.SUGAR);
 
 		registerResearch(r_brewing);
-		registerDecipher(r_brewing, new Decipher(new DecipherGroup(Blocks.CAULDRON, 7)));
+		registerDecipher(r_brewing, new Decipher(new DecipherGroup(Items.CAULDRON, 7)));
 
 		registerIdea(GEM_CUTTING, "D", 'D', Items.DIAMOND);
 		ResearchRecipe r_gem_cutting = new ResearchRecipe(GEM_CUTTING, " P ", " D ", " C ", 'C', ITEM_GROUP.CRAFTING, 'D', Items.DIAMOND, 'P', ITEM_GROUP.PICKAXE);
