@@ -22,7 +22,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	private Collection<Integer> tech;
 
-	@SuppressWarnings({"unchecked", "deprecation"})
+	@SuppressWarnings({"unchecked"})
 	@Override
 	public boolean run(Object... arg) {
 		if (tech == null) {

@@ -2,6 +2,7 @@ package ftgumod;
 
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.event.PlayerLockEvent;
+import ftgumod.item.ItemLookingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
@@ -31,7 +32,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentBase;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -39,7 +42,6 @@ import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.common.util.Constants.NBT;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -65,7 +67,7 @@ public class EventHandler {
 	private int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
-	private static boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
+	private boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -85,6 +87,17 @@ public class EventHandler {
 		return false;
 	}
 
+	private void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
+		tech.setUnlocked(player);
+
+		if (!player.world.isRemote) {
+			player.sendMessage(new TextComponentTranslation("technology.complete.unlock", tech.getDisplayText()));
+			player.world.playSound(null, player.getPosition(), sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+			PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
+		}
+	}
+
 	@SubscribeEvent
 	public void onPlayerInspect(PlayerInspectEvent evt) {
 		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer().getUniqueID()) > t) {
@@ -92,13 +105,12 @@ public class EventHandler {
 			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
 				evt.setUseful(true);
 
-				TechnologyHandler.GLOWING_EYES.setUnlocked(player);
+				TextComponentBase whisper = new TextComponentTranslation("technology.noise.whisper2");
+				whisper.getStyle().setColor(TextFormatting.DARK_GRAY).setItalic(true);
 
-				player.sendMessage(new TextComponentTranslation("technology.noise.whisper2"));
-				player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.GLOWING_EYES.getLocalizedName(true)));
-				player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				player.sendMessage(whisper);
 
-				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
+				unlock(TechnologyHandler.GLOWING_EYES, player, SoundEvents.BLOCK_PORTAL_TRIGGER);
 			}
 		}
 	}
@@ -116,7 +128,10 @@ public class EventHandler {
 					} else {
 						int tick = ticks.get(uuid);
 						if (tick == t) {
-							player.sendMessage(new TextComponentTranslation("technology.noise.whisper1"));
+							TextComponentBase whisper = new TextComponentTranslation("technology.noise.whisper1");
+							whisper.getStyle().setColor(TextFormatting.DARK_GRAY).setItalic(true);
+
+							player.sendMessage(whisper);
 							player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						}
 						if (!(tick > t))
@@ -128,23 +143,12 @@ public class EventHandler {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
 					if (!stack.isEmpty() && stack.getItem() == Items.ENCHANTED_BOOK) {
-						TechnologyHandler.ENCHANTING.setUnlocked(player);
-
-						player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.ENCHANTING.getLocalizedName(true)));
-						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-						PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
+						unlock(TechnologyHandler.ENCHANTING, player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 						break;
 					}
 				}
-			} else if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.ENDER_KNOWLEDGE.canResearchIgnoreCustomUnlock(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world)) {
-				TechnologyHandler.ENDER_KNOWLEDGE.setUnlocked(player);
-
-				player.sendMessage(new TextComponentTranslation("technology.complete.unlock", TechnologyHandler.ENDER_KNOWLEDGE.getLocalizedName(true)));
-				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-				PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
-			}
+			} else if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.ENDER_KNOWLEDGE.canResearchIgnoreCustomUnlock(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world))
+				unlock(TechnologyHandler.ENDER_KNOWLEDGE, player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 		}
 	}
 
@@ -153,13 +157,13 @@ public class EventHandler {
 	public void onItemTooltip(ItemTooltipEvent evt) {
 		Item item = evt.getItemStack().getItem();
 		if (item == FTGUAPI.i_lookingGlass) {
-			NBTTagList blocks = TechnologyUtil.getItemData(evt.getItemStack()).getTagList("FTGU", NBT.TAG_STRING);
+			List<ItemStack> blocks = ItemLookingGlass.getInspected(evt.getItemStack());
 			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				for (int i = 0; i < blocks.tagCount(); i++)
-					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + I18n.format(blocks.getStringTagAt(i) + ".name"));
-				if (blocks.tagCount() > 0)
+				for (ItemStack block : blocks)
+					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + block.getDisplayName());
+				if (blocks.size() > 0)
 					evt.getToolTip().add("");
-			} else if (blocks.tagCount() > 0) {
+			} else if (blocks.size() > 0) {
 				evt.getToolTip().add(I18n.format("item.looking_glass.shift"));
 				evt.getToolTip().add("");
 			}
@@ -170,8 +174,8 @@ public class EventHandler {
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getLocalizedName(false).getFormattedText()));
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getFormattedText());
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getLocalizedName(false).getUnformattedText()));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getUnformattedText());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
 			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
@@ -180,8 +184,8 @@ public class EventHandler {
 				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());
 				String k = can ? "" : "" + TextFormatting.OBFUSCATED;
 
-				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true).getFormattedText());
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getFormattedText());
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true).getUnformattedText());
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getUnformattedText());
 
 				if (can && !tech.isResearched(evt.getEntityPlayer())) {
 					evt.getToolTip().add("");

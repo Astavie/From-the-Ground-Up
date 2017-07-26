@@ -26,10 +26,9 @@ technology.toast.theory=Theory Complete!
 
 chat.type.technology=%s has researched %s
 
-technology.complete.already="%s" has already been researched
-technology.complete.flawless="%s" researched!
+technology.complete.already=%s has already been researched
 technology.complete.understand=You do not understand this technology
-technology.complete.unlock=Unlocked the research for "%s"!
+technology.complete.unlock=Unlocked the research for %s!
 
 technology.decipher.already="%s" has already been looked at
 technology.decipher.flawless=You find hidden meaning in this block
@@ -132,8 +131,8 @@ technology.player_transportation.desc=Why run when you can ride?
 technology.item_transportation.name=Item Transportation
 technology.item_transportation.desc=Rails or hoppers, which do you prefer?
 
-technology.noise.whisper1=\u00a76I hear whispers of an end...
-technology.noise.whisper2=\u00a76I hear whispers of The End!
+technology.noise.whisper1=I hear whispers of an end...
+technology.noise.whisper2=I hear whispers of The End!
 
 research.stonecraft.group.pickaxe=...block breaker...
 research.stonecraft.group.unsmooth_stone=...material to craft with...

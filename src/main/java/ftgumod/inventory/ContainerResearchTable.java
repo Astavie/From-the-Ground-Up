@@ -143,7 +143,7 @@ public class ContainerResearchTable extends Container {
 							}
 
 							Decipher d = TechnologyHandler.unlock.get(recipe);
-							List<String> items = ItemLookingGlass.getItems(inventorySlots.get(glass).getStack());
+							List<String> items = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
 							for (DecipherGroup g : d.list) {
 								boolean perms = false;
 								for (ItemStack s : g.unlock)

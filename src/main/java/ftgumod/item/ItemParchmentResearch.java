@@ -39,7 +39,7 @@ public class ItemParchmentResearch extends Item {
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already)
-						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getLocalizedName(true)));
+						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getDisplayText()));
 				} else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
 					MinecraftForge.EVENT_BUS.post(event);

@@ -9,6 +9,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentBase;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -67,8 +70,14 @@ public class TechnologyUtil {
 		return nbt;
 	}
 
+	public static TextComponentBase getDisplayName(ItemStack stack) {
+		if (stack.hasDisplayName())
+			return new TextComponentString(stack.getDisplayName());
+		else return new TextComponentTranslation(stack.getUnlocalizedName());
+	}
+
 	public static boolean hasRecipe(ItemStack stack) {
-		for (IRecipe r: ForgeRegistries.RECIPES) {
+		for (IRecipe r : ForgeRegistries.RECIPES) {
 			if (r != null && OreDictionary.itemMatches(r.getRecipeOutput(), stack, false) && (!r.getRecipeOutput().hasTagCompound() || ItemStack.areItemStackTagsEqual(r.getRecipeOutput(), stack)))
 				return true;
 		}

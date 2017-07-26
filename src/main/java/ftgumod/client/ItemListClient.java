@@ -1,5 +1,6 @@
-package ftgumod;
+package ftgumod.client;
 
+import ftgumod.ItemList;
 import ftgumod.technology.TechnologyUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -10,12 +11,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 @SideOnly(Side.CLIENT)
-public class ItemListWildcard extends ItemList {
+public class ItemListClient extends ItemList {
 
-	public ItemListWildcard(Object obj) {
+	public ItemListClient(Object obj) {
 		super(obj);
-		for (int i = 0; i < size(); i++) {
-			ItemStack stack = get(i);
+		for (int i = 0; i < list.size(); i++) {
+			ItemStack stack = list.get(i);
 			if (stack.getMetadata() == OreDictionary.WILDCARD_VALUE) {
 				Item item = stack.getItem();
 				for (CreativeTabs tab : item.getCreativeTabs())

@@ -3,7 +3,7 @@ package ftgumod.client.gui;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.ItemList;
-import ftgumod.ItemListWildcard;
+import ftgumod.client.ItemListClient;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestTechMessage;
@@ -58,7 +58,7 @@ public class GuiResearchBook extends GuiScreen {
 
 	private EntityPlayer player;
 	private Technology selected;
-	private NonNullList<ItemListWildcard> unlock;
+	private NonNullList<ItemListClient> unlock;
 	private int num = 4;
 	private int pages;
 
@@ -108,7 +108,7 @@ public class GuiResearchBook extends GuiScreen {
 			// Load Items
 			unlock = NonNullList.create();
 			for (ItemList s : selected.getUnlock()) {
-				ItemListWildcard l = new ItemListWildcard(s);
+				ItemListClient l = new ItemListClient(s);
 				if (l.size() > 0)
 					unlock.add(l);
 			}
@@ -405,7 +405,7 @@ public class GuiResearchBook extends GuiScreen {
 				if (n >= unlock.size())
 					break;
 
-				ItemListWildcard list = unlock.get(n);
+				ItemListClient list = unlock.get(n);
 
 				long tick = mc.world.getWorldTime() / 20;
 				int index = (int) (tick % list.size());
@@ -441,8 +441,8 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			if (state == 0) {
-				String s = selected.getLocalizedName(true).getFormattedText();
-				String s1 = selected.getDescription().getFormattedText();
+				String s = selected.getLocalizedName(true).getUnformattedText();
+				String s1 = selected.getDescription().getUnformattedText();
 
 				int i7 = x + 12;
 				int k7 = y - 4;
@@ -458,12 +458,12 @@ public class GuiResearchBook extends GuiScreen {
 					fontRenderer.drawStringWithShadow(I18n.format("technology.researched"), i7, k7 + i9 + 4, 0xff9090ff);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getLocalizedName(true).getFormattedText();
+				String s1 = selected.getLocalizedName(true).getUnformattedText();
 				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
 				int y1 = (height - imageHeight) / 2;
 				fontRenderer.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);
 
-				String s2 = selected.getDescription().getFormattedText();
+				String s2 = selected.getDescription().getUnformattedText();
 				int x2 = width / 2;
 				int y2 = (height - imageHeight) / 2;
 				drawSplitString(s2, x2, y2 + 32, split, 0xffa0a0a0, true);

@@ -4,12 +4,12 @@ import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
-import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.technology.TechnologyHandler;
+import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -67,7 +67,7 @@ public class GuiResearchTable extends GuiContainer {
 						if (!table.inventorySlots.get(table.glass).getHasStack()) {
 							hint = TextFormatting.OBFUSCATED + hint;
 						} else {
-							List<String> items = ItemLookingGlass.getItems(table.inventorySlots.get(table.glass).getStack());
+							List<String> items = ItemLookingGlass.getInspected(table.inventorySlots.get(table.glass).getStack());
 							boolean perms = false;
 							for (ItemStack stack : g.unlock)
 								for (String t : items)

@@ -28,7 +28,7 @@ public class ToastTechnology implements IToast {
 		gui.drawTexturedModalRect(0, 0, 0, 0, 160, 32);
 
 		String display = I18n.format("technology.toast." + (tech.isTheory() ? "theory" : "technology"));
-		String title = tech.getLocalizedName(false).getFormattedText();
+		String title = tech.getLocalizedName(false).getUnformattedText();
 
 		List<String> list = gui.getMinecraft().fontRenderer.listFormattedStringToWidth(title, 125);
 

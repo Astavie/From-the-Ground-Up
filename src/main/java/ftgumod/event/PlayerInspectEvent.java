@@ -14,13 +14,13 @@ import java.util.List;
 public class PlayerInspectEvent extends PlayerEvent {
 
 	private final EnumHand hand;
-	private final List<String> glass;
+	private final List<ItemStack> glass;
 	private final BlockPos pos;
 	private final EnumFacing face;
 	private final ItemStack block;
 	private boolean useful;
 
-	public PlayerInspectEvent(EntityPlayer player, EnumHand hand, List<String> glass, BlockPos pos, EnumFacing face, ItemStack block, boolean useful) {
+	public PlayerInspectEvent(EntityPlayer player, EnumHand hand, List<ItemStack> glass, BlockPos pos, EnumFacing face, ItemStack block, boolean useful) {
 		super(player);
 		this.hand = hand;
 		this.glass = glass;
@@ -47,7 +47,7 @@ public class PlayerInspectEvent extends PlayerEvent {
 		return getEntityPlayer().world;
 	}
 
-	public List<String> getInspectedList() {
+	public List<ItemStack> getInspected() {
 		return glass;
 	}
 
