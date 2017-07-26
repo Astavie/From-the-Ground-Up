@@ -20,6 +20,7 @@ public class TechnologyHandler {
 	public static final Map<PAGE, Set<Technology>> technologies = new HashMap<>();
 	public static final Set<String> vanilla = new HashSet<>();
 	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<>();
+
 	public static Technology BASIC_CRAFTING;
 	public static Technology WOODWORKING;
 	public static Technology WRITING;
@@ -52,6 +53,7 @@ public class TechnologyHandler {
 	public static Technology GLOWING_EYES;
 	public static Technology ENDER_KNOWLEDGE;
 	public static Technology UNDECIPHERED_RESEARCH;
+
 	private static boolean minecraft = false;
 	private static int ID = 0;
 

@@ -23,7 +23,7 @@ public class CraftingListener implements IContainerListener {
 			if (!stack.isEmpty())
 				MinecraftForge.EVENT_BUS.post(event);
 
-			slot.inventory.setInventorySlotContents(0, event.isLocked() ? ItemStack.EMPTY : stack);
+			slot.inventory.setInventorySlotContents(0, event.isCanceled() ? stack : ItemStack.EMPTY);
 		}
 	}
 

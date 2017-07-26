@@ -43,7 +43,7 @@ public class ItemParchmentResearch extends Item {
 				} else {
 					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
 					MinecraftForge.EVENT_BUS.post(event);
-					if (event.canResearch()) {
+					if (!event.isCanceled()) {
 						t.setResearched(player);
 
 						if (player.world.getGameRules().getBoolean("announceAdvancements"))

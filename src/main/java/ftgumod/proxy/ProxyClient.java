@@ -4,7 +4,7 @@ import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.client.GuiHandlerClient;
 import ftgumod.client.gui.toast.ToastTechnology;
-import ftgumod.compat.CompatJEI;
+import ftgumod.compat.jei.CompatJEI;
 import ftgumod.technology.Technology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;

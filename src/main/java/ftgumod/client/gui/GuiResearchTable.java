@@ -67,12 +67,14 @@ public class GuiResearchTable extends GuiContainer {
 						if (!table.inventorySlots.get(table.glass).getHasStack()) {
 							hint = TextFormatting.OBFUSCATED + hint;
 						} else {
-							List<String> items = ItemLookingGlass.getInspected(table.inventorySlots.get(table.glass).getStack());
+							List<ItemStack> items = ItemLookingGlass.getInspected(table.inventorySlots.get(table.glass).getStack());
 							boolean perms = false;
-							for (ItemStack stack : g.unlock)
-								for (String t : items)
-									if ((stack.isEmpty() && t.equals("tile.null")) || (!stack.isEmpty() && stack.getItem().getUnlocalizedName(stack).equals(t)))
-										perms = true;
+
+							for (ItemStack t : items)
+								if (g.unlock.contains(t)) {
+									perms = true;
+									break;
+								}
 							if (!perms)
 								hint = TextFormatting.OBFUSCATED + hint;
 						}

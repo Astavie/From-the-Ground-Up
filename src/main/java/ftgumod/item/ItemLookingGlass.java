@@ -1,11 +1,7 @@
 package ftgumod.item;
 
-import ftgumod.Decipher;
-import ftgumod.Decipher.DecipherGroup;
 import ftgumod.event.PlayerInspectEvent;
-import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
-import ftgumod.technology.recipe.ResearchRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +19,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
-import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
@@ -65,24 +60,10 @@ public class ItemLookingGlass extends Item {
 					return EnumActionResult.SUCCESS;
 				}
 
-			boolean need = false;
-
-			loop:
-			for (ResearchRecipe r : TechnologyHandler.unlock.keySet())
-				if (r.output.canResearch(player)) {
-					Decipher d = TechnologyHandler.unlock.get(r);
-					for (DecipherGroup g : d.list)
-						for (ItemStack s : g.unlock)
-							if ((!s.isEmpty() && s.getMetadata() == OreDictionary.WILDCARD_VALUE && s.getItem() == stack.getItem()) || ItemStack.areItemStacksEqual(s, stack)) {
-								need = true;
-								break loop;
-							}
-				}
-
-			PlayerInspectEvent event = new PlayerInspectEvent(player, hand, items, pos, face, stack, need);
+			PlayerInspectEvent event = new PlayerInspectEvent(player, hand, items, pos, face, stack);
 			MinecraftForge.EVENT_BUS.post(event);
 
-			if (!event.isUseful()) {
+			if (event.isCanceled()) {
 				if (!world.isRemote) {
 					player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
 					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);

@@ -103,7 +103,7 @@ public class EventHandler {
 		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer().getUniqueID()) > t) {
 			EntityPlayer player = evt.getEntityPlayer();
 			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
-				evt.setUseful(true);
+				evt.setCanceled(false);
 
 				TextComponentBase whisper = new TextComponentTranslation("technology.noise.whisper2");
 				whisper.getStyle().setColor(TextFormatting.DARK_GRAY).setItalic(true);
@@ -284,7 +284,7 @@ public class EventHandler {
 						if (!stack.isEmpty())
 							MinecraftForge.EVENT_BUS.post(event);
 
-						this.stack = event.isLocked() ? ItemStack.EMPTY : stack;
+						this.stack = event.isCanceled() ? stack : ItemStack.EMPTY;
 						s.inventory.setInventorySlotContents(0, this.stack);
 					}
 					return;

@@ -34,13 +34,11 @@ public class ContainerResearchTable extends Container {
 	private final int sizeInventory;
 
 	public ResearchRecipe recipe = null;
-
-	private int feather;
-	private int parchment;
-
 	public int combine;
 	public int output;
 	public int glass;
+	private int feather;
+	private int parchment;
 
 	public ContainerResearchTable(TileEntityInventory tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
@@ -143,13 +141,14 @@ public class ContainerResearchTable extends Container {
 							}
 
 							Decipher d = TechnologyHandler.unlock.get(recipe);
-							List<String> items = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
+							List<ItemStack> items = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
 							for (DecipherGroup g : d.list) {
 								boolean perms = false;
-								for (ItemStack s : g.unlock)
-									for (String t : items)
-										if ((s.isEmpty() && t.equals("tile.null")) || (!s.isEmpty() && s.getItem().getUnlocalizedName(s).equals(t)))
-											perms = true;
+								for (ItemStack t : items)
+									if (g.unlock.contains(t)) {
+										perms = true;
+										break;
+									}
 								if (!perms) {
 									inventorySlots.get(output).putStack(ItemStack.EMPTY);
 									return;
