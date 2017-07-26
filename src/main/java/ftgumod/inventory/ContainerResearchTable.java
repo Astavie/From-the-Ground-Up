@@ -115,7 +115,7 @@ public class ContainerResearchTable extends Container {
 					Technology tech = recipe.output;
 					EntityPlayer player = invPlayer.player;
 
-					if (tech.researched || tech.isResearched(player) || (tech.prev != null && !tech.prev.isResearched(player))) {
+					if (!tech.canResearch(player)) {
 						recipe = null;
 					}
 
@@ -135,8 +135,7 @@ public class ContainerResearchTable extends Container {
 
 				if (recipe != null && recipe == this.recipe) {
 					Technology tech = recipe.output;
-					EntityPlayer player = invPlayer.player;
-					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
+					if (tech.canResearch(invPlayer.player)) {
 						if (TechnologyHandler.hasDecipher(recipe)) {
 							if (!inventorySlots.get(glass).getHasStack()) {
 								inventorySlots.get(output).putStack(ItemStack.EMPTY);

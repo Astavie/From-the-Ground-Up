@@ -5,6 +5,7 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
+import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,7 +15,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @SideOnly(Side.CLIENT)
-@mezz.jei.api.JEIPlugin
+@JEIPlugin
 public class CompatJEI implements ICompat, IModPlugin {
 
 	private static IIngredientRegistry registry;
@@ -39,17 +40,17 @@ public class CompatJEI implements ICompat, IModPlugin {
 			for (int i : add) {
 				Technology t = TechnologyHandler.getTechnology(i);
 				if (t != null)
-					for (ItemList list : t.getItems())
+					for (ItemList list : t.getUnlock())
 						registry.removeIngredientsAtRuntime(ItemStack.class, list.getRaw());
 			}
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
 				if (tech != null) {
-					if (tech.researched)
+					if (tech.isResearched())
 						continue;
 
-					for (ItemList list : tech.getItems())
+					for (ItemList list : tech.getUnlock())
 						registry.addIngredientsAtRuntime(ItemStack.class, list.getRaw());
 				}
 			}

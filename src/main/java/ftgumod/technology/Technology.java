@@ -8,10 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.RecipeBookServer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.*;
 import net.minecraft.util.text.event.HoverEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,38 +19,42 @@ import java.util.List;
 
 public class Technology {
 
-	public static final Logger LOGGER = LogManager.getLogger();
+	private static final Logger LOGGER = LogManager.getLogger();
 
-	public final boolean hide;
-	public final int x;
-	public final int y;
-	public final int level;
+	private final boolean hide;
+
+	private final int x;
+	private final int y;
+	private final int level;
+
 	private final int ID;
-	public ItemStack icon;
-	public List<ItemList> item;
-	public Technology prev;
-	public Technology[] secret;
-	public PAGE page;
-	public boolean researched = false;
+	private final TextComponentBase displayText;
+	private final boolean researched;
+	private ItemStack icon;
+	private List<ItemList> item;
+	private Technology prev;
+	private Technology[] secret;
+	private PAGE page;
 	private int next = 0;
 	private boolean customUnlock = false;
 	private String name;
 
-	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
-		this(page, prev, null, icon, false, x, y, name, item);
+	public Technology(PAGE page, boolean researched, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
+		this(page, researched, prev, null, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
-		this(page, prev, null, icon, hide, x, y, name, item);
+	public Technology(PAGE page, boolean researched, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+		this(page, researched, prev, null, icon, hide, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
-		this(page, prev, secret, icon, false, x, y, name, item);
+	public Technology(PAGE page, boolean researched, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
+		this(page, researched, prev, secret, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+	public Technology(PAGE page, boolean researched, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		ID = TechnologyHandler.getID();
 
+		this.researched = researched;
 		this.x = x;
 		this.y = y;
 		this.name = name;
@@ -74,6 +75,63 @@ public class Technology {
 		for (Object o : item) {
 			this.item.add(new ItemList(TechnologyUtil.toItem(o)));
 		}
+
+		displayText = new TextComponentString("[");
+		displayText.getStyle().setColor(TextFormatting.GREEN);
+
+		ITextComponent itextcomponent = getLocalizedName(true);
+		ITextComponent itextcomponent1 = new TextComponentString("");
+		ITextComponent itextcomponent2 = itextcomponent.createCopy();
+
+		itextcomponent2.getStyle().setColor(TextFormatting.GREEN);
+
+		itextcomponent1.appendSibling(itextcomponent2);
+		itextcomponent1.appendText("\n");
+		itextcomponent1.appendSibling(getDescription());
+
+		itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, itextcomponent1));
+
+		displayText.appendSibling(itextcomponent);
+		displayText.appendText("]");
+	}
+
+	public static Logger getLogger() {
+		return LOGGER;
+	}
+
+	public PAGE getPage() {
+		return page;
+	}
+
+	public ItemStack getIcon() {
+		return icon;
+	}
+
+	public Technology getPrevious() {
+		return prev;
+	}
+
+	public List<ItemList> getUnlock() {
+		return item;
+	}
+
+	public boolean isHidden() {
+		return hide;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
+	}
+
+	/**
+	 * @return whether or not this technology is automatically researched when a player joins the world
+	 */
+	public boolean isResearched() {
+		return researched;
 	}
 
 	public void setCustomUnlock(boolean b) {
@@ -115,39 +173,17 @@ public class Technology {
 		return name;
 	}
 
-	public TextComponentTranslation getLocalizedName(boolean suffix) {
+	public TextComponentBase getLocalizedName(boolean suffix) {
 		TextComponentTranslation name = new TextComponentTranslation("technology." + this.name + ".name");
 		return suffix ? new TextComponentTranslation(isTheory() ? "technology.theory" : "technology.technology", name) : name;
 	}
 
-	public TextComponentTranslation getDescription() {
+	public TextComponentBase getDescription() {
 		return new TextComponentTranslation("technology." + name + ".desc");
 	}
 
-	public TextComponentString getDisplayText() {
-		TextComponentString displayText = new TextComponentString("[");
-		displayText.getStyle().setColor(TextFormatting.GREEN);
-
-		ITextComponent itextcomponent = getLocalizedName(true);
-		ITextComponent itextcomponent1 = new TextComponentString("");
-		ITextComponent itextcomponent2 = itextcomponent.createCopy();
-
-		itextcomponent2.getStyle().setColor(TextFormatting.GREEN);
-
-		itextcomponent1.appendSibling(itextcomponent2);
-		itextcomponent1.appendText("\n");
-		itextcomponent1.appendSibling(getDescription());
-
-		itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, itextcomponent1));
-
-		displayText.appendSibling(itextcomponent);
-		displayText.appendText("]");
-
+	public TextComponentBase getDisplayText() {
 		return displayText;
-	}
-
-	public List<ItemList> getItems() {
-		return item;
 	}
 
 	public int getID() {
@@ -155,8 +191,11 @@ public class Technology {
 	}
 
 	public boolean isResearched(EntityPlayer player) {
+		if (researched)
+			return true;
+
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		return cap != null && cap.isResearched(name) || researched;
+		return cap != null && cap.isResearched(name);
 	}
 
 	public boolean isUnlocked(EntityPlayer player) {

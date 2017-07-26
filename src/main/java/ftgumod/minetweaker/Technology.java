@@ -28,22 +28,22 @@ public class Technology {
 	static final String name = FTGUTweaker.name + " Technology";
 
 	@ZenMethod
-	public static void addTechnology(String page, String prev, IItemStack icon, int x, int y, String name, IIngredient[] item) {
-		addTechnology(page, prev, null, icon, false, x, y, name, item);
+	public static void addTechnology(String page, boolean researched, String prev, IItemStack icon, int x, int y, String name, IIngredient[] item) {
+		addTechnology(page, researched, prev, null, icon, false, x, y, name, item);
 	}
 
 	@ZenMethod
-	public static void addTechnology(String page, String prev, IItemStack icon, boolean hide, int x, int y, String name, IIngredient[] item) {
-		addTechnology(page, prev, null, icon, hide, x, y, name, item);
+	public static void addTechnology(String page, boolean researched, String prev, IItemStack icon, boolean hide, int x, int y, String name, IIngredient[] item) {
+		addTechnology(page, researched, prev, null, icon, hide, x, y, name, item);
 	}
 
 	@ZenMethod
-	public static void addTechnology(String page, String prev, String[] secret, IItemStack icon, int x, int y, String name, IIngredient[] item) {
-		addTechnology(page, prev, secret, icon, false, x, y, name, item);
+	public static void addTechnology(String page, boolean researched, String prev, String[] secret, IItemStack icon, int x, int y, String name, IIngredient[] item) {
+		addTechnology(page, researched, prev, secret, icon, false, x, y, name, item);
 	}
 
 	@ZenMethod
-	public static void addTechnology(String page, String prev, String[] secret, IItemStack icon, boolean hide, int x, int y, String name, IIngredient[] item) {
+	public static void addTechnology(String page, boolean researched, String prev, String[] secret, IItemStack icon, boolean hide, int x, int y, String name, IIngredient[] item) {
 		ftgumod.technology.Technology p = null;
 		if (prev != null) {
 			p = TechnologyHandler.getTechnology(prev);
@@ -69,9 +69,9 @@ public class Technology {
 				ls2[i] = ls1.get(i);
 			}
 
-			MineTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(PAGE.get(page), p, ls2, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
+			MineTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(PAGE.get(page), researched, p, ls2, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
 		} else {
-			MineTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(PAGE.get(page), p, null, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
+			MineTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(PAGE.get(page), researched, p, null, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
 		}
 	}
 
@@ -109,7 +109,7 @@ public class Technology {
 			return;
 		}
 
-		MineTweakerAPI.apply(new ClearCollection(name + " Unlock", p.item));
+		MineTweakerAPI.apply(new ClearCollection(name + " Unlock", p.getUnlock()));
 	}
 
 	private static class AddTech extends BaseInterfaceAdd<ftgumod.technology.Technology> {
@@ -158,7 +158,7 @@ public class Technology {
 
 		@Override
 		public boolean remove(ftgumod.technology.Technology recipe) {
-			if (!TechnologyHandler.technologies.get(recipe.page).remove(recipe))
+			if (!TechnologyHandler.technologies.get(recipe.getPage()).remove(recipe))
 				return false;
 
 			idea = TechnologyHandler.getIdea(recipe);
@@ -175,7 +175,7 @@ public class Technology {
 	private static class AddItems extends BaseInterfaceAdd<ItemList> {
 
 		protected AddItems(Collection<ItemList> recipes, ftgumod.technology.Technology tech) {
-			super(name + " Unlock", recipes, new BaseCollection<>(tech.item));
+			super(name + " Unlock", recipes, new BaseCollection<>(tech.getUnlock()));
 		}
 
 		@Override

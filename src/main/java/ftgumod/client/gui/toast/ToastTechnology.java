@@ -51,7 +51,7 @@ public class ToastTechnology implements IToast {
 		}
 
 		RenderHelper.enableGUIStandardItemLighting();
-		gui.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(null, tech.icon, 8, 8);
+		gui.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(null, tech.getIcon(), 8, 8);
 
 		return delta >= 5000L ? IToast.Visibility.HIDE : IToast.Visibility.SHOW;
 	}

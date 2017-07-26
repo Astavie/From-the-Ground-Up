@@ -71,8 +71,8 @@ public class GuiResearchBook extends GuiScreen {
 		currentPage = 0;
 
 		int i = 141;
-		xScrollO = xScrollP = xScrollTarget = TechnologyHandler.BASIC_CRAFTING.x * 24 - i / 2 - 12;
-		yScrollO = yScrollP = yScrollTarget = TechnologyHandler.BASIC_CRAFTING.y * 24 - i / 2 - 12;
+		xScrollO = xScrollP = xScrollTarget = -i / 2 - 12;
+		yScrollO = yScrollP = yScrollTarget = -i / 2 - 12;
 
 		PacketDispatcher.sendToServer(new RequestTechMessage());
 	}
@@ -107,7 +107,7 @@ public class GuiResearchBook extends GuiScreen {
 
 			// Load Items
 			unlock = NonNullList.create();
-			for (ItemList s : selected.item) {
+			for (ItemList s : selected.getUnlock()) {
 				ItemListWildcard l = new ItemListWildcard(s);
 				if (l.size() > 0)
 					unlock.add(l);
@@ -300,14 +300,14 @@ public class GuiResearchBook extends GuiScreen {
 				for (Technology t1 : tech) {
 					if (t1.hasCustomUnlock() && !t1.isResearched(player) && !t1.isUnlocked(player))
 						continue;
-					if (t1.hide && !t1.hasCustomUnlock() && !t1.isResearched(player))
+					if (t1.isHidden() && !t1.hasCustomUnlock() && !t1.isResearched(player))
 						continue;
-					if (t1.prev == null || !tech.contains(t1.prev))
+					if (t1.getPrevious() == null || !tech.contains(t1.getPrevious()))
 						continue;
-					int xStart = (t1.x * 24 - i) + 11;
-					int yStart = (t1.y * 24 - j) + 11;
-					int xStop = (t1.prev.x * 24 - i) + 11;
-					int yStop = (t1.prev.y * 24 - j) + 11;
+					int xStart = (t1.getX() * 24 - i) + 11;
+					int yStart = (t1.getY() * 24 - j) + 11;
+					int xStop = (t1.getPrevious().getX() * 24 - i) + 11;
+					int yStop = (t1.getPrevious().getY() * 24 - j) + 11;
 
 					boolean flag = t1.isResearched(player);
 					boolean flag1 = t1.canResearchIgnoreResearched(player);
@@ -348,10 +348,10 @@ public class GuiResearchBook extends GuiScreen {
 				for (Technology t2 : tech) {
 					if (t2.hasCustomUnlock() && !t2.isResearched(player) && !t2.isUnlocked(player))
 						continue;
-					if (t2.hide && !t2.hasCustomUnlock() && !t2.isResearched(player))
+					if (t2.isHidden() && !t2.hasCustomUnlock() && !t2.isResearched(player))
 						continue;
-					int l6 = t2.x * 24 - i;
-					int j7 = t2.y * 24 - j;
+					int l6 = t2.getX() * 24 - i;
+					int j7 = t2.getY() * 24 - j;
 					if (l6 < -24 || j7 < -24 || l6 > 224F * zoom || j7 > 155F * zoom)
 						continue;
 
@@ -380,7 +380,7 @@ public class GuiResearchBook extends GuiScreen {
 
 					GlStateManager.disableLighting();
 					GlStateManager.enableCull();
-					itemRender.renderItemAndEffectIntoGUI(t2.icon, l6 + 3, j7 + 3);
+					itemRender.renderItemAndEffectIntoGUI(t2.getIcon(), l6 + 3, j7 + 3);
 					GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 					GlStateManager.disableLighting();
 

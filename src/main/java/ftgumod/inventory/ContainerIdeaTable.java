@@ -100,8 +100,7 @@ public class ContainerIdeaTable extends Container {
 
 				if (recipe != null) {
 					Technology tech = recipe.output;
-					EntityPlayer player = invPlayer.player;
-					if (!tech.researched && !tech.isResearched(player) && (tech.prev == null || tech.prev.isResearched(player))) {
+					if (tech.canResearch(invPlayer.player)) {
 						ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
 
 						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalizedName());

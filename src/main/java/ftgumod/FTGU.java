@@ -153,12 +153,6 @@ public class FTGU {
 		PROXY.init();
 
 		TechnologyHandler.init();
-
-		TechnologyHandler.BASIC_CRAFTING.researched = true;
-		TechnologyHandler.WOODWORKING.researched = true;
-		TechnologyHandler.WRITING.researched = true;
-		TechnologyHandler.WOODEN_TOOLS.researched = true;
-		TechnologyHandler.RESEARCH.researched = true;
 	}
 
 	@Mod.EventHandler
