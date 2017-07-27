@@ -109,7 +109,7 @@ public class Technology {
 			return;
 		}
 
-		MineTweakerAPI.apply(new ClearCollection(name + " Unlock", p.getUnlock()));
+		MineTweakerAPI.apply(new ClearCollection<>(name + " Unlock", p.getUnlock()));
 	}
 
 	private static class AddTech extends BaseInterfaceAdd<ftgumod.technology.Technology> {

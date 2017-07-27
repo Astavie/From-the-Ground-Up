@@ -67,6 +67,19 @@ public class EventHandler {
 	private int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
+	public static void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
+		tech.setUnlocked(player);
+
+		if (!player.world.isRemote) {
+			player.sendMessage(new TextComponentTranslation("technology.complete.unlock", tech.getDisplayText()));
+			player.world.playSound(null, player.getPosition(), sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+			FTGUAPI.c_technologyUnlocked.trigger((EntityPlayerMP) player, tech);
+
+			PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
+		}
+	}
+
 	private boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
 		int x = pos.getX();
 		int y = pos.getY();
@@ -85,17 +98,6 @@ public class EventHandler {
 			}
 		}
 		return false;
-	}
-
-	public static void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
-		tech.setUnlocked(player);
-
-		if (!player.world.isRemote) {
-			player.sendMessage(new TextComponentTranslation("technology.complete.unlock", tech.getDisplayText()));
-			player.world.playSound(null, player.getPosition(), sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-			PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
-		}
 	}
 
 	@SubscribeEvent
@@ -221,7 +223,7 @@ public class EventHandler {
 			replaceRecipeBook((EntityPlayerMP) evt.player);
 
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
-			inv.addListener(new CraftingListener(evt.player));
+			inv.addListener(new CraftingListener((EntityPlayerMP) evt.player));
 
 			ticks.remove(evt.player.getUniqueID());
 
@@ -248,7 +250,7 @@ public class EventHandler {
 			replaceRecipeBook((EntityPlayerMP) evt.getEntityPlayer());
 
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
-			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
 
 			ticks.remove(evt.getOriginal().getUniqueID());
 		}
@@ -258,7 +260,7 @@ public class EventHandler {
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
 		if (!evt.getEntity().world.isRemote) {
 			Container inv = evt.getEntityPlayer().openContainer;
-			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
 		}
 	}
 
@@ -266,7 +268,7 @@ public class EventHandler {
 	public void onPlayerCloseContainer(PlayerContainerEvent.Close evt) {
 		if (!evt.getEntity().world.isRemote) {
 			Container inv = evt.getEntityPlayer().openContainer;
-			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
+			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
 		}
 	}
 
@@ -279,13 +281,15 @@ public class EventHandler {
 			for (Slot s : inv.inventorySlots) {
 				if (s.inventory instanceof InventoryCraftResult) {
 					ItemStack stack = s.inventory.getStackInSlot(0);
-					if (stack != this.stack) {
+					if (stack.isEmpty())
+						this.stack = stack;
+					else if (stack != this.stack) {
 						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack, ((InventoryCraftResult) s.inventory).getRecipeUsed());
-						if (!stack.isEmpty())
-							MinecraftForge.EVENT_BUS.post(event);
+						MinecraftForge.EVENT_BUS.post(event);
 
-						this.stack = event.isCanceled() ? stack : ItemStack.EMPTY;
-						s.inventory.setInventorySlotContents(0, this.stack);
+						if (!event.isCanceled())
+							s.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
+						this.stack = s.inventory.getStackInSlot(0);
 					}
 					return;
 				}

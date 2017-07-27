@@ -6,21 +6,20 @@ import minetweaker.IUndoableAction;
 import java.util.Collection;
 import java.util.HashSet;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
-public class ClearCollection implements IUndoableAction {
+public class ClearCollection<T> implements IUndoableAction {
 
 	private final String name;
-	private final Collection collection;
-	private Collection removed = new HashSet();
+	private final Collection<T> collection;
+	private Collection<T> removed = new HashSet<>();
 
-	public ClearCollection(String name, Collection<?> collection) {
+	public ClearCollection(String name, Collection<T> collection) {
 		this.name = name;
 		this.collection = collection;
 	}
 
 	@Override
 	public void apply() {
-		removed = new HashSet(collection);
+		removed = new HashSet<>(collection);
 		collection.clear();
 	}
 
@@ -47,7 +46,7 @@ public class ClearCollection implements IUndoableAction {
 	@Override
 	public void undo() {
 		collection.addAll(removed);
-		removed = new HashSet();
+		removed = new HashSet<>();
 	}
 
 }

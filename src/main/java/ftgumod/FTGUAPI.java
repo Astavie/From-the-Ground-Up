@@ -2,6 +2,9 @@ package ftgumod;
 
 import ftgumod.block.BlockIdeaTable;
 import ftgumod.block.BlockResearchTable;
+import ftgumod.criterion.TriggerInspect;
+import ftgumod.criterion.TriggerItemLocked;
+import ftgumod.criterion.TriggerTechnology;
 import ftgumod.item.*;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -25,6 +28,11 @@ public final class FTGUAPI {
 	public static final Item i_parchmentResearch = new ItemParchmentResearch(n_parchmentResearch);
 	public static final Item i_researchBook = new ItemResearchBook(n_researchBook);
 	public static final Item i_lookingGlass = new ItemLookingGlass(n_lookingGlass);
+
+	public static final TriggerTechnology c_technologyUnlocked = new TriggerTechnology("technology_unlocked");
+	public static final TriggerTechnology c_technologyResearched = new TriggerTechnology("technology_researched");
+	public static final TriggerItemLocked c_itemLocked = new TriggerItemLocked("item_locked");
+	public static final TriggerInspect c_inspect = new TriggerInspect("inspect");
 
 	static final ItemBlock i_ideaTable = new ItemBlock(b_ideaTable);
 	static final ItemBlock i_researchTable = new ItemBlock(b_researchTable);

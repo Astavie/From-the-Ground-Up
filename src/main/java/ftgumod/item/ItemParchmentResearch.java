@@ -51,6 +51,9 @@ public class ItemParchmentResearch extends Item {
 							player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), t.getDisplayText()));
 
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+						FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, t);
+
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t.getID()), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
 					} else

@@ -1,29 +1,37 @@
 package ftgumod;
 
 import ftgumod.event.PlayerLockEvent;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.MinecraftForge;
 
 public class CraftingListener implements IContainerListener {
 
-	private EntityPlayer player;
+	private EntityPlayerMP player;
 
-	CraftingListener(EntityPlayer player) {
+	CraftingListener(EntityPlayerMP player) {
 		this.player = player;
 	}
 
 	@Override
 	public void sendSlotContents(Container container, int index, ItemStack stack) {
+		if (stack.isEmpty())
+			return;
+
 		Slot slot = container.getSlot(index);
 		if (slot.inventory instanceof InventoryCraftResult) {
-			PlayerLockEvent event = new PlayerLockEvent(player, stack, ((InventoryCraftResult) slot.inventory).getRecipeUsed());
-			if (!stack.isEmpty())
-				MinecraftForge.EVENT_BUS.post(event);
+			IRecipe recipe = ((InventoryCraftResult) slot.inventory).getRecipeUsed();
 
-			slot.inventory.setInventorySlotContents(0, event.isCanceled() ? stack : ItemStack.EMPTY);
+			PlayerLockEvent event = new PlayerLockEvent(player, stack, recipe);
+			MinecraftForge.EVENT_BUS.post(event);
+
+			if (!event.isCanceled()) {
+				slot.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
+				FTGUAPI.c_itemLocked.trigger(player, recipe, stack);
+			}
 		}
 	}
 

@@ -12,6 +12,8 @@ import ftgumod.technology.CapabilityTechnology.Storage;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -32,9 +34,11 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +46,8 @@ import java.util.Map;
 public class FTGU {
 
 	public static final String MODID = "ftgumod";
+
+	private static final Field REGISTRY = ReflectionHelper.findField(CriteriaTriggers.class, "REGISTRY", "field_192139_s");
 
 	public static boolean headStart = false;
 	public static boolean moddedOnly = false;
@@ -71,6 +77,19 @@ public class FTGU {
 		ShapelessOreRecipe r = new ShapelessOreRecipe(getRecipeGroup(output), output, recipe);
 		ForgeRegistries.RECIPES.register(r.setRegistryName(r.getGroup()));
 		return r;
+	}
+
+	@SuppressWarnings({"unchecked"})
+	private void registerCriterion(ICriterionTrigger criterion) {
+		try {
+			Map<ResourceLocation, ICriterionTrigger<?>> registry = (Map<ResourceLocation, ICriterionTrigger<?>>) REGISTRY.get(null);
+			if (!registry.containsKey(criterion.getId()))
+				registry.put(criterion.getId(), criterion);
+			else
+				throw new IllegalArgumentException("Duplicate criterion id " + criterion.getId());
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void registerItem(Item item, String name) {
@@ -103,6 +122,10 @@ public class FTGU {
 		registerItem(FTGUAPI.i_parchmentResearch, FTGUAPI.n_parchmentResearch);
 		registerItem(FTGUAPI.i_researchBook, FTGUAPI.n_researchBook);
 		registerItem(FTGUAPI.i_lookingGlass, FTGUAPI.n_lookingGlass);
+
+		registerCriterion(FTGUAPI.c_technologyUnlocked);
+		registerCriterion(FTGUAPI.c_technologyResearched);
+		registerCriterion(FTGUAPI.c_itemLocked);
 
 		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl.class);
 

@@ -1,11 +1,13 @@
 package ftgumod.item;
 
+import ftgumod.FTGUAPI;
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.technology.TechnologyUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -75,6 +77,8 @@ public class ItemLookingGlass extends Item {
 			if (!world.isRemote) {
 				player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+				FTGUAPI.c_inspect.trigger((EntityPlayerMP) player, pos, state);
 			}
 
 			NBTTagCompound tag = TechnologyUtil.getItemData(item);

@@ -31,9 +31,8 @@ public class ItemListClient extends ItemList {
 			}
 		}
 
-		if (obj instanceof String && !list.isEmpty() && !I18n.hasKey(name + ".name")) {
+		if (obj instanceof String && !list.isEmpty() && !I18n.hasKey(name + ".name"))
 			name = list.get(0).getUnlocalizedName();
-		}
 	}
 
 	public int size() {
