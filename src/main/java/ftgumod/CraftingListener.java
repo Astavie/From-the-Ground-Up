@@ -10,7 +10,7 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class CraftingListener implements IContainerListener {
 
-	private EntityPlayerMP player;
+	private final EntityPlayerMP player;
 
 	CraftingListener(EntityPlayerMP player) {
 		this.player = player;

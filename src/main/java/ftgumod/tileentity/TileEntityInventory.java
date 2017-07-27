@@ -10,8 +10,8 @@ import net.minecraft.tileentity.TileEntityLockable;
 
 public abstract class TileEntityInventory extends TileEntityLockable implements IInventory {
 
-	private ItemStack[] stack;
-	private String name;
+	private final ItemStack[] stack;
+	private final String name;
 
 	public TileEntityInventory(int size, String name) {
 		stack = new ItemStack[size];

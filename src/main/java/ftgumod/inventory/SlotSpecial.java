@@ -6,8 +6,8 @@ import net.minecraft.item.ItemStack;
 
 public class SlotSpecial extends Slot {
 
-	private ItemStack[] special;
-	private int limit;
+	private final ItemStack[] special;
+	private final int limit;
 
 	public SlotSpecial(IInventory inventory, int index, int x, int y, int limit, ItemStack... special) {
 		super(inventory, index, x, y);

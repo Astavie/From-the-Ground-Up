@@ -29,32 +29,30 @@ public class Technology {
 
 	private final int ID;
 	private final TextComponentBase displayText;
-	private final boolean researched;
-	private ItemStack icon;
-	private List<ItemList> item;
-	private Technology prev;
-	private Technology[] secret;
-	private PAGE page;
+	private final ItemStack icon;
+	private final List<ItemList> item;
+	private final Technology prev;
+	private final Technology[] secret;
+	private final PAGE page;
+	private final String name;
 	private int next = 0;
 	private boolean customUnlock = false;
-	private String name;
 
-	public Technology(PAGE page, boolean researched, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
-		this(page, researched, prev, null, icon, false, x, y, name, item);
+	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
+		this(page, prev, null, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, boolean researched, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
-		this(page, researched, prev, null, icon, hide, x, y, name, item);
+	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+		this(page, prev, null, icon, hide, x, y, name, item);
 	}
 
-	public Technology(PAGE page, boolean researched, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
-		this(page, researched, prev, secret, icon, false, x, y, name, item);
+	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
+		this(page, prev, secret, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, boolean researched, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		ID = TechnologyHandler.getID();
 
-		this.researched = researched;
 		this.x = x;
 		this.y = y;
 		this.name = name;
@@ -127,13 +125,6 @@ public class Technology {
 		return y;
 	}
 
-	/**
-	 * @return whether or not this technology is automatically researched when a player joins the world
-	 */
-	public boolean isResearched() {
-		return researched;
-	}
-
 	public void setCustomUnlock(boolean b) {
 		customUnlock = b;
 	}
@@ -191,9 +182,6 @@ public class Technology {
 	}
 
 	public boolean isResearched(EntityPlayer player) {
-		if (researched)
-			return true;
-
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		return cap != null && cap.isResearched(name);
 	}

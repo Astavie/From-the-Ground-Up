@@ -47,13 +47,9 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
-				if (tech != null) {
-					if (tech.isResearched())
-						continue;
-
+				if (tech != null)
 					for (ItemList list : tech.getUnlock())
 						registry.addIngredientsAtRuntime(ItemStack.class, list.getRaw());
-				}
 			}
 
 			tech = new HashSet<>((Collection<Integer>) arg[0]);

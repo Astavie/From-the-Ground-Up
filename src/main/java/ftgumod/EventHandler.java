@@ -56,15 +56,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class EventHandler {
 
 	private static final Field BOOK = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192041_cq");
 
 	private final Map<UUID, Integer> ticks = new HashMap<>();
-	private int s = 5; // 5 seconds
-	private int t = s * 20; // 5 * 20 ticks
+	private final int s = 5; // 5 seconds
+	private final int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
 	public static void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
@@ -225,16 +228,16 @@ public class EventHandler {
 
 			ticks.remove(evt.player.getUniqueID());
 
-			List<String> headstart = Arrays.asList(TechnologyHandler.STONECRAFT.getUnlocalizedName(), TechnologyHandler.STONEWORKING.getUnlocalizedName(), TechnologyHandler.CARPENTRY.getUnlocalizedName(), TechnologyHandler.REFINEMENT.getUnlocalizedName(), TechnologyHandler.BIBLIOGRAPHY.getUnlocalizedName(), TechnologyHandler.ADVANCED_COMBAT.getUnlocalizedName(), TechnologyHandler.BUILDING_BLOCKS.getUnlocalizedName(), TechnologyHandler.COOKING.getUnlocalizedName());
 			ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			if (cap != null && cap.isNew()) {
 				evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
 
-				if (FTGU.moddedOnly) {
+				if (FTGU.moddedOnly)
 					cap.setResearched(TechnologyHandler.vanilla);
-				} else if (FTGU.headStart) {
-					cap.setResearched(headstart);
-				}
+				else if (FTGU.headStart)
+					cap.setResearched(TechnologyHandler.headStart);
+				else
+					cap.setResearched(TechnologyHandler.start);
 
 				cap.setOld();
 			}
@@ -302,7 +305,7 @@ public class EventHandler {
 		if (evt.getObject() instanceof EntityPlayer) {
 			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagList>() {
 
-				ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
+				private final ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
 
 				@Override
 				public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
