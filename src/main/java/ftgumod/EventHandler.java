@@ -232,12 +232,11 @@ public class EventHandler {
 			if (cap != null && cap.isNew()) {
 				evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
 
+				cap.setResearched(TechnologyHandler.start);
+				if (FTGU.headStart)
+					cap.setResearched(TechnologyHandler.headStart);
 				if (FTGU.moddedOnly)
 					cap.setResearched(TechnologyHandler.vanilla);
-				else if (FTGU.headStart)
-					cap.setResearched(TechnologyHandler.headStart);
-				else
-					cap.setResearched(TechnologyHandler.start);
 
 				cap.setOld();
 			}

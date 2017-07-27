@@ -104,7 +104,7 @@ public class CapabilityTechnology {
 
 		@Override
 		public void setResearched(Collection<String> tech) {
-			this.tech = tech;
+			this.tech.addAll(tech);
 		}
 
 		@Override

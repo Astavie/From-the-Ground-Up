@@ -282,12 +282,10 @@ public class TechnologyHandler {
 
 	public static void addResearchedFromStart(Technology technology) {
 		start.add(technology.getUnlocalizedName());
-		addResearchedFromHeadstart(technology);
 	}
 
 	public static void addResearchedFromHeadstart(Technology technology) {
 		headStart.add(technology.getUnlocalizedName());
-		vanilla.add(technology.getUnlocalizedName());
 	}
 
 	public static void registerDecipher(ResearchRecipe r, Decipher d) {
