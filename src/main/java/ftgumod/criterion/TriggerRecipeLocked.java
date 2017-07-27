@@ -15,9 +15,9 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 import java.util.Set;
 
-public class TriggerItemLocked extends TriggerFTGU<TriggerItemLocked.Instance> {
+public class TriggerRecipeLocked extends TriggerFTGU<TriggerRecipeLocked.Instance> {
 
-	public TriggerItemLocked(String id) {
+	public TriggerRecipeLocked(String id) {
 		super(new ResourceLocation(FTGU.MODID, id));
 	}
 

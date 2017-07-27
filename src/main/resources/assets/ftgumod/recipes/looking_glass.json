@@ -1,0 +1,22 @@
+{
+  "type": "forge:ore_shaped",
+  "pattern": [
+    " G ",
+    "GPG",
+    "SG "
+  ],
+  "key": {
+    "G": {
+      "item": "#nuggetGold"
+    },
+    "P": {
+      "item": "#paneGlassColorless"
+    },
+    "S": {
+      "item": "#stickWood"
+    }
+  },
+  "result": {
+    "item": "ftgumod:looking_glass"
+  }
+}

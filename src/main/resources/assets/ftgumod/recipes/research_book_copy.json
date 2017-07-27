@@ -1,0 +1,15 @@
+{
+  "type": "forge:ore_shapeless",
+  "group": "research_book",
+  "result": {
+    "item": "ftgumod:research_book"
+  },
+  "ingredients": [
+    {
+      "item": "ftgumod:research_book"
+    },
+    {
+      "item": "ftgumod:parchment_research"
+    }
+  ]
+}

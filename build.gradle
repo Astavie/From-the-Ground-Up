@@ -82,7 +82,7 @@ install {
 
 task pushMaven(type: Exec) {
     workingDir '/home/arie/Code/Maven'
-    commandLine 'bash', 'push.sh', mod_package, "Maven, ${mod_id}, ${project.version}"
+    commandLine 'bash', 'push.sh', "theractivator/${mod_package}", "Maven, ${mod_id}, ${project.version}"
 }
 
 task increaseVersion {

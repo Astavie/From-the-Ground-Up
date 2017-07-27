@@ -48,7 +48,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 					for (ItemList list : t.getUnlock()) {
 						ItemListClient items = new ItemListClient(list);
 						if (!items.isEmpty())
-							registry.addIngredientsAtRuntime(ItemStack.class, new ItemListClient(list).getRaw());
+							registry.addIngredientsAtRuntime(ItemStack.class, items.getRaw());
 					}
 			}
 
@@ -58,7 +58,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 					for (ItemList list : tech.getUnlock()) {
 						ItemListClient items = new ItemListClient(list);
 						if (!items.isEmpty())
-							registry.removeIngredientsAtRuntime(ItemStack.class, new ItemListClient(list).getRaw());
+							registry.removeIngredientsAtRuntime(ItemStack.class, items.getRaw());
 					}
 			}
 

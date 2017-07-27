@@ -15,8 +15,6 @@ import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -148,31 +146,6 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
-		addShapedRecipe(new ItemStack(FTGUAPI.b_ideaTable), "F P", "SSS", "WBW", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'F', Items.FEATHER, 'P', FTGUAPI.i_parchmentEmpty);
-		addShapedRecipe(new ItemStack(FTGUAPI.b_researchTable), "SSS", "CBC", "CWC", 'S', Blocks.WOODEN_SLAB, 'W', Blocks.PLANKS, 'B', Blocks.CRAFTING_TABLE, 'C', Blocks.COBBLESTONE);
-		addShapedRecipe(new ItemStack(FTGUAPI.i_parchmentEmpty), "S", "P", "S", 'S', Items.STICK, 'P', Items.PAPER);
-		addShapedRecipe(new ItemStack(FTGUAPI.i_lookingGlass), " N ", "NGN", "SN ", 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE, 'S', Items.STICK);
-
-		Item r = FTGUAPI.i_parchmentResearch;
-
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), Items.BOOK, r, r, r, r, r, r, r, r);
-
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r);
-		addShapelessRecipe(new ItemStack(FTGUAPI.i_researchBook), FTGUAPI.i_researchBook, r, r, r, r, r, r, r, r);
-
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY.getGuiHandler());
 
 		PROXY.init();
