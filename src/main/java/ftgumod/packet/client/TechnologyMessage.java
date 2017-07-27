@@ -4,6 +4,7 @@ import ftgumod.FTGU;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
+import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -96,12 +97,12 @@ public class TechnologyMessage implements IMessage {
 
 				cap.clear();
 				for (Integer i : message.tech) {
-					if (i < 0)
-						//noinspection ConstantConditions
-						cap.setResearched(TechnologyHandler.getTechnology(-i).getUnlocalizedName() + ".unlock");
-					else
-						//noinspection ConstantConditions
-						cap.setResearched(TechnologyHandler.getTechnology(i).getUnlocalizedName());
+					Technology tech = TechnologyHandler.getTechnology(Math.abs(i));
+					if (tech != null)
+						if (i < 0)
+							cap.setResearched(tech.getUnlocalizedName() + ".unlock");
+						else
+							cap.setResearched(tech.getUnlocalizedName());
 				}
 
 				if (message.toast != null)

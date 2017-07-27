@@ -1,6 +1,7 @@
 package ftgumod.compat.jei;
 
 import ftgumod.ItemList;
+import ftgumod.client.ItemListClient;
 import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
@@ -33,26 +34,35 @@ public class CompatJEI implements ICompat, IModPlugin {
 		}
 
 		if (arg[0] instanceof Collection) {
-			Collection<Integer> add = new HashSet<>((Collection<Integer>) arg[0]);
+			Collection<Integer> input = (Collection<Integer>) arg[0];
+			input.removeIf(integer -> integer < 0);
+
+			Collection<Integer> add = new HashSet<>(input);
 			Collection<Integer> remove = new HashSet<>(tech);
 			add.removeAll(tech);
-			remove.removeAll((Collection<Integer>) arg[0]);
+			remove.removeAll(input);
 
 			for (int i : add) {
 				Technology t = TechnologyHandler.getTechnology(i);
 				if (t != null)
-					for (ItemList list : t.getUnlock())
-						registry.removeIngredientsAtRuntime(ItemStack.class, list.getRaw());
+					for (ItemList list : t.getUnlock()) {
+						ItemListClient items = new ItemListClient(list);
+						if (!items.isEmpty())
+							registry.addIngredientsAtRuntime(ItemStack.class, new ItemListClient(list).getRaw());
+					}
 			}
 
 			for (int i : remove) {
 				Technology tech = TechnologyHandler.getTechnology(i);
 				if (tech != null)
-					for (ItemList list : tech.getUnlock())
-						registry.addIngredientsAtRuntime(ItemStack.class, list.getRaw());
+					for (ItemList list : tech.getUnlock()) {
+						ItemListClient items = new ItemListClient(list);
+						if (!items.isEmpty())
+							registry.removeIngredientsAtRuntime(ItemStack.class, new ItemListClient(list).getRaw());
+					}
 			}
 
-			tech = new HashSet<>((Collection<Integer>) arg[0]);
+			tech = input;
 
 			return true;
 		}

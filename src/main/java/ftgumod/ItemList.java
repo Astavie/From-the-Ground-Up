@@ -9,7 +9,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.Iterator;
-import java.util.List;
 
 public class ItemList implements Iterable<ItemStack> {
 
@@ -70,15 +69,6 @@ public class ItemList implements Iterable<ItemStack> {
 
 	public boolean isEmpty() {
 		return list.isEmpty();
-	}
-
-	/**
-	 * @return a list of item stacks
-	 * @deprecated Use {@link ItemList#iterator()} or for-each loops instead.
-	 */
-	@Deprecated
-	public List<ItemStack> getRaw() {
-		return list;
 	}
 
 }

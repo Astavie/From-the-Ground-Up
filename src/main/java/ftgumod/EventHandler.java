@@ -59,13 +59,12 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 public class EventHandler {
 
 	private static final Field BOOK = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192041_cq");
 
-	private final Map<UUID, Integer> ticks = new HashMap<>();
+	private final Map<EntityPlayer, Integer> ticks = new HashMap<>();
 	private final int s = 5; // 5 seconds
 	private final int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
@@ -103,9 +102,9 @@ public class EventHandler {
 		return false;
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(receiveCanceled = true)
 	public void onPlayerInspect(PlayerInspectEvent evt) {
-		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer().getUniqueID()) > t) {
+		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer()) > t) {
 			EntityPlayer player = evt.getEntityPlayer();
 			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
 				evt.setCanceled(false);
@@ -124,14 +123,13 @@ public class EventHandler {
 	public void onLivingUpdate(LivingUpdateEvent evt) {
 		if (!evt.getEntity().world.isRemote && evt.getEntity() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) evt.getEntity();
-			UUID uuid = player.getUniqueID();
 
 			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
 				if (player.world.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND) {
-					if (!ticks.containsKey(uuid)) {
-						ticks.put(uuid, 0);
+					if (!ticks.containsKey(player)) {
+						ticks.put(player, 0);
 					} else {
-						int tick = ticks.get(uuid);
+						int tick = ticks.get(player);
 						if (tick == t) {
 							TextComponentBase whisper = new TextComponentTranslation("technology.noise.whisper1");
 							whisper.getStyle().setColor(TextFormatting.DARK_GRAY).setItalic(true);
@@ -140,10 +138,10 @@ public class EventHandler {
 							player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						}
 						if (!(tick > t))
-							ticks.put(uuid, tick + 1);
+							ticks.put(player, tick + 1);
 					}
-				} else if (ticks.containsKey(uuid) && ticks.get(uuid) < t)
-					ticks.remove(uuid);
+				} else if (ticks.containsKey(player) && ticks.get(player) < t)
+					ticks.remove(player);
 			} else if (!TechnologyHandler.ENCHANTING.isUnlocked(player) && TechnologyHandler.ENCHANTING.canResearchIgnoreCustomUnlock(player)) {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);

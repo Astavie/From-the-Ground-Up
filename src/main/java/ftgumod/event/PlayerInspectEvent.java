@@ -32,21 +32,14 @@ public class PlayerInspectEvent extends PlayerEvent {
 		this.face = face;
 		this.block = block;
 
-		boolean cancel = true;
-
-		loop:
 		for (ResearchRecipe r : TechnologyHandler.unlock.keySet())
 			if (r.output.canResearch(player)) {
 				Decipher d = TechnologyHandler.unlock.get(r);
-				for (Decipher.DecipherGroup g : d.list) {
-					System.out.println(g.unlock);
-					if (g.unlock.contains(block)) {
-						cancel = false;
-						break loop;
-					}
-				}
+				for (Decipher.DecipherGroup g : d.list)
+					if (g.unlock.contains(block))
+						return;
 			}
-		setCanceled(cancel);
+		setCanceled(true);
 	}
 
 	public EnumHand getHand() {

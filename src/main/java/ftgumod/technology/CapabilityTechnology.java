@@ -93,8 +93,7 @@ public class CapabilityTechnology {
 
 		@Override
 		public void setResearched(String tech) {
-			if (!this.tech.contains(tech))
-				this.tech.add(tech);
+			this.tech.add(tech);
 		}
 
 		@Override

@@ -10,6 +10,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.List;
+
 @SideOnly(Side.CLIENT)
 public class ItemListClient extends ItemList {
 
@@ -41,6 +43,10 @@ public class ItemListClient extends ItemList {
 
 	public ItemStack get(int index) {
 		return list.get(index);
+	}
+
+	public List<ItemStack> getRaw() {
+		return list;
 	}
 
 }
