@@ -47,45 +47,40 @@ public class ItemLookingGlass extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
+			if (!world.isRemote) {
+				ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
 
-			IBlockState state = world.getBlockState(pos);
-			Block block = state.getBlock();
-			ItemStack stack = block.getPickBlock(state, null, world, pos, player);
+				IBlockState state = world.getBlockState(pos);
+				Block block = state.getBlock();
+				ItemStack stack = block.getPickBlock(state, null, world, pos, player);
 
-			List<ItemStack> items = getInspected(item);
-			for (ItemStack blockstack : items)
-				if (ItemStack.areItemStacksEqual(blockstack, stack)) {
-					if (!world.isRemote) {
+				List<ItemStack> items = getInspected(item);
+				for (ItemStack blockstack : items)
+					if (ItemStack.areItemStacksEqual(blockstack, stack)) {
 						player.sendMessage(new TextComponentTranslation("technology.decipher.already", stack.getTextComponent()));
 						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						return EnumActionResult.SUCCESS;
 					}
+
+				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, items, pos, face, stack);
+				MinecraftForge.EVENT_BUS.post(event);
+
+				if (event.isCanceled()) {
+					player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
+					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					return EnumActionResult.SUCCESS;
 				}
 
-			PlayerInspectEvent event = new PlayerInspectEvent(player, hand, items, pos, face, stack);
-			MinecraftForge.EVENT_BUS.post(event);
-
-			if (event.isCanceled()) {
-				if (!world.isRemote) {
-					player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
-					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				}
-				return EnumActionResult.SUCCESS;
-			}
-
-			if (!world.isRemote) {
 				player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				FTGUAPI.c_inspect.trigger((EntityPlayerMP) player, pos, state);
+
+				NBTTagCompound tag = TechnologyUtil.getItemData(item);
+				NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
+				nbt.appendTag(stack.serializeNBT());
+				tag.setTag("FTGU", nbt);
 			}
-
-			NBTTagCompound tag = TechnologyUtil.getItemData(item);
-			NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
-			nbt.appendTag(stack.serializeNBT());
-			tag.setTag("FTGU", nbt);
-
 			return EnumActionResult.SUCCESS;
 		} else
 			return EnumActionResult.PASS;

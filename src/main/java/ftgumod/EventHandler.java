@@ -2,6 +2,7 @@ package ftgumod;
 
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.event.PlayerLockEvent;
+import ftgumod.event.TechnologyEvent;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
@@ -69,16 +70,19 @@ public class EventHandler {
 	private final int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
-	public static void unlock(Technology tech, EntityPlayer player, SoundEvent sound) {
-		tech.setUnlocked(player);
+	public static void unlock(Technology tech, EntityPlayerMP player, SoundEvent sound) {
+		TechnologyEvent event = new TechnologyEvent.Unlock(player, tech);
+		MinecraftForge.EVENT_BUS.post(event);
 
-		if (!player.world.isRemote) {
+		if (!event.isCanceled()) {
+			tech.setUnlocked(player);
+
 			player.sendMessage(new TextComponentTranslation("technology.complete.unlock", tech.getDisplayText()));
 			player.world.playSound(null, player.getPosition(), sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-			FTGUAPI.c_technologyUnlocked.trigger((EntityPlayerMP) player, tech);
+			FTGUAPI.c_technologyUnlocked.trigger(player, tech);
 
-			PacketDispatcher.sendTo(new TechnologyMessage(player, true), (EntityPlayerMP) player);
+			PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
 		}
 	}
 
@@ -114,7 +118,7 @@ public class EventHandler {
 
 				player.sendMessage(whisper);
 
-				unlock(TechnologyHandler.GLOWING_EYES, player, SoundEvents.BLOCK_PORTAL_TRIGGER);
+				unlock(TechnologyHandler.GLOWING_EYES, (EntityPlayerMP) player, SoundEvents.BLOCK_PORTAL_TRIGGER);
 			}
 		}
 	}
@@ -146,12 +150,12 @@ public class EventHandler {
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 					ItemStack stack = player.inventory.getStackInSlot(i);
 					if (!stack.isEmpty() && stack.getItem() == Items.ENCHANTED_BOOK) {
-						unlock(TechnologyHandler.ENCHANTING, player, SoundEvents.ENTITY_PLAYER_LEVELUP);
+						unlock(TechnologyHandler.ENCHANTING, (EntityPlayerMP) player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 						break;
 					}
 				}
 			} else if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.ENDER_KNOWLEDGE.canResearchIgnoreCustomUnlock(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world))
-				unlock(TechnologyHandler.ENDER_KNOWLEDGE, player, SoundEvents.ENTITY_PLAYER_LEVELUP);
+				unlock(TechnologyHandler.ENDER_KNOWLEDGE, (EntityPlayerMP) player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 		}
 	}
 

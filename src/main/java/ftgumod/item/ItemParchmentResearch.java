@@ -1,7 +1,7 @@
 package ftgumod.item;
 
 import ftgumod.FTGUAPI;
-import ftgumod.event.PlayerResearchEvent;
+import ftgumod.event.TechnologyEvent;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
@@ -41,7 +41,7 @@ public class ItemParchmentResearch extends Item {
 					if (already)
 						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getDisplayText()));
 				} else {
-					PlayerResearchEvent event = new PlayerResearchEvent(player, t);
+					TechnologyEvent event = new TechnologyEvent.Research(player, t);
 					MinecraftForge.EVENT_BUS.post(event);
 					if (!event.isCanceled()) {
 						t.setResearched(player);

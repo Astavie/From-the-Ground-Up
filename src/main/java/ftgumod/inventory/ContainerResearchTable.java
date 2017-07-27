@@ -11,6 +11,7 @@ import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.ResearchRecipe;
 import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -114,7 +115,7 @@ public class ContainerResearchTable extends Container {
 					}
 
 					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe) && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(player))
-						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, player, SoundEvents.ENTITY_PLAYER_LEVELUP);
+						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, (EntityPlayerMP) player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 				}
 			} else {
 				recipe = null;
