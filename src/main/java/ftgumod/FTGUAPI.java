@@ -31,8 +31,8 @@ public final class FTGUAPI {
 
 	public static final TriggerTechnology c_technologyUnlocked = new TriggerTechnology("technology_unlocked");
 	public static final TriggerTechnology c_technologyResearched = new TriggerTechnology("technology_researched");
-	public static final TriggerItemLocked c_itemLocked = new TriggerItemLocked("item_locked");
-	public static final TriggerInspect c_inspect = new TriggerInspect("inspect");
+	public static final TriggerItemLocked c_itemLocked = new TriggerItemLocked("recipe_locked");
+	public static final TriggerInspect c_inspect = new TriggerInspect("block_inspected");
 
 	static final ItemBlock i_ideaTable = new ItemBlock(b_ideaTable);
 	static final ItemBlock i_researchTable = new ItemBlock(b_researchTable);

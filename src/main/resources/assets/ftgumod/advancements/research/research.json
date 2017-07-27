@@ -1,0 +1,15 @@
+{
+  "display": {
+    "icon": {
+      "item": "ftgumod:parchment_research"
+    },
+    "title": "Science!",
+    "description": "Successfully research something"
+  },
+  "parent": "ftgumod:research/root",
+  "criteria": {
+    "ftgu": {
+      "trigger": "ftgumod:technology_researched"
+    }
+  }
+}

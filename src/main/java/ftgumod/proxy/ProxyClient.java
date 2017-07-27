@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SuppressWarnings("MethodCallSideOnly")
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends ProxyCommon {
 
@@ -34,12 +35,12 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return (ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx));
+		return ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx);
 	}
 
 	@Override
 	public RecipeBook getRecipeBook(EntityPlayer player) {
-		return ((EntityPlayerSP) player).getRecipeBook();
+		return player.world.isRemote ? ((EntityPlayerSP) player).getRecipeBook() : super.getRecipeBook(player);
 	}
 
 	@Override

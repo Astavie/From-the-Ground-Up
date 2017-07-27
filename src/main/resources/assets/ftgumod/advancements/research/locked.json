@@ -1,0 +1,15 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:barrier"
+    },
+    "title": "Locked Recipes",
+    "description": "Try to craft something not yet researched"
+  },
+  "parent": "ftgumod:research/root",
+  "criteria": {
+    "ftgu": {
+      "trigger": "ftgumod:recipe_locked"
+    }
+  }
+}

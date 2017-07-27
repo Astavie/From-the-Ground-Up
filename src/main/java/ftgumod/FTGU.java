@@ -55,7 +55,7 @@ public class FTGU {
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
 
-	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyServer")
+	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon PROXY;
 	public final Map<String, ICompat> compat = new HashMap<>();
 
@@ -126,6 +126,7 @@ public class FTGU {
 		registerCriterion(FTGUAPI.c_technologyUnlocked);
 		registerCriterion(FTGUAPI.c_technologyResearched);
 		registerCriterion(FTGUAPI.c_itemLocked);
+		registerCriterion(FTGUAPI.c_inspect);
 
 		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl.class);
 

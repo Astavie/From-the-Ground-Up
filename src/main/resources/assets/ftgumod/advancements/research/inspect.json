@@ -1,0 +1,15 @@
+{
+  "display": {
+    "icon": {
+      "item": "ftgumod:looking_glass"
+    },
+    "title": "Sherlock Holmes",
+    "description": "Find hidden meaning in a block"
+  },
+  "parent": "ftgumod:research/unlock_decipher",
+  "criteria": {
+    "ftgu": {
+      "trigger": "ftgumod:block_inspected"
+    }
+  }
+}

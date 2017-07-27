@@ -3,6 +3,7 @@ package ftgumod.criterion;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.FTGU;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,7 @@ import java.util.Set;
 public class TriggerItemLocked extends TriggerFTGU<TriggerItemLocked.Instance> {
 
 	public TriggerItemLocked(String id) {
-		super(new ResourceLocation(id));
+		super(new ResourceLocation(FTGU.MODID, id));
 	}
 
 	@Override

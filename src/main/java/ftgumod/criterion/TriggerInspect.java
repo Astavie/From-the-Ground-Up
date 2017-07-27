@@ -6,6 +6,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.FTGU;
 import net.minecraft.advancements.critereon.LocationPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -25,7 +26,7 @@ import java.util.Set;
 public class TriggerInspect extends TriggerFTGU<TriggerInspect.Instance> {
 
 	public TriggerInspect(String id) {
-		super(new ResourceLocation(id));
+		super(new ResourceLocation(FTGU.MODID, id));
 	}
 
 	@Override
@@ -41,12 +42,10 @@ public class TriggerInspect extends TriggerFTGU<TriggerInspect.Instance> {
 
 		Map<IProperty<?>, Object> properties = null;
 		if (jsonObject.has("state")) {
-			if (block == null) {
+			if (block == null)
 				throw new JsonSyntaxException("Can't define block state without a specific block type");
-			}
 
 			BlockStateContainer blockState = block.getBlockState();
-
 			IProperty property;
 
 			//noinspection Guava

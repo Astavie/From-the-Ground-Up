@@ -209,7 +209,7 @@ public class EventHandler {
 
 	private void replaceRecipeBook(EntityPlayerMP player) {
 		try {
-			RecipeBookServerImpl book = new RecipeBookServerImpl();
+			RecipeBookServerImpl book = new RecipeBookServerImpl(player);
 			book.read(player.getRecipeBook().write());
 			BOOK.set(player, book);
 		} catch (IllegalAccessException e) {
@@ -220,8 +220,6 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerLoggedInEvent evt) {
 		if (!evt.player.world.isRemote) {
-			replaceRecipeBook((EntityPlayerMP) evt.player);
-
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
 			inv.addListener(new CraftingListener((EntityPlayerMP) evt.player));
 
@@ -240,6 +238,7 @@ public class EventHandler {
 
 				cap.setOld();
 			}
+			replaceRecipeBook((EntityPlayerMP) evt.player);
 			PacketDispatcher.sendTo(new TechnologyMessage(evt.player, false), (EntityPlayerMP) evt.player);
 		}
 	}
@@ -324,6 +323,7 @@ public class EventHandler {
 				public void deserializeNBT(NBTTagList nbt) {
 					CapabilityTechnology.TECH_CAP.getStorage().readNBT(CapabilityTechnology.TECH_CAP, inst, null, nbt);
 				}
+
 			});
 		}
 	}

@@ -3,6 +3,7 @@ package ftgumod.criterion;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.FTGU;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -15,7 +16,7 @@ import java.util.Set;
 public class TriggerTechnology extends TriggerFTGU<TriggerTechnology.Instance> {
 
 	public TriggerTechnology(String id) {
-		super(new ResourceLocation(id));
+		super(new ResourceLocation(FTGU.MODID, id));
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class TriggerTechnology extends TriggerFTGU<TriggerTechnology.Instance> {
 		}
 
 		public boolean test(Technology technology) {
-			return this.technology == null || this.technology == technology;
+			return this.technology == null || this.technology.equals(technology);
 		}
 
 	}
