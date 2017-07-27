@@ -63,13 +63,4 @@ public class ItemList implements Iterable<ItemStack> {
 		return list.isEmpty();
 	}
 
-	/**
-	 * @deprecated Use {@link ItemList#iterator()} or for-each loops instead.
-	 * @return a list of item stacks
-	 */
-	@Deprecated
-	public List<ItemStack> getRaw() {
-		return list;
-	}
-
 }

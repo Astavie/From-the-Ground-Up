@@ -1,5 +1,7 @@
 package ftgumod.minetweaker;
 
+import java.util.Set;
+
 import ftgumod.minetweaker.util.BaseCollection;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceAdd;
 import ftgumod.minetweaker.util.BaseInterface.BaseInterfaceRemove;
@@ -45,7 +47,8 @@ public class Page {
 	public static void removePage(String name) {
 		PAGE page = PAGE.get(name);
 		if (page == null) {
-			MineTweakerAPI.logWarning("[" + FTGUTweaker.name + "] No " + Page.name + " found for " + name + ". Command ignored!");
+			MineTweakerAPI.logWarning(
+					"[" + FTGUTweaker.name + "] No " + Page.name + " found for " + name + ". Command ignored!");
 			return;
 		}
 		MineTweakerAPI.apply(new Remove(page));
@@ -54,6 +57,7 @@ public class Page {
 	private static class Remove extends BaseInterfaceRemove<PAGE> {
 
 		private final PAGE page;
+		private Set<ftgumod.technology.Technology> undo;
 
 		protected Remove(PAGE page) {
 			super(name, page, new BaseCollection<PAGE>(PAGE.pages));
@@ -68,7 +72,14 @@ public class Page {
 		@Override
 		public void apply() {
 			super.apply();
-			TechnologyHandler.technologies.remove(page);
+			undo = TechnologyHandler.technologies.remove(page);
+		}
+
+		@Override
+		public void undo() {
+			super.undo();
+			if (undo != null)
+				TechnologyHandler.technologies.put(page, undo);
 		}
 
 	}

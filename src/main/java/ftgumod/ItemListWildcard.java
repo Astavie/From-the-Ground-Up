@@ -1,5 +1,7 @@
 package ftgumod;
 
+import java.util.List;
+
 import ftgumod.technology.TechnologyUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
@@ -40,6 +42,10 @@ public class ItemListWildcard extends ItemList {
 
 	public ItemStack get(int index) {
 		return list.get(index);
+	}
+
+	public List<ItemStack> getRaw() {
+		return list;
 	}
 
 }
