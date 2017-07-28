@@ -17,7 +17,7 @@ public class TechnologyHandler {
 
 	public static final Set<IdeaRecipe> ideas = new HashSet<>();
 	public static final Set<ResearchRecipe> researches = new HashSet<>();
-	public static final Map<PAGE, Set<Technology>> technologies = new HashMap<>();
+	public static final Map<Tree, Set<Technology>> technologies = new HashMap<>();
 	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<>();
 
 	public static final Set<String> start = new HashSet<>();
@@ -61,56 +61,56 @@ public class TechnologyHandler {
 	private static int ID = 0;
 
 	public static void init() {
-		PAGE.pages.add(PAGE.MINECRAFT);
+		Tree.TREES.add(Tree.MINECRAFT);
 
 		ITEM_GROUP.init();
 
-		BASIC_CRAFTING = new Technology(PAGE.MINECRAFT, null, new ItemStack(Blocks.GRASS), 0, 0, "basic_crafting", Items.WHEAT, Blocks.HAY_BLOCK, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, new ItemStack(Items.DYE, 1, 5), new ItemStack(Items.DYE, 1, 6), new ItemStack(Items.DYE, 1, 7), new ItemStack(Items.DYE, 1, 8), new ItemStack(Items.DYE, 1, 9), new ItemStack(Items.DYE, 1, 10), new ItemStack(Items.DYE, 1, 12), new ItemStack(Items.DYE, 1, 13), new ItemStack(Items.DYE, 1, 14), Items.SUGAR, Blocks.SLIME_BLOCK);
-		WOODWORKING = new Technology(PAGE.MINECRAFT, BASIC_CRAFTING, new ItemStack(Blocks.PLANKS), 2, 0, "woodworking", Blocks.PLANKS, Blocks.CRAFTING_TABLE, Blocks.WOODEN_SLAB, ITEM_GROUP.WOODEN_STAIRS);
-		WRITING = new Technology(PAGE.MINECRAFT, BASIC_CRAFTING, new ItemStack(Items.PAPER), 0, -2, "writing", Items.PAPER);
-		WOODEN_TOOLS = new Technology(PAGE.MINECRAFT, WOODWORKING, new ItemStack(Items.STICK), 4, -1, "wooden_tools", Items.STICK, Items.WOODEN_HOE, Items.WOODEN_PICKAXE);
-		RESEARCH = new Technology(PAGE.MINECRAFT, WRITING, new ItemStack(FTGUAPI.i_parchmentIdea), -2, -2, "research", FTGUAPI.i_parchmentEmpty, FTGUAPI.b_ideaTable, FTGUAPI.b_researchTable);
+		BASIC_CRAFTING = new Technology(Tree.MINECRAFT, null, new ItemStack(Blocks.GRASS), 0, 0, "basic_crafting", Items.WHEAT, Blocks.HAY_BLOCK, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, new ItemStack(Items.DYE, 1, 5), new ItemStack(Items.DYE, 1, 6), new ItemStack(Items.DYE, 1, 7), new ItemStack(Items.DYE, 1, 8), new ItemStack(Items.DYE, 1, 9), new ItemStack(Items.DYE, 1, 10), new ItemStack(Items.DYE, 1, 12), new ItemStack(Items.DYE, 1, 13), new ItemStack(Items.DYE, 1, 14), Items.SUGAR, Blocks.SLIME_BLOCK);
+		WOODWORKING = new Technology(Tree.MINECRAFT, BASIC_CRAFTING, new ItemStack(Blocks.PLANKS), 2, 0, "woodworking", Blocks.PLANKS, Blocks.CRAFTING_TABLE, Blocks.WOODEN_SLAB, ITEM_GROUP.WOODEN_STAIRS);
+		WRITING = new Technology(Tree.MINECRAFT, BASIC_CRAFTING, new ItemStack(Items.PAPER), 0, -2, "writing", Items.PAPER);
+		WOODEN_TOOLS = new Technology(Tree.MINECRAFT, WOODWORKING, new ItemStack(Items.STICK), 4, -1, "wooden_tools", Items.STICK, Items.WOODEN_HOE, Items.WOODEN_PICKAXE);
+		RESEARCH = new Technology(Tree.MINECRAFT, WRITING, new ItemStack(FTGUAPI.i_parchmentIdea), -2, -2, "research", FTGUAPI.i_parchmentEmpty, FTGUAPI.b_ideaTable, FTGUAPI.b_researchTable);
 
-		STONECRAFT = new Technology(PAGE.MINECRAFT, WOODWORKING, new ItemStack(Blocks.COBBLESTONE), 4, 1, "stonecraft", Blocks.SANDSTONE, new ItemStack(Blocks.STONE_SLAB, 1, 1), new ItemStack(Blocks.STONE_SLAB, 1, 3), new ItemStack(Blocks.STONE_SLAB2, 1, 0), Blocks.STONE_STAIRS, Blocks.SANDSTONE_STAIRS);
-		CARPENTRY = new Technology(PAGE.MINECRAFT, WOODEN_TOOLS, new ItemStack(Blocks.CHEST), 4, -3, "carpentry", ITEM_GROUP.WOODEN_DOOR, Blocks.TRAPDOOR, ITEM_GROUP.WOODEN_FENCE, ITEM_GROUP.WOODEN_FENCE_GATE, Blocks.CHEST, Items.BED, Items.WOODEN_AXE, Items.WOODEN_SHOVEL, Items.WOODEN_SWORD, Blocks.CARPET, Items.BANNER, Items.BOWL);
-		STONEWORKING = new Technology(PAGE.MINECRAFT, WOODEN_TOOLS, new ItemStack(Items.STONE_PICKAXE), 6, -1, "stoneworking", Items.STONE_AXE, Items.STONE_HOE, Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_SWORD);
+		STONECRAFT = new Technology(Tree.MINECRAFT, WOODWORKING, new ItemStack(Blocks.COBBLESTONE), 4, 1, "stonecraft", Blocks.SANDSTONE, new ItemStack(Blocks.STONE_SLAB, 1, 1), new ItemStack(Blocks.STONE_SLAB, 1, 3), new ItemStack(Blocks.STONE_SLAB2, 1, 0), Blocks.STONE_STAIRS, Blocks.SANDSTONE_STAIRS);
+		CARPENTRY = new Technology(Tree.MINECRAFT, WOODEN_TOOLS, new ItemStack(Blocks.CHEST), 4, -3, "carpentry", ITEM_GROUP.WOODEN_DOOR, Blocks.TRAPDOOR, ITEM_GROUP.WOODEN_FENCE, ITEM_GROUP.WOODEN_FENCE_GATE, Blocks.CHEST, Items.BED, Items.WOODEN_AXE, Items.WOODEN_SHOVEL, Items.WOODEN_SWORD, Blocks.CARPET, Items.BANNER, Items.BOWL);
+		STONEWORKING = new Technology(Tree.MINECRAFT, WOODEN_TOOLS, new ItemStack(Items.STONE_PICKAXE), 6, -1, "stoneworking", Items.STONE_AXE, Items.STONE_HOE, Items.STONE_PICKAXE, Items.STONE_SHOVEL, Items.STONE_SWORD);
 
 		Technology[] a_stoneworking = {STONEWORKING};
 
-		REFINEMENT = new Technology(PAGE.MINECRAFT, STONECRAFT, a_stoneworking, new ItemStack(Items.IRON_INGOT), 6, 1, "refinement", Blocks.FURNACE, Items.IRON_INGOT, Items.GOLD_INGOT, Items.COAL, Items.REDSTONE, Items.DIAMOND, Items.EMERALD, new ItemStack(Items.DYE, 1, 4), Items.GOLD_NUGGET, Items.FLINT_AND_STEEL, Items.QUARTZ);
-		BIBLIOGRAPHY = new Technology(PAGE.MINECRAFT, WRITING, new ItemStack(Items.BOOK), 0, -4, "bibliography", Items.BOOK, Items.WRITABLE_BOOK, Items.WRITTEN_BOOK, Blocks.BOOKSHELF);
-		ADVANCED_COMBAT = new Technology(PAGE.MINECRAFT, STONEWORKING, new ItemStack(Items.SHIELD), 6, -3, "advanced_combat", Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.SHIELD);
+		REFINEMENT = new Technology(Tree.MINECRAFT, STONECRAFT, a_stoneworking, new ItemStack(Items.IRON_INGOT), 6, 1, "refinement", Blocks.FURNACE, Items.IRON_INGOT, Items.GOLD_INGOT, Items.COAL, Items.REDSTONE, Items.DIAMOND, Items.EMERALD, new ItemStack(Items.DYE, 1, 4), Items.GOLD_NUGGET, Items.FLINT_AND_STEEL, Items.QUARTZ);
+		BIBLIOGRAPHY = new Technology(Tree.MINECRAFT, WRITING, new ItemStack(Items.BOOK), 0, -4, "bibliography", Items.BOOK, Items.WRITABLE_BOOK, Items.WRITTEN_BOOK, Blocks.BOOKSHELF);
+		ADVANCED_COMBAT = new Technology(Tree.MINECRAFT, STONEWORKING, new ItemStack(Items.SHIELD), 6, -3, "advanced_combat", Items.LEATHER_HELMET, Items.LEATHER_CHESTPLATE, Items.LEATHER_LEGGINGS, Items.LEATHER_BOOTS, Items.BOW, Items.ARROW, Items.ARMOR_STAND, Items.SHIELD);
 
 		Technology[] a_refinement = {REFINEMENT};
 
-		METAL_ARMOR = new Technology(PAGE.MINECRAFT, ADVANCED_COMBAT, a_refinement, new ItemStack(Items.IRON_HELMET), 6, -5, "metal_armor", Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS);
-		SMITHING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.ANVIL), 8, 1, "smithing", Blocks.ANVIL, Items.IRON_AXE, Items.IRON_DOOR, Items.IRON_HOE, Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_SWORD, Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL, Items.GOLDEN_SWORD, Blocks.IRON_BARS, Blocks.IRON_TRAPDOOR, Items.BUCKET);
-		BUILDING_BLOCKS = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Blocks.BRICK_BLOCK), 8, 2, "building_blocks", Blocks.STAINED_GLASS, Blocks.GLASS_PANE, Blocks.STAINED_GLASS_PANE, Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.END_BRICKS, Blocks.NETHER_BRICK, Blocks.RED_NETHER_BRICK, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.STONE_BRICK_STAIRS, Blocks.STONEBRICK, new ItemStack(Blocks.STONE_SLAB, 1, 0), new ItemStack(Blocks.STONE_SLAB, 1, 4), new ItemStack(Blocks.STONE_SLAB, 1, 5), new ItemStack(Blocks.STONE_SLAB, 1, 6), new ItemStack(Blocks.STONE_SLAB, 1, 7), Blocks.PURPUR_BLOCK, Blocks.PURPUR_PILLAR, Blocks.PURPUR_SLAB, Blocks.PURPUR_STAIRS, Blocks.PRISMARINE, Blocks.GLOWSTONE, Blocks.BONE_BLOCK, Blocks.COAL_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK, Blocks.GOLD_BLOCK, Blocks.IRON_BLOCK, Blocks.LAPIS_BLOCK, Blocks.QUARTZ_BLOCK, Blocks.REDSTONE_BLOCK);
-		COOKING = new Technology(PAGE.MINECRAFT, REFINEMENT, new ItemStack(Items.BEETROOT_SOUP), 8, 3, "cooking", Items.FISHING_ROD, Items.CARROT_ON_A_STICK, Items.CAKE, Items.PUMPKIN_PIE, Items.BEETROOT_SOUP, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BREAD, Items.COOKIE);
-		GILDED_CUISINE = new Technology(PAGE.MINECRAFT, COOKING, new ItemStack(Items.GOLDEN_APPLE), 10, 3, "gilded_cuisine", Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.SPECKLED_MELON);
-		BREWING = new Technology(PAGE.MINECRAFT, GILDED_CUISINE, new ItemStack(Items.BREWING_STAND), 12, 3, "brewing", Items.BREWING_STAND, Items.FERMENTED_SPIDER_EYE, Items.MAGMA_CREAM, Blocks.MAGMA, Items.BLAZE_POWDER, Blocks.NETHER_WART_BLOCK);
-		GEM_CUTTING = new Technology(PAGE.MINECRAFT, SMITHING, new ItemStack(Items.DIAMOND), 8, -1, "gem_cutting", Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD);
+		METAL_ARMOR = new Technology(Tree.MINECRAFT, ADVANCED_COMBAT, a_refinement, new ItemStack(Items.IRON_HELMET), 6, -5, "metal_armor", Items.IRON_HELMET, Items.IRON_CHESTPLATE, Items.IRON_LEGGINGS, Items.IRON_BOOTS, Items.GOLDEN_HELMET, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_LEGGINGS, Items.GOLDEN_BOOTS);
+		SMITHING = new Technology(Tree.MINECRAFT, REFINEMENT, new ItemStack(Blocks.ANVIL), 8, 1, "smithing", Blocks.ANVIL, Items.IRON_AXE, Items.IRON_DOOR, Items.IRON_HOE, Items.IRON_PICKAXE, Items.IRON_SHOVEL, Items.IRON_SWORD, Items.GOLDEN_AXE, Items.GOLDEN_PICKAXE, Items.GOLDEN_HOE, Items.GOLDEN_SHOVEL, Items.GOLDEN_SWORD, Blocks.IRON_BARS, Blocks.IRON_TRAPDOOR, Items.BUCKET);
+		BUILDING_BLOCKS = new Technology(Tree.MINECRAFT, REFINEMENT, new ItemStack(Blocks.BRICK_BLOCK), 8, 2, "building_blocks", Blocks.STAINED_GLASS, Blocks.GLASS_PANE, Blocks.STAINED_GLASS_PANE, Blocks.BRICK_BLOCK, Blocks.BRICK_STAIRS, Blocks.END_BRICKS, Blocks.NETHER_BRICK, Blocks.RED_NETHER_BRICK, Blocks.NETHER_BRICK_FENCE, Blocks.NETHER_BRICK_STAIRS, Blocks.STONE_BRICK_STAIRS, Blocks.STONEBRICK, new ItemStack(Blocks.STONE_SLAB, 1, 0), new ItemStack(Blocks.STONE_SLAB, 1, 4), new ItemStack(Blocks.STONE_SLAB, 1, 5), new ItemStack(Blocks.STONE_SLAB, 1, 6), new ItemStack(Blocks.STONE_SLAB, 1, 7), Blocks.PURPUR_BLOCK, Blocks.PURPUR_PILLAR, Blocks.PURPUR_SLAB, Blocks.PURPUR_STAIRS, Blocks.PRISMARINE, Blocks.GLOWSTONE, Blocks.BONE_BLOCK, Blocks.COAL_BLOCK, Blocks.DIAMOND_BLOCK, Blocks.EMERALD_BLOCK, Blocks.GOLD_BLOCK, Blocks.IRON_BLOCK, Blocks.LAPIS_BLOCK, Blocks.QUARTZ_BLOCK, Blocks.REDSTONE_BLOCK);
+		COOKING = new Technology(Tree.MINECRAFT, REFINEMENT, new ItemStack(Items.BEETROOT_SOUP), 8, 3, "cooking", Items.FISHING_ROD, Items.CARROT_ON_A_STICK, Items.CAKE, Items.PUMPKIN_PIE, Items.BEETROOT_SOUP, Items.MUSHROOM_STEW, Items.RABBIT_STEW, Items.BREAD, Items.COOKIE);
+		GILDED_CUISINE = new Technology(Tree.MINECRAFT, COOKING, new ItemStack(Items.GOLDEN_APPLE), 10, 3, "gilded_cuisine", Items.GOLDEN_CARROT, Items.GOLDEN_APPLE, Items.SPECKLED_MELON);
+		BREWING = new Technology(Tree.MINECRAFT, GILDED_CUISINE, new ItemStack(Items.BREWING_STAND), 12, 3, "brewing", Items.BREWING_STAND, Items.FERMENTED_SPIDER_EYE, Items.MAGMA_CREAM, Blocks.MAGMA, Items.BLAZE_POWDER, Blocks.NETHER_WART_BLOCK);
+		GEM_CUTTING = new Technology(Tree.MINECRAFT, SMITHING, new ItemStack(Items.DIAMOND), 8, -1, "gem_cutting", Items.DIAMOND_AXE, Items.DIAMOND_HOE, Items.DIAMOND_PICKAXE, Items.DIAMOND_SHOVEL, Items.DIAMOND_SWORD);
 
 		Technology[] a_gemcutting = {GEM_CUTTING};
 
-		GEM_ARMOR = new Technology(PAGE.MINECRAFT, METAL_ARMOR, a_gemcutting, new ItemStack(Items.DIAMOND_HELMET), 6, -7, "gem_armor", Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS);
-		BASIC_REDSTONE = new Technology(PAGE.MINECRAFT, SMITHING, new ItemStack(Items.REDSTONE), 10, 1, "basic_redstone", Blocks.REDSTONE_TORCH, Blocks.WOODEN_PRESSURE_PLATE, Blocks.STONE_PRESSURE_PLATE, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Blocks.LEVER, Blocks.WOODEN_BUTTON, Blocks.STONE_BUTTON);
-		ADVANCED_REDSTONE = new Technology(PAGE.MINECRAFT, BASIC_REDSTONE, new ItemStack(Items.REPEATER), 12, 1, "advanced_redstone", Items.COMPARATOR, Items.REPEATER, Blocks.TRIPWIRE_HOOK, Blocks.TRAPPED_CHEST, Blocks.REDSTONE_LAMP);
-		TIME_PLACE_DESTINATION = new Technology(PAGE.MINECRAFT, BASIC_REDSTONE, new ItemStack(Items.COMPASS), 10, -1, "time_place_destination", Items.COMPASS, Items.CLOCK, Items.MAP);
-		REDSTONE_MACHINERY = new Technology(PAGE.MINECRAFT, ADVANCED_REDSTONE, new ItemStack(Blocks.PISTON), 14, 1, "redstone_machinery", Blocks.PISTON, Blocks.STICKY_PISTON, Blocks.DISPENSER, Blocks.DROPPER, Blocks.DAYLIGHT_DETECTOR);
-		EXPLOSIVES = new Technology(PAGE.MINECRAFT, ADVANCED_REDSTONE, new ItemStack(Blocks.TNT), 12, -1, "explosives", Blocks.TNT, Items.FIRE_CHARGE, Items.FIREWORK_CHARGE, Items.FIREWORKS);
-		PLAYER_TRANSPORTATION = new Technology(PAGE.MINECRAFT, REDSTONE_MACHINERY, new ItemStack(Items.MINECART), 16, 1, "player_transportation", Blocks.RAIL, Items.MINECART, Items.FURNACE_MINECART, Items.BOAT, Items.ACACIA_BOAT, Items.BIRCH_BOAT, Items.DARK_OAK_BOAT, Items.JUNGLE_BOAT, Items.SPRUCE_BOAT);
-		ITEM_TRANSPORTATION = new Technology(PAGE.MINECRAFT, PLAYER_TRANSPORTATION, new ItemStack(Items.CHEST_MINECART), 16, -1, "item_transportation", Items.HOPPER_MINECART, Items.CHEST_MINECART, Blocks.HOPPER);
-		ADVANCED_RAILS = new Technology(PAGE.MINECRAFT, PLAYER_TRANSPORTATION, new ItemStack(Blocks.GOLDEN_RAIL), 16, 3, "advanced_rails", Blocks.ACTIVATOR_RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL);
-		MUSIC = new Technology(PAGE.MINECRAFT, REDSTONE_MACHINERY, a_gemcutting, new ItemStack(Blocks.JUKEBOX), 14, -1, "music", Blocks.JUKEBOX, Blocks.NOTEBLOCK);
+		GEM_ARMOR = new Technology(Tree.MINECRAFT, METAL_ARMOR, a_gemcutting, new ItemStack(Items.DIAMOND_HELMET), 6, -7, "gem_armor", Items.DIAMOND_HELMET, Items.DIAMOND_CHESTPLATE, Items.DIAMOND_LEGGINGS, Items.DIAMOND_BOOTS);
+		BASIC_REDSTONE = new Technology(Tree.MINECRAFT, SMITHING, new ItemStack(Items.REDSTONE), 10, 1, "basic_redstone", Blocks.REDSTONE_TORCH, Blocks.WOODEN_PRESSURE_PLATE, Blocks.STONE_PRESSURE_PLATE, Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Blocks.LEVER, Blocks.WOODEN_BUTTON, Blocks.STONE_BUTTON);
+		ADVANCED_REDSTONE = new Technology(Tree.MINECRAFT, BASIC_REDSTONE, new ItemStack(Items.REPEATER), 12, 1, "advanced_redstone", Items.COMPARATOR, Items.REPEATER, Blocks.TRIPWIRE_HOOK, Blocks.TRAPPED_CHEST, Blocks.REDSTONE_LAMP);
+		TIME_PLACE_DESTINATION = new Technology(Tree.MINECRAFT, BASIC_REDSTONE, new ItemStack(Items.COMPASS), 10, -1, "time_place_destination", Items.COMPASS, Items.CLOCK, Items.MAP);
+		REDSTONE_MACHINERY = new Technology(Tree.MINECRAFT, ADVANCED_REDSTONE, new ItemStack(Blocks.PISTON), 14, 1, "redstone_machinery", Blocks.PISTON, Blocks.STICKY_PISTON, Blocks.DISPENSER, Blocks.DROPPER, Blocks.DAYLIGHT_DETECTOR);
+		EXPLOSIVES = new Technology(Tree.MINECRAFT, ADVANCED_REDSTONE, new ItemStack(Blocks.TNT), 12, -1, "explosives", Blocks.TNT, Items.FIRE_CHARGE, Items.FIREWORK_CHARGE, Items.FIREWORKS);
+		PLAYER_TRANSPORTATION = new Technology(Tree.MINECRAFT, REDSTONE_MACHINERY, new ItemStack(Items.MINECART), 16, 1, "player_transportation", Blocks.RAIL, Items.MINECART, Items.FURNACE_MINECART, Items.BOAT, Items.ACACIA_BOAT, Items.BIRCH_BOAT, Items.DARK_OAK_BOAT, Items.JUNGLE_BOAT, Items.SPRUCE_BOAT);
+		ITEM_TRANSPORTATION = new Technology(Tree.MINECRAFT, PLAYER_TRANSPORTATION, new ItemStack(Items.CHEST_MINECART), 16, -1, "item_transportation", Items.HOPPER_MINECART, Items.CHEST_MINECART, Blocks.HOPPER);
+		ADVANCED_RAILS = new Technology(Tree.MINECRAFT, PLAYER_TRANSPORTATION, new ItemStack(Blocks.GOLDEN_RAIL), 16, 3, "advanced_rails", Blocks.ACTIVATOR_RAIL, Blocks.DETECTOR_RAIL, Blocks.GOLDEN_RAIL);
+		MUSIC = new Technology(Tree.MINECRAFT, REDSTONE_MACHINERY, a_gemcutting, new ItemStack(Blocks.JUKEBOX), 14, -1, "music", Blocks.JUKEBOX, Blocks.NOTEBLOCK);
 
 		Technology[] a_redstone = {MUSIC, ITEM_TRANSPORTATION, ADVANCED_RAILS, EXPLOSIVES, TIME_PLACE_DESTINATION, GEM_CUTTING, BREWING};
 
-		ENCHANTING = new Technology(PAGE.MINECRAFT, BIBLIOGRAPHY, a_redstone, new ItemStack(Blocks.ENCHANTING_TABLE), 0, -6, "enchanting", Blocks.ENCHANTING_TABLE);
-		GLOWING_EYES = new Technology(PAGE.MINECRAFT, ENCHANTING, new ItemStack(Items.ENDER_EYE), 0, -8, "glowing_eyes", Items.ENDER_EYE);
-		ENDER_KNOWLEDGE = new Technology(PAGE.MINECRAFT, GLOWING_EYES, new ItemStack(Items.END_CRYSTAL), 0, -10, "ender_knowledge", Items.END_CRYSTAL, Blocks.ENDER_CHEST, Blocks.BEACON);
+		ENCHANTING = new Technology(Tree.MINECRAFT, BIBLIOGRAPHY, a_redstone, new ItemStack(Blocks.ENCHANTING_TABLE), 0, -6, "enchanting", Blocks.ENCHANTING_TABLE);
+		GLOWING_EYES = new Technology(Tree.MINECRAFT, ENCHANTING, new ItemStack(Items.ENDER_EYE), 0, -8, "glowing_eyes", Items.ENDER_EYE);
+		ENDER_KNOWLEDGE = new Technology(Tree.MINECRAFT, GLOWING_EYES, new ItemStack(Items.END_CRYSTAL), 0, -10, "ender_knowledge", Items.END_CRYSTAL, Blocks.ENDER_CHEST, Blocks.BEACON);
 
-		UNDECIPHERED_RESEARCH = new Technology(PAGE.MINECRAFT, null, new ItemStack(Items.NETHER_STAR), -2, 0, "undeciphered_research", FTGUAPI.i_lookingGlass);
+		UNDECIPHERED_RESEARCH = new Technology(Tree.MINECRAFT, null, new ItemStack(Items.NETHER_STAR), -2, 0, "undeciphered_research", FTGUAPI.i_lookingGlass);
 
 		minecraft = true;
 		registerTechnology(BASIC_CRAFTING);
@@ -300,20 +300,20 @@ public class TechnologyHandler {
 	}
 
 	public static boolean registerTechnology(Technology tech) {
-		if (!technologies.containsKey(tech.getPage()))
-			technologies.put(tech.getPage(), new HashSet<>());
+		if (!technologies.containsKey(tech.getTree()))
+			technologies.put(tech.getTree(), new HashSet<>());
 
-		if (!technologies.get(tech.getPage()).add(tech))
+		if (!technologies.get(tech.getTree()).add(tech))
 			return false;
 
-		if (tech.getPage().maxX == OreDictionary.WILDCARD_VALUE || tech.getX() > tech.getPage().maxX)
-			tech.getPage().maxX = tech.getX();
-		if (tech.getPage().minX == OreDictionary.WILDCARD_VALUE || tech.getX() < tech.getPage().minX)
-			tech.getPage().minX = tech.getX();
-		if (tech.getPage().maxY == OreDictionary.WILDCARD_VALUE || tech.getY() > tech.getPage().maxY)
-			tech.getPage().maxY = tech.getY();
-		if (tech.getPage().minY == OreDictionary.WILDCARD_VALUE || tech.getY() < tech.getPage().minY)
-			tech.getPage().minY = tech.getY();
+		if (tech.getTree().maxX == OreDictionary.WILDCARD_VALUE || tech.getX() > tech.getTree().maxX)
+			tech.getTree().maxX = tech.getX();
+		if (tech.getTree().minX == OreDictionary.WILDCARD_VALUE || tech.getX() < tech.getTree().minX)
+			tech.getTree().minX = tech.getX();
+		if (tech.getTree().maxY == OreDictionary.WILDCARD_VALUE || tech.getY() > tech.getTree().maxY)
+			tech.getTree().maxY = tech.getY();
+		if (tech.getTree().minY == OreDictionary.WILDCARD_VALUE || tech.getY() < tech.getTree().minY)
+			tech.getTree().minY = tech.getY();
 
 		if (minecraft)
 			vanilla.add(tech.getUnlocalizedName());
@@ -404,33 +404,33 @@ public class TechnologyHandler {
 		IDEATABLE, RESEARCHTABLE
 	}
 
-	public static class PAGE {
+	public static class Tree {
 
-		public static final PAGE MINECRAFT = new PAGE("Minecraft");
-		public static final List<PAGE> pages = new ArrayList<>();
+		public static final Tree MINECRAFT = new Tree("Minecraft");
+		public static final List<Tree> TREES = new ArrayList<>();
 		public final String name;
 		public int minX = OreDictionary.WILDCARD_VALUE;
 		public int maxX = OreDictionary.WILDCARD_VALUE;
 		public int minY = OreDictionary.WILDCARD_VALUE;
 		public int maxY = OreDictionary.WILDCARD_VALUE;
 
-		public PAGE(String name) {
+		public Tree(String name) {
 			this.name = name;
 		}
 
-		public static PAGE get(int index) {
-			return pages.get(index);
+		public static Tree get(int index) {
+			return TREES.get(index);
 		}
 
-		public static PAGE get(String name) {
-			for (PAGE p : pages)
+		public static Tree get(String name) {
+			for (Tree p : TREES)
 				if (p.name.equals(name))
 					return p;
 			return null;
 		}
 
 		public static int size() {
-			return pages.size();
+			return TREES.size();
 		}
 
 	}

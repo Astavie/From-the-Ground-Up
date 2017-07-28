@@ -3,7 +3,7 @@ package ftgumod.technology;
 import ftgumod.ItemList;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
-import ftgumod.technology.TechnologyHandler.PAGE;
+import ftgumod.technology.TechnologyHandler.Tree;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -33,31 +33,31 @@ public class Technology {
 	private final List<ItemList> item;
 	private final Technology prev;
 	private final Technology[] secret;
-	private final PAGE page;
+	private final TechnologyHandler.Tree tree;
 	private final String name;
 	private int next = 0;
 	private boolean customUnlock = false;
 
-	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
-		this(page, prev, null, icon, false, x, y, name, item);
+	public Technology(Tree tree, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
+		this(tree, prev, null, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
-		this(page, prev, null, icon, hide, x, y, name, item);
+	public Technology(Tree tree, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+		this(tree, prev, null, icon, hide, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
-		this(page, prev, secret, icon, false, x, y, name, item);
+	public Technology(Tree tree, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
+		this(tree, prev, secret, icon, false, x, y, name, item);
 	}
 
-	public Technology(PAGE page, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
+	public Technology(TechnologyHandler.Tree tree, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
 		ID = TechnologyHandler.getID();
 
 		this.x = x;
 		this.y = y;
 		this.name = name;
 		this.prev = prev;
-		this.page = page;
+		this.tree = tree;
 		this.icon = icon;
 		this.secret = secret;
 		this.hide = hide;
@@ -97,8 +97,8 @@ public class Technology {
 		return LOGGER;
 	}
 
-	public PAGE getPage() {
-		return page;
+	public Tree getTree() {
+		return tree;
 	}
 
 	public ItemStack getIcon() {

@@ -11,7 +11,7 @@ public class FTGUTweaker {
 		CraftTweakerAPI.registerClass(Idea.class);
 		CraftTweakerAPI.registerClass(Research.class);
 		CraftTweakerAPI.registerClass(Scramble.class);
-		CraftTweakerAPI.registerClass(Page.class);
+		CraftTweakerAPI.registerClass(Tree.class);
 	}
 
 }

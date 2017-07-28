@@ -10,7 +10,7 @@ import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyHandler.PAGE;
+import ftgumod.technology.TechnologyHandler.Tree;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -83,7 +83,7 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		PAGE p = PAGE.get(currentPage);
+		Tree p = TechnologyHandler.Tree.get(currentPage);
 
 		buttonList.clear();
 		if (state == 0) {
@@ -93,7 +93,7 @@ public class GuiResearchBook extends GuiScreen {
 			y_max = p.maxY * 24 - 77;
 
 			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, p.name);
-			if (PAGE.size() < 2)
+			if (Tree.size() < 2)
 				page.enabled = false;
 
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
@@ -134,9 +134,9 @@ public class GuiResearchBook extends GuiScreen {
 		} else if (button.id == 2) {
 			if (state == 0) {
 				currentPage++;
-				if (currentPage >= PAGE.size())
+				if (currentPage >= Tree.size())
 					currentPage = 0;
-				button.displayString = PAGE.get(currentPage).name;
+				button.displayString = Tree.get(currentPage).name;
 			} else {
 				PacketDispatcher.sendToServer(new CopyTechMessage(state));
 			}
@@ -298,7 +298,7 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.depthFunc(515);
 		if (state == 0) {
 			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
-			Set<Technology> tech = TechnologyHandler.technologies.get(PAGE.get(currentPage));
+			Set<Technology> tech = TechnologyHandler.technologies.get(Tree.get(currentPage));
 
 			if (tech != null) {
 				try {

@@ -11,7 +11,7 @@ import ftgumod.compat.crafttweaker.util.CollectionsBuilder;
 import ftgumod.compat.crafttweaker.util.IRecipeBuilder;
 import ftgumod.compat.crafttweaker.util.InputHelper;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyHandler.PAGE;
+import ftgumod.technology.TechnologyHandler.Tree;
 import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
@@ -67,9 +67,9 @@ public class Technology {
 				ls2[i] = ls1.get(i);
 			}
 
-			CraftTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(PAGE.get(page), p, ls2, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
+			CraftTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(Tree.get(page), p, ls2, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
 		} else {
-			CraftTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(PAGE.get(page), p, null, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
+			CraftTweakerAPI.apply(new AddTech(new ftgumod.technology.Technology(TechnologyHandler.Tree.get(page), p, null, InputHelper.getStack(icon), hide, x, y, name, InputHelper.toObjects(item))));
 		}
 	}
 
@@ -144,7 +144,7 @@ public class Technology {
 
 		@Override
 		public void remove(ftgumod.technology.Technology recipe) {
-			if (!TechnologyHandler.technologies.get(recipe.getPage()).remove(recipe))
+			if (!TechnologyHandler.technologies.get(recipe.getTree()).remove(recipe))
 				return;
 
 			IdeaRecipe idea = TechnologyHandler.getIdea(recipe);
