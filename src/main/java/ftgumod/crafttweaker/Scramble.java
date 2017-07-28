@@ -1,12 +1,12 @@
 package ftgumod.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.IAction;
 import crafttweaker.api.item.IIngredient;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
 import ftgumod.crafttweaker.util.Action.ActionAdd;
-import ftgumod.crafttweaker.util.ActionClear;
 import ftgumod.crafttweaker.util.CollectionBuilder;
 import ftgumod.crafttweaker.util.InputHelper;
 import ftgumod.technology.TechnologyHandler;
@@ -69,30 +69,29 @@ public class Scramble {
 
 	}
 
-	private static class Clear extends ActionClear<DecipherGroup> {
+	private static class Clear implements IAction {
 
 		private final ResearchRecipe key;
 
 		private Clear(ResearchRecipe key) {
-			super(key.output.getUnlocalizedName() + " scrambles", TechnologyHandler.unlock.get(key).list);
 			this.key = key;
 		}
 
 		@Override
 		public void apply() {
-			super.apply();
-			TechnologyHandler.unlock.get(key).recalculateSlots();
+			TechnologyHandler.unlock.remove(key);
 
 			ITEM_GROUP.UNDECIPHERED.clearItems();
 			for (ResearchRecipe r : TechnologyHandler.unlock.keySet()) {
-				Decipher d = TechnologyHandler.unlock.get(r);
-				if (d.list.size() == 0)
-					TechnologyHandler.unlock.remove(r);
-
 				ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);
 				TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalizedName());
 				ITEM_GROUP.UNDECIPHERED.addItem(i);
 			}
+		}
+
+		@Override
+		public String describe() {
+			return "[" + FTGUTweaker.name + "] Clearing all " + key.output.getUnlocalizedName() + " scrambles";
 		}
 
 	}

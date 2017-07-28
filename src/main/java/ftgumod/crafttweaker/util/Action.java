@@ -4,12 +4,12 @@ import crafttweaker.IAction;
 
 public abstract class Action<T> implements IAction {
 
-	protected final IRecipeBuilder<T> base;
+	protected final IRecipeBuilder<T> builder;
 	protected final T recipe;
 
-	protected Action(T recipe, IRecipeBuilder<T> base) {
+	protected Action(T recipe, IRecipeBuilder<T> builder) {
 		this.recipe = recipe;
-		this.base = base;
+		this.builder = builder;
 	}
 
 	public static abstract class ActionAdd<T> extends Action<T> {
@@ -20,7 +20,7 @@ public abstract class Action<T> implements IAction {
 
 		@Override
 		public void apply() {
-			base.add(recipe);
+			builder.add(recipe);
 		}
 
 	}
@@ -33,7 +33,7 @@ public abstract class Action<T> implements IAction {
 
 		@Override
 		public void apply() {
-			base.remove(recipe);
+			builder.remove(recipe);
 		}
 
 	}

@@ -113,7 +113,7 @@ public class Technology {
 	private static class AddTech extends ActionAdd<ftgumod.technology.Technology> {
 
 		protected AddTech(ftgumod.technology.Technology tech) {
-			super(tech, new BaseTechnology());
+			super(tech, new TechnologyBuilder());
 		}
 
 		@Override
@@ -125,7 +125,7 @@ public class Technology {
 	private static class RemoveTech extends ActionRemove<ftgumod.technology.Technology> {
 
 		protected RemoveTech(ftgumod.technology.Technology tech) {
-			super(tech, new BaseTechnology());
+			super(tech, new TechnologyBuilder());
 		}
 
 		@Override
@@ -135,7 +135,7 @@ public class Technology {
 
 	}
 
-	private static class BaseTechnology implements IRecipeBuilder<ftgumod.technology.Technology> {
+	private static class TechnologyBuilder implements IRecipeBuilder<ftgumod.technology.Technology> {
 
 		@Override
 		public void add(ftgumod.technology.Technology recipe) {
