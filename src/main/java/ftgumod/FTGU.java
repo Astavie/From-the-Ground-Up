@@ -2,7 +2,7 @@ package ftgumod;
 
 import ftgumod.compat.ICompat;
 import ftgumod.compat.immersiveengineering.CompatIE;
-import ftgumod.minetweaker.FTGUTweaker;
+import ftgumod.crafttweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;

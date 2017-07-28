@@ -13,11 +13,10 @@ apply plugin: 'maven'
 ext {
     if (mc_minor == "0") {
         mc_version = "1.${mc_major}"
-        mc_version2 = "1${mc_major}"
     } else {
         mc_version = "1.${mc_major}.${mc_minor}"
-        mc_version2 = "1${mc_major}${mc_minor}"
     }
+    mc_version2 = "1${mc_major}${mc_minor}"
 }
 
 version = "${mc_version}-${mod_status}${major}.${minor}.${patch}"
@@ -38,13 +37,12 @@ minecraft {
 repositories {
     maven { url "http://dvs1.progwml6.com/files/maven" }
     maven { url "http://maven.blamejared.com/" }
-    maven { url "http://www.ryanliptak.com/maven/" }
 }
 
 dependencies {
     // Mod APIs
     deobfCompile "mezz.jei:jei_${mc_version}:+:api"
-    deobfCompile "MineTweaker3:MineTweaker3-API:+"
+    deobfCompile "CraftTweaker2:CraftTweaker2-API:+"
     deobfCompile "blusunrize:ImmersiveEngineering:0.${mc_major}+" // API didn't work 26/07/2017
 
     // Runtime Mods
@@ -52,7 +50,7 @@ dependencies {
     // runtime "slimeknights:TConstruct:${mc_version}+"
 
     runtime "mezz.jei:jei_${mc_version}:+"
-    // runtime "MineTweaker3:MineTweaker3-MC${mc_version2}-Main:+"
+    runtime "CraftTweaker2:CraftTweaker2-MC${mc_version2}-Main:+"
 }
 
 processResources {

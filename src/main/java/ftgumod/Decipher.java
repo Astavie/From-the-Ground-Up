@@ -1,5 +1,6 @@
 package ftgumod;
 
+import com.google.common.primitives.Ints;
 import ftgumod.technology.TechnologyUtil;
 
 import java.util.Arrays;
@@ -28,9 +29,9 @@ public class Decipher {
 		public final ItemList unlock;
 		public final Set<Integer> slots;
 
-		public DecipherGroup(Object unlock, Integer... slots) {
+		public DecipherGroup(Object unlock, int... slots) {
 			this.unlock = new ItemList(TechnologyUtil.toItem(unlock));
-			this.slots = new LinkedHashSet<>(Arrays.asList(slots));
+			this.slots = new LinkedHashSet<>(Ints.asList(slots));
 		}
 
 	}
