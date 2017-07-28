@@ -1,15 +1,15 @@
-package ftgumod.crafttweaker;
+package ftgumod.compat.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import ftgumod.ItemList;
-import ftgumod.crafttweaker.util.Action.ActionAdd;
-import ftgumod.crafttweaker.util.Action.ActionRemove;
-import ftgumod.crafttweaker.util.ActionClear;
-import ftgumod.crafttweaker.util.CollectionsBuilder;
-import ftgumod.crafttweaker.util.IRecipeBuilder;
-import ftgumod.crafttweaker.util.InputHelper;
+import ftgumod.compat.crafttweaker.util.Action.ActionAdd;
+import ftgumod.compat.crafttweaker.util.Action.ActionRemove;
+import ftgumod.compat.crafttweaker.util.ActionClear;
+import ftgumod.compat.crafttweaker.util.CollectionsBuilder;
+import ftgumod.compat.crafttweaker.util.IRecipeBuilder;
+import ftgumod.compat.crafttweaker.util.InputHelper;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import ftgumod.technology.TechnologyUtil;

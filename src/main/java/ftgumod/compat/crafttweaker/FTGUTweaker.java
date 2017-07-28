@@ -1,4 +1,4 @@
-package ftgumod.crafttweaker;
+package ftgumod.compat.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 

@@ -1,4 +1,4 @@
-package ftgumod.crafttweaker.util;
+package ftgumod.compat.crafttweaker.util;
 
 import crafttweaker.IAction;
 

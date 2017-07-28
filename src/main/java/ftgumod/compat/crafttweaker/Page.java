@@ -1,9 +1,9 @@
-package ftgumod.crafttweaker;
+package ftgumod.compat.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
-import ftgumod.crafttweaker.util.Action.ActionAdd;
-import ftgumod.crafttweaker.util.Action.ActionRemove;
-import ftgumod.crafttweaker.util.CollectionBuilder;
+import ftgumod.compat.crafttweaker.util.Action.ActionAdd;
+import ftgumod.compat.crafttweaker.util.Action.ActionRemove;
+import ftgumod.compat.crafttweaker.util.CollectionBuilder;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.PAGE;
 import stanhebben.zenscript.annotations.ZenClass;

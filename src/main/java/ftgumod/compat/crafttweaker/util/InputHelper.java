@@ -1,11 +1,11 @@
-package ftgumod.crafttweaker.util;
+package ftgumod.compat.crafttweaker.util;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.liquid.ILiquidStack;
 import crafttweaker.api.oredict.IOreDictEntry;
-import ftgumod.crafttweaker.FTGUTweaker;
+import ftgumod.compat.crafttweaker.FTGUTweaker;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;

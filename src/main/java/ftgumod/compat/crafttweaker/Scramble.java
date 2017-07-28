@@ -1,4 +1,4 @@
-package ftgumod.crafttweaker;
+package ftgumod.compat.crafttweaker;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
@@ -6,9 +6,9 @@ import crafttweaker.api.item.IIngredient;
 import ftgumod.Decipher;
 import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGUAPI;
-import ftgumod.crafttweaker.util.Action.ActionAdd;
-import ftgumod.crafttweaker.util.CollectionBuilder;
-import ftgumod.crafttweaker.util.InputHelper;
+import ftgumod.compat.crafttweaker.util.Action.ActionAdd;
+import ftgumod.compat.crafttweaker.util.CollectionBuilder;
+import ftgumod.compat.crafttweaker.util.InputHelper;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyHandler.ITEM_GROUP;
 import ftgumod.technology.TechnologyUtil;

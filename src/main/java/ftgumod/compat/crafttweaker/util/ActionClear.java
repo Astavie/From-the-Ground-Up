@@ -1,7 +1,7 @@
-package ftgumod.crafttweaker.util;
+package ftgumod.compat.crafttweaker.util;
 
 import crafttweaker.IAction;
-import ftgumod.crafttweaker.FTGUTweaker;
+import ftgumod.compat.crafttweaker.FTGUTweaker;
 
 import java.util.Collection;
 

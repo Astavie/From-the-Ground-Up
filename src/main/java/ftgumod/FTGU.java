@@ -1,8 +1,8 @@
 package ftgumod;
 
 import ftgumod.compat.ICompat;
+import ftgumod.compat.crafttweaker.FTGUTweaker;
 import ftgumod.compat.immersiveengineering.CompatIE;
-import ftgumod.crafttweaker.FTGUTweaker;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
