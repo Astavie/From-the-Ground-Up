@@ -6,7 +6,6 @@ import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -27,7 +26,6 @@ public class PageElementText implements IPageElement {
 	public PageElementText(GuiBook book, ITextComponent text, Alignment alignment, float size, boolean shadow) {
 		this.book = book;
 		width = book.getBook().getPageWidth() / size;
-		text.getStyle().setColor(TextFormatting.DARK_PURPLE);
 		this.text = GuiUtilRenderComponents.splitText(text, (int) width, book.getFontRenderer(), true, false);
 		this.alignment = alignment;
 		this.size = size;
@@ -56,37 +54,47 @@ public class PageElementText implements IPageElement {
 		float x = alignment.getPosition(width);
 		float y = 0;
 
-		float mx = mouseX / size;
-		float my = mouseY / size;
-
-		ITextComponent hover = null;
-
 		for (ITextComponent text : text) {
 			String s = text.getFormattedText();
-			int width = fontRenderer.getStringWidth(s);
-			float i = x - alignment.getPosition(width);
-
-			if (my >= y && my < y + fontRenderer.FONT_HEIGHT && mx >= i && mx < i + width) {
-				float j = i;
-				for (ITextComponent child : text)
-					if (child instanceof TextComponentString) {
-						j += fontRenderer.getStringWidth(((TextComponentString) child).getText());
-						if (j > mx) {
-							hover = child;
-							break;
-						}
-					}
-			}
-
-			fontRenderer.drawString(s, i, y, Color.WHITE.getRGB(), shadow);
+			fontRenderer.drawString(s, x - alignment.getPosition(fontRenderer.getStringWidth(s)), y, Color.WHITE.getRGB(), shadow);
 			y += fontRenderer.FONT_HEIGHT;
 		}
 
 		float size = 1 / this.size;
 		GlStateManager.scale(size, size, size);
 
-		if (hover != null)
-			book.handleComponentHover(hover, mouseX, mouseY);
+		book.handleComponentHover(getComponentAt(mouseX, mouseY), mouseX, mouseY);
+	}
+
+	@Override
+	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
+		if (mouseButton == 0)
+			book.handleComponentClick(getComponentAt(mouseX, mouseY));
+	}
+
+	private ITextComponent getComponentAt(int mouseX, int mouseY) {
+		FontRenderer fontRenderer = book.getFontRenderer();
+		float x = alignment.getPosition(width);
+		float y = 0;
+
+		float mx = mouseX / size;
+		float my = mouseY / size;
+
+		for (ITextComponent text : text) {
+			int width = fontRenderer.getStringWidth(text.getFormattedText());
+			float i = x - alignment.getPosition(width);
+
+			float j = y + fontRenderer.FONT_HEIGHT;
+			if (my >= y && my < j && mx >= i && mx < i + width)
+				for (ITextComponent child : text)
+					if (child instanceof TextComponentString) {
+						i += fontRenderer.getStringWidth(((TextComponentString) child).getText());
+						if (i > mx)
+							return child;
+					}
+			y = j;
+		}
+		return null;
 	}
 
 	public enum Alignment {

@@ -1,21 +1,29 @@
 package ftgumod.client.gui.book;
 
+import ftgumod.client.gui.book.content.IPageContent;
 import ftgumod.client.gui.book.element.IPageElement;
-import ftgumod.client.gui.book.element.PageElementText;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+@SideOnly(Side.CLIENT)
 public class GuiBook extends GuiScreen {
 
 	private final IBook book;
-	private final IPageElement element;
+	private final List<IPageElement> elements = new ArrayList<>();
 
 	public GuiBook(IBook book) {
 		this.book = book;
-		this.element = new PageElementText(this, new TextComponentString("Small text...\nThis is not fun!"), PageElementText.Alignment.LEFT, 5F, true);
+		for (IPageContent content : book.getContent())
+			content.build(this, elements);
 	}
 
 	public IBook getBook() {
@@ -35,7 +43,28 @@ public class GuiBook extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		element.drawElement(mouseX, mouseY, partialTicks);
+
+		int y = 0;
+		for (IPageElement element : elements) {
+			element.drawElement(mouseX, mouseY - y, partialTicks);
+			int height = element.getHeight();
+			GlStateManager.translate(0F, height, 0F);
+			y += height;
+		}
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		int y = 0;
+		for (IPageElement element : elements) {
+			int i = y + element.getHeight();
+			if (i > mouseY) {
+				element.mouseClicked(mouseX, mouseY - y, mouseButton);
+				return;
+			}
+			y = i;
+		}
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 }

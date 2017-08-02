@@ -10,6 +10,6 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public interface IPageContent {
 
-	List<IPageElement> build(GuiBook book);
+	void build(GuiBook book, List<IPageElement> elements);
 
 }

@@ -13,4 +13,6 @@ public interface IPageElement {
 
 	void drawElement(int mouseX, int mouseY, float partialTicks);
 
+	void mouseClicked(int mouseX, int mouseY, int mouseButton);
+
 }
