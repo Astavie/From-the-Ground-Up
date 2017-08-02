@@ -1,6 +1,7 @@
 package ftgumod.item;
 
-import ftgumod.client.gui.GuiResearchBook;
+import ftgumod.client.gui.book.GuiBook;
+import ftgumod.client.gui.book.IBook;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,7 +26,17 @@ public class ItemResearchBook extends Item {
 	@SideOnly(Side.CLIENT)
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
+			Minecraft.getMinecraft().displayGuiScreen(new GuiBook(new IBook() {
+				@Override
+				public int getPageWidth() {
+					return 300;
+				}
+
+				@Override
+				public int getPageHeight() {
+					return 300;
+				}
+			}));
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand());
 	}

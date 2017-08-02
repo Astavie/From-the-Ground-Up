@@ -79,7 +79,7 @@ public class ContainerResearchTable extends Container {
 		glass = c;
 		c++;
 
-		addSlotToContainer(new SlotResearchTable(invPlayer.player, invResult, c, 124, 35, tileEntity));
+		addSlotToContainer(new Slot(invResult, c, 124, 35));
 		output = c;
 		c++;
 

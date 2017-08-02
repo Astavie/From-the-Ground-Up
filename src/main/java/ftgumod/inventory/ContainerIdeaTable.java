@@ -66,7 +66,7 @@ public class ContainerIdeaTable extends Container {
 			c++;
 		}
 
-		addSlotToContainer(new SlotIdeaTable(invPlayer.player, invResult, c, 124, 35, tileEntity));
+		addSlotToContainer(new Slot(invResult, c, 124, 35));
 		output = c;
 		c++;
 

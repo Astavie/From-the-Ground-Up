@@ -21,11 +21,9 @@ public class SlotSpecial extends Slot {
 			return true;
 		}
 
-		for (ItemStack s : special) {
-			if (stack.getItem() == s.getItem() && stack.getMetadata() == s.getMetadata()) {
+		for (ItemStack s : special)
+			if (stack.getItem() == s.getItem() && stack.getMetadata() == s.getMetadata())
 				return true;
-			}
-		}
 		return false;
 	}
 
@@ -33,4 +31,5 @@ public class SlotSpecial extends Slot {
 	public int getSlotStackLimit() {
 		return limit;
 	}
+
 }
