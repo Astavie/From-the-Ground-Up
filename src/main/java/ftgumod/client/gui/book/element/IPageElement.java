@@ -8,10 +8,13 @@ public interface IPageElement {
 
 	int getHeight();
 
-	@Override
-	int hashCode();
+	int getMargin();
+
+	int getPageWidth();
 
 	void drawElement(int mouseX, int mouseY, float partialTicks);
+
+	void drawForeground(int mouseX, int mouseY, float partialTicks);
 
 	void mouseClicked(int mouseX, int mouseY, int mouseButton);
 

@@ -5,10 +5,12 @@ import ftgumod.client.gui.book.element.IPageElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,15 +44,46 @@ public class GuiBook extends GuiScreen {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
 
-		int y = 0;
-		for (IPageElement element : elements) {
-			element.drawElement(mouseX, mouseY - y, partialTicks);
-			int height = element.getHeight();
-			GlStateManager.translate(0F, height, 0F);
-			y += height;
+		GlStateManager.pushMatrix();
+		{
+			int width = book.getWidthLeft() + book.getWidthRight();
+			int marginTop = (this.height - book.getHeight()) / 2;
+			int marginLeft = (this.width - width) / 2;
+			GlStateManager.translate(marginLeft, marginTop, 0);
+
+			GlStateManager.scale(2, 2, 2);
+			{
+				mc.getTextureManager().bindTexture(book.getTexture());
+				drawTexturedModalRect(0, 0, 0, 0, width / 2, book.getHeight() / 2);
+			}
+			GlStateManager.scale(0.5, 0.5, 0.5);
+
+			GlStateManager.pushMatrix();
+			{
+				int factor = new ScaledResolution(mc).getScaleFactor();
+				GlStateManager.translate(book.getPageXLeft(), book.getPageY(), 0);
+
+				int y = book.getHeight() - (book.getPageHeight() + book.getPageY());
+				GL11.glScissor((marginLeft + book.getPageXLeft()) * factor, (marginTop + y) * factor, book.getPageWidth() * factor, book.getPageHeight() * factor);
+
+				y = 0;
+				for (IPageElement element : elements) {
+					GL11.glEnable(GL11.GL_SCISSOR_TEST);
+					element.drawElement(mouseX, mouseY - y, partialTicks);
+					GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+					element.drawForeground(mouseX, mouseY - y, partialTicks);
+					int height = element.getHeight() + element.getMargin();
+					GlStateManager.translate(0, height, 0);
+					y += height;
+				}
+			}
+			GlStateManager.popMatrix();
 		}
+		GlStateManager.popMatrix();
+
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	@Override

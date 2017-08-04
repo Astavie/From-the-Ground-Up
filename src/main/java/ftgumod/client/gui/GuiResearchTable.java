@@ -91,9 +91,7 @@ public class GuiResearchTable extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float arg0, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(texture);
-		int marginHorizontal = (width - xSize) / 2;
-		int marginVertical = (height - ySize) / 2;
-		drawTexturedModalRect(marginHorizontal, marginVertical, 0, 0, xSize, ySize);
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 		if (table.recipe != null) {

@@ -2,9 +2,9 @@ package ftgumod.client.gui;
 
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
-import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -42,9 +42,7 @@ public class GuiIdeaTable extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float arg0, int mouseX, int mouseY) {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(texture);
-		int marginHorizontal = (width - xSize) / 2;
-		int marginVertical = (height - ySize) / 2;
-		drawTexturedModalRect(marginHorizontal, marginVertical, 0, 0, xSize, ySize);
+		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
 }

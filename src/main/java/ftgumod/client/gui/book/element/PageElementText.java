@@ -9,7 +9,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.awt.*;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
@@ -25,7 +24,8 @@ public class PageElementText implements IPageElement {
 
 	public PageElementText(GuiBook book, ITextComponent text, Alignment alignment, float size, boolean shadow) {
 		this.book = book;
-		width = book.getBook().getPageWidth() / size;
+		width = //book.getBook().getPageWidth() / size;
+				1000;
 		this.text = GuiUtilRenderComponents.splitText(text, (int) width, book.getFontRenderer(), true, false);
 		this.alignment = alignment;
 		this.size = size;
@@ -34,35 +34,39 @@ public class PageElementText implements IPageElement {
 
 	@Override
 	public int getHeight() {
-		return (int) ((text.size() + 1) * book.getFontRenderer().FONT_HEIGHT * size);
+		return text.size() * getMargin();
 	}
 
-	/**
-	 * @deprecated Text elements should not be used as references
-	 */
 	@Override
-	@Deprecated
-	public int hashCode() {
-		return text.get(0).getUnformattedText().hashCode();
+	public int getMargin() {
+		return (int) (book.getFontRenderer().FONT_HEIGHT * size);
+	}
+
+	@Override
+	public int getPageWidth() {
+		return 1;
 	}
 
 	@Override
 	public void drawElement(int mouseX, int mouseY, float partialTicks) {
 		GlStateManager.scale(size, size, size);
+		{
+			FontRenderer fontRenderer = book.getFontRenderer();
+			float x = alignment.getPosition(width);
+			float y = 0;
 
-		FontRenderer fontRenderer = book.getFontRenderer();
-		float x = alignment.getPosition(width);
-		float y = 0;
-
-		for (ITextComponent text : text) {
-			String s = text.getFormattedText();
-			fontRenderer.drawString(s, x - alignment.getPosition(fontRenderer.getStringWidth(s)), y, Color.WHITE.getRGB(), shadow);
-			y += fontRenderer.FONT_HEIGHT;
+			for (ITextComponent text : text) {
+				String s = text.getFormattedText();
+				fontRenderer.drawString(s, x - alignment.getPosition(fontRenderer.getStringWidth(s)), y, 0, shadow);
+				y += fontRenderer.FONT_HEIGHT;
+			}
 		}
-
 		float size = 1 / this.size;
 		GlStateManager.scale(size, size, size);
+	}
 
+	@Override
+	public void drawForeground(int mouseX, int mouseY, float partialTicks) {
 		book.handleComponentHover(getComponentAt(mouseX, mouseY), mouseX, mouseY);
 	}
 
