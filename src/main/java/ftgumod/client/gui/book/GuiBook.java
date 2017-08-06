@@ -69,6 +69,7 @@ public class GuiBook extends GuiScreen {
 		int ya = marginTop + (book.getHeight() - (book.getPageHeight() + book.getPageY()));
 
 		for (Map.Entry<IPageElement, FramebufferTransparent> entry : elements.entrySet()) {
+			// Setup framebuffer rendering
 			GlStateManager.matrixMode(5889);
 			GlStateManager.loadIdentity();
 			GlStateManager.ortho(0.0D, book.getPageWidth() * factor, book.getPageHeight() * factor, 0.0D, 1000.0D, 3000.0D);
@@ -76,7 +77,7 @@ public class GuiBook extends GuiScreen {
 			GlStateManager.loadIdentity();
 			GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
-			int mx = mouseX - marginLeft - book.getPageXLeft();
+			int mx = mouseX - xa;
 			int my = mouseY - marginTop - book.getPageY() - y;
 
 			IPageElement element = entry.getKey();
@@ -86,18 +87,19 @@ public class GuiBook extends GuiScreen {
 
 			GlStateManager.pushMatrix();
 			GlStateManager.scale(factor, factor, factor);
+			GlStateManager.translate(0, y, 0);
 			element.drawElement(mx, my, partialTicks);
 			GlStateManager.popMatrix();
 
 			mc.getFramebuffer().bindFramebuffer(true);
-
-			GlStateManager.pushMatrix();
-			framebuffer.framebufferRender(xa, ya - y, 0, 0, book.getPageWidth(), book.getPageHeight(), true);
+			framebuffer.framebufferRender(xa, ya, 0, 0, book.getPageWidth(), book.getPageHeight(), true);
 			framebuffer.framebufferClear();
-			GlStateManager.popMatrix();
+
+			mc.getFramebuffer().bindFramebuffer(true);
+			mc.entityRenderer.setupOverlayRendering();
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(marginLeft + book.getPageXLeft(), marginTop + book.getPageY() + y, 0);
+			GlStateManager.translate(xa, marginTop + book.getPageY() + y, 0);
 			element.drawForeground(mx, my, partialTicks);
 			GlStateManager.popMatrix();
 
