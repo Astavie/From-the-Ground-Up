@@ -24,8 +24,7 @@ public class PageElementText implements IPageElement {
 
 	public PageElementText(GuiBook book, ITextComponent text, Alignment alignment, float size, boolean shadow) {
 		this.book = book;
-		width = //book.getBook().getPageWidth() / size;
-				1000;
+		width = book.getBook().getPageWidth() / size;
 		this.text = GuiUtilRenderComponents.splitText(text, (int) width, book.getFontRenderer(), true, false);
 		this.alignment = alignment;
 		this.size = size;
@@ -50,19 +49,15 @@ public class PageElementText implements IPageElement {
 	@Override
 	public void drawElement(int mouseX, int mouseY, float partialTicks) {
 		GlStateManager.scale(size, size, size);
-		{
-			FontRenderer fontRenderer = book.getFontRenderer();
-			float x = alignment.getPosition(width);
-			float y = 0;
+		FontRenderer fontRenderer = book.getFontRenderer();
+		float x = alignment.getPosition(width);
+		float y = 0;
 
-			for (ITextComponent text : text) {
-				String s = text.getFormattedText();
-				fontRenderer.drawString(s, x - alignment.getPosition(fontRenderer.getStringWidth(s)), y, 0, shadow);
-				y += fontRenderer.FONT_HEIGHT;
-			}
+		for (ITextComponent text : text) {
+			String s = text.getFormattedText();
+			fontRenderer.drawString(s, x - alignment.getPosition(fontRenderer.getStringWidth(s)), y, 0, shadow);
+			y += fontRenderer.FONT_HEIGHT;
 		}
-		float size = 1 / this.size;
-		GlStateManager.scale(size, size, size);
 	}
 
 	@Override
