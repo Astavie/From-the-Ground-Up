@@ -1,8 +1,8 @@
 package ftgumod.client.gui.book;
 
 import ftgumod.FTGU;
-import ftgumod.client.gui.book.content.IPageContent;
-import ftgumod.client.gui.book.element.PageElementText;
+import ftgumod.client.gui.book.content.IBookContent;
+import ftgumod.client.gui.book.element.BookElementText;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,14 +15,14 @@ import java.util.List;
 public class BookResearch implements IBook {
 
 	@Override
-	public List<IPageContent> getContent() {
+	public List<IBookContent> getContent() {
 		return Collections.singletonList((book, elements) -> {
 			TextComponentString title = new TextComponentString("Insert Title Here");
 			title.getStyle().setBold(true);
 
-			elements.add(new PageElementText(book, title, PageElementText.Alignment.LEFT, 1.2F, false));
-			elements.add(new PageElementText(book, new TextComponentString("Paragraph 1\nIncluding new lines!"), PageElementText.Alignment.LEFT, 1.0F, false));
-			elements.add(new PageElementText(book, new TextComponentString("Paragraph 2"), PageElementText.Alignment.LEFT, 1.0F, false));
+			elements.add(new BookElementText(book, title, BookElementText.Alignment.LEFT, 1.2F, false));
+			elements.add(new BookElementText(book, new TextComponentString("Paragraph 1\nIncluding new lines!"), BookElementText.Alignment.LEFT, 1.0F, false));
+			elements.add(new BookElementText(book, new TextComponentString("Paragraph 2"), BookElementText.Alignment.LEFT, 1.0F, false));
 		});
 	}
 

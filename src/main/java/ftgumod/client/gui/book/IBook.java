@@ -1,6 +1,6 @@
 package ftgumod.client.gui.book;
 
-import ftgumod.client.gui.book.content.IPageContent;
+import ftgumod.client.gui.book.content.IBookContent;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -10,7 +10,7 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public interface IBook {
 
-	List<IPageContent> getContent();
+	List<IBookContent> getContent();
 
 	ResourceLocation getTexture();
 

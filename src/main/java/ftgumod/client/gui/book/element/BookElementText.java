@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import java.util.List;
 
 @SideOnly(Side.CLIENT)
-public class PageElementText implements IPageElement {
+public class BookElementText implements IBookElement {
 
 	private final GuiBook book;
 	private final List<ITextComponent> text;
@@ -22,7 +22,7 @@ public class PageElementText implements IPageElement {
 
 	private final float width;
 
-	public PageElementText(GuiBook book, ITextComponent text, Alignment alignment, float size, boolean shadow) {
+	public BookElementText(GuiBook book, ITextComponent text, Alignment alignment, float size, boolean shadow) {
 		this.book = book;
 		width = book.getBook().getPageWidth() / size;
 		this.text = GuiUtilRenderComponents.splitText(text, (int) width, book.getFontRenderer(), true, false);

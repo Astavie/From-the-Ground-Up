@@ -1,12 +1,11 @@
 package ftgumod.client.gui.book;
 
-import ftgumod.client.gui.book.content.IPageContent;
-import ftgumod.client.gui.book.element.IPageElement;
-import ftgumod.client.shader.FramebufferTransparent;
+import ftgumod.client.gui.book.content.IBookContent;
+import ftgumod.client.gui.book.element.IBookElement;
+import ftgumod.client.gui.book.element.PageElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,24 +13,49 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class GuiBook extends GuiScreen {
 
 	private final IBook book;
-	private final Map<IPageElement, FramebufferTransparent> elements = new LinkedHashMap<>();
-	private final int factor = new ScaledResolution(Minecraft.getMinecraft()).getScaleFactor();
+	private final List<List<PageElement>> pages = new ArrayList<>();
+	private final int bookWidth;
+
+	private int page = 0;
 
 	public GuiBook(IBook book) {
 		this.book = book;
-		List<IPageElement> list = new ArrayList<>();
-		for (IPageContent content : book.getContent())
+		bookWidth = book.getWidthLeft() + book.getWidthRight();
+
+		List<IBookElement> list = new ArrayList<>();
+		for (IBookContent content : book.getContent())
 			content.build(this, list);
-		for (IPageElement element : list)
-			elements.put(element, new FramebufferTransparent(book.getPageWidth(), book.getPageHeight(), factor, true));
+
+		int page = 0;
+		int y = 0;
+		IBookElement last = null;
+		for (IBookElement element : list) {
+			int margin = last == null ? 0 : last.getMargin();
+			if (y != 0 && y + margin + element.getHeight() > book.getPageHeight()) {
+				y = 0;
+				page++;
+			} else
+				y += margin;
+
+			for (int i = page; i < page + element.getPageWidth(); i++)
+				getPage(i).add(new PageElement(book, element, i - page, y));
+
+			page += element.getPageWidth() - 1;
+			y += element.getHeight();
+			last = element;
+		}
+	}
+
+	private List<PageElement> getPage(int index) {
+		while (pages.size() <= index)
+			pages.add(new ArrayList<>());
+		return pages.get(index);
 	}
 
 	public IBook getBook() {
@@ -51,84 +75,52 @@ public class GuiBook extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		drawDefaultBackground();
 
-		GlStateManager.pushMatrix();
-
-		int width = book.getWidthLeft() + book.getWidthRight();
 		int marginTop = (this.height - book.getHeight()) / 2;
-		int marginLeft = (this.width - width) / 2;
+		int marginLeft = (this.width - bookWidth) / 2;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(2, 2, 2);
 		mc.getTextureManager().bindTexture(book.getTexture());
-		drawTexturedModalRect(marginLeft / 2, marginTop / 2, 0, 0, width / 2, book.getHeight() / 2);
+		drawTexturedModalRect(marginLeft / 2, marginTop / 2, 0, 0, bookWidth / 2, book.getHeight() / 2);
 		GlStateManager.popMatrix();
 
-		int y = 0;
+		int xaLeft = marginLeft + book.getPageXLeft() - 1;
+		int xaRight = marginLeft + book.getPageXRight() - 1;
+		int ya = marginTop + book.getPageY();
 
-		int xa = marginLeft + book.getPageXLeft() - 1;
-		int ya = marginTop + (book.getHeight() - (book.getPageHeight() + book.getPageY()));
-
-		for (Map.Entry<IPageElement, FramebufferTransparent> entry : elements.entrySet()) {
-			// Setup framebuffer rendering
-			GlStateManager.matrixMode(5889);
-			GlStateManager.loadIdentity();
-			GlStateManager.ortho(0.0D, book.getPageWidth() * factor, book.getPageHeight() * factor, 0.0D, 1000.0D, 3000.0D);
-			GlStateManager.matrixMode(5888);
-			GlStateManager.loadIdentity();
-			GlStateManager.translate(0.0F, 0.0F, -2000.0F);
-
-			int mx = mouseX - xa;
-			int my = mouseY - marginTop - book.getPageY() - y;
-
-			IPageElement element = entry.getKey();
-			FramebufferTransparent framebuffer = entry.getValue();
-
-			framebuffer.bindFramebuffer(true);
-
+		for (PageElement element : getPage(page * 2)) {
 			GlStateManager.pushMatrix();
-			GlStateManager.scale(factor, factor, factor);
-			GlStateManager.translate(0, y, 0);
-			element.drawElement(mx, my, partialTicks);
+			element.draw(xaLeft, ya, mouseX - xaLeft, mouseY - ya, partialTicks);
 			GlStateManager.popMatrix();
-
-			mc.getFramebuffer().bindFramebuffer(true);
-			framebuffer.framebufferRender(xa, ya, 0, 0, book.getPageWidth(), book.getPageHeight(), true);
-			framebuffer.framebufferClear();
-
-			mc.getFramebuffer().bindFramebuffer(true);
-			mc.entityRenderer.setupOverlayRendering();
-
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(xa, marginTop + book.getPageY() + y, 0);
-			element.drawForeground(mx, my, partialTicks);
-			GlStateManager.popMatrix();
-
-			y += element.getHeight() + element.getMargin();
 		}
 
-		GlStateManager.popMatrix();
+		for (PageElement element : getPage(page * 2 + 1)) {
+			GlStateManager.pushMatrix();
+			element.draw(xaRight, ya, mouseX - xaRight, mouseY - ya, partialTicks);
+			GlStateManager.popMatrix();
+		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		int y = 0;
-		for (IPageElement element : elements.keySet()) {
-			int i = y + element.getHeight();
-			if (i > mouseY) {
-				element.mouseClicked(mouseX, mouseY - y, mouseButton);
-				return;
-			}
-			y = i;
-		}
-		super.mouseClicked(mouseX, mouseY, mouseButton);
-	}
+		int marginTop = (this.height - book.getHeight()) / 2;
+		int marginLeft = (this.width - bookWidth) / 2;
 
-	@Override
-	public void onGuiClosed() {
-		for (FramebufferTransparent framebuffer : elements.values())
-			framebuffer.deleteFramebuffer();
+		int xaLeft = marginLeft + book.getPageXLeft() - 1;
+		int xaRight = marginLeft + book.getPageXRight() - 1;
+		int ya = marginTop + book.getPageY();
+
+		if (mouseY > ya && mouseY < ya + book.getPageHeight())
+			if (mouseX >= xaLeft && mouseX < xaLeft + book.getPageWidth())
+				for (PageElement element : getPage(page * 2))
+					element.mouseClicked(mouseX - xaLeft, mouseY - ya, mouseButton);
+			else if (mouseX >= xaRight && mouseX < xaRight + book.getPageWidth())
+				for (PageElement element : getPage(page * 2 + 1))
+					element.mouseClicked(mouseX - xaRight, mouseY - ya, mouseButton);
+
+		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 }
