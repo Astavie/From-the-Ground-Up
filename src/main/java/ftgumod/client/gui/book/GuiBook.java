@@ -78,26 +78,36 @@ public class GuiBook extends GuiScreen {
 		int marginTop = (this.height - book.getHeight()) / 2;
 		int marginLeft = (this.width - bookWidth) / 2;
 
-		GlStateManager.pushMatrix();
-		GlStateManager.scale(2, 2, 2);
 		mc.getTextureManager().bindTexture(book.getTexture());
-		drawTexturedModalRect(marginLeft / 2, marginTop / 2, 0, 0, bookWidth / 2, book.getHeight() / 2);
-		GlStateManager.popMatrix();
 
-		int xaLeft = marginLeft + book.getPageXLeft() - 1;
-		int xaRight = marginLeft + book.getPageXRight() - 1;
-		int ya = marginTop + book.getPageY();
+		boolean left = page == 0;
+		boolean right = 2 * page - 2 >= pages.size();
 
-		for (PageElement element : getPage(page * 2)) {
-			GlStateManager.pushMatrix();
-			element.draw(xaLeft, ya, mouseX - xaLeft, mouseY - ya, partialTicks);
-			GlStateManager.popMatrix();
-		}
+		int x = left ? book.getWidthLeft() : 0;
+		int y = left || right ? book.getHeight() : 0;
+		int width = right ? book.getWidthLeft() : left ? book.getWidthRight() : bookWidth;
 
-		for (PageElement element : getPage(page * 2 + 1)) {
-			GlStateManager.pushMatrix();
-			element.draw(xaRight, ya, mouseX - xaRight, mouseY - ya, partialTicks);
-			GlStateManager.popMatrix();
+		if (left)
+			marginLeft += book.getWidthLeft();
+
+		drawModalRectWithCustomSizedTexture(marginLeft, marginTop, x, y, width, book.getHeight(), 512, 512);
+
+		if (!left && !right) {
+			int xaLeft = marginLeft + book.getPageXLeft() - 1;
+			int xaRight = marginLeft + book.getPageXRight() - 1;
+			int ya = marginTop + book.getPageY();
+
+			for (PageElement element : getPage(2 * page - 2)) {
+				GlStateManager.pushMatrix();
+				element.draw(xaLeft, ya, mouseX - xaLeft, mouseY - ya, partialTicks);
+				GlStateManager.popMatrix();
+			}
+
+			for (PageElement element : getPage(2 * page - 1)) {
+				GlStateManager.pushMatrix();
+				element.draw(xaRight, ya, mouseX - xaRight, mouseY - ya, partialTicks);
+				GlStateManager.popMatrix();
+			}
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
@@ -105,20 +115,29 @@ public class GuiBook extends GuiScreen {
 
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-		int marginTop = (this.height - book.getHeight()) / 2;
-		int marginLeft = (this.width - bookWidth) / 2;
+		if (mouseButton == 0)
+			page++;
+		if (mouseButton == 1)
+			page--;
+		if (page < 0)
+			page = 0;
 
-		int xaLeft = marginLeft + book.getPageXLeft() - 1;
-		int xaRight = marginLeft + book.getPageXRight() - 1;
-		int ya = marginTop + book.getPageY();
+		if (page != 0 && 2 * page - 2 < pages.size()) {
+			int marginTop = (this.height - book.getHeight()) / 2;
+			int marginLeft = (this.width - bookWidth) / 2;
 
-		if (mouseY > ya && mouseY < ya + book.getPageHeight())
-			if (mouseX >= xaLeft && mouseX < xaLeft + book.getPageWidth())
-				for (PageElement element : getPage(page * 2))
-					element.mouseClicked(mouseX - xaLeft, mouseY - ya, mouseButton);
-			else if (mouseX >= xaRight && mouseX < xaRight + book.getPageWidth())
-				for (PageElement element : getPage(page * 2 + 1))
-					element.mouseClicked(mouseX - xaRight, mouseY - ya, mouseButton);
+			int xaLeft = marginLeft + book.getPageXLeft() - 1;
+			int xaRight = marginLeft + book.getPageXRight() - 1;
+			int ya = marginTop + book.getPageY();
+
+			if (mouseY > ya && mouseY < ya + book.getPageHeight())
+				if (mouseX >= xaLeft && mouseX < xaLeft + book.getPageWidth())
+					for (PageElement element : getPage(2 * page - 2))
+						element.mouseClicked(mouseX - xaLeft, mouseY - ya, mouseButton);
+				else if (mouseX >= xaRight && mouseX < xaRight + book.getPageWidth())
+					for (PageElement element : getPage(2 * page - 1))
+						element.mouseClicked(mouseX - xaRight, mouseY - ya, mouseButton);
+		}
 
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 	}
