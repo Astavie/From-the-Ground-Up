@@ -3,6 +3,7 @@ package ftgumod.technology.recipe;
 import ftgumod.technology.Technology;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -11,11 +12,11 @@ import java.util.Set;
 
 public class IdeaRecipe {
 
-	private final Collection<Ingredient> recipe;
+	private final NonNullList<Ingredient> recipe;
 	private final int needed;
 	private final Technology output;
 
-	public IdeaRecipe(Collection<Ingredient> recipe, int needed, Technology output) {
+	public IdeaRecipe(NonNullList<Ingredient> recipe, int needed, Technology output) {
 		this.output = output;
 		this.needed = needed;
 		this.recipe = recipe;

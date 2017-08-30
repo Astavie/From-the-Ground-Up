@@ -3,8 +3,6 @@ package ftgumod.proxy;
 import ftgumod.GuiHandler;
 import ftgumod.technology.Technology;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.stats.RecipeBook;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
@@ -19,10 +17,6 @@ public class ProxyCommon {
 
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
 		return ctx.getServerHandler().player;
-	}
-
-	public RecipeBook getRecipeBook(EntityPlayer player) {
-		return ((EntityPlayerMP) player).getRecipeBook();
 	}
 
 	public void preInit() {

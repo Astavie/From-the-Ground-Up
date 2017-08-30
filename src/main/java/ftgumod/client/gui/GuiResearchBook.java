@@ -305,12 +305,12 @@ public class GuiResearchBook extends GuiScreen {
 							continue;
 						if (t1.isHidden() && !t1.hasCustomUnlock() && !t1.isResearched(player))
 							continue;
-						if (t1.getPrevious() == null || !tech.contains(t1.getPrevious()))
+						if (t1.getParent() == null || !tech.contains(t1.getParent()))
 							continue;
 						int xStart = (t1.getX() * 24 - i) + 11;
 						int yStart = (t1.getY() * 24 - j) + 11;
-						int xStop = (t1.getPrevious().getX() * 24 - i) + 11;
-						int yStop = (t1.getPrevious().getY() * 24 - j) + 11;
+						int xStop = (t1.getParent().getX() * 24 - i) + 11;
+						int yStop = (t1.getParent().getY() * 24 - j) + 11;
 
 						boolean flag = t1.isResearched(player);
 						boolean flag1 = t1.canResearchIgnoreResearched(player);

@@ -1,14 +1,16 @@
 package ftgumod.technology;
 
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class TechnologyHandler {
 
+	public static final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
 	public static final Set<Technology> technologies = new HashSet<>();
 
 	public static final Set<String> start = new HashSet<>();
@@ -271,6 +273,8 @@ public class TechnologyHandler {
 
 	public static void registerTechnology(Technology tech) {
 		technologies.add(tech);
+		if (tech.hasParent())
+			tech.getParent().getChildren().add(tech);
 
 		if (minecraft)
 			vanilla.add(tech.getRegistryName().toString());
@@ -290,6 +294,20 @@ public class TechnologyHandler {
 					if (ingredient.test(item))
 						return t;
 		return null;
+	}
+
+	public static AdvancementProgress getProgress(EntityPlayer player, Technology technology) {
+		return progress.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>()).computeIfAbsent(technology, tech -> {
+			AdvancementProgress progress = new AdvancementProgress();
+			progress.update(tech.getCriteria(), tech.getRequirements());
+
+			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+			for (String criterion : progress.getRemaningCriteria())
+				if (cap.isResearched(tech.getRegistryName().toString() + "." + criterion))
+					progress.grantCriterion(criterion);
+
+			return progress;
+		});
 	}
 
 	public enum GUI {

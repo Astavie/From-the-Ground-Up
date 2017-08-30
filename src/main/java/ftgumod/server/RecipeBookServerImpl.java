@@ -82,11 +82,11 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 		return recipes;
 	}
 
-	public void addItems(NonNullList<Ingredient> list, EntityPlayerMP player) {
+	public void addRecipes(NonNullList<Ingredient> list, EntityPlayerMP player) {
 		super.add(getRecipeList(list), player);
 	}
 
-	public void removeItems(NonNullList<Ingredient> list, EntityPlayerMP player) {
+	public void removeRecipes(NonNullList<Ingredient> list, EntityPlayerMP player) {
 		remove(getRecipeList(list), player);
 	}
 

@@ -1,8 +1,6 @@
 package ftgumod;
 
-import ftgumod.event.PlayerInspectEvent;
 import ftgumod.event.PlayerLockEvent;
-import ftgumod.event.TechnologyEvent;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
@@ -14,16 +12,13 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.util.BlockSerializable;
 import ftgumod.util.StackUtils;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.command.CommandReload;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.inventory.InventoryCraftResult;
@@ -33,19 +28,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentBase;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -71,92 +60,10 @@ public class EventHandler {
 	private final int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
-	public static void unlock(Technology tech, EntityPlayerMP player, SoundEvent sound) {
-		TechnologyEvent event = new TechnologyEvent.Unlock(player, tech);
-		MinecraftForge.EVENT_BUS.post(event);
-
-		if (!event.isCanceled()) {
-			tech.setUnlocked(player);
-
-			player.sendMessage(new TextComponentTranslation("technology.complete.unlock", tech.getDisplayText()));
-			player.world.playSound(null, player.getPosition(), sound, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-			FTGUAPI.c_technologyUnlocked.trigger(player, tech);
-
-			PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
-		}
-	}
-
-	private boolean hasBlock(BlockPos pos, Block block, int radius, World world) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-
-		x -= radius / 2;
-		y -= 1;
-		z -= radius / 2;
-		for (int y1 = y; y1 < y + 2; y1++) {
-			for (int x1 = x; x1 < x + radius; x1++) {
-				for (int z1 = z; z1 < z + radius; z1++) {
-					Block b = world.getBlockState(new BlockPos(x1, y1, z1)).getBlock();
-					if (b == block)
-						return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	@SubscribeEvent(receiveCanceled = true)
-	public void onPlayerInspect(PlayerInspectEvent evt) {
-		if (!evt.getWorld().isRemote && evt.getBlock() == Blocks.SOUL_SAND && ticks.get(evt.getEntityPlayer()) > t) {
-			EntityPlayer player = evt.getEntityPlayer();
-			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
-				evt.setCanceled(false);
-
-				TextComponentBase whisper = new TextComponentTranslation("technology.noise.whisper2");
-				whisper.getStyle().setColor(TextFormatting.DARK_GRAY).setItalic(true);
-
-				player.sendMessage(whisper);
-
-				unlock(TechnologyHandler.GLOWING_EYES, (EntityPlayerMP) player, SoundEvents.BLOCK_PORTAL_TRIGGER);
-			}
-		}
-	}
-
 	@SubscribeEvent
-	public void onLivingUpdate(LivingUpdateEvent evt) {
-		if (!evt.getEntity().world.isRemote && evt.getEntity() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) evt.getEntity();
-
-			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
-				if (player.world.getBlockState(player.getPosition().offset(EnumFacing.DOWN, 1)).getBlock() == Blocks.SOUL_SAND) {
-					if (!ticks.containsKey(player)) {
-						ticks.put(player, 0);
-					} else {
-						int tick = ticks.get(player);
-						if (tick == t) {
-							TextComponentBase whisper = new TextComponentTranslation("technology.noise.whisper1");
-							whisper.getStyle().setColor(TextFormatting.DARK_GRAY).setItalic(true);
-
-							player.sendMessage(whisper);
-							player.world.playSound(null, player.getPosition(), SoundEvents.BLOCK_PORTAL_AMBIENT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-						}
-						if (!(tick > t))
-							ticks.put(player, tick + 1);
-					}
-				} else if (ticks.containsKey(player) && ticks.get(player) < t)
-					ticks.remove(player);
-			} else if (!TechnologyHandler.ENCHANTING.isUnlocked(player) && TechnologyHandler.ENCHANTING.canResearchIgnoreCustomUnlock(player)) {
-				for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-					ItemStack stack = player.inventory.getStackInSlot(i);
-					if (!stack.isEmpty() && stack.getItem() == Items.ENCHANTED_BOOK) {
-						unlock(TechnologyHandler.ENCHANTING, (EntityPlayerMP) player, SoundEvents.ENTITY_PLAYER_LEVELUP);
-						break;
-					}
-				}
-			} else if (!TechnologyHandler.ENDER_KNOWLEDGE.isUnlocked(player) && TechnologyHandler.ENDER_KNOWLEDGE.canResearchIgnoreCustomUnlock(player) && hasBlock(player.getPosition(), Blocks.DRAGON_EGG, 5, player.world))
-				unlock(TechnologyHandler.ENDER_KNOWLEDGE, (EntityPlayerMP) player, SoundEvents.ENTITY_PLAYER_LEVELUP);
+	public void onCommand(CommandEvent evt) {
+		if (evt.getCommand() instanceof CommandReload) {
+			// TODO: Reload stuff
 		}
 	}
 

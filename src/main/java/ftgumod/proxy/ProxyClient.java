@@ -7,12 +7,10 @@ import ftgumod.client.gui.toast.ToastTechnology;
 import ftgumod.compat.jei.CompatJEI;
 import ftgumod.technology.Technology;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.stats.RecipeBook;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -36,11 +34,6 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
 		return ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx);
-	}
-
-	@Override
-	public RecipeBook getRecipeBook(EntityPlayer player) {
-		return player.world.isRemote ? ((EntityPlayerSP) player).getRecipeBook() : super.getRecipeBook(player);
 	}
 
 	@Override

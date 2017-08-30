@@ -125,7 +125,7 @@ public class FTGU {
 		registerCriterion(FTGUAPI.c_itemLocked);
 		registerCriterion(FTGUAPI.c_inspect);
 
-		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl.class);
+		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl::new);
 
 		MinecraftForge.EVENT_BUS.register(new CapabilityTechnology());
 		MinecraftForge.EVENT_BUS.register(new EventHandler());

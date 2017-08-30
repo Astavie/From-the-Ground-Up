@@ -4,21 +4,24 @@ import ftgumod.technology.Technology;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.entity.player.EntityPlayer;
 
 public final class ListenerTechnology<T extends ICriterionInstance> extends ICriterionTrigger.Listener<T> {
 
+	private final EntityPlayer player;
 	private final Technology technology;
 	private final String name;
 
-	public ListenerTechnology(T instance, Technology technology, String name) {
+	public ListenerTechnology(EntityPlayer player, T instance, Technology technology, String name) {
 		super(instance, null, null);
+		this.player = player;
 		this.technology = technology;
 		this.name = name;
 	}
 
 	@Override
-	public void grantCriterion(PlayerAdvancements ignore) {
-
+	public void grantCriterion(PlayerAdvancements playerAdvancements) {
+		technology.grantCriterion(player, name);
 	}
 
 	@Override

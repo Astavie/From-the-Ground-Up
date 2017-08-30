@@ -3,7 +3,6 @@ package ftgumod.inventory;
 import ftgumod.FTGUAPI;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,10 +80,9 @@ public class ContainerIdeaTable extends Container {
 		}
 
 		for (Technology tech : TechnologyHandler.technologies)
-			if (tech.canResearch(invPlayer.player))
-				for (IdeaRecipe i : tech.getIdeaRecipes())
-					if (i.test(inventory))
-						return tech;
+			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player))
+				if (tech.getIdeaRecipe().test(inventory))
+					return tech;
 		return null;
 	}
 
