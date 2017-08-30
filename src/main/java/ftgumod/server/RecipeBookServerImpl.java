@@ -1,15 +1,16 @@
 package ftgumod.server;
 
 import com.google.common.collect.Lists;
-import ftgumod.ItemList;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.stats.RecipeBookServer;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
@@ -72,20 +73,20 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 			remove(list, player); // Invoke remove method so the client also gets updated
 	}
 
-	private List<IRecipe> getRecipeList(List<ItemList> list) {
+	private List<IRecipe> getRecipeList(NonNullList<Ingredient> list) {
 		List<IRecipe> recipes = new ArrayList<>();
-		for (ItemList item : list)
+		for (Ingredient ingredient : list)
 			for (IRecipe r : ForgeRegistries.RECIPES)
-				if (item.contains(r.getRecipeOutput()))
+				if (ingredient.test(r.getRecipeOutput()))
 					recipes.add(r);
 		return recipes;
 	}
 
-	public void addItems(List<ItemList> list, EntityPlayerMP player) {
+	public void addItems(NonNullList<Ingredient> list, EntityPlayerMP player) {
 		super.add(getRecipeList(list), player);
 	}
 
-	public void removeItems(List<ItemList> list, EntityPlayerMP player) {
+	public void removeItems(NonNullList<Ingredient> list, EntityPlayerMP player) {
 		remove(getRecipeList(list), player);
 	}
 

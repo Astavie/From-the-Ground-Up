@@ -8,6 +8,8 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
@@ -17,9 +19,9 @@ import java.util.HashSet;
 
 public class TechnologyMessage implements IMessage {
 
-	private Collection<Integer> tech;
+	private Collection<String> tech;
 	private boolean force;
-	private Integer toast;
+	private Technology toast;
 
 	public TechnologyMessage() {
 	}
@@ -28,21 +30,10 @@ public class TechnologyMessage implements IMessage {
 		this(player, force, null);
 	}
 
-	public TechnologyMessage(EntityPlayer player, boolean force, @Nullable Integer toast) {
+	public TechnologyMessage(EntityPlayer player, boolean force, @Nullable Technology toast) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
-			tech = new HashSet<>();
-
-			for (String s : cap.getResearched()) {
-				if (s.endsWith(".unlock")) {
-					//noinspection ConstantConditions
-					tech.add(-TechnologyHandler.getTechnology(s.replace(".unlock", "")).getID());
-				} else {
-					//noinspection ConstantConditions
-					tech.add(TechnologyHandler.getTechnology(s).getID());
-				}
-			}
-
+			this.tech = cap.getResearched();
 			this.force = force;
 			this.toast = toast;
 		} else
@@ -55,12 +46,11 @@ public class TechnologyMessage implements IMessage {
 
 		this.tech = new HashSet<>();
 		int size = buffer.readInt();
-		for (int i = 0; i < size; i++) {
-			tech.add(buffer.readInt());
-		}
+		for (int i = 0; i < size; i++)
+			tech.add(ByteBufUtils.readUTF8String(buffer));
 
 		if (buffer.readBoolean())
-			toast = buffer.readInt();
+			toast = TechnologyHandler.getTechnology(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
 	}
 
 	@Override
@@ -69,16 +59,14 @@ public class TechnologyMessage implements IMessage {
 
 		if (tech != null) {
 			buffer.writeInt(tech.size());
-			for (Integer i : tech) {
-				buffer.writeInt(i);
-			}
-		} else {
+			for (String s : tech)
+				ByteBufUtils.writeUTF8String(buffer, s);
+		} else
 			buffer.writeInt(0);
-		}
 
 		if (toast != null) {
 			buffer.writeBoolean(true);
-			buffer.writeInt(toast);
+			ByteBufUtils.writeUTF8String(buffer, toast.getRegistryName().toString());
 		} else
 			buffer.writeBoolean(false);
 	}
@@ -96,17 +84,10 @@ public class TechnologyMessage implements IMessage {
 					return null;
 
 				cap.clear();
-				for (Integer i : message.tech) {
-					Technology tech = TechnologyHandler.getTechnology(Math.abs(i));
-					if (tech != null)
-						if (i < 0)
-							cap.setResearched(tech.getUnlocalizedName() + ".unlock");
-						else
-							cap.setResearched(tech.getUnlocalizedName());
-				}
+				cap.setResearched(message.tech);
 
 				if (message.toast != null)
-					FTGU.PROXY.showTechnologyToast(TechnologyHandler.getTechnology(message.toast));
+					FTGU.PROXY.showTechnologyToast(message.toast);
 
 				FTGU.INSTANCE.runCompat("jei", message.tech);
 			}

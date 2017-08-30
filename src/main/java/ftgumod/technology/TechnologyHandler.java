@@ -1,24 +1,15 @@
 package ftgumod.technology;
 
-import ftgumod.Decipher;
-import ftgumod.Decipher.DecipherGroup;
-import ftgumod.FTGUAPI;
-import ftgumod.ItemList;
-import ftgumod.technology.recipe.IdeaRecipe;
-import ftgumod.technology.recipe.ResearchRecipe;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class TechnologyHandler {
 
-	public static final Set<IdeaRecipe> ideas = new HashSet<>();
-	public static final Set<ResearchRecipe> researches = new HashSet<>();
-	public static final Map<Tree, Set<Technology>> technologies = new HashMap<>();
-	public static final Map<ResearchRecipe, Decipher> unlock = new HashMap<>();
+	public static final Set<Technology> technologies = new HashSet<>();
 
 	public static final Set<String> start = new HashSet<>();
 	public static final Set<String> headStart = new HashSet<>();
@@ -58,12 +49,9 @@ public class TechnologyHandler {
 	public static Technology UNDECIPHERED_RESEARCH;
 
 	private static boolean minecraft = false;
-	private static int ID = 0;
 
 	public static void init() {
-		Tree.TREES.add(Tree.MINECRAFT);
-
-		ITEM_GROUP.init();
+		/*
 
 		BASIC_CRAFTING = new Technology(Tree.MINECRAFT, null, new ItemStack(Blocks.GRASS), 0, 0, "basic_crafting", Items.WHEAT, Blocks.HAY_BLOCK, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, new ItemStack(Items.DYE, 1, 5), new ItemStack(Items.DYE, 1, 6), new ItemStack(Items.DYE, 1, 7), new ItemStack(Items.DYE, 1, 8), new ItemStack(Items.DYE, 1, 9), new ItemStack(Items.DYE, 1, 10), new ItemStack(Items.DYE, 1, 12), new ItemStack(Items.DYE, 1, 13), new ItemStack(Items.DYE, 1, 14), Items.SUGAR, Blocks.SLIME_BLOCK);
 		WOODWORKING = new Technology(Tree.MINECRAFT, BASIC_CRAFTING, new ItemStack(Blocks.PLANKS), 2, 0, "woodworking", Blocks.PLANKS, Blocks.CRAFTING_TABLE, Blocks.WOODEN_SLAB, ITEM_GROUP.WOODEN_STAIRS);
@@ -269,257 +257,43 @@ public class TechnologyHandler {
 
 		registerIdea(UNDECIPHERED_RESEARCH, "B", 'B', ITEM_GROUP.UNDECIPHERED);
 		registerResearch(UNDECIPHERED_RESEARCH, "ONO", "NGN", "ONO", 'O', Blocks.OBSIDIAN, 'N', Items.GOLD_NUGGET, 'G', Blocks.GLASS_PANE);
-	}
 
-	public static int getID() {
-		ID++;
-		return ID;
-	}
-
-	public static int getTotalTechnologies() {
-		return ID;
+		*/
 	}
 
 	public static void addResearchedFromStart(Technology technology) {
-		start.add(technology.getUnlocalizedName());
+		start.add(technology.getRegistryName().toString());
 	}
 
 	public static void addResearchedFromHeadstart(Technology technology) {
-		headStart.add(technology.getUnlocalizedName());
+		headStart.add(technology.getRegistryName().toString());
 	}
 
-	public static void registerDecipher(ResearchRecipe r, Decipher d) {
-		unlock.put(r, d);
-		ItemStack i = new ItemStack(FTGUAPI.i_parchmentIdea);
-		TechnologyUtil.getItemData(i).setString("FTGU", r.output.getUnlocalizedName());
-		ITEM_GROUP.UNDECIPHERED.addItem(i);
-	}
-
-	public static boolean hasDecipher(ResearchRecipe r) {
-		return unlock.containsKey(r) && unlock.get(r).list.size() > 0;
-	}
-
-	public static boolean registerTechnology(Technology tech) {
-		if (!technologies.containsKey(tech.getTree()))
-			technologies.put(tech.getTree(), new HashSet<>());
-
-		if (!technologies.get(tech.getTree()).add(tech))
-			return false;
-
-		if (tech.getTree().maxX == OreDictionary.WILDCARD_VALUE || tech.getX() > tech.getTree().maxX)
-			tech.getTree().maxX = tech.getX();
-		if (tech.getTree().minX == OreDictionary.WILDCARD_VALUE || tech.getX() < tech.getTree().minX)
-			tech.getTree().minX = tech.getX();
-		if (tech.getTree().maxY == OreDictionary.WILDCARD_VALUE || tech.getY() > tech.getTree().maxY)
-			tech.getTree().maxY = tech.getY();
-		if (tech.getTree().minY == OreDictionary.WILDCARD_VALUE || tech.getY() < tech.getTree().minY)
-			tech.getTree().minY = tech.getY();
+	public static void registerTechnology(Technology tech) {
+		technologies.add(tech);
 
 		if (minecraft)
-			vanilla.add(tech.getUnlocalizedName());
-
-		return true;
+			vanilla.add(tech.getRegistryName().toString());
 	}
 
-	public static void registerIdea(Technology tech, Object... pars) {
-		ideas.add(new IdeaRecipe(tech, pars));
-	}
-
-	public static void registerResearch(Technology tech, Object... pars) {
-		researches.add(new ResearchRecipe(tech, pars));
-	}
-
-	public static void registerIdea(IdeaRecipe recipe) {
-		ideas.add(recipe);
-	}
-
-	public static void registerResearch(ResearchRecipe recipe) {
-		researches.add(recipe);
-	}
-
-	public static Technology getTechnology(String name) {
-		for (Set<Technology> s : technologies.values())
-			for (Technology t : s)
-				if (t.getUnlocalizedName().equalsIgnoreCase(name))
-					return t;
-		return null;
-	}
-
-	public static Technology getTechnology(int ID) {
-		for (Set<Technology> s : technologies.values())
-			for (Technology t : s)
-				if (t.getID() == ID)
-					return t;
-		return null;
-	}
-
-	public static IdeaRecipe getIdea(String name) {
-		for (IdeaRecipe i : ideas) {
-			if (i.output.getUnlocalizedName().equalsIgnoreCase(name)) {
-				return i;
-			}
-		}
-		return null;
-	}
-
-	public static IdeaRecipe getIdea(Technology tech) {
-		for (IdeaRecipe i : ideas) {
-			if (i.output == tech) {
-				return i;
-			}
-		}
-		return null;
-	}
-
-	public static ResearchRecipe getResearch(String name) {
-		for (ResearchRecipe r : researches) {
-			if (r.output.getUnlocalizedName().equalsIgnoreCase(name)) {
-				return r;
-			}
-		}
-		return null;
-	}
-
-	public static ResearchRecipe getResearch(Technology tech) {
-		for (ResearchRecipe r : researches) {
-			if (r.output == tech) {
-				return r;
-			}
-		}
+	public static Technology getTechnology(ResourceLocation name) {
+		for (Technology t : technologies)
+			if (t.getRegistryName().equals(name))
+				return t;
 		return null;
 	}
 
 	public static Technology getLocked(ItemStack item) {
-		if (item.isEmpty())
-			return null;
-		for (Set<Technology> s : technologies.values())
-			for (Technology t : s)
-				for (ItemList o : t.getUnlock())
-					if (o.contains(item))
+		if (!item.isEmpty())
+			for (Technology t : technologies)
+				for (Ingredient ingredient : t.getUnlock())
+					if (ingredient.test(item))
 						return t;
 		return null;
 	}
 
 	public enum GUI {
 		IDEATABLE, RESEARCHTABLE
-	}
-
-	public static class Tree {
-
-		public static final Tree MINECRAFT = new Tree("Minecraft");
-		public static final List<Tree> TREES = new ArrayList<>();
-		public final String name;
-		public int minX = OreDictionary.WILDCARD_VALUE;
-		public int maxX = OreDictionary.WILDCARD_VALUE;
-		public int minY = OreDictionary.WILDCARD_VALUE;
-		public int maxY = OreDictionary.WILDCARD_VALUE;
-
-		public Tree(String name) {
-			this.name = name;
-		}
-
-		public static Tree get(int index) {
-			return TREES.get(index);
-		}
-
-		public static Tree get(String name) {
-			for (Tree p : TREES)
-				if (p.name.equals(name))
-					return p;
-			return null;
-		}
-
-		public static int size() {
-			return TREES.size();
-		}
-
-	}
-
-	public static class ITEM_GROUP {
-
-		public static ITEM_GROUP COLORFUL;
-		public static ITEM_GROUP WOODEN_STAIRS;
-		public static ITEM_GROUP WOODEN_DOOR;
-		public static ITEM_GROUP WOODEN_FENCE;
-		public static ITEM_GROUP WOODEN_FENCE_GATE;
-		public static ITEM_GROUP PICKAXE;
-		public static ITEM_GROUP UNSMOOTH_STONE;
-		public static ITEM_GROUP CRAFTING;
-		public static ITEM_GROUP ORE;
-		public static ITEM_GROUP AXE;
-		public static ITEM_GROUP SWORD;
-		public static ITEM_GROUP LEATHER_ARMOR;
-		public static ITEM_GROUP METAL_ARMOR;
-		public static ITEM_GROUP INGOT;
-		public static ITEM_GROUP HEAT;
-		public static ITEM_GROUP UNCOOKED_FOOD;
-		public static ITEM_GROUP STEW;
-		public static ITEM_GROUP VEGETABLE;
-		public static ITEM_GROUP FRUIT;
-		public static ITEM_GROUP CARROTAPPLE;
-		public static ITEM_GROUP METAL_HELMET;
-		public static ITEM_GROUP PRESSURE_PLATE;
-		public static ITEM_GROUP RECORD;
-		public static ITEM_GROUP DRAGON;
-		public static ITEM_GROUP UNDECIPHERED;
-		private final String name;
-		public List<ItemList> item = new ArrayList<>();
-
-		private ITEM_GROUP(String name, Object... item) {
-			this.name = name;
-
-			for (Object o : item) {
-				this.item.add(new ItemList(TechnologyUtil.toItem(o)));
-			}
-		}
-
-		public static void init() {
-			COLORFUL = new ITEM_GROUP("colorful", Blocks.WOOL, Blocks.STAINED_HARDENED_CLAY);
-			WOODEN_STAIRS = new ITEM_GROUP("wooden_stairs", Blocks.OAK_STAIRS, Blocks.SPRUCE_STAIRS, Blocks.BIRCH_STAIRS, Blocks.JUNGLE_STAIRS, Blocks.ACACIA_STAIRS, Blocks.DARK_OAK_STAIRS);
-			WOODEN_DOOR = new ITEM_GROUP("wooden_door", Items.OAK_DOOR, Items.SPRUCE_DOOR, Items.BIRCH_DOOR, Items.JUNGLE_DOOR, Items.ACACIA_DOOR, Items.DARK_OAK_DOOR);
-			WOODEN_FENCE = new ITEM_GROUP("wooden_fence", Blocks.OAK_FENCE, Blocks.SPRUCE_FENCE, Blocks.BIRCH_FENCE, Blocks.JUNGLE_FENCE, Blocks.ACACIA_FENCE, Blocks.DARK_OAK_FENCE);
-			WOODEN_FENCE_GATE = new ITEM_GROUP("wooden_fence_gate", Blocks.OAK_FENCE_GATE, Blocks.SPRUCE_FENCE_GATE, Blocks.BIRCH_FENCE_GATE, Blocks.JUNGLE_FENCE_GATE, Blocks.ACACIA_FENCE_GATE, Blocks.DARK_OAK_FENCE_GATE);
-			PICKAXE = new ITEM_GROUP("pickaxe", Items.WOODEN_PICKAXE, Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE);
-			UNSMOOTH_STONE = new ITEM_GROUP("unsmooth_stone", Blocks.SANDSTONE, Blocks.COBBLESTONE);
-			CRAFTING = new ITEM_GROUP("crafting", Blocks.CRAFTING_TABLE, Blocks.ANVIL);
-			ORE = new ITEM_GROUP("ore", Blocks.COAL_ORE, Blocks.DIAMOND_ORE, Blocks.EMERALD_ORE, Blocks.GOLD_ORE, Blocks.IRON_ORE, Blocks.LAPIS_ORE, Blocks.REDSTONE_ORE);
-			AXE = new ITEM_GROUP("axe", Items.WOODEN_AXE, Items.STONE_AXE, Items.IRON_AXE, Items.GOLDEN_AXE, Items.DIAMOND_AXE);
-			SWORD = new ITEM_GROUP("sword", Items.WOODEN_SWORD, Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, Items.DIAMOND_SWORD);
-			LEATHER_ARMOR = new ITEM_GROUP("leather_armor", Items.LEATHER_BOOTS, Items.LEATHER_CHESTPLATE, Items.LEATHER_HELMET, Items.LEATHER_LEGGINGS);
-			METAL_ARMOR = new ITEM_GROUP("metal_armor", Items.IRON_BOOTS, Items.IRON_CHESTPLATE, Items.IRON_HELMET, Items.IRON_LEGGINGS, Items.GOLDEN_BOOTS, Items.GOLDEN_CHESTPLATE, Items.GOLDEN_HELMET, Items.GOLDEN_LEGGINGS);
-			INGOT = new ITEM_GROUP("ingot", Items.GOLD_INGOT, Items.IRON_INGOT);
-			HEAT = new ITEM_GROUP("heat", Items.FLINT_AND_STEEL, Blocks.FURNACE, Items.FIRE_CHARGE);
-			UNCOOKED_FOOD = new ITEM_GROUP("uncooked_food", Items.RABBIT, Items.BEEF, Items.MUTTON, Items.CHICKEN, Items.PORKCHOP, new ItemStack(Items.FISH, 1, 0), new ItemStack(Items.FISH, 1, 1));
-			STEW = new ITEM_GROUP("stew", Items.BEETROOT, Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM);
-			VEGETABLE = new ITEM_GROUP("vegetable", Items.CARROT, new ItemStack(Items.POTATO), Items.BEETROOT);
-			FRUIT = new ITEM_GROUP("fruit", Items.APPLE, Items.MELON, Items.CHORUS_FRUIT);
-			CARROTAPPLE = new ITEM_GROUP("carrotapple", Items.APPLE, Items.CARROT, Items.MELON);
-			METAL_HELMET = new ITEM_GROUP("metal_helmet", Items.GOLDEN_HELMET, Items.IRON_HELMET);
-			PRESSURE_PLATE = new ITEM_GROUP("pressure_plate", Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE, Blocks.LIGHT_WEIGHTED_PRESSURE_PLATE, Blocks.STONE_PRESSURE_PLATE, Blocks.WOODEN_PRESSURE_PLATE);
-			RECORD = new ITEM_GROUP("record", Items.RECORD_11, Items.RECORD_13, Items.RECORD_BLOCKS, Items.RECORD_CAT, Items.RECORD_CHIRP, Items.RECORD_FAR, Items.RECORD_MALL, Items.RECORD_MELLOHI, Items.RECORD_STAL, Items.RECORD_STRAD, Items.RECORD_WAIT, Items.RECORD_WARD);
-			DRAGON = new ITEM_GROUP("dragon", Blocks.DRAGON_EGG, Items.DRAGON_BREATH, new ItemStack(Items.SKULL, 1, 5));
-			UNDECIPHERED = new ITEM_GROUP("undeciphered");
-		}
-
-		public boolean contains(ItemStack stack) {
-			for (ItemList l : item)
-				if (l.contains(stack))
-					return true;
-			return false;
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public void addItem(Object o) {
-			item.add(new ItemList(TechnologyUtil.toItem(o)));
-		}
-
-		public void clearItems() {
-			item = new ArrayList<>();
-		}
-
 	}
 
 }

@@ -8,8 +8,8 @@ import ftgumod.item.ItemLookingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
-import ftgumod.technology.recipe.ResearchRecipe;
 import ftgumod.tileentity.TileEntityInventory;
+import ftgumod.util.BlockSerializable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,6 +19,8 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
 
@@ -30,7 +32,7 @@ public class ContainerResearchTable extends Container {
 
 	private final int sizeInventory;
 
-	public ResearchRecipe recipe = null;
+	public Technology recipe = null;
 	public int combine;
 	public int output;
 	public int glass;
@@ -86,76 +88,56 @@ public class ContainerResearchTable extends Container {
 		return c;
 	}
 
-	private ResearchRecipe hasRecipe() {
-		outer:
-		for (ResearchRecipe i : TechnologyHandler.researches) {
-			for (int j = 0; j < 9; j++)
-				if (!i.recipe.get(j).contains(inventorySlots.get(combine + j).getStack()))
-					continue outer;
-			return i;
-		}
-		return null;
-	}
-
 	@Override
 	public void onCraftMatrixChanged(IInventory inv) {
 		if (inv == invInput) {
-			boolean parch = inventorySlots.get(parchment).getHasStack();
-			if (parch) {
+			if (inventorySlots.get(parchment).getHasStack()) {
 				NBTTagCompound tag = TechnologyUtil.getItemData(inventorySlots.get(parchment).getStack());
 				String s = tag.getString("FTGU");
-				recipe = TechnologyHandler.getResearch(s);
+				Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(s));
 
-				if (recipe != null) {
-					Technology tech = recipe.output;
-					EntityPlayer player = invPlayer.player;
-
-					if (!tech.canResearch(player)) {
-						recipe = null;
-					}
-
-					if (recipe != null && !player.world.isRemote && TechnologyHandler.hasDecipher(recipe) && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(player))
-						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, (EntityPlayerMP) player, SoundEvents.ENTITY_PLAYER_LEVELUP);
+				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player)) {
+					recipe = tech;
+					if (!invPlayer.player.world.isRemote && recipe.getResearchRecipe().hasDecipher() && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(invPlayer.player))
+						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, (EntityPlayerMP) invPlayer.player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 				}
-			} else {
+			} else
 				recipe = null;
-			}
 
-			if (inventorySlots.get(feather).getHasStack() && parch) {
-				ResearchRecipe recipe = hasRecipe();
+			if (recipe != null && !inventoryItemStacks.get(feather).isEmpty()) {
+				NonNullList<ItemStack> inventory = NonNullList.create();
+				for (int i = 0; i < 9; i++)
+					inventory.add(inventoryItemStacks.get(combine + i));
 
-				if (recipe != null && recipe == this.recipe) {
-					Technology tech = recipe.output;
-					if (tech.canResearch(invPlayer.player)) {
-						if (TechnologyHandler.hasDecipher(recipe)) {
-							if (!inventorySlots.get(glass).getHasStack()) {
+				if (recipe.getResearchRecipe().test(inventory)) {
+					if (recipe.getResearchRecipe().hasDecipher()) {
+						if (!inventorySlots.get(glass).getHasStack()) {
+							inventorySlots.get(output).putStack(ItemStack.EMPTY);
+							return;
+						}
+
+						Decipher d = recipe.getResearchRecipe().getDecipher();
+						List<BlockSerializable> blocks = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
+						for (DecipherGroup g : d.list) {
+							boolean perms = false;
+							for (BlockSerializable block : blocks)
+								if (block.test(g.unlock)) {
+									perms = true;
+									break;
+								}
+							if (!perms) {
 								inventorySlots.get(output).putStack(ItemStack.EMPTY);
 								return;
 							}
-
-							Decipher d = TechnologyHandler.unlock.get(recipe);
-							List<ItemStack> items = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
-							for (DecipherGroup g : d.list) {
-								boolean perms = false;
-								for (ItemStack t : items)
-									if (g.unlock.contains(t)) {
-										perms = true;
-										break;
-									}
-								if (!perms) {
-									inventorySlots.get(output).putStack(ItemStack.EMPTY);
-									return;
-								}
-							}
 						}
-
-						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
-
-						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalizedName());
-
-						inventorySlots.get(output).putStack(result);
-						return;
 					}
+
+					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
+
+					TechnologyUtil.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
+
+					inventorySlots.get(output).putStack(result);
+					return;
 				}
 			}
 

@@ -2,8 +2,6 @@ package ftgumod.client.gui;
 
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
-import ftgumod.ItemList;
-import ftgumod.client.ItemListClient;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestTechMessage;

@@ -1,9 +1,12 @@
 package ftgumod.item;
 
+import ftgumod.Decipher;
 import ftgumod.FTGUAPI;
 import ftgumod.event.PlayerInspectEvent;
+import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
-import net.minecraft.block.Block;
+import ftgumod.util.BlockSerializable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,12 +38,11 @@ public class ItemLookingGlass extends Item {
 		setMaxStackSize(1);
 	}
 
-	public static List<ItemStack> getInspected(ItemStack item) {
-		List<ItemStack> list = new ArrayList<>();
+	public static List<BlockSerializable> getInspected(ItemStack item) {
+		List<BlockSerializable> list = new ArrayList<>();
 		NBTTagList blocks = TechnologyUtil.getItemData(item).getTagList("FTGU", NBT.TAG_COMPOUND);
-		for (int i = 0; i < blocks.tagCount(); i++) {
-			list.add(new ItemStack(blocks.getCompoundTagAt(i)));
-		}
+		for (int i = 0; i < blocks.tagCount(); i++)
+			list.add(new BlockSerializable(blocks.getCompoundTagAt(i)));
 		return list;
 	}
 
@@ -49,20 +51,26 @@ public class ItemLookingGlass extends Item {
 		if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (!world.isRemote) {
 				ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
+				List<BlockSerializable> list = getInspected(item);
 
 				IBlockState state = world.getBlockState(pos);
-				Block block = state.getBlock();
-				ItemStack stack = block.getPickBlock(state, null, world, pos, player);
+				BlockSerializable block = new BlockSerializable(world, pos, state);
 
-				List<ItemStack> items = getInspected(item);
-				for (ItemStack blockstack : items)
-					if (ItemStack.areItemStacksEqual(blockstack, stack)) {
-						player.sendMessage(new TextComponentTranslation("technology.decipher.already", stack.getTextComponent()));
-						world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-						return EnumActionResult.SUCCESS;
-					}
+				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, pos, state, face);
+				event.setCanceled(true);
 
-				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, items, pos, face, stack);
+				outer:
+				for (Technology tech : TechnologyHandler.technologies)
+					if (tech.hasResearchRecipe() && tech.getResearchRecipe().hasDecipher())
+						group:for (Decipher.DecipherGroup decipher : tech.getResearchRecipe().getDecipher().list)
+							if (block.test(decipher.unlock)) {
+								for (BlockSerializable other : list)
+									if (other.test(decipher.unlock))
+										continue group;
+								event.setCanceled(false);
+								break outer;
+							}
+
 				MinecraftForge.EVENT_BUS.post(event);
 
 				if (event.isCanceled()) {
@@ -78,7 +86,7 @@ public class ItemLookingGlass extends Item {
 
 				NBTTagCompound tag = TechnologyUtil.getItemData(item);
 				NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
-				nbt.appendTag(stack.serializeNBT());
+				nbt.appendTag(block.serialize());
 				tag.setTag("FTGU", nbt);
 			}
 			return EnumActionResult.SUCCESS;

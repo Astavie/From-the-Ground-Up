@@ -30,7 +30,6 @@ technology.complete.already=%s has already been researched
 technology.complete.understand=You do not understand this technology
 technology.complete.unlock=Unlocked the research for %s
 
-technology.decipher.already=%s has already been looked at
 technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
 technology.decipher.tooltip=Shift Right-click to find hidden meaning in blocks

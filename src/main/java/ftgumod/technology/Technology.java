@@ -1,128 +1,106 @@
 package ftgumod.technology;
 
-import ftgumod.ItemList;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
-import ftgumod.technology.TechnologyHandler.Tree;
+import ftgumod.technology.recipe.IdeaRecipe;
+import ftgumod.technology.recipe.ResearchRecipe;
+import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.RecipeBookServer;
-import net.minecraft.util.text.*;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.event.HoverEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Technology {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-
-	private final boolean hide;
-
-	private final int x;
-	private final int y;
 	private final int level;
-
-	private final int ID;
-	private final TextComponentBase displayText;
-	private final ItemStack icon;
-	private final List<ItemList> item;
+	private final boolean root;
+	private final ITextComponent displayText;
+	private final DisplayInfo display;
+	private final Type type;
+	private final NonNullList<Ingredient> unlock;
 	private final Technology prev;
-	private final Technology[] secret;
-	private final TechnologyHandler.Tree tree;
-	private final String name;
-	private int next = 0;
+	private final ResourceLocation id;
+	private final NonNullList<IdeaRecipe> ideas;
+	private ResearchRecipe research;
 	private boolean customUnlock = false;
 
-	public Technology(Tree tree, @Nullable Technology prev, ItemStack icon, int x, int y, String name, Object... item) {
-		this(tree, prev, null, icon, false, x, y, name, item);
-	}
-
-	public Technology(Tree tree, @Nullable Technology prev, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
-		this(tree, prev, null, icon, hide, x, y, name, item);
-	}
-
-	public Technology(Tree tree, @Nullable Technology prev, Technology[] secret, ItemStack icon, int x, int y, String name, Object... item) {
-		this(tree, prev, secret, icon, false, x, y, name, item);
-	}
-
-	public Technology(TechnologyHandler.Tree tree, @Nullable Technology prev, Technology[] secret, ItemStack icon, boolean hide, int x, int y, String name, Object... item) {
-		ID = TechnologyHandler.getID();
-
-		this.x = x;
-		this.y = y;
-		this.name = name;
+	public Technology(ResourceLocation id, @Nullable Technology prev, boolean root, DisplayInfo display, Type type, @Nullable NonNullList<Ingredient> unlock, @Nullable NonNullList<IdeaRecipe> ideas, @Nullable ResearchRecipe research) {
+		this.id = id;
 		this.prev = prev;
-		this.tree = tree;
-		this.icon = icon;
-		this.secret = secret;
-		this.hide = hide;
+		this.root = root;
+		this.display = display;
+		this.type = type;
+		this.unlock = unlock == null ? NonNullList.create() : unlock;
+		this.ideas = ideas == null ? NonNullList.create() : ideas;
+		this.research = research;
 
 		if (prev == null)
 			level = 1;
-		else {
+		else
 			level = prev.level + 1;
-			prev.next += 1;
-		}
 
-		this.item = new ArrayList<>();
-		for (Object o : item) {
-			this.item.add(new ItemList(TechnologyUtil.toItem(o)));
-		}
-
-		displayText = new TextComponentString("[");
-		displayText.getStyle().setColor(TextFormatting.GREEN);
-
-		ITextComponent itextcomponent = getLocalizedName(true);
+		this.displayText = new TextComponentString("[");
+		this.displayText.getStyle().setColor(display.getFrame().getFormat());
+		ITextComponent itextcomponent = display.getTitle().createCopy();
 		ITextComponent itextcomponent1 = new TextComponentString("");
 		ITextComponent itextcomponent2 = itextcomponent.createCopy();
-
-		itextcomponent2.getStyle().setColor(TextFormatting.GREEN);
-
+		itextcomponent2.getStyle().setColor(display.getFrame().getFormat());
 		itextcomponent1.appendSibling(itextcomponent2);
 		itextcomponent1.appendText("\n");
-		itextcomponent1.appendSibling(getDescription());
-
+		itextcomponent1.appendSibling(display.getDescription());
 		itextcomponent.getStyle().setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, itextcomponent1));
-
-		displayText.appendSibling(itextcomponent);
-		displayText.appendText("]");
+		this.displayText.appendSibling(itextcomponent);
+		this.displayText.appendText("]");
 	}
 
 	public static Logger getLogger() {
 		return LOGGER;
 	}
 
-	public Tree getTree() {
-		return tree;
+	public ResearchRecipe getResearchRecipe() {
+		return research;
 	}
 
-	public ItemStack getIcon() {
-		return icon;
+	public void setResearchRecipe(ResearchRecipe recipe) {
+		research = recipe;
+	}
+
+	public boolean hasResearchRecipe() {
+		return research != null;
+	}
+
+	public NonNullList<IdeaRecipe> getIdeaRecipes() {
+		return ideas;
+	}
+
+	public void addIdeaRecipe(IdeaRecipe recipe) {
+		ideas.add(recipe);
+	}
+
+	public boolean isRoot() {
+		return root;
+	}
+
+	public DisplayInfo getDisplay() {
+		return display;
 	}
 
 	public Technology getPrevious() {
 		return prev;
 	}
 
-	public List<ItemList> getUnlock() {
-		return item;
-	}
-
-	public boolean isHidden() {
-		return hide;
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
+	public NonNullList<Ingredient> getUnlock() {
+		return unlock;
 	}
 
 	public void setCustomUnlock(boolean b) {
@@ -137,104 +115,57 @@ public class Technology {
 		if (customUnlock) {
 			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			if (cap != null)
-				cap.setResearched(name + ".unlock");
+				cap.setResearched(id.toString() + ".unlock");
 		}
 	}
 
 	public void setResearched(EntityPlayer player) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
-			cap.setResearched(name);
+			cap.setResearched(id.toString());
 
 			if (!player.world.isRemote) {
 				RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
 				if (book instanceof RecipeBookServerImpl)
-					((RecipeBookServerImpl) book).addItems(item, (EntityPlayerMP) player);
+					((RecipeBookServerImpl) book).addItems(unlock, (EntityPlayerMP) player);
 				else
 					LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
 			}
 		}
 	}
 
-	public boolean isTheory() {
-		return next > item.size();
+	public Type getType() {
+		return type;
 	}
 
-	public String getUnlocalizedName() {
-		return name;
+	public ResourceLocation getRegistryName() {
+		return id;
 	}
 
-	public TextComponentBase getLocalizedName(boolean suffix) {
-		TextComponentTranslation name = new TextComponentTranslation("technology." + this.name + ".name");
-		return suffix ? new TextComponentTranslation(isTheory() ? "technology.theory" : "technology.technology", name) : name;
-	}
-
-	public TextComponentBase getDescription() {
-		return new TextComponentTranslation("technology." + name + ".desc");
-	}
-
-	public TextComponentBase getDisplayText() {
+	public ITextComponent getDisplayText() {
 		return displayText;
 	}
 
-	public int getID() {
-		return ID;
-	}
-
 	public boolean isResearched(EntityPlayer player) {
-		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		return cap != null && cap.isResearched(name);
+		final ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+		return cap != null && cap.isResearched(id.toString());
 	}
 
 	public boolean isUnlocked(EntityPlayer player) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		return !customUnlock || cap != null && cap.isResearched(name + ".unlock");
+		return !customUnlock || cap != null && cap.isResearched(id.toString() + ".unlock");
 	}
 
 	public boolean canResearch(EntityPlayer player) {
-		if (isResearched(player))
-			return false;
-		if (customUnlock && !isUnlocked(player))
-			return false;
-		if (prev != null && !prev.isResearched(player))
-			return false;
-		if (secret == null)
-			return true;
-		else
-			for (Technology t : secret)
-				if (!t.isResearched(player))
-					return false;
-		return true;
+		return !isResearched(player) && (!customUnlock || isUnlocked(player) && (prev == null || prev.isResearched(player)));
 	}
 
 	public boolean canResearchIgnoreCustomUnlock(EntityPlayer player) {
-		if (isResearched(player))
-			return false;
-		if (prev != null && !prev.isResearched(player))
-			return false;
-		if (secret == null)
-			return true;
-		else
-			for (Technology t : secret)
-				if (!t.isResearched(player))
-					return false;
-		return true;
+		return !isResearched(player) && (prev == null || prev.isResearched(player));
 	}
 
 	public boolean canResearchIgnoreResearched(EntityPlayer player) {
-		if (isResearched(player))
-			return true;
-		if (customUnlock && !isUnlocked(player))
-			return false;
-		if (prev != null && !prev.isResearched(player))
-			return false;
-		if (secret == null)
-			return true;
-		else
-			for (Technology t : secret)
-				if (!t.isResearched(player))
-					return false;
-		return true;
+		return isResearched(player) || !customUnlock || isUnlocked(player) && (prev == null || prev.isResearched(player));
 	}
 
 	public int requirementsUntilAvailable(EntityPlayer player) {
@@ -242,10 +173,13 @@ public class Technology {
 			return 0;
 		if (canResearch(player))
 			return 1;
-		int r = 2;
 		if (prev != null)
-			r = Math.max(prev.requirementsUntilAvailable(player) + 1, r);
-		return r;
+			return prev.requirementsUntilAvailable(player) + 1;
+		return 2;
+	}
+
+	public enum Type {
+		TECHNOLOGY, THEORY
 	}
 
 }

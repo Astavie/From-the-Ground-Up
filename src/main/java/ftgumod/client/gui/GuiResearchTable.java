@@ -8,19 +8,18 @@ import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
-import ftgumod.technology.TechnologyHandler;
 import ftgumod.tileentity.TileEntityInventory;
+import ftgumod.util.BlockSerializable;
+import ftgumod.util.IngredientNamed;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class GuiResearchTable extends GuiContainer {
@@ -56,22 +55,20 @@ public class GuiResearchTable extends GuiContainer {
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 			int index = slot.getSlotIndex() - table.combine;
-			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && !table.recipe.recipe.get(index).isEmpty()) {
-				List<String> text = new ArrayList<>();
-
-				String hint = I18n.format("research." + table.recipe.output.getUnlocalizedName() + "." + table.recipe.recipe.get(index).toString());
-				if (TechnologyHandler.hasDecipher(table.recipe)) {
-					Decipher d = TechnologyHandler.unlock.get(table.recipe);
+			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && table.recipe.getResearchRecipe().get(index) instanceof IngredientNamed) {
+				String hint = ((IngredientNamed) table.recipe.getResearchRecipe().get(index)).getName().getUnformattedText();
+				if (table.recipe.getResearchRecipe().hasDecipher()) {
+					Decipher d = table.recipe.getResearchRecipe().getDecipher();
 					DecipherGroup g = d.unlock[index];
 					if (g != null) {
 						if (!table.inventorySlots.get(table.glass).getHasStack()) {
 							hint = TextFormatting.OBFUSCATED + hint;
 						} else {
-							List<ItemStack> items = ItemLookingGlass.getInspected(table.inventorySlots.get(table.glass).getStack());
+							List<BlockSerializable> blocks = ItemLookingGlass.getInspected(table.inventorySlots.get(table.glass).getStack());
 							boolean perms = false;
 
-							for (ItemStack t : items)
-								if (g.unlock.contains(t)) {
+							for (BlockSerializable block : blocks)
+								if (block.test(g.unlock)) {
 									perms = true;
 									break;
 								}
@@ -80,9 +77,7 @@ public class GuiResearchTable extends GuiContainer {
 						}
 					}
 				}
-				text.add(hint);
-
-				drawHoveringText(text, mouseX - guiLeft, mouseY - guiTop, fontRenderer);
+				drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 			}
 		}
 	}
@@ -94,15 +89,13 @@ public class GuiResearchTable extends GuiContainer {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-		if (table.recipe != null) {
-			for (int i = 0; i < 9; i++) {
-				if (!table.recipe.recipe.get(i).isEmpty()) {
+		if (table.recipe != null)
+			for (int i = 0; i < 9; i++)
+				if (!table.recipe.getResearchRecipe().isEmpty(i)) {
 					Slot slot = inventorySlots.inventorySlots.get(i + table.combine);
 					if (!slot.getHasStack())
 						this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
 				}
-			}
-		}
 	}
 
 }

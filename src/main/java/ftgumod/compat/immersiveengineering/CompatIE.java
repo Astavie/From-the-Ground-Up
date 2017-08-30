@@ -1,9 +1,9 @@
 package ftgumod.compat.immersiveengineering;
 
 import blusunrize.immersiveengineering.api.MultiblockHandler;
-import ftgumod.ItemList;
 import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.HashMap;
@@ -14,19 +14,16 @@ public class CompatIE implements ICompat {
 	private final Map<MultiblockHandler.IMultiblock, Technology> unlock = new HashMap<>();
 
 	@Override
-	public boolean run(Object... arg) { // Technology, IMultiblock[], Object[]
-		if (arg[0] instanceof Technology && arg[1] instanceof MultiblockHandler.IMultiblock[] && arg[2] instanceof Object[]) {
+	public boolean run(Object... arg) { // Technology, IMultiblock[], Ingredient[]
+		if (arg[0] instanceof Technology && arg[1] instanceof MultiblockHandler.IMultiblock[] && arg[2] instanceof Ingredient[]) {
 			Technology tech = (Technology) arg[0];
 			MultiblockHandler.IMultiblock[] multiblocks = (MultiblockHandler.IMultiblock[]) arg[1];
-			Object[] objects = (Object[]) arg[2];
+			Ingredient[] ingredients = (Ingredient[]) arg[2];
 
-			int size = Math.min(multiblocks.length, objects.length);
+			int size = Math.min(multiblocks.length, ingredients.length);
 			for (int i = 0; i < size; i++) {
 				unlock.put(multiblocks[i], tech);
-
-				ItemList list = new ItemList(objects[i], true);
-				if (!list.isEmpty())
-					tech.getUnlock().add(list);
+				tech.getUnlock().add(ingredients[i]);
 			}
 			return true;
 		}

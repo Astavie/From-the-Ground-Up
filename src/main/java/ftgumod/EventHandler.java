@@ -13,6 +13,7 @@ import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
+import ftgumod.util.BlockSerializable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -108,7 +109,7 @@ public class EventHandler {
 
 	@SubscribeEvent(receiveCanceled = true)
 	public void onPlayerInspect(PlayerInspectEvent evt) {
-		if (!evt.getWorld().isRemote && evt.getBlock().getItem() == Item.getItemFromBlock(Blocks.SOUL_SAND) && ticks.get(evt.getEntityPlayer()) > t) {
+		if (!evt.getWorld().isRemote && evt.getBlock() == Blocks.SOUL_SAND && ticks.get(evt.getEntityPlayer()) > t) {
 			EntityPlayer player = evt.getEntityPlayer();
 			if (!TechnologyHandler.GLOWING_EYES.isUnlocked(player) && TechnologyHandler.GLOWING_EYES.canResearchIgnoreCustomUnlock(player)) {
 				evt.setCanceled(false);
@@ -164,10 +165,10 @@ public class EventHandler {
 	public void onItemTooltip(ItemTooltipEvent evt) {
 		Item item = evt.getItemStack().getItem();
 		if (item == FTGUAPI.i_lookingGlass) {
-			List<ItemStack> blocks = ItemLookingGlass.getInspected(evt.getItemStack());
+			List<BlockSerializable> blocks = ItemLookingGlass.getInspected(evt.getItemStack());
 			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				for (ItemStack block : blocks)
-					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + block.getDisplayName());
+				for (BlockSerializable block : blocks)
+					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + block.getLocalizedName());
 				if (blocks.size() > 0)
 					evt.getToolTip().add("");
 			} else if (blocks.size() > 0) {
@@ -177,22 +178,22 @@ public class EventHandler {
 
 			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
-			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
+			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU")));
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getLocalizedName(false).getUnformattedText()));
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getUnformattedText());
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getDisplay().getTitle().getUnformattedText()));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplay().getDescription().getUnformattedText());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
-			Technology tech = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU"));
+			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU")));
 
 			if (tech != null) {
 				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());
 				String k = can ? "" : "" + TextFormatting.OBFUSCATED;
 
-				evt.getToolTip().add(TextFormatting.GOLD + tech.getLocalizedName(true).getUnformattedText());
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDescription().getUnformattedText());
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getDisplay().getTitle().getUnformattedText());
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplay().getDescription().getUnformattedText());
 
 				if (can && !tech.isResearched(evt.getEntityPlayer())) {
 					evt.getToolTip().add("");
@@ -228,8 +229,6 @@ public class EventHandler {
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
 			inv.addListener(new CraftingListener((EntityPlayerMP) evt.player));
 
-			ticks.remove(evt.player.getUniqueID());
-
 			ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			if (cap != null && cap.isNew()) {
 				evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
@@ -255,7 +254,7 @@ public class EventHandler {
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
 			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
 
-			ticks.remove(evt.getOriginal().getUniqueID());
+			ticks.remove(evt.getOriginal());
 		}
 	}
 

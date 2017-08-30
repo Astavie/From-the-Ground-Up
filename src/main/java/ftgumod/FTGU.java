@@ -1,7 +1,6 @@
 package ftgumod;
 
 import ftgumod.compat.ICompat;
-import ftgumod.compat.crafttweaker.FTGUTweaker;
 import ftgumod.compat.immersiveengineering.CompatIE;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
@@ -160,12 +159,6 @@ public class FTGU {
 			MinecraftForge.EVENT_BUS.register(compat);
 			this.compat.put("immersiveengineering", compat);
 		}
-		if (Loader.isModLoaded("crafttweaker"))
-			try {
-				FTGUTweaker.class.newInstance();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		PROXY.postInit();
 	}
 

@@ -8,35 +8,37 @@ import ftgumod.technology.TechnologyUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class CopyTechMessage implements IMessage {
 
-	private int id;
+	private String id;
 
 	public CopyTechMessage() {
 	}
 
-	public CopyTechMessage(int id) {
-		this.id = id;
+	public CopyTechMessage(Technology technology) {
+		this.id = technology.getRegistryName().toString();
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		id = buf.readInt();
+		id = ByteBufUtils.readUTF8String(buf);
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(id);
+		ByteBufUtils.writeUTF8String(buf, id);
 	}
 
 	public static class CopyTechMessageHandler extends MessageHandler<CopyTechMessage> {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
-			Technology tech = TechnologyHandler.getTechnology(message.id);
+			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(message.id));
 
 			if (tech != null && tech.isResearched(player)) {
 				int index = -1;
@@ -48,7 +50,7 @@ public class CopyTechMessage implements IMessage {
 					player.inventory.getStackInSlot(index).shrink(1);
 
 					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
-					TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalizedName());
+					TechnologyUtil.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
 					if (player.inventory.getFirstEmptyStack() == -1)
 						player.dropItem(result, true);

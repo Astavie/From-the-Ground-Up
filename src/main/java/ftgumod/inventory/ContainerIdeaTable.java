@@ -1,7 +1,6 @@
 package ftgumod.inventory;
 
 import ftgumod.FTGUAPI;
-import ftgumod.ItemList;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.technology.TechnologyUtil;
@@ -14,8 +13,8 @@ import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.Set;
 
 public class ContainerIdeaTable extends Container {
 
@@ -73,22 +72,19 @@ public class ContainerIdeaTable extends Container {
 		return c;
 	}
 
-	private IdeaRecipe hasRecipe() {
-		for (IdeaRecipe i : TechnologyHandler.ideas) {
-			Set<ItemList> items = new HashSet<>();
-			items.addAll(i.recipe);
-			for (int j = 0; j < 3; j++) {
-				ItemStack stack = inventorySlots.get(combine + j).getStack();
-				for (ItemList list : items) {
-					if (list.contains(stack)) {
-						items.remove(list);
-						break;
-					}
-				}
-			}
-			if (items.size() == 0)
-				return i;
+	private Technology hasRecipe() {
+		Collection<ItemStack> inventory = new HashSet<>();
+		for (int i = 0; i < 3; i++) {
+			ItemStack stack = inventoryItemStacks.get(combine + i);
+			if (!stack.isEmpty())
+				inventory.add(stack);
 		}
+
+		for (Technology tech : TechnologyHandler.technologies)
+			if (tech.canResearch(invPlayer.player))
+				for (IdeaRecipe i : tech.getIdeaRecipes())
+					if (i.test(inventory))
+						return tech;
 		return null;
 	}
 
@@ -96,18 +92,15 @@ public class ContainerIdeaTable extends Container {
 	public void onCraftMatrixChanged(IInventory inv) {
 		if (inv == invInput) {
 			if (inventorySlots.get(feather).getHasStack() && inventorySlots.get(parchment).getHasStack()) {
-				IdeaRecipe recipe = hasRecipe();
+				Technology tech = hasRecipe();
 
-				if (recipe != null) {
-					Technology tech = recipe.output;
-					if (tech.canResearch(invPlayer.player)) {
-						ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
+				if (tech != null) {
+					ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
 
-						TechnologyUtil.getItemData(result).setString("FTGU", tech.getUnlocalizedName());
+					TechnologyUtil.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
-						inventorySlots.get(output).putStack(result);
-						return;
-					}
+					inventorySlots.get(output).putStack(result);
+					return;
 				}
 			}
 			inventorySlots.get(output).putStack(ItemStack.EMPTY);

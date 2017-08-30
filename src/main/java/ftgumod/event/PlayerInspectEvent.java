@@ -1,10 +1,8 @@
 package ftgumod.event;
 
-import ftgumod.Decipher;
-import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.recipe.ResearchRecipe;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -12,59 +10,44 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 @Cancelable
 public class PlayerInspectEvent extends PlayerEvent {
 
 	private final EnumHand hand;
-	private final List<ItemStack> glass;
-	private final BlockPos pos;
 	private final EnumFacing face;
-	private final ItemStack block;
+	private final BlockPos pos;
+	private final IBlockState block;
 
-	public PlayerInspectEvent(EntityPlayer player, EnumHand hand, List<ItemStack> glass, BlockPos pos, EnumFacing face, ItemStack block) {
+	public PlayerInspectEvent(EntityPlayer player, EnumHand hand, BlockPos pos, IBlockState block, EnumFacing face) {
 		super(player);
 		this.hand = hand;
-		this.glass = glass;
 		this.pos = pos;
-		this.face = face;
 		this.block = block;
-
-		for (ResearchRecipe r : TechnologyHandler.unlock.keySet())
-			if (r.output.canResearch(player)) {
-				Decipher d = TechnologyHandler.unlock.get(r);
-				for (Decipher.DecipherGroup g : d.list)
-					if (g.unlock.contains(block))
-						return;
-			}
-		setCanceled(true);
+		this.face = face;
 	}
 
 	public EnumHand getHand() {
 		return hand;
 	}
 
-	public BlockPos getPos() {
-		return pos;
-	}
-
-	@Nullable
 	public EnumFacing getFace() {
 		return face;
+	}
+
+	public BlockPos getPos() {
+		return pos;
 	}
 
 	public World getWorld() {
 		return getEntityPlayer().world;
 	}
 
-	public List<ItemStack> getInspected() {
-		return glass;
+	public IBlockState getBlockState() {
+		return block;
 	}
 
-	public ItemStack getBlock() {
-		return block;
+	public Block getBlock() {
+		return block.getBlock();
 	}
 
 }

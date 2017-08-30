@@ -11,28 +11,30 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.stats.RecipeBookServer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class UnlockTechMessage implements IMessage {
 
-	private int tech;
+	private String tech;
 
 	public UnlockTechMessage() {
 	}
 
-	public UnlockTechMessage(int tech) {
-		this.tech = tech;
+	public UnlockTechMessage(Technology tech) {
+		this.tech = tech.getRegistryName().toString();
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buffer) {
-		tech = buffer.readInt();
+	public void fromBytes(ByteBuf buf) {
+		tech = ByteBufUtils.readUTF8String(buf);
 	}
 
 	@Override
-	public void toBytes(ByteBuf buffer) {
-		buffer.writeInt(tech);
+	public void toBytes(ByteBuf buf) {
+		ByteBufUtils.writeUTF8String(buf, tech);
 	}
 
 	public static class UnlockTechMessageHandler extends MessageHandler<UnlockTechMessage> {
@@ -41,12 +43,12 @@ public class UnlockTechMessage implements IMessage {
 		public IMessage handleMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
 			if (player != null && player.capabilities.isCreativeMode) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				Technology t = TechnologyHandler.getTechnology(message.tech);
+				Technology t = TechnologyHandler.getTechnology(new ResourceLocation(message.tech));
 
 				if (cap != null && t != null) {
 					if (t.isResearched(player)) {
-						cap.removeResearched(t.getUnlocalizedName());
-						cap.removeResearched(t.getUnlocalizedName() + ".unlock");
+						cap.removeResearched(message.tech);
+						cap.removeResearched(message.tech + ".unlock");
 
 						RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
 						if (book instanceof RecipeBookServerImpl)

@@ -1,46 +1,50 @@
 package ftgumod.technology.recipe;
 
-import ftgumod.ItemList;
+import ftgumod.Decipher;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.NonNullList;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.annotation.Nullable;
 
 public class ResearchRecipe {
 
-	public final List<ItemList> recipe = new ArrayList<>();
-	public final Technology output;
+	private final NonNullList<Ingredient> ingredients;
+	private final Technology output;
+	private final Decipher decipher;
 
-	public ResearchRecipe(Technology output, Object... obj) {
+	public ResearchRecipe(Technology output, NonNullList<Ingredient> ingredients, @Nullable Decipher decipher) {
 		this.output = output;
+		this.ingredients = ingredients;
+		this.decipher = decipher;
+	}
 
-		char[] r1 = ((String) obj[0]).toCharArray();
-		char[] r2 = ((String) obj[1]).toCharArray();
-		char[] r3 = ((String) obj[2]).toCharArray();
+	public boolean test(NonNullList<ItemStack> inventory) {
+		for (int i = 0; i < 9; i++)
+			if (!ingredients.get(i).test(inventory.get(i)))
+				return false;
+		return true;
+	}
 
-		char[] recipe = new char[9];
-		recipe[0] = r1[0];
-		recipe[1] = r1[1];
-		recipe[2] = r1[2];
-		recipe[3] = r2[0];
-		recipe[4] = r2[1];
-		recipe[5] = r2[2];
-		recipe[6] = r3[0];
-		recipe[7] = r3[1];
-		recipe[8] = r3[2];
+	public Technology getTechnology() {
+		return output;
+	}
 
-		Map<Character, ItemList> items = new HashMap<>();
+	public boolean hasDecipher() {
+		return decipher != null;
+	}
 
-		for (int i = 3; i < obj.length; i += 2)
-			items.put((Character) obj[i], new ItemList(TechnologyUtil.toItem(obj[i + 1])));
+	public Decipher getDecipher() {
+		return decipher;
+	}
 
-		for (char c : recipe) {
-			ItemList list = items.get(c);
-			this.recipe.add(list != null ? list : new ItemList());
-		}
+	public boolean isEmpty(int index) {
+		return ingredients.get(index) == Ingredient.EMPTY;
+	}
+
+	public Ingredient get(int index) {
+		return ingredients.get(index);
 	}
 
 }

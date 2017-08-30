@@ -1,7 +1,5 @@
 package ftgumod.compat.jei;
 
-import ftgumod.ItemList;
-import ftgumod.client.ItemListClient;
 import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
@@ -10,11 +8,15 @@ import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 @SideOnly(Side.CLIENT)
 @JEIPlugin
@@ -22,44 +24,32 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	private static IIngredientRegistry registry;
 
-	private Collection<Integer> tech;
+	private Collection<String> tech = TechnologyHandler.technologies.stream().map(tech -> tech.getRegistryName().toString()).collect(Collectors.toSet());
 
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({"unchecked", "deprecation"})
 	@Override
 	public boolean run(Object... arg) {
-		if (tech == null) {
-			tech = new HashSet<>();
-			for (int i = TechnologyHandler.getTotalTechnologies(); i > 0; i--)
-				tech.add(i);
-		}
-
 		if (arg[0] instanceof Collection) {
-			Collection<Integer> input = (Collection<Integer>) arg[0];
-			input.removeIf(integer -> integer < 0);
+			Collection<String> input = (Collection<String>) arg[0];
+			input.removeIf(string -> string.endsWith(".unlock"));
 
-			Collection<Integer> add = new HashSet<>(input);
-			Collection<Integer> remove = new HashSet<>(tech);
+			Collection<String> add = new HashSet<>(input);
+			Collection<String> remove = new HashSet<>(tech);
 			add.removeAll(tech);
 			remove.removeAll(input);
 
-			for (int i : add) {
-				Technology t = TechnologyHandler.getTechnology(i);
+			for (String s : add) {
+				Technology t = TechnologyHandler.getTechnology(new ResourceLocation(s));
 				if (t != null)
-					for (ItemList list : t.getUnlock()) {
-						ItemListClient items = new ItemListClient(list);
-						if (!items.isEmpty())
-							registry.addIngredientsAtRuntime(ItemStack.class, items.getRaw());
-					}
+					for (Ingredient ingredient : t.getUnlock())
+						registry.addIngredientsAtRuntime(ItemStack.class, Arrays.asList(ingredient.getMatchingStacks()));
 			}
 
-			for (int i : remove) {
-				Technology tech = TechnologyHandler.getTechnology(i);
+			for (String s : remove) {
+				Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(s));
 				if (tech != null)
-					for (ItemList list : tech.getUnlock()) {
-						ItemListClient items = new ItemListClient(list);
-						if (!items.isEmpty())
-							registry.removeIngredientsAtRuntime(ItemStack.class, items.getRaw());
-					}
+					for (Ingredient ingredient : tech.getUnlock())
+						registry.removeIngredientsAtRuntime(ItemStack.class, Arrays.asList(ingredient.getMatchingStacks()));
 			}
 
 			tech = input;

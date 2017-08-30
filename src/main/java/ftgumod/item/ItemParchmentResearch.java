@@ -12,10 +12,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -35,7 +32,7 @@ public class ItemParchmentResearch extends Item {
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
 		if (!player.world.isRemote) {
-			Technology t = TechnologyHandler.getTechnology(TechnologyUtil.getItemData(item).getString("FTGU"));
+			Technology t = TechnologyHandler.getTechnology(new ResourceLocation(TechnologyUtil.getItemData(item).getString("FTGU")));
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already)
@@ -54,7 +51,7 @@ public class ItemParchmentResearch extends Item {
 
 						FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, t);
 
-						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t.getID()), (EntityPlayerMP) player);
+						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
 					} else
 						player.sendMessage(new TextComponentTranslation("technology.complete.understand"));

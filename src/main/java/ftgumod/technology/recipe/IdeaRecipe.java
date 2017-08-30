@@ -1,37 +1,45 @@
 package ftgumod.technology.recipe;
 
-import ftgumod.ItemList;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyUtil;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 public class IdeaRecipe {
 
-	public final List<ItemList> recipe;
-	public final Technology output;
+	private final Collection<Ingredient> recipe;
+	private final int needed;
+	private final Technology output;
 
-	public IdeaRecipe(List<ItemList> recipe, Technology output) {
+	public IdeaRecipe(Collection<Ingredient> recipe, int needed, Technology output) {
 		this.output = output;
+		this.needed = needed;
 		this.recipe = recipe;
 	}
 
-	public IdeaRecipe(Technology output, Object... obj) {
-		this.output = output;
-		this.recipe = new ArrayList<>();
+	public boolean test(Collection<ItemStack> inventory) {
+		Set<Ingredient> copy = new HashSet<>(recipe);
+		int count = 0;
 
-		char[] recipe = ((String) obj[0]).toCharArray();
-		Map<Character, ItemList> items = new HashMap<>();
-
-		for (int i = 1; i < obj.length; i += 2)
-			items.put((Character) obj[i], new ItemList(TechnologyUtil.toItem(obj[i + 1])));
-
-		for (char c : recipe) {
-			this.recipe.add(items.get(c));
+		for (ItemStack stack : inventory) {
+			Iterator<Ingredient> iterator = copy.iterator();
+			while (iterator.hasNext())
+				if (iterator.next().test(stack)) {
+					iterator.remove();
+					count++;
+					break;
+				}
 		}
+
+		return count >= needed;
+	}
+
+	public Technology getTechnology() {
+		return output;
 	}
 
 }

@@ -42,7 +42,6 @@ repositories {
 dependencies {
     // Mod APIs
     deobfCompile "mezz.jei:jei_${mc_version}:+:api"
-    deobfCompile "CraftTweaker2:CraftTweaker2-API:+"
     deobfCompile "blusunrize:ImmersiveEngineering:0.${mc_major}+" // API didn't work 26/07/2017
 
     // Runtime Mods
@@ -50,7 +49,6 @@ dependencies {
     // runtime "slimeknights:TConstruct:${mc_version}+"
 
     runtime "mezz.jei:jei_${mc_version}:+"
-    runtime "CraftTweaker2:CraftTweaker2-MC${mc_version2}-Main:+"
 }
 
 processResources {
