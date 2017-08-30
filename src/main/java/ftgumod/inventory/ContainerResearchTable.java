@@ -7,9 +7,9 @@ import ftgumod.FTGUAPI;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.BlockSerializable;
+import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -92,7 +92,7 @@ public class ContainerResearchTable extends Container {
 	public void onCraftMatrixChanged(IInventory inv) {
 		if (inv == invInput) {
 			if (inventorySlots.get(parchment).getHasStack()) {
-				NBTTagCompound tag = TechnologyUtil.getItemData(inventorySlots.get(parchment).getStack());
+				NBTTagCompound tag = StackUtils.getItemData(inventorySlots.get(parchment).getStack());
 				String s = tag.getString("FTGU");
 				Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(s));
 
@@ -134,7 +134,7 @@ public class ContainerResearchTable extends Container {
 
 					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
 
-					TechnologyUtil.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
+					StackUtils.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
 
 					inventorySlots.get(output).putStack(result);
 					return;

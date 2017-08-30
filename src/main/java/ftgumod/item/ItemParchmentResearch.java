@@ -6,7 +6,7 @@ import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
+import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -32,7 +32,7 @@ public class ItemParchmentResearch extends Item {
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
 		if (!player.world.isRemote) {
-			Technology t = TechnologyHandler.getTechnology(new ResourceLocation(TechnologyUtil.getItemData(item).getString("FTGU")));
+			Technology t = TechnologyHandler.getTechnology(new ResourceLocation(StackUtils.getItemData(item).getString("FTGU")));
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already)

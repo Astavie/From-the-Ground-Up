@@ -5,8 +5,8 @@ import ftgumod.FTGUAPI;
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
 import ftgumod.util.BlockSerializable;
+import ftgumod.util.StackUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,7 +40,7 @@ public class ItemLookingGlass extends Item {
 
 	public static List<BlockSerializable> getInspected(ItemStack item) {
 		List<BlockSerializable> list = new ArrayList<>();
-		NBTTagList blocks = TechnologyUtil.getItemData(item).getTagList("FTGU", NBT.TAG_COMPOUND);
+		NBTTagList blocks = StackUtils.getItemData(item).getTagList("FTGU", NBT.TAG_COMPOUND);
 		for (int i = 0; i < blocks.tagCount(); i++)
 			list.add(new BlockSerializable(blocks.getCompoundTagAt(i)));
 		return list;
@@ -84,7 +84,7 @@ public class ItemLookingGlass extends Item {
 
 				FTGUAPI.c_inspect.trigger((EntityPlayerMP) player, pos, state);
 
-				NBTTagCompound tag = TechnologyUtil.getItemData(item);
+				NBTTagCompound tag = StackUtils.getItemData(item);
 				NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
 				nbt.appendTag(block.serialize());
 				tag.setTag("FTGU", nbt);

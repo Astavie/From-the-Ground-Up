@@ -4,7 +4,7 @@ import ftgumod.FTGUAPI;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
+import ftgumod.util.StackUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -50,7 +50,7 @@ public class CopyTechMessage implements IMessage {
 					player.inventory.getStackInSlot(index).shrink(1);
 
 					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
-					TechnologyUtil.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
+					StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
 					if (player.inventory.getFirstEmptyStack() == -1)
 						player.dropItem(result, true);

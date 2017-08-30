@@ -1,4 +1,4 @@
-package ftgumod.criterion;
+package ftgumod.util;
 
 import ftgumod.technology.Technology;
 import net.minecraft.advancements.ICriterionInstance;

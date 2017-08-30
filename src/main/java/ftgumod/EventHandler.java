@@ -12,8 +12,8 @@ import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
 import ftgumod.util.BlockSerializable;
+import ftgumod.util.StackUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -178,7 +178,7 @@ public class EventHandler {
 
 			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
-			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU")));
+			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
@@ -186,7 +186,7 @@ public class EventHandler {
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplay().getDescription().getUnformattedText());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
-			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(TechnologyUtil.getItemData(evt.getItemStack()).getString("FTGU")));
+			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
 
 			if (tech != null) {
 				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());

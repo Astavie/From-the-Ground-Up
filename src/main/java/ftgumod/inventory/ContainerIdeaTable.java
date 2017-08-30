@@ -3,9 +3,9 @@ package ftgumod.inventory;
 import ftgumod.FTGUAPI;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import ftgumod.technology.TechnologyUtil;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.tileentity.TileEntityInventory;
+import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -97,7 +97,7 @@ public class ContainerIdeaTable extends Container {
 				if (tech != null) {
 					ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
 
-					TechnologyUtil.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
+					StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
 					inventorySlots.get(output).putStack(result);
 					return;
