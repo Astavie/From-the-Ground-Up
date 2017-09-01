@@ -25,7 +25,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
-import org.lwjgl.input.Keyboard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +47,7 @@ public class ItemLookingGlass extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
-		if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+		if (player.isSneaking()) {
 			if (!world.isRemote) {
 				ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
 				List<BlockSerializable> list = getInspected(item);
@@ -65,9 +64,9 @@ public class ItemLookingGlass extends Item {
 						group:for (int i = 0; i < 9; i++)
 							if (!tech.getResearchRecipe().isEmpty(i) && tech.getResearchRecipe().get(i).hasDecipher()) {
 								BlockPredicate predicate = tech.getResearchRecipe().get(i).getDecipher();
-								if (block.test(predicate)) {
+								if (block.test(predicate, player.getServer())) {
 									for (BlockSerializable other : list)
-										if (other.test(predicate))
+										if (other.test(predicate, player.getServer()))
 											continue group;
 									event.setCanceled(false);
 									break outer;

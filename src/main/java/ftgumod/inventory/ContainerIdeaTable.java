@@ -73,11 +73,9 @@ public class ContainerIdeaTable extends Container {
 
 	private Technology hasRecipe() {
 		Collection<ItemStack> inventory = new HashSet<>();
-		for (int i = 0; i < 3; i++) {
-			ItemStack stack = inventoryItemStacks.get(combine + i);
-			if (!stack.isEmpty())
-				inventory.add(stack);
-		}
+		for (int i = 0; i < 3; i++)
+			if (inventorySlots.get(i + combine).getHasStack())
+				inventory.add(inventorySlots.get(i + combine).getStack());
 
 		for (Technology tech : TechnologyHandler.technologies)
 			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player))

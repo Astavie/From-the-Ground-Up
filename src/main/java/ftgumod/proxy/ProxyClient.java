@@ -12,6 +12,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,11 +40,7 @@ public class ProxyClient extends ProxyCommon {
 	}
 
 	@Override
-	public void preInit() {
-	}
-
-	@Override
-	public void init() {
+	public void init(FMLInitializationEvent event) {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(FTGUAPI.b_ideaTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_ideaTable, "inventory"));
@@ -56,7 +54,7 @@ public class ProxyClient extends ProxyCommon {
 	}
 
 	@Override
-	public void postInit() {
+	public void postInit(FMLPostInitializationEvent event) {
 		if (Loader.isModLoaded("jei"))
 			FTGU.INSTANCE.compat.put("jei", new CompatJEI());
 	}

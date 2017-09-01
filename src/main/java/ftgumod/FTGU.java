@@ -11,7 +11,6 @@ import ftgumod.technology.CapabilityTechnology.DefaultImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.CapabilityTechnology.Storage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.advancements.AdvancementRewards;
@@ -123,7 +122,7 @@ public class FTGU {
 
 		PacketDispatcher.registerPackets();
 
-		PROXY.preInit();
+		PROXY.preInit(event);
 
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
@@ -137,10 +136,7 @@ public class FTGU {
 	@Mod.EventHandler
 	public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, PROXY.getGuiHandler());
-
-		PROXY.init();
-
-		TechnologyHandler.load();
+		PROXY.init(event);
 	}
 
 	@Mod.EventHandler
@@ -150,7 +146,7 @@ public class FTGU {
 			MinecraftForge.EVENT_BUS.register(compat);
 			this.compat.put("immersiveengineering", compat);
 		}
-		PROXY.postInit();
+		PROXY.postInit(event);
 	}
 
 }

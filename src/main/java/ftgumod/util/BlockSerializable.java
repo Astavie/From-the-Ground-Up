@@ -6,11 +6,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.server.FMLServerHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -74,13 +74,11 @@ public class BlockSerializable {
 	}
 
 	public String getLocalizedName() {
-		return new ItemStack(block, data).getDisplayName();
+		return new ItemStack(block, 1, data).getDisplayName();
 	}
 
-	public boolean test(BlockPredicate predicate) {
-		if (FMLServerHandler.instance().getServer() != null)
-			return predicate.test(FMLServerHandler.instance().getServer().getWorld(dimension.getId()), pos, block, properties);
-		else throw new IllegalStateException();
+	public boolean test(BlockPredicate predicate, MinecraftServer server) {
+		return predicate.test(server.getWorld(dimension.getId()), pos, block, properties);
 	}
 
 }

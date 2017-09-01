@@ -33,6 +33,7 @@ import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -50,9 +51,15 @@ public class EventHandler {
 	public void onCommand(CommandEvent evt) {
 		if (evt.getCommand() instanceof CommandReload) {
 			TechnologyHandler.clear();
-			TechnologyHandler.load();
+			TechnologyHandler.load(evt.getSender().getServer().worlds[0]);
 			PacketDispatcher.sendToAll(new TechnologyInfoMessage(TechnologyHandler.cache));
 		}
+	}
+
+	@SubscribeEvent
+	public void onWorldLoad(WorldEvent.Load evt) {
+		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0)
+			TechnologyHandler.load(evt.getWorld());
 	}
 
 	@SubscribeEvent

@@ -3,11 +3,9 @@ package ftgumod.client.gui;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.inventory.ContainerResearchTable;
-import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.tileentity.TileEntityInventory;
-import ftgumod.util.BlockSerializable;
 import ftgumod.util.IngredientResearch;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,7 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Collections;
-import java.util.List;
 
 public class GuiResearchTable extends GuiContainer {
 
@@ -57,22 +54,8 @@ public class GuiResearchTable extends GuiContainer {
 				IngredientResearch ingredient = table.recipe.getResearchRecipe().get(index);
 				if (ingredient.hasHint()) {
 					String hint = ingredient.getHint().getUnformattedText();
-					if (ingredient.hasDecipher()) {
-						if (!table.inventorySlots.get(table.glass).getHasStack()) {
-							hint = TextFormatting.OBFUSCATED + hint;
-						} else {
-							List<BlockSerializable> blocks = ItemLookingGlass.getInspected(table.inventorySlots.get(table.glass).getStack());
-							boolean perms = false;
-
-							for (BlockSerializable block : blocks)
-								if (block.test(ingredient.getDecipher())) {
-									perms = true;
-									break;
-								}
-							if (!perms)
-								hint = TextFormatting.OBFUSCATED + hint;
-						}
-					}
+					if (table.deciphered == null || !table.deciphered.contains(index))
+						hint = TextFormatting.OBFUSCATED + hint;
 					drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 				}
 			}

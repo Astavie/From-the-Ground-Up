@@ -1,5 +1,7 @@
 package ftgumod.packet;
 
+import ftgumod.packet.client.DecipherMessage;
+import ftgumod.packet.client.DecipherMessage.DecipherMessageHandler;
 import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyInfoMessage.TechnologyInfoMessageHandler;
 import ftgumod.packet.client.TechnologyMessage;
@@ -24,11 +26,14 @@ public final class PacketDispatcher {
 
 	public static void registerPackets() {
 		dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel("ftgu");
+
 		PacketDispatcher.registerMessage(RequestTechMessageHandler.class, RequestTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(UnlockTechMessageHandler.class, UnlockTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(CopyTechMessageHandler.class, CopyTechMessage.class, Side.SERVER);
+
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);
 		PacketDispatcher.registerMessage(TechnologyInfoMessageHandler.class, TechnologyInfoMessage.class, Side.CLIENT);
+		PacketDispatcher.registerMessage(DecipherMessageHandler.class, DecipherMessage.class, Side.CLIENT);
 	}
 
 	@SuppressWarnings({"unchecked"})

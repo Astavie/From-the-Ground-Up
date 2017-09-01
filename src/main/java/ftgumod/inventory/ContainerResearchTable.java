@@ -2,6 +2,8 @@ package ftgumod.inventory;
 
 import ftgumod.FTGUAPI;
 import ftgumod.item.ItemLookingGlass;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.DecipherMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.tileentity.TileEntityInventory;
@@ -9,6 +11,7 @@ import ftgumod.util.BlockPredicate;
 import ftgumod.util.BlockSerializable;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
@@ -18,11 +21,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContainerResearchTable extends Container {
 
-	private final TileEntityInventory invInput;
+	public final TileEntityInventory invInput;
 	private final IInventory invResult = new InventoryCraftResult();
 	private final InventoryPlayer invPlayer;
 
@@ -32,6 +37,7 @@ public class ContainerResearchTable extends Container {
 	public int combine;
 	public int output;
 	public int glass;
+	public Set<Integer> deciphered;
 	private int feather;
 	private int parchment;
 
@@ -100,29 +106,45 @@ public class ContainerResearchTable extends Container {
 			} else
 				recipe = null;
 
-			if (recipe != null && !inventoryItemStacks.get(feather).isEmpty()) {
-				NonNullList<ItemStack> inventory = NonNullList.create();
-				for (int i = 0; i < 9; i++)
-					inventory.add(inventoryItemStacks.get(combine + i));
-
-				if (recipe.getResearchRecipe().test(inventory)) {
+			if (recipe != null && inventorySlots.get(feather).getHasStack()) {
+				if (invPlayer.player.world.isRemote) {
+					if (deciphered == null || deciphered.size() < 9) {
+						inventorySlots.get(output).putStack(ItemStack.EMPTY);
+						return;
+					}
+				} else {
 					List<BlockSerializable> blocks = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
+					deciphered = new HashSet<>();
+
+					boolean allow = true;
 					for (int i = 0; i < 9; i++) {
 						if (!recipe.getResearchRecipe().isEmpty(i) && recipe.getResearchRecipe().get(i).hasDecipher()) {
 							BlockPredicate predicate = recipe.getResearchRecipe().get(i).getDecipher();
 							boolean perms = false;
 							for (BlockSerializable block : blocks)
-								if (block.test(predicate)) {
+								if (block.test(predicate, invPlayer.player.getServer())) {
 									perms = true;
 									break;
 								}
-							if (!perms) {
-								inventorySlots.get(output).putStack(ItemStack.EMPTY);
-								return;
-							}
-						}
+							if (!perms)
+								allow = false;
+							else
+								deciphered.add(i);
+						} else
+							deciphered.add(i);
 					}
+					PacketDispatcher.sendTo(new DecipherMessage(deciphered), (EntityPlayerMP) invPlayer.player);
+					if (!allow) {
+						inventorySlots.get(output).putStack(ItemStack.EMPTY);
+						return;
+					}
+				}
 
+				NonNullList<ItemStack> inventory = NonNullList.create();
+				for (int i = 0; i < 9; i++)
+					inventory.add(inventorySlots.get(combine + i).getStack());
+
+				if (recipe.getResearchRecipe().test(inventory)) {
 					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
 
 					StackUtils.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());

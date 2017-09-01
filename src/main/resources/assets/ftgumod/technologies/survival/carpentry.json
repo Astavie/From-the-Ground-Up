@@ -33,11 +33,15 @@
       "P": {
         "type": "forge:ore_dict",
         "ore": "plankWood",
-        "hint": "Wood, ya dingus!"
+        "hint": "Wood!"
       },
       "O": {
         "item": "minecraft:wool",
-        "data": 32767
+        "data": 32767,
+        "hint": "Wool!",
+        "decipher": {
+          "block": "minecraft:wool"
+        }
       }
     }
   },

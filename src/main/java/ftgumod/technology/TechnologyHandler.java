@@ -7,12 +7,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
@@ -274,23 +276,6 @@ public class TechnologyHandler {
 		*/
 	}
 
-	public static void addResearchedFromStart(Technology technology) {
-		start.add(technology.getRegistryName().toString());
-	}
-
-	public static void addResearchedFromHeadstart(Technology technology) {
-		headStart.add(technology.getRegistryName().toString());
-	}
-
-	public static void registerTechnology(Technology tech) {
-		technologies.add(tech);
-		if (tech.hasParent())
-			tech.getParent().getChildren().add(tech);
-
-		if (minecraft)
-			vanilla.add(tech.getRegistryName().toString());
-	}
-
 	public static Technology getTechnology(ResourceLocation name) {
 		for (Technology t : technologies)
 			if (t.getRegistryName().equals(name))
@@ -326,21 +311,58 @@ public class TechnologyHandler {
 		progress.clear();
 	}
 
-	public static void load() {
+	public static void load(World world) {
+		loadBuiltin();
+
+		Technology.getLogger().info("Loading custom technologies...");
+		File dir = new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies");
+
 		Map<ResourceLocation, String> json = new HashMap<>();
 
+		label:
+		for (File file : FileUtils.listFiles(dir, new String[] {"json"}, true)) {
+			if (file.getParentFile().equals(dir) || file.getParentFile().getParentFile().equals(dir))
+				continue;
+			String relative = dir.toPath().relativize(file.toPath()).toString();
+
+			int index = relative.indexOf('/');
+			String domain = relative.substring(0, index);
+			String name = FilenameUtils.removeExtension(relative.substring(index));
+
+			ResourceLocation id = new ResourceLocation(domain, name);
+			for (Technology tech : technologies)
+				if (tech.getRegistryName().equals(id)) {
+					Technology.getLogger().error("Technology " + id + " has a duplicate id, it will be ignored");
+					continue label;
+				}
+
+			try {
+				json.put(id, new String(Files.readAllBytes(file.toPath())));
+			} catch (IOException e) {
+				Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
+			}
+		}
+
+		deserialize(json);
+		cache = json;
+	}
+
+	public static void loadBuiltin() {
+		Technology.getLogger().info("Loading built-in technologies...");
+
+		Map<ResourceLocation, String> json = new HashMap<>();
 		Loader.instance().getActiveModList().forEach(mod -> CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/technologies", null, (root, file) -> {
 			String relative = root.relativize(file).toString();
-			if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_"))
+			if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_") || !relative.contains("/"))
 				return true;
 
-			String name = FilenameUtils.removeExtension(relative).replaceAll("\\\\", "/");
+			String name = FilenameUtils.removeExtension(relative);
 			ResourceLocation id = new ResourceLocation(mod.getModId(), name);
 
 			try {
-				json.put(id, new String(Files.readAllBytes(file)).replace(" ", ""));
+				json.put(id, new String(Files.readAllBytes(file)));
 			} catch (IOException e) {
-				FMLLog.log.error("Couldn't read technology {} from {}", id, file, e);
+				Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 				return false;
 			}
 
@@ -348,7 +370,6 @@ public class TechnologyHandler {
 		}, true, true));
 
 		deserialize(json);
-		cache = json;
 	}
 
 	public static void deserialize(Map<ResourceLocation, String> json) {
@@ -387,6 +408,11 @@ public class TechnologyHandler {
 				for (Map.Entry<ResourceLocation, Technology.Builder> entry : builders.entrySet())
 					Technology.getLogger().error("Couldn't load technology " + entry.getKey());
 		}
+
+		technologies.values().forEach(tech -> {
+			if (tech.hasParent())
+				tech.getParent().getChildren().add(tech);
+		});
 
 		Technology.getLogger().info("Loaded " + technologies.size() + " technolog" + (technologies.size() != 1 ? "ies" : "y"));
 		TechnologyHandler.technologies.addAll(technologies.values());
