@@ -43,7 +43,7 @@ public class ItemParchmentResearch extends Item {
 					if (!event.isCanceled()) {
 						t.setResearched(player);
 
-						if (player.world.getGameRules().getBoolean("announceAdvancements"))
+						if (player.world.getGameRules().getBoolean("announceAdvancements") && t.getDisplay().shouldAnnounceToChat())
 							//noinspection ConstantConditions
 							player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), t.getDisplayText()));
 

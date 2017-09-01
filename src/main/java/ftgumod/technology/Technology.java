@@ -1,5 +1,6 @@
 package ftgumod.technology;
 
+import com.google.gson.*;
 import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.stats.RecipeBookServer;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -21,10 +23,14 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.HoverEvent;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.JsonContext;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -36,7 +42,6 @@ public class Technology {
 	private final Set<Technology> children = new HashSet<>();
 
 	private final int level;
-	private final boolean root;
 	private final ITextComponent displayText;
 	private final DisplayInfo display;
 	private final Type type;
@@ -51,10 +56,9 @@ public class Technology {
 	private final IdeaRecipe idea;
 	private final ResearchRecipe research;
 
-	public Technology(ResourceLocation id, @Nullable Technology parent, boolean root, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
+	public Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
-		this.root = root;
 		this.display = display;
 		this.type = type;
 
@@ -110,7 +114,7 @@ public class Technology {
 	}
 
 	public boolean isRoot() {
-		return root;
+		return !hasParent() || !id.getResourcePath().substring(0, id.getResourcePath().indexOf('/')).equals(parent.id.getResourcePath().substring(0, parent.id.getResourcePath().indexOf('/')));
 	}
 
 	public DisplayInfo getDisplay() {
@@ -151,7 +155,8 @@ public class Technology {
 					rewards.apply(playerMP);
 
 				for (Technology child : children)
-					child.registerListeners(playerMP);
+					if (child.hasCustomUnlock())
+						child.registerListeners(playerMP);
 			}
 		}
 	}
@@ -169,7 +174,7 @@ public class Technology {
 		boolean done = progress.isDone();
 
 		if (progress.grantCriterion(name)) {
-			player.getCapability(CapabilityTechnology.TECH_CAP, null).setResearched(id.toString() + "." + name);
+			player.getCapability(CapabilityTechnology.TECH_CAP, null).setResearched(id.toString() + "#" + name);
 			if (player instanceof EntityPlayerMP) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
@@ -188,7 +193,7 @@ public class Technology {
 
 	public void revokeCriterion(EntityPlayer player, String name) {
 		if (TechnologyHandler.getProgress(player, this).revokeCriterion(name)) {
-			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(id.toString() + "." + name);
+			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(id.toString() + "#" + name);
 			if (player instanceof EntityPlayerMP) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
@@ -274,6 +279,123 @@ public class Technology {
 
 	public enum Type {
 		TECHNOLOGY, THEORY
+	}
+
+	public static class Builder {
+
+		private final ResourceLocation parentId;
+		private final DisplayInfo display;
+		private final Type type;
+		private final AdvancementRewards rewards;
+		private final Map<String, Criterion> criteria;
+		private final String[][] requirements;
+
+		private final JsonArray unlock;
+		private final JsonObject idea;
+		private final JsonObject research;
+
+		private Technology parent;
+
+		public Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
+			this.parentId = parent;
+			this.display = display;
+			this.type = type;
+			this.rewards = rewards;
+			this.criteria = criteria;
+			this.requirements = requirements;
+			this.unlock = unlock;
+			this.idea = idea;
+			this.research = research;
+		}
+
+		public boolean resolveParent(Map<ResourceLocation, Technology> map) {
+			if (parentId == null)
+				return true;
+			parent = map.get(parentId);
+			return parent != null;
+		}
+
+		public Technology build(ResourceLocation location, JsonContext context) {
+			NonNullList<Ingredient> unlock = NonNullList.create();
+			if (this.unlock != null)
+				for (JsonElement element : this.unlock)
+					unlock.add(CraftingHelper.getIngredient(element, context));
+
+			IdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
+			ResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
+
+			return new Technology(location, parent, display, type, rewards, criteria, requirements, unlock, idea, research);
+		}
+
+	}
+
+	public static class Deserializer implements JsonDeserializer<Builder> {
+
+		@Override
+		public Builder deserialize(JsonElement element, java.lang.reflect.Type ignore, JsonDeserializationContext context) throws JsonParseException {
+			if (!element.isJsonObject())
+				throw new JsonSyntaxException("Expected technology to be an object");
+			JsonObject json = element.getAsJsonObject();
+
+			ResourceLocation parent = json.has("parent") ? new ResourceLocation(JsonUtils.getString(json, "parent")) : null;
+
+			JsonObject displayObject = JsonUtils.getJsonObject(json, "display");
+			DisplayInfo display = DisplayInfo.deserialize(displayObject, context);
+
+			Type type = displayObject.has("theory") && JsonUtils.getBoolean(displayObject, "theory") ? Type.THEORY : Type.TECHNOLOGY;
+
+			AdvancementRewards rewards = JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context, AdvancementRewards.class);
+			Map<String, Criterion> criteria = json.has("criteria") ? Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context) : Collections.emptyMap();
+
+			JsonArray array = JsonUtils.getJsonArray(json, "requirements", new JsonArray());
+			String[][] requirements = new String[array.size()][];
+
+			for (int i = 0; i < array.size(); ++i) {
+				JsonArray subarray = JsonUtils.getJsonArray(array.get(i), "requirements[" + i + "]");
+				requirements[i] = new String[subarray.size()];
+
+				for (int j = 0; j < subarray.size(); ++j)
+					requirements[i][j] = JsonUtils.getString(subarray.get(j), "requirements[" + i + "][" + j + "]");
+			}
+
+			if (requirements.length == 0) {
+				requirements = new String[criteria.size()][];
+				int k = 0;
+
+				for (String s2 : criteria.keySet())
+					requirements[k++] = new String[] {s2};
+			}
+
+			for (String[] subarray : requirements) {
+				if (subarray.length == 0 && criteria.isEmpty())
+					throw new JsonSyntaxException("Requirement entry cannot be empty");
+
+				for (String s : subarray)
+					if (!criteria.containsKey(s))
+						throw new JsonSyntaxException("Unknown required criterion '" + s + "'");
+			}
+
+			for (String s1 : criteria.keySet()) {
+				boolean flag = false;
+
+				for (String[] subarray : requirements) {
+					if (ArrayUtils.contains(subarray, s1)) {
+						flag = true;
+						break;
+					}
+				}
+
+				if (!flag)
+					throw new JsonSyntaxException("Criterion '" + s1 + "' isn't a requirement for completion. This isn't supported behaviour, all criteria must be required.");
+			}
+
+			JsonArray unlock = json.has("unlock") ? JsonUtils.getJsonArray(json, "unlock") : null;
+			JsonObject idea = json.has("idea") ? JsonUtils.getJsonObject(json, "idea") : null;
+			JsonObject research = json.has("research") ? JsonUtils.getJsonObject(json, "research") : null;
+
+			return new Builder(parent, display, type, rewards, criteria, requirements, unlock, idea, research);
+		}
+
 	}
 
 }

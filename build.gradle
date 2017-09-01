@@ -16,7 +16,6 @@ ext {
     } else {
         mc_version = "1.${mc_major}.${mc_minor}"
     }
-    mc_version2 = "1${mc_major}${mc_minor}"
 }
 
 version = "${mc_version}-${mod_status}${major}.${minor}.${patch}"
@@ -62,6 +61,12 @@ processResources {
 
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'FMLAT': 'ftgumod_at.cfg'
     }
 }
 

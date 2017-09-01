@@ -1,12 +1,17 @@
 package ftgumod.technology;
 
+import ftgumod.FTGU;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
@@ -29,6 +34,38 @@ public class CapabilityTechnology {
 				if (!cap1.isNew())
 					cap2.setOld();
 			}
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	@SubscribeEvent
+	public void onEntityConstruct(AttachCapabilitiesEvent evt) {
+		if (evt.getObject() instanceof EntityPlayer) {
+			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagList>() {
+
+				private final ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
+
+				@Override
+				public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+					return capability == CapabilityTechnology.TECH_CAP;
+				}
+
+				@Override
+				public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+					return capability == CapabilityTechnology.TECH_CAP ? CapabilityTechnology.TECH_CAP.<T>cast(inst) : null;
+				}
+
+				@Override
+				public NBTTagList serializeNBT() {
+					return (NBTTagList) CapabilityTechnology.TECH_CAP.getStorage().writeNBT(CapabilityTechnology.TECH_CAP, inst, null);
+				}
+
+				@Override
+				public void deserializeNBT(NBTTagList nbt) {
+					CapabilityTechnology.TECH_CAP.getStorage().readNBT(CapabilityTechnology.TECH_CAP, inst, null, nbt);
+				}
+
+			});
 		}
 	}
 
@@ -124,6 +161,7 @@ public class CapabilityTechnology {
 		@Override
 		public void removeResearched(String tech) {
 			this.tech.remove(tech);
+			this.tech.removeIf(string -> string.startsWith(tech + "#"));
 		}
 
 	}

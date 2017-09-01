@@ -1,9 +1,14 @@
 package ftgumod.technology.recipe;
 
-import ftgumod.technology.Technology;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.JsonContext;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,12 +19,21 @@ public class IdeaRecipe {
 
 	private final NonNullList<Ingredient> recipe;
 	private final int needed;
-	private final Technology output;
 
-	public IdeaRecipe(NonNullList<Ingredient> recipe, int needed, Technology output) {
-		this.output = output;
+	public IdeaRecipe(NonNullList<Ingredient> recipe, int needed) {
 		this.needed = needed;
 		this.recipe = recipe;
+	}
+
+	public static IdeaRecipe deserialize(JsonObject object, JsonContext context) {
+		int amount = JsonUtils.getInt(object, "amount");
+		JsonArray ingredients = JsonUtils.getJsonArray(object, "ingredients");
+
+		NonNullList<Ingredient> recipe = NonNullList.create();
+		for (JsonElement element : ingredients)
+			recipe.add(CraftingHelper.getIngredient(element, context));
+
+		return new IdeaRecipe(recipe, amount);
 	}
 
 	public boolean test(Collection<ItemStack> inventory) {
@@ -37,10 +51,6 @@ public class IdeaRecipe {
 		}
 
 		return count >= needed;
-	}
-
-	public Technology getTechnology() {
-		return output;
 	}
 
 }

@@ -1,0 +1,54 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:bed"
+    },
+    "title": {
+      "translate": "technology.carpentry.name"
+    },
+    "description": {
+      "translate": "technology.carpentry.desc"
+    }
+  },
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "plankWood"
+      },
+      {
+        "item": "minecraft:wool",
+        "data": 32767
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "POP",
+      "OPO",
+      "POP"
+    ],
+    "key": {
+      "P": {
+        "type": "forge:ore_dict",
+        "ore": "plankWood",
+        "hint": "Wood, ya dingus!"
+      },
+      "O": {
+        "item": "minecraft:wool",
+        "data": 32767
+      }
+    }
+  },
+  "unlock": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    {
+      "item": "minecraft:wool",
+      "data": 32767
+    }
+  ]
+}

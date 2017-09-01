@@ -48,7 +48,6 @@ public class UnlockTechMessage implements IMessage {
 				if (cap != null && t != null) {
 					if (t.isResearched(player)) {
 						cap.removeResearched(message.tech);
-						cap.removeResearched(message.tech + ".unlock");
 
 						RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
 						if (book instanceof RecipeBookServerImpl)

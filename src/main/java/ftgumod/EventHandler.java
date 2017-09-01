@@ -4,6 +4,7 @@ import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
@@ -17,7 +18,6 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.command.CommandReload;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
@@ -25,15 +25,10 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
@@ -41,29 +36,22 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EventHandler {
 
-	private static final Field BOOK = ReflectionHelper.findField(EntityPlayerMP.class, "recipeBook", "field_192041_cq");
-
-	private final Map<EntityPlayer, Integer> ticks = new HashMap<>();
-	private final int s = 5; // 5 seconds
-	private final int t = s * 20; // 5 * 20 ticks
 	private ItemStack stack = ItemStack.EMPTY;
 
 	@SubscribeEvent
 	public void onCommand(CommandEvent evt) {
 		if (evt.getCommand() instanceof CommandReload) {
-			// TODO: Reload stuff
+			TechnologyHandler.clear();
+			TechnologyHandler.load();
+			PacketDispatcher.sendToAll(new TechnologyInfoMessage(TechnologyHandler.cache));
 		}
 	}
 
@@ -121,13 +109,9 @@ public class EventHandler {
 	}
 
 	private void replaceRecipeBook(EntityPlayerMP player) {
-		try {
-			RecipeBookServerImpl book = new RecipeBookServerImpl(player);
-			book.read(player.getRecipeBook().write());
-			BOOK.set(player, book);
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
+		RecipeBookServerImpl book = new RecipeBookServerImpl(player);
+		book.read(player.recipeBook.write());
+		player.recipeBook = book;
 	}
 
 	@SubscribeEvent
@@ -149,6 +133,7 @@ public class EventHandler {
 				cap.setOld();
 			}
 			replaceRecipeBook((EntityPlayerMP) evt.player);
+			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyHandler.cache), (EntityPlayerMP) evt.player);
 			PacketDispatcher.sendTo(new TechnologyMessage(evt.player, false), (EntityPlayerMP) evt.player);
 		}
 	}
@@ -160,8 +145,6 @@ public class EventHandler {
 
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
 			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
-
-			ticks.remove(evt.getOriginal());
 		}
 	}
 
@@ -203,38 +186,6 @@ public class EventHandler {
 					return;
 				}
 			}
-		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	@SubscribeEvent
-	public void onEntityConstruct(AttachCapabilitiesEvent evt) {
-		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagList>() {
-
-				private final ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
-
-				@Override
-				public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-					return capability == CapabilityTechnology.TECH_CAP;
-				}
-
-				@Override
-				public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-					return capability == CapabilityTechnology.TECH_CAP ? CapabilityTechnology.TECH_CAP.<T>cast(inst) : null;
-				}
-
-				@Override
-				public NBTTagList serializeNBT() {
-					return (NBTTagList) CapabilityTechnology.TECH_CAP.getStorage().writeNBT(CapabilityTechnology.TECH_CAP, inst, null);
-				}
-
-				@Override
-				public void deserializeNBT(NBTTagList nbt) {
-					CapabilityTechnology.TECH_CAP.getStorage().readNBT(CapabilityTechnology.TECH_CAP, inst, null, nbt);
-				}
-
-			});
 		}
 	}
 

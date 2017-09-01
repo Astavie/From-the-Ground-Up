@@ -83,8 +83,27 @@ public class TechnologyMessage implements IMessage {
 				if (!message.force && cap.getResearched().size() == message.tech.size())
 					return null;
 
-				cap.clear();
-				cap.setResearched(message.tech);
+				for (String name : cap.getResearched())
+					if (!message.tech.contains(name)) {
+						cap.removeResearched(name);
+
+						String[] split = name.split("#");
+						if (split.length == 2) {
+							Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(split[0]));
+							TechnologyHandler.getProgress(player, tech).revokeCriterion(split[1]);
+						}
+					}
+
+				for (String name : message.tech)
+					if (!cap.isResearched(name)) {
+						cap.setResearched(name);
+
+						String[] split = name.split("#");
+						if (split.length == 2) {
+							Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(split[0]));
+							TechnologyHandler.getProgress(player, tech).grantCriterion(split[1]);
+						}
+					}
 
 				if (message.toast != null)
 					FTGU.PROXY.showTechnologyToast(message.toast);

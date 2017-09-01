@@ -23,7 +23,8 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void showTechnologyToast(Technology technology) {
-		Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(technology));
+		if (technology.getDisplay().shouldShowToast())
+			Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(technology));
 	}
 
 	@Override

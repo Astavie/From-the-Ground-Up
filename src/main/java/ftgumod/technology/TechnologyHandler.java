@@ -1,11 +1,20 @@
 package ftgumod.technology;
 
+import com.google.gson.JsonParseException;
+import ftgumod.FTGU;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
+import org.apache.commons.io.FilenameUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.*;
 
 public class TechnologyHandler {
@@ -16,6 +25,8 @@ public class TechnologyHandler {
 	public static final Set<String> start = new HashSet<>();
 	public static final Set<String> headStart = new HashSet<>();
 	public static final Set<String> vanilla = new HashSet<>();
+
+	public static Map<ResourceLocation, String> cache;
 
 	public static Technology BASIC_CRAFTING;
 	public static Technology WOODWORKING;
@@ -303,11 +314,82 @@ public class TechnologyHandler {
 
 			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			for (String criterion : progress.getRemaningCriteria())
-				if (cap.isResearched(tech.getRegistryName().toString() + "." + criterion))
+				if (cap.isResearched(tech.getRegistryName().toString() + "#" + criterion))
 					progress.grantCriterion(criterion);
 
 			return progress;
 		});
+	}
+
+	public static void clear() {
+		technologies.clear();
+		progress.clear();
+	}
+
+	public static void load() {
+		Map<ResourceLocation, String> json = new HashMap<>();
+
+		Loader.instance().getActiveModList().forEach(mod -> CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/technologies", null, (root, file) -> {
+			String relative = root.relativize(file).toString();
+			if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_"))
+				return true;
+
+			String name = FilenameUtils.removeExtension(relative).replaceAll("\\\\", "/");
+			ResourceLocation id = new ResourceLocation(mod.getModId(), name);
+
+			try {
+				json.put(id, new String(Files.readAllBytes(file)).replace(" ", ""));
+			} catch (IOException e) {
+				FMLLog.log.error("Couldn't read technology {} from {}", id, file, e);
+				return false;
+			}
+
+			return true;
+		}, true, true));
+
+		deserialize(json);
+		cache = json;
+	}
+
+	public static void deserialize(Map<ResourceLocation, String> json) {
+		Map<ResourceLocation, Technology.Builder> builders = new HashMap<>();
+		Map<ResourceLocation, Technology> technologies = new HashMap<>();
+
+		for (Map.Entry<ResourceLocation, String> file : json.entrySet())
+			try {
+				builders.put(file.getKey(), FTGU.GSON.fromJson(file.getValue(), Technology.Builder.class));
+			} catch (JsonParseException e) {
+				Technology.getLogger().error("Couldn't load technology " + file.getKey(), e);
+			}
+
+		boolean load = true;
+		while (!builders.isEmpty() && load) {
+			load = false;
+
+			Iterator<Map.Entry<ResourceLocation, Technology.Builder>> iterator = builders.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<ResourceLocation, Technology.Builder> entry = iterator.next();
+
+				if (entry.getValue().resolveParent(technologies)) {
+					try {
+						Technology technology = entry.getValue().build(entry.getKey(), new JsonContext(entry.getKey().getResourceDomain()));
+						technologies.put(technology.getRegistryName(), technology);
+						load = true;
+					} catch (JsonParseException e) {
+						Technology.getLogger().error("Couldn't load technology " + entry.getKey(), e);
+					}
+
+					iterator.remove();
+				}
+			}
+
+			if (!load)
+				for (Map.Entry<ResourceLocation, Technology.Builder> entry : builders.entrySet())
+					Technology.getLogger().error("Couldn't load technology " + entry.getKey());
+		}
+
+		Technology.getLogger().info("Loaded " + technologies.size() + " technolog" + (technologies.size() != 1 ? "ies" : "y"));
+		TechnologyHandler.technologies.addAll(technologies.values());
 	}
 
 	public enum GUI {

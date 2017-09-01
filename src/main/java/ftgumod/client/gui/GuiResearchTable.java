@@ -1,7 +1,5 @@
 package ftgumod.client.gui;
 
-import ftgumod.Decipher;
-import ftgumod.Decipher.DecipherGroup;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.inventory.ContainerResearchTable;
@@ -10,7 +8,7 @@ import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.BlockSerializable;
-import ftgumod.util.IngredientNamed;
+import ftgumod.util.IngredientResearch;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -55,12 +53,11 @@ public class GuiResearchTable extends GuiContainer {
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 			int index = slot.getSlotIndex() - table.combine;
-			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && table.recipe.getResearchRecipe().get(index) instanceof IngredientNamed) {
-				String hint = ((IngredientNamed) table.recipe.getResearchRecipe().get(index)).getName().getUnformattedText();
-				if (table.recipe.getResearchRecipe().hasDecipher()) {
-					Decipher d = table.recipe.getResearchRecipe().getDecipher();
-					DecipherGroup g = d.unlock[index];
-					if (g != null) {
+			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && !table.recipe.getResearchRecipe().isEmpty(index)) {
+				IngredientResearch ingredient = table.recipe.getResearchRecipe().get(index);
+				if (ingredient.hasHint()) {
+					String hint = ingredient.getHint().getUnformattedText();
+					if (ingredient.hasDecipher()) {
 						if (!table.inventorySlots.get(table.glass).getHasStack()) {
 							hint = TextFormatting.OBFUSCATED + hint;
 						} else {
@@ -68,7 +65,7 @@ public class GuiResearchTable extends GuiContainer {
 							boolean perms = false;
 
 							for (BlockSerializable block : blocks)
-								if (block.test(g.unlock)) {
+								if (block.test(ingredient.getDecipher())) {
 									perms = true;
 									break;
 								}
@@ -76,8 +73,8 @@ public class GuiResearchTable extends GuiContainer {
 								hint = TextFormatting.OBFUSCATED + hint;
 						}
 					}
+					drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 				}
-				drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 			}
 		}
 	}

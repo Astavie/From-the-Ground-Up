@@ -1,20 +1,16 @@
 package ftgumod.inventory;
 
-import ftgumod.Decipher;
-import ftgumod.Decipher.DecipherGroup;
-import ftgumod.EventHandler;
 import ftgumod.FTGUAPI;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.tileentity.TileEntityInventory;
+import ftgumod.util.BlockPredicate;
 import ftgumod.util.BlockSerializable;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -98,8 +94,8 @@ public class ContainerResearchTable extends Container {
 
 				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player)) {
 					recipe = tech;
-					if (!invPlayer.player.world.isRemote && recipe.getResearchRecipe().hasDecipher() && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(invPlayer.player))
-						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, (EntityPlayerMP) invPlayer.player, SoundEvents.ENTITY_PLAYER_LEVELUP);
+//					if (!invPlayer.player.world.isRemote && recipe.getResearchRecipe().hasDecipher() && !TechnologyHandler.UNDECIPHERED_RESEARCH.isUnlocked(invPlayer.player))
+//						EventHandler.unlock(TechnologyHandler.UNDECIPHERED_RESEARCH, (EntityPlayerMP) invPlayer.player, SoundEvents.ENTITY_PLAYER_LEVELUP);
 				}
 			} else
 				recipe = null;
@@ -110,18 +106,13 @@ public class ContainerResearchTable extends Container {
 					inventory.add(inventoryItemStacks.get(combine + i));
 
 				if (recipe.getResearchRecipe().test(inventory)) {
-					if (recipe.getResearchRecipe().hasDecipher()) {
-						if (!inventorySlots.get(glass).getHasStack()) {
-							inventorySlots.get(output).putStack(ItemStack.EMPTY);
-							return;
-						}
-
-						Decipher d = recipe.getResearchRecipe().getDecipher();
-						List<BlockSerializable> blocks = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
-						for (DecipherGroup g : d.list) {
+					List<BlockSerializable> blocks = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
+					for (int i = 0; i < 9; i++) {
+						if (!recipe.getResearchRecipe().isEmpty(i) && recipe.getResearchRecipe().get(i).hasDecipher()) {
+							BlockPredicate predicate = recipe.getResearchRecipe().get(i).getDecipher();
 							boolean perms = false;
 							for (BlockSerializable block : blocks)
-								if (block.test(g.unlock)) {
+								if (block.test(predicate)) {
 									perms = true;
 									break;
 								}

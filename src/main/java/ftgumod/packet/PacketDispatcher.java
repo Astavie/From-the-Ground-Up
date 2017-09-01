@@ -1,5 +1,7 @@
 package ftgumod.packet;
 
+import ftgumod.packet.client.TechnologyInfoMessage;
+import ftgumod.packet.client.TechnologyInfoMessage.TechnologyInfoMessageHandler;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.packet.client.TechnologyMessage.TechnologyMessageHandler;
 import ftgumod.packet.server.CopyTechMessage;
@@ -26,6 +28,7 @@ public final class PacketDispatcher {
 		PacketDispatcher.registerMessage(UnlockTechMessageHandler.class, UnlockTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(CopyTechMessageHandler.class, CopyTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);
+		PacketDispatcher.registerMessage(TechnologyInfoMessageHandler.class, TechnologyInfoMessage.class, Side.CLIENT);
 	}
 
 	@SuppressWarnings({"unchecked"})
@@ -37,7 +40,12 @@ public final class PacketDispatcher {
 		PacketDispatcher.dispatcher.sendTo(message, player);
 	}
 
+	public static void sendToAll(IMessage message) {
+		PacketDispatcher.dispatcher.sendToAll(message);
+	}
+
 	public static void sendToServer(IMessage message) {
 		PacketDispatcher.dispatcher.sendToServer(message);
 	}
+
 }

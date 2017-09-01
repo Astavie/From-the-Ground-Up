@@ -1,5 +1,7 @@
 package ftgumod;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import ftgumod.compat.ICompat;
 import ftgumod.compat.immersiveengineering.CompatIE;
 import ftgumod.packet.PacketDispatcher;
@@ -8,16 +10,20 @@ import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.DefaultImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.CapabilityTechnology.Storage;
+import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
+import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
@@ -31,20 +37,18 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 @Mod(modid = FTGU.MODID)
 public class FTGU {
 
-	public static final String MODID = "ftgumod";
+	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(Technology.Builder.class, new Technology.Deserializer()).registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer()).registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer()).registerTypeHierarchyAdapter(Style.class, new Style.Serializer()).registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
 
-	private static final Field REGISTRY = ReflectionHelper.findField(CriteriaTriggers.class, "REGISTRY", "field_192139_s");
+	public static final String MODID = "ftgumod";
 
 	public static boolean headStart = false;
 	public static boolean moddedOnly = false;
@@ -74,19 +78,6 @@ public class FTGU {
 		ShapelessOreRecipe r = new ShapelessOreRecipe(getRecipeGroup(output), output, recipe);
 		ForgeRegistries.RECIPES.register(r.setRegistryName(r.getGroup()));
 		return r;
-	}
-
-	@SuppressWarnings({"unchecked"})
-	private void registerCriterion(ICriterionTrigger criterion) {
-		try {
-			Map<ResourceLocation, ICriterionTrigger<?>> registry = (Map<ResourceLocation, ICriterionTrigger<?>>) REGISTRY.get(null);
-			if (!registry.containsKey(criterion.getId()))
-				registry.put(criterion.getId(), criterion);
-			else
-				throw new IllegalArgumentException("Duplicate criterion id " + criterion.getId());
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
 	}
 
 	private void registerItem(Item item, String name) {
@@ -120,10 +111,10 @@ public class FTGU {
 		registerItem(FTGUAPI.i_researchBook, FTGUAPI.n_researchBook);
 		registerItem(FTGUAPI.i_lookingGlass, FTGUAPI.n_lookingGlass);
 
-		registerCriterion(FTGUAPI.c_technologyUnlocked);
-		registerCriterion(FTGUAPI.c_technologyResearched);
-		registerCriterion(FTGUAPI.c_itemLocked);
-		registerCriterion(FTGUAPI.c_inspect);
+		CriteriaTriggers.register(FTGUAPI.c_technologyUnlocked);
+		CriteriaTriggers.register(FTGUAPI.c_technologyResearched);
+		CriteriaTriggers.register(FTGUAPI.c_itemLocked);
+		CriteriaTriggers.register(FTGUAPI.c_inspect);
 
 		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl::new);
 
@@ -149,7 +140,7 @@ public class FTGU {
 
 		PROXY.init();
 
-		TechnologyHandler.init();
+		TechnologyHandler.load();
 	}
 
 	@Mod.EventHandler

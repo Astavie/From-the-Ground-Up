@@ -1,10 +1,10 @@
 package ftgumod.item;
 
-import ftgumod.Decipher;
 import ftgumod.FTGUAPI;
 import ftgumod.event.PlayerInspectEvent;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
+import ftgumod.util.BlockPredicate;
 import ftgumod.util.BlockSerializable;
 import ftgumod.util.StackUtils;
 import net.minecraft.block.state.IBlockState;
@@ -61,14 +61,17 @@ public class ItemLookingGlass extends Item {
 
 				outer:
 				for (Technology tech : TechnologyHandler.technologies)
-					if (tech.hasResearchRecipe() && tech.getResearchRecipe().hasDecipher())
-						group:for (Decipher.DecipherGroup decipher : tech.getResearchRecipe().getDecipher().list)
-							if (block.test(decipher.unlock)) {
-								for (BlockSerializable other : list)
-									if (other.test(decipher.unlock))
-										continue group;
-								event.setCanceled(false);
-								break outer;
+					if (tech.hasResearchRecipe())
+						group:for (int i = 0; i < 9; i++)
+							if (!tech.getResearchRecipe().isEmpty(i) && tech.getResearchRecipe().get(i).hasDecipher()) {
+								BlockPredicate predicate = tech.getResearchRecipe().get(i).getDecipher();
+								if (block.test(predicate)) {
+									for (BlockSerializable other : list)
+										if (other.test(predicate))
+											continue group;
+									event.setCanceled(false);
+									break outer;
+								}
 							}
 
 				MinecraftForge.EVENT_BUS.post(event);
