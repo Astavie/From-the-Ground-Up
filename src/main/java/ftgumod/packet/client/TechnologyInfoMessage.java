@@ -1,6 +1,5 @@
 package ftgumod.packet.client;
 
-import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
@@ -45,9 +44,7 @@ public class TechnologyInfoMessage implements IMessage {
 		@Override
 		public IMessage onMessage(TechnologyInfoMessage message, MessageContext ctx) {
 			TechnologyHandler.clear();
-			TechnologyHandler.loadBuiltin();
-
-			Technology.getLogger().info("Loading custom technologies...");
+			TechnologyHandler.loadBuiltin().forEach(message.json::putIfAbsent);
 			TechnologyHandler.deserialize(message.json);
 			return null;
 		}

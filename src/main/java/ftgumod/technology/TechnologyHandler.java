@@ -30,41 +30,6 @@ public class TechnologyHandler {
 
 	public static Map<ResourceLocation, String> cache;
 
-	public static Technology BASIC_CRAFTING;
-	public static Technology WOODWORKING;
-	public static Technology WRITING;
-	public static Technology WOODEN_TOOLS;
-	public static Technology RESEARCH;
-	public static Technology STONECRAFT;
-	public static Technology CARPENTRY;
-	public static Technology STONEWORKING;
-	public static Technology REFINEMENT;
-	public static Technology BIBLIOGRAPHY;
-	public static Technology ADVANCED_COMBAT;
-	public static Technology METAL_ARMOR;
-	public static Technology SMITHING;
-	public static Technology BUILDING_BLOCKS;
-	public static Technology COOKING;
-	public static Technology GILDED_CUISINE;
-	public static Technology BREWING;
-	public static Technology GEM_CUTTING;
-	public static Technology GEM_ARMOR;
-	public static Technology BASIC_REDSTONE;
-	public static Technology ADVANCED_REDSTONE;
-	public static Technology TIME_PLACE_DESTINATION;
-	public static Technology REDSTONE_MACHINERY;
-	public static Technology EXPLOSIVES;
-	public static Technology PLAYER_TRANSPORTATION;
-	public static Technology ITEM_TRANSPORTATION;
-	public static Technology ADVANCED_RAILS;
-	public static Technology MUSIC;
-	public static Technology ENCHANTING;
-	public static Technology GLOWING_EYES;
-	public static Technology ENDER_KNOWLEDGE;
-	public static Technology UNDECIPHERED_RESEARCH;
-
-	private static boolean minecraft = false;
-
 	public static void init() {
 		/*
 
@@ -311,45 +276,41 @@ public class TechnologyHandler {
 		progress.clear();
 	}
 
-	public static void load(World world) {
-		loadBuiltin();
+	public static void reload(World world) {
+		clear();
 
-		Technology.getLogger().info("Loading custom technologies...");
 		File dir = new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies");
 
 		Map<ResourceLocation, String> json = new HashMap<>();
 
-		label:
-		for (File file : FileUtils.listFiles(dir, new String[] {"json"}, true)) {
-			if (file.getParentFile().equals(dir) || file.getParentFile().getParentFile().equals(dir))
-				continue;
-			String relative = dir.toPath().relativize(file.toPath()).toString();
+		if (dir.exists() && dir.isDirectory())
+			for (File file : FileUtils.listFiles(dir, new String[] {"json"}, true)) {
+				if (file.getParentFile().equals(dir) || file.getParentFile().getParentFile().equals(dir))
+					continue;
+				String relative = dir.toPath().relativize(file.toPath()).toString();
 
-			int index = relative.indexOf('/');
-			String domain = relative.substring(0, index);
-			String name = FilenameUtils.removeExtension(relative.substring(index));
+				int index = relative.indexOf('/');
+				String domain = relative.substring(0, index);
+				String name = FilenameUtils.removeExtension(relative.substring(index));
 
-			ResourceLocation id = new ResourceLocation(domain, name);
-			for (Technology tech : technologies)
-				if (tech.getRegistryName().equals(id)) {
-					Technology.getLogger().error("Technology " + id + " has a duplicate id, it will be ignored");
-					continue label;
+				ResourceLocation id = new ResourceLocation(domain, name);
+
+				try {
+					json.put(id, new String(Files.readAllBytes(file.toPath())));
+				} catch (IOException e) {
+					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 				}
-
-			try {
-				json.put(id, new String(Files.readAllBytes(file.toPath())));
-			} catch (IOException e) {
-				Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 			}
-		}
+		else
+			dir.mkdirs();
 
+		cache = new HashMap<>(json);
+
+		loadBuiltin().forEach(json::putIfAbsent);
 		deserialize(json);
-		cache = json;
 	}
 
-	public static void loadBuiltin() {
-		Technology.getLogger().info("Loading built-in technologies...");
-
+	public static Map<ResourceLocation, String> loadBuiltin() {
 		Map<ResourceLocation, String> json = new HashMap<>();
 		Loader.instance().getActiveModList().forEach(mod -> CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/technologies", null, (root, file) -> {
 			String relative = root.relativize(file).toString();
@@ -369,7 +330,7 @@ public class TechnologyHandler {
 			return true;
 		}, true, true));
 
-		deserialize(json);
+		return json;
 	}
 
 	public static void deserialize(Map<ResourceLocation, String> json) {
@@ -412,6 +373,12 @@ public class TechnologyHandler {
 		technologies.values().forEach(tech -> {
 			if (tech.hasParent())
 				tech.getParent().getChildren().add(tech);
+			if (tech.start)
+				start.add(tech.getRegistryName().toString());
+			if (tech.headStart)
+				headStart.add(tech.getRegistryName().toString());
+			if (tech.getRegistryName().getResourceDomain().equals(FTGU.MODID))
+				vanilla.add(tech.getRegistryName().toString());
 		});
 
 		Technology.getLogger().info("Loaded " + technologies.size() + " technolog" + (technologies.size() != 1 ? "ies" : "y"));

@@ -37,6 +37,7 @@ import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -50,8 +51,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onCommand(CommandEvent evt) {
 		if (evt.getCommand() instanceof CommandReload) {
-			TechnologyHandler.clear();
-			TechnologyHandler.load(evt.getSender().getServer().worlds[0]);
+			TechnologyHandler.reload(evt.getSender().getServer().worlds[0]);
 			PacketDispatcher.sendToAll(new TechnologyInfoMessage(TechnologyHandler.cache));
 		}
 	}
@@ -59,7 +59,7 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
 		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0)
-			TechnologyHandler.load(evt.getWorld());
+			TechnologyHandler.reload(evt.getWorld());
 	}
 
 	@SubscribeEvent
@@ -139,10 +139,20 @@ public class EventHandler {
 
 				cap.setOld();
 			}
+
+			for (Technology tech : TechnologyHandler.technologies)
+				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
+					tech.registerListeners((EntityPlayerMP) evt.player);
+
 			replaceRecipeBook((EntityPlayerMP) evt.player);
 			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyHandler.cache), (EntityPlayerMP) evt.player);
 			PacketDispatcher.sendTo(new TechnologyMessage(evt.player, false), (EntityPlayerMP) evt.player);
 		}
+	}
+
+	@SubscribeEvent
+	public void onPlayerLeave(PlayerLoggedOutEvent evt) {
+		TechnologyHandler.progress.remove(evt.player.getUniqueID());
 	}
 
 	@SubscribeEvent

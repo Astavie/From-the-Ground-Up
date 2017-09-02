@@ -37,20 +37,23 @@ public class IdeaRecipe {
 	}
 
 	public boolean test(Collection<ItemStack> inventory) {
-		Set<Ingredient> copy = new HashSet<>(recipe);
-		int count = 0;
+		if (inventory.size() >= needed) {
+			Set<Ingredient> copy = new HashSet<>(recipe);
 
-		for (ItemStack stack : inventory) {
-			Iterator<Ingredient> iterator = copy.iterator();
-			while (iterator.hasNext())
-				if (iterator.next().test(stack)) {
-					iterator.remove();
-					count++;
-					break;
-				}
+			loop:
+			for (ItemStack stack : inventory) {
+				Iterator<Ingredient> iterator = copy.iterator();
+				while (iterator.hasNext())
+					if (iterator.next().test(stack)) {
+						iterator.remove();
+						continue loop;
+					}
+				return false;
+			}
+
+			return true;
 		}
-
-		return count >= needed;
+		return false;
 	}
 
 }

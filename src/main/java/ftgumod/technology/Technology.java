@@ -39,6 +39,9 @@ public class Technology {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
+	public final boolean start;
+	public final boolean headStart;
+
 	private final Set<Technology> children = new HashSet<>();
 
 	private final int level;
@@ -56,11 +59,14 @@ public class Technology {
 	private final IdeaRecipe idea;
 	private final ResearchRecipe research;
 
-	public Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
+	private Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
 		this.type = type;
+
+		this.start = start;
+		this.headStart = headStart;
 
 		this.rewards = rewards;
 		this.criteria = criteria;
@@ -203,7 +209,7 @@ public class Technology {
 		}
 	}
 
-	private void registerListeners(EntityPlayerMP player) {
+	public void registerListeners(EntityPlayerMP player) {
 		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
 		if (!progress.isDone())
 			for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
@@ -219,7 +225,7 @@ public class Technology {
 			}
 	}
 
-	private void unregisterListeners(EntityPlayerMP player) {
+	public void unregisterListeners(EntityPlayerMP player) {
 		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
 		for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
 			CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
@@ -294,15 +300,20 @@ public class Technology {
 		private final JsonObject idea;
 		private final JsonObject research;
 
+		private final boolean start;
+		private final boolean headStart;
+
 		private Technology parent;
 
-		public Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
+		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
 			this.parentId = parent;
 			this.display = display;
 			this.type = type;
 			this.rewards = rewards;
 			this.criteria = criteria;
 			this.requirements = requirements;
+			this.start = start;
+			this.headStart = headStart;
 			this.unlock = unlock;
 			this.idea = idea;
 			this.research = research;
@@ -324,7 +335,7 @@ public class Technology {
 			IdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			ResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
-			return new Technology(location, parent, display, type, rewards, criteria, requirements, unlock, idea, research);
+			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, headStart, unlock, idea, research);
 		}
 
 	}
@@ -393,7 +404,10 @@ public class Technology {
 			JsonObject idea = json.has("idea") ? JsonUtils.getJsonObject(json, "idea") : null;
 			JsonObject research = json.has("research") ? JsonUtils.getJsonObject(json, "research") : null;
 
-			return new Builder(parent, display, type, rewards, criteria, requirements, unlock, idea, research);
+			boolean start = JsonUtils.getBoolean(json, "start", false);
+			boolean headStart = JsonUtils.getBoolean(json, "headstart", false);
+
+			return new Builder(parent, display, type, rewards, criteria, requirements, start, headStart, unlock, idea, research);
 		}
 
 	}

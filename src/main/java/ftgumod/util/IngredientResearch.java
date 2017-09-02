@@ -2,11 +2,11 @@ package ftgumod.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -38,15 +38,11 @@ public class IngredientResearch extends Ingredient {
 
 		ITextComponent hint = null;
 		if (object.has("hint"))
-			hint = FTGU.GSON.fromJson(element.getAsJsonObject().get("hint"), ITextComponent.class);
+			hint = FTGU.GSON.fromJson(object.get("hint"), ITextComponent.class);
 
 		BlockPredicate decipher = null;
-		if (object.has("decipher")) {
-			JsonElement i = object.get("decipher");
-			if (i.isJsonObject())
-				decipher = BlockPredicate.deserialize(i.getAsJsonObject());
-			else throw new JsonSyntaxException("Expected decipher to be an object");
-		}
+		if (object.has("decipher"))
+			decipher = BlockPredicate.deserialize(JsonUtils.getJsonObject(object, "decipher"));
 
 		return new IngredientResearch(ingredient, hint, decipher);
 	}
