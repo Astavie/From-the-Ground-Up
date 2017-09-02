@@ -68,6 +68,12 @@
     {
       "item": "minecraft:wool",
       "data": 32767
+    },
+    {
+      "type": "immersiveengineering:multiblock",
+      "multiblock": "IE:CokeOven",
+      "item": "immersiveengineering:stone_device",
+      "data": 0
     }
   ]
 }

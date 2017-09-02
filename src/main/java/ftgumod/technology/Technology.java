@@ -1,6 +1,7 @@
 package ftgumod.technology;
 
 import com.google.gson.*;
+import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
@@ -329,8 +330,11 @@ public class Technology {
 		public Technology build(ResourceLocation location, JsonContext context) {
 			NonNullList<Ingredient> unlock = NonNullList.create();
 			if (this.unlock != null)
-				for (JsonElement element : this.unlock)
+				for (JsonElement element : this.unlock) {
+					if (element.isJsonObject())
+						FTGU.INSTANCE.runCompat("immersiveengineering", location, element.getAsJsonObject());
 					unlock.add(CraftingHelper.getIngredient(element, context));
+				}
 
 			IdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			ResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
