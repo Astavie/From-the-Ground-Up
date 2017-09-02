@@ -22,7 +22,9 @@ import java.util.*;
 public class TechnologyHandler {
 
 	public static final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
-	public static final Set<Technology> technologies = new HashSet<>();
+
+	public static final Map<ResourceLocation, Technology> technologies = new HashMap<>();
+	public static final List<Technology> roots = new ArrayList<>();
 
 	public static final Set<String> start = new HashSet<>();
 	public static final Set<String> headStart = new HashSet<>();
@@ -241,16 +243,9 @@ public class TechnologyHandler {
 		*/
 	}
 
-	public static Technology getTechnology(ResourceLocation name) {
-		for (Technology t : technologies)
-			if (t.getRegistryName().equals(name))
-				return t;
-		return null;
-	}
-
 	public static Technology getLocked(ItemStack item) {
 		if (!item.isEmpty())
-			for (Technology t : technologies)
+			for (Technology t : technologies.values())
 				for (Ingredient ingredient : t.getUnlock())
 					if (ingredient.test(item))
 						return t;
@@ -272,8 +267,14 @@ public class TechnologyHandler {
 	}
 
 	public static void clear() {
-		technologies.clear();
 		progress.clear();
+
+		technologies.clear();
+		roots.clear();
+
+		start.clear();
+		headStart.clear();
+		vanilla.clear();
 	}
 
 	public static void reload(World world) {
@@ -373,16 +374,20 @@ public class TechnologyHandler {
 		technologies.values().forEach(tech -> {
 			if (tech.hasParent())
 				tech.getParent().getChildren().add(tech);
+
 			if (tech.start)
 				start.add(tech.getRegistryName().toString());
 			if (tech.headStart)
 				headStart.add(tech.getRegistryName().toString());
 			if (tech.getRegistryName().getResourceDomain().equals(FTGU.MODID))
 				vanilla.add(tech.getRegistryName().toString());
+
+			if (tech.isRoot())
+				roots.add(tech);
 		});
 
 		Technology.getLogger().info("Loaded " + technologies.size() + " technolog" + (technologies.size() != 1 ? "ies" : "y"));
-		TechnologyHandler.technologies.addAll(technologies.values());
+		TechnologyHandler.technologies.putAll(technologies);
 	}
 
 	public enum GUI {

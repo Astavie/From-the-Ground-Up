@@ -59,7 +59,7 @@ public class ItemLookingGlass extends Item {
 				event.setCanceled(true);
 
 				outer:
-				for (Technology tech : TechnologyHandler.technologies)
+				for (Technology tech : TechnologyHandler.technologies.values())
 					if (tech.hasResearchRecipe())
 						group:for (int i = 0; i < 9; i++)
 							if (!tech.getResearchRecipe().isEmpty(i) && tech.getResearchRecipe().get(i).hasDecipher()) {

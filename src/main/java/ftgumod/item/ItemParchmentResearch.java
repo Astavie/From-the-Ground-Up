@@ -32,7 +32,7 @@ public class ItemParchmentResearch extends Item {
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
 		if (!player.world.isRemote) {
-			Technology t = TechnologyHandler.getTechnology(new ResourceLocation(StackUtils.getItemData(item).getString("FTGU")));
+			Technology t = TechnologyHandler.technologies.get(new ResourceLocation(StackUtils.getItemData(item).getString("FTGU")));
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already)

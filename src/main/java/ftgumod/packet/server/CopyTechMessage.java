@@ -38,7 +38,7 @@ public class CopyTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
-			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(message.id));
+			Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(message.id));
 
 			if (tech != null && tech.isResearched(player)) {
 				int index = -1;

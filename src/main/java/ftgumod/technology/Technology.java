@@ -31,10 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Technology {
 
@@ -102,6 +99,14 @@ public class Technology {
 
 	public Set<Technology> getChildren() {
 		return children;
+	}
+
+	public void getTree(Collection<Technology> collection) {
+		collection.add(this);
+		getChildren().forEach(tech -> {
+			if (!tech.isRoot())
+				tech.getTree(collection);
+		});
 	}
 
 	public ResearchRecipe getResearchRecipe() {
@@ -356,6 +361,9 @@ public class Technology {
 
 			JsonObject displayObject = JsonUtils.getJsonObject(json, "display");
 			DisplayInfo display = DisplayInfo.deserialize(displayObject, context);
+
+			if (displayObject.has("x") || displayObject.has("y"))
+				display.setPosition(JsonUtils.getInt(displayObject, "x"), JsonUtils.getInt(displayObject, "y"));
 
 			Type type = displayObject.has("theory") && JsonUtils.getBoolean(displayObject, "theory") ? Type.THEORY : Type.TECHNOLOGY;
 

@@ -80,7 +80,7 @@ public class EventHandler {
 
 			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("technology.decipher.tooltip"));
 		} else if (item == FTGUAPI.i_parchmentIdea) {
-			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
+			Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
 
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
@@ -88,7 +88,7 @@ public class EventHandler {
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplay().getDescription().getUnformattedText());
 			}
 		} else if (item == FTGUAPI.i_parchmentResearch) {
-			Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
+			Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
 
 			if (tech != null) {
 				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());
@@ -140,7 +140,7 @@ public class EventHandler {
 				cap.setOld();
 			}
 
-			for (Technology tech : TechnologyHandler.technologies)
+			for (Technology tech : TechnologyHandler.technologies.values())
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
 

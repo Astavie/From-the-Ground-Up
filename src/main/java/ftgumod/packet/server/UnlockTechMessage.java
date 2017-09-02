@@ -43,7 +43,7 @@ public class UnlockTechMessage implements IMessage {
 		public IMessage handleMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
 			if (player != null && player.capabilities.isCreativeMode) {
 				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				Technology t = TechnologyHandler.getTechnology(new ResourceLocation(message.tech));
+				Technology t = TechnologyHandler.technologies.get(new ResourceLocation(message.tech));
 
 				if (cap != null && t != null) {
 					if (t.isResearched(player)) {

@@ -8,7 +8,9 @@
     },
     "description": {
       "translate": "technology.carpentry.desc"
-    }
+    },
+    "x": 0,
+    "y": 0
   },
   "idea": {
     "amount": 2,

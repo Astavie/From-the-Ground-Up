@@ -2,6 +2,7 @@ package ftgumod.packet.client;
 
 import ftgumod.FTGU;
 import ftgumod.packet.MessageHandler;
+import ftgumod.packet.server.RequestTechMessage;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import javax.annotation.Nullable;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 
 public class TechnologyMessage implements IMessage {
@@ -50,7 +52,7 @@ public class TechnologyMessage implements IMessage {
 			tech.add(ByteBufUtils.readUTF8String(buffer));
 
 		if (buffer.readBoolean())
-			toast = TechnologyHandler.getTechnology(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
+			toast = TechnologyHandler.technologies.get(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
 	}
 
 	@Override
@@ -78,37 +80,41 @@ public class TechnologyMessage implements IMessage {
 			if (player == null)
 				return null;
 
-			ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-			if (cap != null) {
-				if (!message.force && cap.getResearched().size() == message.tech.size())
-					return null;
+			try {
+				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+				if (cap != null) {
+					if (!message.force && cap.getResearched().size() == message.tech.size())
+						return null;
 
-				for (String name : cap.getResearched())
-					if (!message.tech.contains(name)) {
-						cap.removeResearched(name);
+					for (String name : cap.getResearched())
+						if (!message.tech.contains(name)) {
+							cap.removeResearched(name);
 
-						String[] split = name.split("#");
-						if (split.length == 2) {
-							Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(split[0]));
-							TechnologyHandler.getProgress(player, tech).revokeCriterion(split[1]);
+							String[] split = name.split("#");
+							if (split.length == 2) {
+								Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(split[0]));
+								TechnologyHandler.getProgress(player, tech).revokeCriterion(split[1]);
+							}
 						}
-					}
 
-				for (String name : message.tech)
-					if (!cap.isResearched(name)) {
-						cap.setResearched(name);
+					for (String name : message.tech)
+						if (!cap.isResearched(name)) {
+							cap.setResearched(name);
 
-						String[] split = name.split("#");
-						if (split.length == 2) {
-							Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(split[0]));
-							TechnologyHandler.getProgress(player, tech).grantCriterion(split[1]);
+							String[] split = name.split("#");
+							if (split.length == 2) {
+								Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(split[0]));
+								TechnologyHandler.getProgress(player, tech).grantCriterion(split[1]);
+							}
 						}
-					}
 
-				if (message.toast != null)
-					FTGU.PROXY.showTechnologyToast(message.toast);
+					if (message.toast != null)
+						FTGU.PROXY.showTechnologyToast(message.toast);
 
-				FTGU.INSTANCE.runCompat("jei", message.tech);
+					FTGU.INSTANCE.runCompat("jei", message.tech);
+				}
+			} catch (ConcurrentModificationException ignore) {
+				return new RequestTechMessage();
 			}
 
 			return null;

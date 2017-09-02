@@ -24,7 +24,7 @@ public class TriggerTechnology extends TriggerFTGU<TriggerTechnology.Instance> {
 		Technology technology = null;
 		if (jsonObject.has("technology")) {
 			String name = JsonUtils.getString(jsonObject, "technology");
-			technology = TechnologyHandler.getTechnology(new ResourceLocation(name));
+			technology = TechnologyHandler.technologies.get(new ResourceLocation(name));
 			if (technology == null)
 				throw new JsonSyntaxException("Unknown technology '" + name + "'");
 		}

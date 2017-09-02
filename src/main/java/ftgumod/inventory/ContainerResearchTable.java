@@ -96,7 +96,7 @@ public class ContainerResearchTable extends Container {
 			if (inventorySlots.get(parchment).getHasStack()) {
 				NBTTagCompound tag = StackUtils.getItemData(inventorySlots.get(parchment).getStack());
 				String s = tag.getString("FTGU");
-				Technology tech = TechnologyHandler.getTechnology(new ResourceLocation(s));
+				Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(s));
 
 				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player)) {
 					recipe = tech;

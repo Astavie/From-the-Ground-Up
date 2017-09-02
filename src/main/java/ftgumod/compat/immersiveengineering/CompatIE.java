@@ -48,7 +48,7 @@ public class CompatIE implements ICompat {
 	@SubscribeEvent
 	public void onMultiblockForm(MultiblockHandler.MultiblockFormEvent evt) {
 		if (unlock.containsKey(evt.getMultiblock())) {
-			Technology technology = TechnologyHandler.getTechnology(unlock.get(evt.getMultiblock()));
+			Technology technology = TechnologyHandler.technologies.get(unlock.get(evt.getMultiblock()));
 			if (technology != null && !technology.isResearched(evt.getEntityPlayer()))
 				evt.setCanceled(true); // TODO: Send message?
 		}
