@@ -2,7 +2,7 @@ package ftgumod.packet.client;
 
 import ftgumod.FTGU;
 import ftgumod.packet.MessageHandler;
-import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
@@ -114,7 +114,7 @@ public class TechnologyMessage implements IMessage {
 					FTGU.INSTANCE.runCompat("jei", message.tech);
 				}
 			} catch (ConcurrentModificationException ignore) {
-				return new RequestTechMessage();
+				return new RequestMessage();
 			}
 
 			return null;

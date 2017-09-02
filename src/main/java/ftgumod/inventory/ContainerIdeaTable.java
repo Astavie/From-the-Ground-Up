@@ -77,10 +77,11 @@ public class ContainerIdeaTable extends Container {
 			if (inventorySlots.get(i + combine).getHasStack())
 				inventory.add(inventorySlots.get(i + combine).getStack());
 
-		for (Technology tech : TechnologyHandler.technologies.values())
+		for (Technology tech : TechnologyHandler.technologies.values()) {
 			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player))
 				if (tech.getIdeaRecipe().test(inventory))
 					return tech;
+		}
 		return null;
 	}
 

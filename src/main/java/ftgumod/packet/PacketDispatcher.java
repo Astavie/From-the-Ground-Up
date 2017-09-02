@@ -8,8 +8,8 @@ import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.packet.client.TechnologyMessage.TechnologyMessageHandler;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.CopyTechMessage.CopyTechMessageHandler;
-import ftgumod.packet.server.RequestTechMessage;
-import ftgumod.packet.server.RequestTechMessage.RequestTechMessageHandler;
+import ftgumod.packet.server.RequestMessage;
+import ftgumod.packet.server.RequestMessage.RequestMessageHandler;
 import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.packet.server.UnlockTechMessage.UnlockTechMessageHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -27,7 +27,7 @@ public final class PacketDispatcher {
 	public static void registerPackets() {
 		dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel("ftgu");
 
-		PacketDispatcher.registerMessage(RequestTechMessageHandler.class, RequestTechMessage.class, Side.SERVER);
+		PacketDispatcher.registerMessage(RequestMessageHandler.class, RequestMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(UnlockTechMessageHandler.class, UnlockTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(CopyTechMessageHandler.class, CopyTechMessage.class, Side.SERVER);
 

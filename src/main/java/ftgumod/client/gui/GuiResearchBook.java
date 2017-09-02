@@ -4,7 +4,7 @@ import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
-import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
@@ -31,21 +31,18 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.ConcurrentModificationException;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @SideOnly(Side.CLIENT)
 public class GuiResearchBook extends GuiScreen {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID + ":textures/gui/achievement/achievement_background.png");
-
+	List<Technology> roots = new ArrayList<>();
 	private int x_min;
 	private int y_min;
 	private int x_max;
 	private int y_max;
-
 	private int imageWidth;
 	private int imageHeight;
 	private float zoom;
@@ -61,7 +58,6 @@ public class GuiResearchBook extends GuiScreen {
 	private double yLastScroll;
 	private boolean state = true;
 	private int scroll = 1;
-
 	private EntityPlayer player;
 	private Technology selected;
 	private int num = 4;
@@ -69,6 +65,11 @@ public class GuiResearchBook extends GuiScreen {
 
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
+
+		TechnologyHandler.roots.forEach(tech -> {
+			if (tech.canResearchIgnoreResearched(player))
+				roots.add(tech);
+		});
 
 		imageWidth = 256;
 		imageHeight = 202;
@@ -79,12 +80,12 @@ public class GuiResearchBook extends GuiScreen {
 		xScrollO = xScrollP = xScrollTarget = -i / 2 - 12;
 		yScrollO = yScrollP = yScrollTarget = -i / 2 - 12;
 
-		PacketDispatcher.sendToServer(new RequestTechMessage());
+		PacketDispatcher.sendToServer(new RequestMessage());
 	}
 
 	@Override
 	public void initGui() {
-		Technology p = TechnologyHandler.roots.get(currentPage);
+		Technology p = roots.get(currentPage);
 
 		buttonList.clear();
 		if (state) {
@@ -113,7 +114,7 @@ public class GuiResearchBook extends GuiScreen {
 			y_max = y_max * 24 - 77;
 
 			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, p.getDisplay().getTitle().getUnformattedText());
-			if (TechnologyHandler.roots.size() < 2)
+			if (roots.size() < 2)
 				page.enabled = false;
 
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
@@ -146,9 +147,9 @@ public class GuiResearchBook extends GuiScreen {
 		} else if (button.id == 2) {
 			if (state) {
 				currentPage++;
-				if (currentPage >= TechnologyHandler.roots.size())
+				if (currentPage >= roots.size())
 					currentPage = 0;
-				button.displayString = TechnologyHandler.roots.get(currentPage).getDisplay().getTitle().getUnformattedText();
+				button.displayString = roots.get(currentPage).getDisplay().getTitle().getUnformattedText();
 			} else {
 				PacketDispatcher.sendToServer(new CopyTechMessage(selected));
 			}
@@ -312,7 +313,7 @@ public class GuiResearchBook extends GuiScreen {
 			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
 
 			Set<Technology> tech = new HashSet<>();
-			TechnologyHandler.roots.get(currentPage).getTree(tech);
+			roots.get(currentPage).getTree(tech);
 
 			if (tech != null) {
 				try {

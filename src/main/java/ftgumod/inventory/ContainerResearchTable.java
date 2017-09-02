@@ -106,7 +106,7 @@ public class ContainerResearchTable extends Container {
 			} else
 				recipe = null;
 
-			if (recipe != null && inventorySlots.get(feather).getHasStack()) {
+			if (recipe != null) {
 				if (invPlayer.player.world.isRemote) {
 					if (deciphered == null || deciphered.size() < 9) {
 						inventorySlots.get(output).putStack(ItemStack.EMPTY);
@@ -140,17 +140,19 @@ public class ContainerResearchTable extends Container {
 					}
 				}
 
-				NonNullList<ItemStack> inventory = NonNullList.create();
-				for (int i = 0; i < 9; i++)
-					inventory.add(inventorySlots.get(combine + i).getStack());
+				if (inventorySlots.get(feather).getHasStack()) {
+					NonNullList<ItemStack> inventory = NonNullList.create();
+					for (int i = 0; i < 9; i++)
+						inventory.add(inventorySlots.get(combine + i).getStack());
 
-				if (recipe.getResearchRecipe().test(inventory)) {
-					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
+					if (recipe.getResearchRecipe().test(inventory)) {
+						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
 
-					StackUtils.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
+						StackUtils.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
 
-					inventorySlots.get(output).putStack(result);
-					return;
+						inventorySlots.get(output).putStack(result);
+						return;
+					}
 				}
 			}
 

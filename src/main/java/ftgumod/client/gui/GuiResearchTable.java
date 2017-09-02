@@ -4,7 +4,7 @@ import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.server.RequestTechMessage;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.IngredientResearch;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -29,8 +29,6 @@ public class GuiResearchTable extends GuiContainer {
 		this.tileentity = tileentity;
 
 		texture = new ResourceLocation(FTGU.MODID + ":textures/gui/container/" + tileentity.getName() + ".png");
-
-		PacketDispatcher.sendToServer(new RequestTechMessage());
 	}
 
 	@Override
@@ -54,8 +52,11 @@ public class GuiResearchTable extends GuiContainer {
 				IngredientResearch ingredient = table.recipe.getResearchRecipe().get(index);
 				if (ingredient.hasHint()) {
 					String hint = ingredient.getHint().getUnformattedText();
-					if (table.deciphered == null || !table.deciphered.contains(index))
+					if (table.deciphered == null || !table.deciphered.contains(index)) {
+						if (table.deciphered == null)
+							PacketDispatcher.sendToServer(new RequestMessage(1));
 						hint = TextFormatting.OBFUSCATED + hint;
+					}
 					drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 				}
 			}

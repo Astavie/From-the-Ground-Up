@@ -24,7 +24,7 @@ public class TechnologyHandler {
 	public static final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
 
 	public static final Map<ResourceLocation, Technology> technologies = new HashMap<>();
-	public static final List<Technology> roots = new ArrayList<>();
+	public static final Set<Technology> roots = new HashSet<>();
 
 	public static final Set<String> start = new HashSet<>();
 	public static final Set<String> headStart = new HashSet<>();
