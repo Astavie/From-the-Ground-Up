@@ -8,17 +8,12 @@ import ftgumod.packet.server.RequestMessage;
 import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -37,8 +32,9 @@ import java.util.*;
 public class GuiResearchBook extends GuiScreen {
 
 	private static final Logger LOGGER = LogManager.getLogger();
-	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID + ":textures/gui/achievement/achievement_background.png");
-	List<Technology> roots = new ArrayList<>();
+	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID, "textures/gui/achievement/achievement_background.png");
+	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
+	private List<Technology> roots = new ArrayList<>();
 	private int x_min;
 	private int y_min;
 	private int x_max;
@@ -265,11 +261,6 @@ public class GuiResearchBook extends GuiScreen {
 		fontRenderer.drawString(I18n.format("item.research_book.name"), i + 15, j + 5, 0x404040);
 	}
 
-	@SuppressWarnings("deprecation")
-	private TextureAtlasSprite getTexture(ItemStack itemStack) {
-		return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(((ItemBlock) itemStack.getItem()).getBlock().getStateFromMeta(itemStack.getMetadata()));
-	}
-
 	private void drawResearchScreen(int x, int y, float z) {
 		int split = 211;
 
@@ -298,11 +289,14 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.enableColorMaterial();
 
+		Technology root = roots.get(currentPage);
 		for (int l3 = 0; l3 < 10; l3++) {
 			for (int i4 = 0; i4 < 14; i4++) {
-				TextureAtlasSprite textureatlassprite = getTexture(new ItemStack(Blocks.STAINED_HARDENED_CLAY, 1, 9));
-				mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-				drawTexturedModalRect(i4 * 16, l3 * 16, textureatlassprite, 16, 16);
+				if (root.getDisplay().getBackground() == null)
+					mc.getTextureManager().bindTexture(STAINED_CLAY);
+				else
+					mc.getTextureManager().bindTexture(root.getDisplay().getBackground());
+				drawModalRectWithCustomSizedTexture(i4 * 16, l3 * 16, 0, 0, 16, 16, 16, 16);
 			}
 		}
 		mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
@@ -313,7 +307,7 @@ public class GuiResearchBook extends GuiScreen {
 			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
 
 			Set<Technology> tech = new HashSet<>();
-			roots.get(currentPage).getTree(tech);
+			root.getTree(tech);
 
 			if (tech != null) {
 				try {

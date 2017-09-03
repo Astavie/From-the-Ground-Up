@@ -52,6 +52,8 @@ public class GuiResearchTable extends GuiContainer {
 				IngredientResearch ingredient = table.recipe.getResearchRecipe().get(index);
 				if (ingredient.hasHint()) {
 					String hint = ingredient.getHint().getUnformattedText();
+					if (ingredient.getHint().getStyle().isEmpty())
+						hint = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + hint;
 					if (table.deciphered == null || !table.deciphered.contains(index)) {
 						if (table.deciphered == null)
 							PacketDispatcher.sendToServer(new RequestMessage(1));

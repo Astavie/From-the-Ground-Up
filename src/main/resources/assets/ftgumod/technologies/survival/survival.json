@@ -1,0 +1,54 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:crafting_table"
+    },
+    "title": {
+      "translate": "technology.survival.name"
+    },
+    "description": {
+      "translate": "technology.survival.desc"
+    },
+    "background": "minecraft:textures/blocks/dirt.png",
+    "x": 0,
+    "y": 0
+  },
+  "start": true,
+  "unlock": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "slabWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "stairWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "stickWood"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "craftingTableWood"
+    },
+    {
+      "item": "minecraft:wooden_sword"
+    },
+    {
+      "item": "minecraft:wooden_shovel"
+    },
+    {
+      "item": "minecraft:wooden_pickaxe"
+    },
+    {
+      "item": "minecraft:wooden_axe"
+    },
+    {
+      "item": "minecraft:wooden_hoe"
+    }
+  ]
+}

@@ -342,6 +342,7 @@ public class TechnologyHandler {
 			try {
 				builders.put(file.getKey(), FTGU.GSON.fromJson(file.getValue(), Technology.Builder.class));
 			} catch (JsonParseException e) {
+				cache.remove(file.getKey());
 				Technology.getLogger().error("Couldn't load technology " + file.getKey(), e);
 			}
 
@@ -359,6 +360,7 @@ public class TechnologyHandler {
 						technologies.put(technology.getRegistryName(), technology);
 						load = true;
 					} catch (JsonParseException e) {
+						cache.remove(entry.getKey());
 						Technology.getLogger().error("Couldn't load technology " + entry.getKey(), e);
 					}
 
@@ -367,8 +369,10 @@ public class TechnologyHandler {
 			}
 
 			if (!load)
-				for (Map.Entry<ResourceLocation, Technology.Builder> entry : builders.entrySet())
+				for (Map.Entry<ResourceLocation, Technology.Builder> entry : builders.entrySet()) {
+					cache.remove(entry.getKey());
 					Technology.getLogger().error("Couldn't load technology " + entry.getKey());
+				}
 		}
 
 		technologies.values().forEach(tech -> {

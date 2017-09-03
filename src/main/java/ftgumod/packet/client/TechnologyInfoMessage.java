@@ -1,5 +1,6 @@
 package ftgumod.packet.client;
 
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
@@ -46,7 +47,7 @@ public class TechnologyInfoMessage implements IMessage {
 			TechnologyHandler.clear();
 			TechnologyHandler.loadBuiltin().forEach(message.json::putIfAbsent);
 			TechnologyHandler.deserialize(message.json);
-			return null;
+			return new RequestMessage();
 		}
 
 	}

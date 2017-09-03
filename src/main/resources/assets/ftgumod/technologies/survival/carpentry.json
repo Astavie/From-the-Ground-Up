@@ -1,7 +1,8 @@
 {
   "display": {
     "icon": {
-      "item": "minecraft:bed"
+      "item": "minecraft:bed",
+      "data": 14
     },
     "title": {
       "translate": "technology.carpentry.name"
@@ -9,9 +10,11 @@
     "description": {
       "translate": "technology.carpentry.desc"
     },
-    "x": 0,
+    "x": 2,
     "y": 0
   },
+  "headstart": true,
+  "parent": "ftgumod:survival/survival",
   "idea": {
     "amount": 2,
     "ingredients": [
@@ -20,62 +23,134 @@
         "ore": "plankWood"
       },
       {
+        "type": "forge:ore_dict",
+        "ore": "slabWood"
+      },
+      {
         "item": "minecraft:wool",
         "data": 32767
       }
     ]
   },
-  "criteria": {
-    "shot_arrow": {
-      "trigger": "minecraft:player_hurt_entity",
-      "conditions": {
-        "damage": {
-          "type": {
-            "is_projectile": true,
-            "direct_entity": {
-              "type": "minecraft:arrow"
-            }
-          }
-        }
-      }
-    }
-  },
   "research": {
     "pattern": [
-      "POP",
-      "OPO",
-      "POP"
+      " A ",
+      "WWW",
+      "SSS"
     ],
     "key": {
-      "P": {
+      "A": [
+        {
+          "item": "minecraft:wooden_axe",
+          "hint": "Wood Chopper"
+        },
+        {
+          "item": "minecraft:stone_axe"
+        },
+        {
+          "item": "minecraft:iron_axe"
+        },
+        {
+          "item": "minecraft:golden_axe"
+        },
+        {
+          "item": "minecraft:diamond_axe"
+        }
+      ],
+      "W": {
         "type": "forge:ore_dict",
         "ore": "plankWood",
-        "hint": "Wood!"
+        "hint": "Material"
       },
-      "O": {
-        "item": "minecraft:wool",
-        "data": 32767,
-        "hint": "Wool!",
-        "decipher": {
-          "block": "minecraft:wool"
-        }
+      "S": {
+        "type": "forge:ore_dict",
+        "ore": "slabWood",
+        "hint": "Table"
       }
     }
   },
   "unlock": [
+    [
+      {
+        "item": "minecraft:wooden_door"
+      },
+      {
+        "item": "minecraft:spruce_door"
+      },
+      {
+        "item": "minecraft:birch_door"
+      },
+      {
+        "item": "minecraft:jungle_door"
+      },
+      {
+        "item": "minecraft:acacia_door"
+      },
+      {
+        "item": "minecraft:dark_oak_door"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:fence"
+      },
+      {
+        "item": "minecraft:spruce_fence"
+      },
+      {
+        "item": "minecraft:birch_fence"
+      },
+      {
+        "item": "minecraft:jungle_fence"
+      },
+      {
+        "item": "minecraft:acacia_fence"
+      },
+      {
+        "item": "minecraft:dark_oak_fence"
+      }
+    ],
+    [
+      {
+        "item": "minecraft:fence_gate"
+      },
+      {
+        "item": "minecraft:spruce_fence_gate"
+      },
+      {
+        "item": "minecraft:birch_fence_gate"
+      },
+      {
+        "item": "minecraft:jungle_fence_gate"
+      },
+      {
+        "item": "minecraft:acacia_fence_gate"
+      },
+      {
+        "item": "minecraft:dark_oak_fence_gate"
+      }
+    ],
     {
-      "type": "forge:ore_dict",
-      "ore": "plankWood"
+      "item": "minecraft:chest"
+    },
+    {
+      "item": "minecraft:trapdoor"
     },
     {
       "item": "minecraft:wool",
       "data": 32767
     },
     {
-      "type": "immersiveengineering:multiblock",
-      "multiblock": "IE:CokeOven",
-      "item": "immersiveengineering:stone_device",
-      "data": 0
+      "item": "minecraft:bed",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:carpet",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:banner",
+      "data": 32767
     }
   ]
 }

@@ -5,7 +5,6 @@ import ftgumod.item.ItemLookingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyInfoMessage;
-import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
@@ -146,7 +145,6 @@ public class EventHandler {
 
 			replaceRecipeBook((EntityPlayerMP) evt.player);
 			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyHandler.cache), (EntityPlayerMP) evt.player);
-			PacketDispatcher.sendTo(new TechnologyMessage(evt.player, false), (EntityPlayerMP) evt.player);
 		}
 	}
 
