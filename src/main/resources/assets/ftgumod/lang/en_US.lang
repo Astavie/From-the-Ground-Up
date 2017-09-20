@@ -34,29 +34,23 @@ technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
 technology.decipher.tooltip=Shift Right-click to find hidden meaning in blocks
 
-technology.basic_crafting.name=Basic Crafting
-technology.basic_crafting.desc=I should know all these recipes already
-
-technology.woodworking.name=Woodworking
-technology.woodworking.desc=I wonder if I can turn this wood, that I'm getting, into something
-
-technology.writing.name=Writing
-technology.writing.desc=I can't fit all this information in my head
-
-technology.wooden_tools.name=Wooden Tools
-technology.wooden_tools.desc=It seems my hands aren't the perfect tools for everything
+technology.survival.name=Survival
+technology.survival.desc=You should know this, if you want to survive
 
 technology.research.name=Research
-technology.research.desc=Isn't that what I'm doing right now?
+technology.research.desc=Combining random items to see what results in a new idea
 
-technology.stonecraft.name=Stonecraft
-technology.stonecraft.desc=Wood is such a boring material anyway
+technology.agriculture.name=Agriculture
+technology.agriculture.desc=Commanding plants to do your bidding
 
 technology.carpentry.name=Carpentry
-technology.carpentry.desc=With all the possibilities, no wonder you can do even more with wood
+technology.carpentry.desc=Wood and wool, they sound alike too
 
 technology.stoneworking.name=Stoneworking
-technology.stoneworking.desc=Because wooden tools just aren't good enough
+technology.stoneworking.desc=It's time to craft some actual tools
+
+technology.stonecraft.name=Stonecraft
+technology.stonecraft.desc=Because wood is such a boring material
 
 technology.refinement.name=Refinement
 technology.refinement.desc=From the Stone Age to the Iron Age
@@ -64,14 +58,11 @@ technology.refinement.desc=From the Stone Age to the Iron Age
 technology.bibliography.name=Bibliography
 technology.bibliography.desc=Storing paper inside cowhide
 
-technology.advanced_combat.name=Advanced Combat
-technology.advanced_combat.desc=Swords are nice, but other ways of fighting would be nice too
+technology.defense.name=Defense
+technology.defense.desc=Swords hurt
 
 technology.metal_armor.name=Metal Armor
 technology.metal_armor.desc=Cowhide seems very flimsy, so let's make better armor
-
-technology.undeciphered_research.name=Undeciphered Research
-technology.undeciphered_research.desc=Let's decipher those cryptic hints
 
 technology.enchanting.name=Enchanting
 technology.enchanting.desc=Some say it's overkill, but I strongly disagree
@@ -249,8 +240,3 @@ research.ender_knowledge.tile.endRod=...end r...
 research.undeciphered_research.tile.obsidian=...hard lav...
 research.undeciphered_research.item.goldNugget=...gilde...
 research.undeciphered_research.tile.thinGlass=...lens...
-
-group.wooden_stairs.name=Wooden Stairs
-group.wooden_door.name=Wooden Door
-group.wooden_fence.name=Wooden Fence
-group.wooden_fence_gate.name=Wooden Fence Gate

@@ -19,7 +19,7 @@
       "item": "#plankWood"
     },
     "B": {
-      "item": "#craftingTableWood"
+      "item": "minecraft:crafting_table"
     }
   },
   "result": {

@@ -1,0 +1,119 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:farmland"
+    },
+    "title": {
+      "translate": "technology.agriculture.name"
+    },
+    "description": {
+      "translate": "technology.agriculture.desc"
+    },
+    "x": 4,
+    "y": 2
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/stoneworking",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "item": "minecraft:wheat"
+        },
+        {
+          "item": "minecraft:wheat_seeds"
+        },
+        {
+          "item": "minecraft:carrot"
+        },
+        {
+          "item": "minecraft:potato"
+        },
+        {
+          "item": "minecraft:melon"
+        },
+        {
+          "item": "minecraft:melon_seeds"
+        },
+        {
+          "item": "minecraft:pumpkin"
+        },
+        {
+          "item": "minecraft:pumpkin_seeds"
+        },
+        {
+          "item": "minecraft:reeds"
+        }
+      ],
+      {
+        "item": "minecraft:dirt",
+        "data": 0
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "   ",
+      "SCS",
+      "DDD"
+    ],
+    "key": {
+      "S": {
+        "type": "forge:ore_dict",
+        "ore": "stickWood",
+        "hint": "Can be leaned against"
+      },
+      "C": [
+        {
+          "item": "minecraft:wheat_seeds",
+          "hint": "Crop"
+        },
+        {
+          "item": "minecraft:carrot"
+        },
+        {
+          "item": "minecraft:potato"
+        },
+        {
+          "item": "minecraft:melon_seeds"
+        },
+        {
+          "item": "minecraft:pumpkin_seeds"
+        }
+      ],
+      "D": {
+        "item": "minecraft:dirt",
+        "data": 0,
+        "hint": "Soil"
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:wooden_hoe"
+    },
+    {
+      "item": "minecraft:stone_hoe"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:melon_seeds"
+    },
+    {
+      "item": "minecraft:pumpkin_seeds"
+    },
+    {
+      "item": "minecraft:hay_block"
+    },
+    {
+      "item": "minecraft:wheat"
+    },
+    {
+      "item": "minecraft:dirt",
+      "data": 1
+    }
+  ]
+}

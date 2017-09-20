@@ -1,0 +1,103 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:stone",
+      "data": 6
+    },
+    "title": {
+      "translate": "technology.stonecraft.name"
+    },
+    "description": {
+      "translate": "technology.stonecraft.desc"
+    },
+    "x": 4,
+    "y": 1
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/stoneworking",
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "minecraft:stone",
+        "data": 32767
+      },
+      {
+        "item": "minecraft:sandstone",
+        "data": 32767
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "P  ",
+      " SS",
+      " SS"
+    ],
+    "key": {
+      "P": [
+        {
+          "item": "minecraft:wooden_pickaxe",
+          "hint": "Miner"
+        },
+        {
+          "item": "minecraft:stone_pickaxe"
+        },
+        {
+          "item": "minecraft:iron_pickaxe"
+        },
+        {
+          "item": "minecraft:golden_pickaxe"
+        },
+        {
+          "item": "minecraft:diamond_pickaxe"
+        }
+      ],
+      "S": [
+        {
+          "item": "minecraft:stone",
+          "data": 32767,
+          "hint": "Unpolished"
+        },
+        {
+          "item": "minecraft:sandstone",
+          "data": 32767
+        }
+      ]
+    }
+  },
+  "unlock": [
+    [
+      {
+        "item": "minecraft:stone",
+        "data": 2
+      },
+      {
+        "item": "minecraft:stone",
+        "data": 4
+      },
+      {
+        "item": "minecraft:stone",
+        "data": 6
+      }
+    ],
+    {
+      "item": "minecraft:stone_slab",
+      "data": 3
+    },
+    {
+      "item": "minecraft:stone_stairs"
+    },
+    {
+      "item": "minecraft:sandstone",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:stone_slab",
+      "data": 1
+    },
+    {
+      "item": "minecraft:sandstone_stairs"
+    }
+  ]
+}

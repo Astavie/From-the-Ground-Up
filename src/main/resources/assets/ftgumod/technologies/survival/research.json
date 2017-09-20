@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "item": "ftgumod:parchment_idea"
+    },
+    "title": {
+      "translate": "technology.research.name"
+    },
+    "description": {
+      "translate": "technology.research.desc"
+    },
+    "x": 0,
+    "y": -2
+  },
+  "start": true,
+  "parent": "ftgumod:survival/survival",
+  "unlock": [
+    {
+      "item": "minecraft:paper"
+    },
+    {
+      "item": "ftgumod:parchment_empty"
+    },
+    {
+      "item": "ftgumod:looking_glass"
+    },
+    {
+      "item": "ftgumod:idea_table"
+    },
+    {
+      "item": "ftgumod:research_table"
+    }
+  ]
+}

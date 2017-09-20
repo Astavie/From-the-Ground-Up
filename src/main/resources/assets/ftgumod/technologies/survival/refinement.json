@@ -1,0 +1,155 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:iron_ingot",
+      "data": 6
+    },
+    "title": {
+      "translate": "technology.refinement.name"
+    },
+    "description": {
+      "translate": "technology.refinement.desc"
+    },
+    "x": 6,
+    "y": 1
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/stonecraft",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "oreIron"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "oreGold"
+        }
+      ],
+      {
+        "item": "minecraft:coal",
+        "data": 32767
+      },
+      [
+        {
+          "item": "minecraft:wooden_pickaxe"
+        },
+        {
+          "item": "minecraft:stone_pickaxe"
+        },
+        {
+          "item": "minecraft:iron_pickaxe"
+        },
+        {
+          "item": "minecraft:golden_pickaxe"
+        },
+        {
+          "item": "minecraft:diamond_pickaxe"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "CCC",
+      "COC",
+      "CFC"
+    ],
+    "key": {
+      "C": {
+        "item": "minecraft:cobblestone",
+        "hint": "Inflammable Insulator"
+      },
+      "O": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "oreIron",
+          "hint": "Smeltable"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "oreGold"
+        }
+      ],
+      "F": {
+        "item": "minecraft:coal",
+        "data": 32767,
+        "hint": "Fuel"
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:furnace"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetIron"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockIron"
+    },
+    {
+      "item": "minecraft:flint_and_steel"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "ingotGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "nuggetGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockGold"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockDiamond"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "gemEmerald"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockEmerald"
+    },
+    {
+      "item": "minecraft:coal",
+      "data": 0
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockCoal"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "gemLapis"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockLapis"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
+    },
+    {
+      "type": "forge:ore_dict",
+      "ore": "blockRedstone"
+    }
+  ]
+}

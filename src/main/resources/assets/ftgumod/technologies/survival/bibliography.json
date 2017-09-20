@@ -1,0 +1,60 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:book"
+    },
+    "title": {
+      "translate": "technology.bibliography.name"
+    },
+    "description": {
+      "translate": "technology.bibliography.desc"
+    },
+    "x": 1,
+    "y": -3
+  },
+  "parent": "ftgumod:survival/research",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "minecraft:paper"
+      },
+      {
+        "item": "minecraft:leather"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "WWW",
+      "LPL",
+      "WWW"
+    ],
+    "key": {
+      "W": {
+        "type": "forge:ore_dict",
+        "ore": "plankWood",
+        "hint": "Casing"
+      },
+      "L": {
+        "item": "minecraft:leather",
+        "hint": "Cover"
+      },
+      "P": {
+        "item": "minecraft:paper",
+        "hint": "Writing"
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "item": "minecraft:writable_book"
+    },
+    {
+      "item": "minecraft:bookshelf"
+    }
+  ]
+}

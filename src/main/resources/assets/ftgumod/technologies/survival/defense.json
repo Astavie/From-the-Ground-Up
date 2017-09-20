@@ -1,0 +1,114 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:shield"
+    },
+    "title": {
+      "translate": "technology.defense.name"
+    },
+    "description": {
+      "translate": "technology.defense.desc"
+    },
+    "x": 4,
+    "y": 0
+  },
+  "parent": "ftgumod:survival/carpentry",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "item": "minecraft:wooden_sword"
+        },
+        {
+          "item": "minecraft:stone_sword"
+        },
+        {
+          "item": "minecraft:iron_sword"
+        },
+        {
+          "item": "minecraft:golden_sword"
+        },
+        {
+          "item": "minecraft:diamond_sword"
+        }
+      ],
+      {
+        "item": "minecraft:leather"
+      },
+      {
+        "item": "minecraft:iron_ingot"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " S ",
+      "ALI",
+      " S "
+    ],
+    "key": {
+      "A": [
+        {
+          "item": "minecraft:wooden_sword",
+          "hint": "Attack"
+        },
+        {
+          "item": "minecraft:stone_sword"
+        },
+        {
+          "item": "minecraft:iron_sword"
+        },
+        {
+          "item": "minecraft:golden_sword"
+        },
+        {
+          "item": "minecraft:diamond_sword"
+        }
+      ],
+      "L": {
+        "item": "minecraft:leather",
+        "hint": "Armor"
+      },
+      "I": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "ingotIron",
+          "hint": "Defense"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "plankWood"
+        }
+      ],
+      "S": {
+        "type": "forge:ore_dict",
+        "ore": "stickWood",
+        "hint": "Coat Stand"
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:leather_helmet"
+    },
+    {
+      "item": "minecraft:leather_chestplate"
+    },
+    {
+      "item": "minecraft:leather_leggings"
+    },
+    {
+      "item": "minecraft:leather_boots"
+    },
+    {
+      "item": "minecraft:armor_stand"
+    },
+    {
+      "item": "minecraft:bow"
+    },
+    {
+      "item": "minecraft:arrow"
+    }
+  ]
+}

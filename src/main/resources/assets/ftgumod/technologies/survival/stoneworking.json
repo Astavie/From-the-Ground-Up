@@ -1,0 +1,82 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:stone_pickaxe"
+    },
+    "title": {
+      "translate": "technology.stoneworking.name"
+    },
+    "description": {
+      "translate": "technology.stoneworking.desc"
+    },
+    "x": 2,
+    "y": 1
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/survival",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "stickWood"
+        },
+        {
+          "item": "minecraft:wooden_sword"
+        },
+        {
+          "item": "minecraft:wooden_shovel"
+        },
+        {
+          "item": "minecraft:wooden_pickaxe"
+        },
+        {
+          "item": "minecraft:wooden_axe"
+        },
+        {
+          "item": "minecraft:wooden_hoe"
+        }
+      ],
+      {
+        "item": "minecraft:cobblestone"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " RC",
+      " SR",
+      "S  "
+    ],
+    "key": {
+      "R": {
+        "item": "minecraft:string",
+        "hint": "Rope"
+      },
+      "C": {
+        "item": "minecraft:cobblestone",
+        "hint": "Head"
+      },
+      "S": {
+        "type": "forge:ore_dict",
+        "ore": "stickWood",
+        "hint": "Handle"
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:stone_sword"
+    },
+    {
+      "item": "minecraft:stone_shovel"
+    },
+    {
+      "item": "minecraft:stone_pickaxe"
+    },
+    {
+      "item": "minecraft:stone_axe"
+    }
+  ]
+}
