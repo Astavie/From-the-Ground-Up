@@ -4,13 +4,16 @@ import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class TechnologyInfoMessage implements IMessage {
 
@@ -45,8 +48,10 @@ public class TechnologyInfoMessage implements IMessage {
 		@Override
 		public IMessage onMessage(TechnologyInfoMessage message, MessageContext ctx) {
 			TechnologyHandler.clear();
-			TechnologyHandler.loadBuiltin().forEach(message.json::putIfAbsent);
-			TechnologyHandler.deserialize(message.json);
+
+			Map<ResourceLocation, Pair<JsonContext, String>> map = message.json.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> Pair.of(new JsonContext(t.getKey().getResourceDomain()), t.getValue())));
+			TechnologyHandler.loadBuiltin().forEach(map::putIfAbsent);
+			TechnologyHandler.deserialize(map);
 			return new RequestMessage();
 		}
 

@@ -18,37 +18,16 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      [
-        {
-          "type": "forge:ore_dict",
-          "ore": "oreIron"
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "oreGold"
-        }
-      ],
+      {
+        "item": "#ore"
+      },
       {
         "item": "minecraft:coal",
         "data": 32767
       },
-      [
-        {
-          "item": "minecraft:wooden_pickaxe"
-        },
-        {
-          "item": "minecraft:stone_pickaxe"
-        },
-        {
-          "item": "minecraft:iron_pickaxe"
-        },
-        {
-          "item": "minecraft:golden_pickaxe"
-        },
-        {
-          "item": "minecraft:diamond_pickaxe"
-        }
-      ]
+      {
+        "item": "#pickaxe"
+      }
     ]
   },
   "research": {
@@ -62,17 +41,10 @@
         "item": "minecraft:cobblestone",
         "hint": "Inflammable Insulator"
       },
-      "O": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "oreIron",
-          "hint": "Smeltable"
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "oreGold"
-        }
-      ],
+      "O": {
+        "item": "#ore",
+        "hint": "Smeltable"
+      },
       "F": {
         "item": "minecraft:coal",
         "data": 32767,

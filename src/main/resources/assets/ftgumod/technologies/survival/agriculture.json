@@ -17,35 +17,9 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      [
-        {
-          "item": "minecraft:wheat"
-        },
-        {
-          "item": "minecraft:wheat_seeds"
-        },
-        {
-          "item": "minecraft:carrot"
-        },
-        {
-          "item": "minecraft:potato"
-        },
-        {
-          "item": "minecraft:melon"
-        },
-        {
-          "item": "minecraft:melon_seeds"
-        },
-        {
-          "item": "minecraft:pumpkin"
-        },
-        {
-          "item": "minecraft:pumpkin_seeds"
-        },
-        {
-          "item": "minecraft:reeds"
-        }
-      ],
+      {
+        "item": "#crop"
+      },
       {
         "item": "minecraft:dirt",
         "data": 0
@@ -64,24 +38,10 @@
         "ore": "stickWood",
         "hint": "Can be leaned against"
       },
-      "C": [
-        {
-          "item": "minecraft:wheat_seeds",
-          "hint": "Crop"
-        },
-        {
-          "item": "minecraft:carrot"
-        },
-        {
-          "item": "minecraft:potato"
-        },
-        {
-          "item": "minecraft:melon_seeds"
-        },
-        {
-          "item": "minecraft:pumpkin_seeds"
-        }
-      ],
+      "C": {
+        "item": "#crop",
+        "hint": "Crop"
+      },
       "D": {
         "item": "minecraft:dirt",
         "data": 0,

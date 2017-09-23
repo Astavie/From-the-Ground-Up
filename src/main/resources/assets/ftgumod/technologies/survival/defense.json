@@ -16,23 +16,9 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      [
-        {
-          "item": "minecraft:wooden_sword"
-        },
-        {
-          "item": "minecraft:stone_sword"
-        },
-        {
-          "item": "minecraft:iron_sword"
-        },
-        {
-          "item": "minecraft:golden_sword"
-        },
-        {
-          "item": "minecraft:diamond_sword"
-        }
-      ],
+      {
+        "item": "#sword"
+      },
       {
         "item": "minecraft:leather"
       },
@@ -48,24 +34,10 @@
       " S "
     ],
     "key": {
-      "A": [
-        {
-          "item": "minecraft:wooden_sword",
-          "hint": "Attack"
-        },
-        {
-          "item": "minecraft:stone_sword"
-        },
-        {
-          "item": "minecraft:iron_sword"
-        },
-        {
-          "item": "minecraft:golden_sword"
-        },
-        {
-          "item": "minecraft:diamond_sword"
-        }
-      ],
+      "A": {
+        "item": "#sword",
+        "hint": "Attack"
+      },
       "L": {
         "item": "minecraft:leather",
         "hint": "Armor"

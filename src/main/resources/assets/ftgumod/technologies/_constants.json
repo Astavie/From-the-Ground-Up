@@ -1,0 +1,189 @@
+[
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:wooden_pickaxe"
+      },
+      {
+        "item": "minecraft:stone_pickaxe"
+      },
+      {
+        "item": "minecraft:iron_pickaxe"
+      },
+      {
+        "item": "minecraft:golden_pickaxe"
+      },
+      {
+        "item": "minecraft:diamond_pickaxe"
+      }
+    ],
+    "name": "pickaxe"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:wooden_axe"
+      },
+      {
+        "item": "minecraft:stone_axe"
+      },
+      {
+        "item": "minecraft:iron_axe"
+      },
+      {
+        "item": "minecraft:golden_axe"
+      },
+      {
+        "item": "minecraft:diamond_axe"
+      }
+    ],
+    "name": "axe"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:wooden_sword"
+      },
+      {
+        "item": "minecraft:stone_sword"
+      },
+      {
+        "item": "minecraft:iron_sword"
+      },
+      {
+        "item": "minecraft:golden_sword"
+      },
+      {
+        "item": "minecraft:diamond_sword"
+      }
+    ],
+    "name": "sword"
+  },
+  {
+    "ingredient": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "oreIron"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "oreGold"
+      }
+    ],
+    "name": "ore"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:stone",
+        "data": 32767
+      },
+      {
+        "item": "minecraft:sandstone",
+        "data": 32767
+      }
+    ],
+    "name": "stone"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:wheat"
+      },
+      {
+        "item": "minecraft:wheat_seeds"
+      },
+      {
+        "item": "minecraft:carrot"
+      },
+      {
+        "item": "minecraft:potato"
+      },
+      {
+        "item": "minecraft:melon"
+      },
+      {
+        "item": "minecraft:melon_seeds"
+      },
+      {
+        "item": "minecraft:pumpkin"
+      },
+      {
+        "item": "minecraft:pumpkin_seeds"
+      },
+      {
+        "item": "minecraft:reeds"
+      }
+    ],
+    "name": "crop"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:wooden_door"
+      },
+      {
+        "item": "minecraft:spruce_door"
+      },
+      {
+        "item": "minecraft:birch_door"
+      },
+      {
+        "item": "minecraft:jungle_door"
+      },
+      {
+        "item": "minecraft:acacia_door"
+      },
+      {
+        "item": "minecraft:dark_oak_door"
+      }
+    ],
+    "name": "#door"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:fence"
+      },
+      {
+        "item": "minecraft:spruce_fence"
+      },
+      {
+        "item": "minecraft:birch_fence"
+      },
+      {
+        "item": "minecraft:jungle_fence"
+      },
+      {
+        "item": "minecraft:acacia_fence"
+      },
+      {
+        "item": "minecraft:dark_oak_fence"
+      }
+    ],
+    "name": "fence"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:fence_gate"
+      },
+      {
+        "item": "minecraft:spruce_fence_gate"
+      },
+      {
+        "item": "minecraft:birch_fence_gate"
+      },
+      {
+        "item": "minecraft:jungle_fence_gate"
+      },
+      {
+        "item": "minecraft:acacia_fence_gate"
+      },
+      {
+        "item": "minecraft:dark_oak_fence_gate"
+      }
+    ],
+    "name": "fence_gate"
+  }
+]

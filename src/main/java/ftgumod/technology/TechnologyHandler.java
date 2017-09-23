@@ -1,23 +1,32 @@
 package ftgumod.technology;
 
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import ftgumod.FTGU;
+import ftgumod.util.JsonContextPublic;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class TechnologyHandler {
 
@@ -307,40 +316,61 @@ public class TechnologyHandler {
 
 		cache = new HashMap<>(json);
 
-		loadBuiltin().forEach(json::putIfAbsent);
-		deserialize(json);
+		Map<ResourceLocation, Pair<JsonContext, String>> map = json.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> Pair.of(new JsonContext(t.getKey().getResourceDomain()), t.getValue())));
+		loadBuiltin().forEach(map::putIfAbsent);
+		deserialize(map);
 	}
 
-	public static Map<ResourceLocation, String> loadBuiltin() {
-		Map<ResourceLocation, String> json = new HashMap<>();
-		Loader.instance().getActiveModList().forEach(mod -> CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/technologies", null, (root, file) -> {
-			String relative = root.relativize(file).toString();
-			if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_") || !relative.contains("/"))
+	public static Map<ResourceLocation, Pair<JsonContext, String>> loadBuiltin() {
+		Map<ResourceLocation, Pair<JsonContext, String>> json = new HashMap<>();
+
+		Loader.instance().getActiveModList().forEach(mod -> {
+			JsonContextPublic context = new JsonContextPublic(mod.getModId());
+
+			CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/technologies", root -> {
+				Path path = root.resolve("_constants.json");
+				if (path != null && Files.exists(path)) {
+					BufferedReader reader = null;
+					try {
+						reader = Files.newBufferedReader(path);
+						JsonObject[] array = JsonUtils.fromJson(FTGU.GSON, reader, JsonObject[].class);
+						context.loadConstants(array);
+					} catch (IOException e) {
+						FMLLog.log.error("Error loading _constants.json: ", e);
+						return false;
+					} finally {
+						IOUtils.closeQuietly(reader);
+					}
+				}
 				return true;
+			}, (root, file) -> {
+				String relative = root.relativize(file).toString();
+				if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_") || !relative.contains("/"))
+					return true;
 
-			String name = FilenameUtils.removeExtension(relative);
-			ResourceLocation id = new ResourceLocation(mod.getModId(), name);
+				String name = FilenameUtils.removeExtension(relative);
+				ResourceLocation id = new ResourceLocation(mod.getModId(), name);
 
-			try {
-				json.put(id, new String(Files.readAllBytes(file)));
-			} catch (IOException e) {
-				Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
-				return false;
-			}
+				try {
+					json.put(id, Pair.of(context, new String(Files.readAllBytes(file))));
+				} catch (IOException e) {
+					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
+					return false;
+				}
 
-			return true;
-		}, true, true));
-
+				return true;
+			}, true, true);
+		});
 		return json;
 	}
 
-	public static void deserialize(Map<ResourceLocation, String> json) {
-		Map<ResourceLocation, Technology.Builder> builders = new HashMap<>();
+	public static void deserialize(Map<ResourceLocation, Pair<JsonContext, String>> json) {
+		Map<ResourceLocation, Pair<JsonContext, Technology.Builder>> builders = new HashMap<>();
 		Map<ResourceLocation, Technology> technologies = new HashMap<>();
 
-		for (Map.Entry<ResourceLocation, String> file : json.entrySet())
+		for (Map.Entry<ResourceLocation, Pair<JsonContext, String>> file : json.entrySet())
 			try {
-				builders.put(file.getKey(), FTGU.GSON.fromJson(file.getValue(), Technology.Builder.class));
+				builders.put(file.getKey(), Pair.of(file.getValue().getLeft(), FTGU.GSON.fromJson(file.getValue().getRight(), Technology.Builder.class)));
 			} catch (JsonParseException e) {
 				cache.remove(file.getKey());
 				Technology.getLogger().error("Couldn't load technology " + file.getKey(), e);
@@ -350,13 +380,13 @@ public class TechnologyHandler {
 		while (!builders.isEmpty() && load) {
 			load = false;
 
-			Iterator<Map.Entry<ResourceLocation, Technology.Builder>> iterator = builders.entrySet().iterator();
+			Iterator<Map.Entry<ResourceLocation, Pair<JsonContext, Technology.Builder>>> iterator = builders.entrySet().iterator();
 			while (iterator.hasNext()) {
-				Map.Entry<ResourceLocation, Technology.Builder> entry = iterator.next();
+				Map.Entry<ResourceLocation, Pair<JsonContext, Technology.Builder>> entry = iterator.next();
 
-				if (entry.getValue().resolveParent(technologies)) {
+				if (entry.getValue().getRight().resolveParent(technologies)) {
 					try {
-						Technology technology = entry.getValue().build(entry.getKey(), new JsonContext(entry.getKey().getResourceDomain()));
+						Technology technology = entry.getValue().getRight().build(entry.getKey(), entry.getValue().getLeft());
 						technologies.put(technology.getRegistryName(), technology);
 						load = true;
 					} catch (JsonParseException e) {
@@ -369,7 +399,7 @@ public class TechnologyHandler {
 			}
 
 			if (!load)
-				for (Map.Entry<ResourceLocation, Technology.Builder> entry : builders.entrySet()) {
+				for (Map.Entry<ResourceLocation, ?> entry : builders.entrySet()) {
 					cache.remove(entry.getKey());
 					Technology.getLogger().error("Couldn't load technology " + entry.getKey());
 				}
