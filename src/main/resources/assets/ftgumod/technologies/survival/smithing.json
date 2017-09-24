@@ -1,0 +1,103 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:anvil",
+      "data": 0
+    },
+    "title": {
+      "translate": "technology.smithing.name"
+    },
+    "description": {
+      "translate": "technology.smithing.desc"
+    },
+    "x": 6,
+    "y": 1
+  },
+  "parent": "ftgumod:survival/refinement",
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "#metal"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "   ",
+      " I ",
+      "FCU"
+    ],
+    "key": {
+      "I": {
+        "item": "#metal",
+        "hint": "Material"
+      },
+      "F": [
+        {
+          "item": "minecraft:flint_and_steel",
+          "hint": "Fire"
+        },
+        {
+          "item": "minecraft:fire_charge"
+        }
+      ],
+      "C": {
+        "item": "#crafting",
+        "hint": "Table"
+      },
+      "U": {
+        "item": "minecraft:furnace",
+        "hint": "Smelter"
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:anvil",
+      "data": 0
+    },
+    {
+      "item": "minecraft:bucket"
+    },
+    {
+      "item": "minecraft:iron_bars"
+    },
+    {
+      "item": "minecraft:iron_door"
+    },
+    {
+      "item": "minecraft:iron_trapdoor"
+    },
+    {
+      "item": "minecraft:iron_sword"
+    },
+    {
+      "item": "minecraft:iron_shovel"
+    },
+    {
+      "item": "minecraft:iron_pickaxe"
+    },
+    {
+      "item": "minecraft:iron_axe"
+    },
+    {
+      "item": "minecraft:iron_hoe"
+    },
+    {
+      "item": "minecraft:golden_sword"
+    },
+    {
+      "item": "minecraft:golden_shovel"
+    },
+    {
+      "item": "minecraft:golden_pickaxe"
+    },
+    {
+      "item": "minecraft:golden_axe"
+    },
+    {
+      "item": "minecraft:golden_hoe"
+    }
+  ]
+}

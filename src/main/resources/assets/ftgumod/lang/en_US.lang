@@ -71,8 +71,17 @@ technology.gilded_cuisine.desc=Eating gold to regenerate your health
 technology.dyes.name=Dyes
 technology.dyes.desc=Extracting color from plants
 
+technology.smithing.name=Smithing
+technology.smithing.desc=Pressing hard metal together into the correct shape
+
 technology.metal_armor.name=Metal Armor
-technology.metal_armor.desc=Cowhide seems very flimsy, so let's make better armor
+technology.metal_armor.desc=Medieval knights approve
+
+technology.lapidary.name=Lapidary
+technology.lapidary.desc=Still done with one's bare hands
+
+technology.gem_armor.name=Crystalline Armor
+technology.gem_armor.desc=Somehow more defensive than metal
 
 technology.enchanting.name=Enchanting
 technology.enchanting.desc=Some say it's overkill, but I strongly disagree
@@ -83,17 +92,8 @@ technology.glowing_eyes.desc=They look at me funny
 technology.ender_knowledge.name=Ender Knowledge
 technology.ender_knowledge.desc=Stealin' knowledge like it's nobody's business
 
-technology.gem_armor.name=Gem Armor
-technology.gem_armor.desc=Showing off your bling in a defensive manner
-
 technology.building_blocks.name=Building Blocks
 technology.building_blocks.desc=Why would you need anything else than sand in a sandbox?
-
-technology.smithing.name=Smithing
-technology.smithing.desc=It's time to use the ingots for some crafting
-
-technology.gem_cutting.name=Gem Cutting
-technology.gem_cutting.desc=Showing off your bling in a useful manner
 
 technology.brewing.name=Brewing
 technology.brewing.desc=Drinking drugs for superhuman powers

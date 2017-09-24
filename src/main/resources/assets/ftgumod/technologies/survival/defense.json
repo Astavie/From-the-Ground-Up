@@ -9,22 +9,29 @@
     "description": {
       "translate": "technology.defense.desc"
     },
-    "x": 4,
+    "x": 2,
     "y": 0
   },
   "headstart": true,
-  "parent": "ftgumod:survival/carpentry",
+  "parent": "ftgumod:survival/survival",
   "idea": {
     "amount": 2,
     "ingredients": [
       {
         "item": "#sword"
       },
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "leather"
+        },
+        {
+          "item": "#armorLeather"
+        }
+      ],
       {
-        "item": "minecraft:leather"
-      },
-      {
-        "item": "minecraft:iron_ingot"
+        "type": "forge:ore_dict",
+        "ore": "ingotIron"
       }
     ]
   },
@@ -41,7 +48,8 @@
       },
       "L": [
         {
-          "item": "minecraft:leather",
+          "type": "forge:ore_dict",
+          "ore": "leather",
           "hint": "Armor"
         },
         {

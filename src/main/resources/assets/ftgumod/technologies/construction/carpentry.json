@@ -14,7 +14,7 @@
     "y": 0
   },
   "headstart": true,
-  "parent": "ftgumod:survival/survival",
+  "parent": "ftgumod:construction/construction",
   "idea": {
     "amount": 2,
     "ingredients": [

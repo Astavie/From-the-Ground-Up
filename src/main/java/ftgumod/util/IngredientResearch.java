@@ -2,16 +2,18 @@ package ftgumod.util;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.util.JsonUtils;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 public class IngredientResearch extends Ingredient {
 
@@ -19,9 +21,9 @@ public class IngredientResearch extends Ingredient {
 
 	private final Ingredient ingredient;
 	private final ITextComponent hint;
-	private final BlockPredicate unlock;
+	private final Set<BlockPredicate> unlock;
 
-	public IngredientResearch(Ingredient ingredient, @Nullable ITextComponent hint, @Nullable BlockPredicate unlock) {
+	public IngredientResearch(Ingredient ingredient, @Nullable ITextComponent hint, @Nullable Set<BlockPredicate> unlock) {
 		this.ingredient = ingredient;
 		this.hint = hint;
 		this.unlock = unlock;
@@ -40,9 +42,20 @@ public class IngredientResearch extends Ingredient {
 		if (object.has("hint"))
 			hint = FTGU.GSON.fromJson(object.get("hint"), ITextComponent.class);
 
-		BlockPredicate decipher = null;
-		if (object.has("decipher"))
-			decipher = BlockPredicate.deserialize(JsonUtils.getJsonObject(object, "decipher"));
+		Set<BlockPredicate> decipher = new HashSet<>();
+		if (object.has("decipher")) {
+			JsonElement i = object.get("decipher");
+			if (i.isJsonArray())
+				for (JsonElement j : i.getAsJsonArray())
+					if (j.isJsonObject())
+						decipher.add(BlockPredicate.deserialize(j.getAsJsonObject()));
+					else
+						throw new JsonSyntaxException("Expected decipher inside an array to be an object");
+			else if (i.isJsonObject())
+				decipher.add(BlockPredicate.deserialize(i.getAsJsonObject()));
+			else
+				throw new JsonSyntaxException("Expected decipher to be a object or array of objects");
+		}
 
 		return new IngredientResearch(ingredient, hint, decipher);
 	}
@@ -70,7 +83,7 @@ public class IngredientResearch extends Ingredient {
 		return hint;
 	}
 
-	public BlockPredicate getDecipher() {
+	public Set<BlockPredicate> getDecipher() {
 		return unlock;
 	}
 

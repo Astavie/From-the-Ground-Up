@@ -75,6 +75,35 @@
   {
     "ingredient": [
       {
+        "type": "forge:ore_dict",
+        "ore": "nuggetIron"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "nuggetGold"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "ingotIron"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "ingotGold"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "blockIron"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "blockGold"
+      }
+    ],
+    "name": "metal"
+  },
+  {
+    "ingredient": [
+      {
         "item": "minecraft:stone",
         "data": 32767
       },
@@ -238,5 +267,34 @@
       }
     ],
     "name": "rawMeat"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:leather_helmet"
+      },
+      {
+        "item": "minecraft:leather_chestplate"
+      },
+      {
+        "item": "minecraft:leather_leggings"
+      },
+      {
+        "item": "minecraft:leather_boots"
+      }
+    ],
+    "name": "armorLeather"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:crafting_table"
+      },
+      {
+        "item": "minecraft:anvil",
+        "data": 32767
+      }
+    ],
+    "name": "crafting"
   }
 ]

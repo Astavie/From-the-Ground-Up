@@ -151,8 +151,8 @@ public class GuiResearchBook extends GuiScreen {
 				if (currentPage >= roots.size())
 					currentPage = 0;
 
-				xScrollP = xScrollO = xScrollTarget = -141 / 2 - 12;
-				yScrollP = yScrollO = yScrollTarget = -141 / 2 - 12;
+				xScrollO = xScrollP = xScrollTarget = -141 / 2 - 12;
+				yScrollO = yScrollP = yScrollTarget = -141 / 2 - 12;
 				initGui();
 			} else {
 				PacketDispatcher.sendToServer(new CopyTechMessage(selected));
@@ -270,8 +270,6 @@ public class GuiResearchBook extends GuiScreen {
 	}
 
 	private void drawResearchScreen(int x, int y, float z) {
-		int split = 211;
-
 		int i = MathHelper.floor(xScrollO + (xScrollP - xScrollO) * z);
 		int j = MathHelper.floor(yScrollO + (yScrollP - yScrollO) * z);
 
@@ -507,13 +505,16 @@ public class GuiResearchBook extends GuiScreen {
 			} else {
 				String s1 = selected.getDisplay().getTitle().getUnformattedText();
 				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
-				int y1 = (height - imageHeight) / 2;
-				fontRenderer.drawStringWithShadow(s1, x1, y1 + 22, 0xffffff);
+				fontRenderer.drawStringWithShadow(s1, x1, l + 22, 0xffffff);
 
 				String s2 = selected.getDisplay().getDescription().getUnformattedText();
 				int x2 = width / 2;
-				int y2 = (height - imageHeight) / 2;
-				drawSplitString(s2, x2, y2 + 32, split, 0xffa0a0a0, true);
+				int y2 = l + 32;
+
+				for (String s : fontRenderer.listFormattedStringToWidth(s2, 211)) {
+					fontRenderer.drawStringWithShadow(s, x2 - (fontRenderer.getStringWidth(s) / 2), y2, 0xffa0a0a0);
+					y2 += fontRenderer.FONT_HEIGHT;
+				}
 
 				String s3 = scroll + "/" + pages;
 				int x3 = (width + imageWidth) / 2 - fontRenderer.getStringWidth(s3);
@@ -525,16 +526,6 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.enableDepth();
 		GlStateManager.enableLighting();
 		RenderHelper.disableStandardItemLighting();
-	}
-
-	private void drawSplitString(String string, int x, int y, int split, int color, boolean shadow) {
-		for (String s : fontRenderer.listFormattedStringToWidth(string, split)) {
-			if (shadow)
-				fontRenderer.drawStringWithShadow(s, x - (fontRenderer.getStringWidth(s) / 2), y, color);
-			else
-				fontRenderer.drawString(s, x - (fontRenderer.getStringWidth(s) / 2), y, color);
-			y += fontRenderer.FONT_HEIGHT;
-		}
 	}
 
 	@Override

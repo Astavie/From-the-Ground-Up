@@ -28,6 +28,7 @@ import net.minecraftforge.common.util.Constants.NBT;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class ItemLookingGlass extends Item {
 
@@ -63,14 +64,15 @@ public class ItemLookingGlass extends Item {
 					if (tech.hasResearchRecipe())
 						group:for (int i = 0; i < 9; i++)
 							if (!tech.getResearchRecipe().isEmpty(i) && tech.getResearchRecipe().get(i).hasDecipher()) {
-								BlockPredicate predicate = tech.getResearchRecipe().get(i).getDecipher();
-								if (block.test(predicate, player.getServer())) {
-									for (BlockSerializable other : list)
-										if (other.test(predicate, player.getServer()))
-											continue group;
-									event.setCanceled(false);
-									break outer;
-								}
+								Set<BlockPredicate> set = tech.getResearchRecipe().get(i).getDecipher();
+								for (BlockPredicate predicate : set)
+									if (block.test(predicate, player.getServer())) {
+										for (BlockSerializable other : list)
+											if (other.test(predicate, player.getServer()))
+												continue group;
+										event.setCanceled(false);
+										break outer;
+									}
 							}
 
 				MinecraftForge.EVENT_BUS.post(event);

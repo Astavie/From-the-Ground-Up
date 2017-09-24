@@ -119,13 +119,14 @@ public class ContainerResearchTable extends Container {
 					boolean allow = true;
 					for (int i = 0; i < 9; i++) {
 						if (!recipe.getResearchRecipe().isEmpty(i) && recipe.getResearchRecipe().get(i).hasDecipher()) {
-							BlockPredicate predicate = recipe.getResearchRecipe().get(i).getDecipher();
+							Set<BlockPredicate> set = recipe.getResearchRecipe().get(i).getDecipher();
 							boolean perms = false;
 							for (BlockSerializable block : blocks)
-								if (block.test(predicate, invPlayer.player.getServer())) {
-									perms = true;
-									break;
-								}
+								for (BlockPredicate predicate : set)
+									if (block.test(predicate, invPlayer.player.getServer())) {
+										perms = true;
+										break;
+									}
 							if (!perms)
 								allow = false;
 							else

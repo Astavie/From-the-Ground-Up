@@ -1,0 +1,83 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:iron_chestplate"
+    },
+    "title": {
+      "translate": "technology.metal_armor.name"
+    },
+    "description": {
+      "translate": "technology.metal_armor.desc"
+    },
+    "x": 6,
+    "y": 0
+  },
+  "parent": "ftgumod:survival/defense",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "#armorLeather"
+      },
+      {
+        "item": "#metal"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "MHM",
+      "MCM",
+      "MLM"
+    ],
+    "key": {
+      "M": {
+        "item": "#metal",
+        "hint": "Material"
+      },
+      "H": {
+        "item": "minecraft:leather_helmet",
+        "hint": "Armor"
+      },
+      "C": {
+        "item": "minecraft:leather_chestplate",
+        "hint": "Armor"
+      },
+      "L": [
+        {
+          "item": "minecraft:leather_leggings",
+          "hint": "Armor"
+        },
+        {
+          "item": "minecraft:leather_boots"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:iron_helmet"
+    },
+    {
+      "item": "minecraft:iron_chestplate"
+    },
+    {
+      "item": "minecraft:iron_leggings"
+    },
+    {
+      "item": "minecraft:iron_boots"
+    },
+    {
+      "item": "minecraft:golden_helmet"
+    },
+    {
+      "item": "minecraft:golden_chestplate"
+    },
+    {
+      "item": "minecraft:golden_leggings"
+    },
+    {
+      "item": "minecraft:golden_boots"
+    }
+  ]
+}
