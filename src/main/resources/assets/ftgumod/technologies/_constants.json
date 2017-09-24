@@ -138,7 +138,7 @@
         "item": "minecraft:dark_oak_door"
       }
     ],
-    "name": "#door"
+    "name": "door"
   },
   {
     "ingredient": [
@@ -185,5 +185,58 @@
       }
     ],
     "name": "fence_gate"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:yellow_flower",
+        "data": 32767
+      },
+      {
+        "item": "minecraft:red_flower",
+        "data": 32767
+      }
+    ],
+    "name": "flower"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:furnace"
+      },
+      {
+        "item": "minecraft:coal",
+        "data": 32767
+      }
+    ],
+    "name": "heat"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:fish",
+        "data": 0
+      },
+      {
+        "item": "minecraft:fish",
+        "data": 3
+      },
+      {
+        "item": "minecraft:porkchop"
+      },
+      {
+        "item": "minecraft:beef"
+      },
+      {
+        "item": "minecraft:mutton"
+      },
+      {
+        "item": "minecraft:chicken"
+      },
+      {
+        "item": "minecraft:rabbit"
+      }
+    ],
+    "name": "rawMeat"
   }
 ]

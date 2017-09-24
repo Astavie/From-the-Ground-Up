@@ -33,5 +33,12 @@
       "ore": "slabWood"
     },
     "name": "slabWood"
+  },
+  {
+    "ingredient": {
+      "type": "forge:ore_dict",
+      "ore": "paper"
+    },
+    "name": "paper"
   }
 ]

@@ -48,11 +48,20 @@
         "ore": "plankWood",
         "hint": "Material"
       },
-      "S": {
-        "type": "forge:ore_dict",
-        "ore": "slabWood",
-        "hint": "Table"
-      }
+      "S": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "slabWood",
+          "hint": "Table"
+        },
+        {
+          "item": "minecraft:crafting_table"
+        },
+        {
+          "item": "minecraft:anvil",
+          "data": 32767
+        }
+      ]
     }
   },
   "unlock": [

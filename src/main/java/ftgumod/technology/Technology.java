@@ -192,7 +192,7 @@ public class Technology {
 
 				unregisterListeners(playerMP);
 				if (!done && progress.isDone()) {
-					playerMP.sendMessage(new TextComponentTranslation("technology.complete.unlock", displayText));
+					playerMP.sendMessage(new TextComponentTranslation(isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
 					playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 					FTGUAPI.c_technologyUnlocked.trigger(playerMP, this);

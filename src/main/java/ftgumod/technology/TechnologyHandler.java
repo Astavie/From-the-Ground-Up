@@ -291,7 +291,7 @@ public class TechnologyHandler {
 
 		File dir = new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies");
 
-		Map<ResourceLocation, String> json = new HashMap<>();
+		cache = new HashMap<>();
 
 		if (dir.exists() && dir.isDirectory())
 			for (File file : FileUtils.listFiles(dir, new String[] {"json"}, true)) {
@@ -306,7 +306,7 @@ public class TechnologyHandler {
 				ResourceLocation id = new ResourceLocation(domain, name);
 
 				try {
-					json.put(id, new String(Files.readAllBytes(file.toPath())));
+					cache.put(id, new String(Files.readAllBytes(file.toPath())));
 				} catch (IOException e) {
 					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 				}
@@ -314,9 +314,7 @@ public class TechnologyHandler {
 		else
 			dir.mkdirs();
 
-		cache = new HashMap<>(json);
-
-		Map<ResourceLocation, Pair<JsonContext, String>> map = json.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> Pair.of(new JsonContext(t.getKey().getResourceDomain()), t.getValue())));
+		Map<ResourceLocation, Pair<JsonContext, String>> map = cache.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> Pair.of(new JsonContext(t.getKey().getResourceDomain()), t.getValue())));
 		loadBuiltin().forEach(map::putIfAbsent);
 		deserialize(map);
 	}

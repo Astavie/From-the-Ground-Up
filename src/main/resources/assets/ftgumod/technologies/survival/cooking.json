@@ -1,0 +1,119 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:beetroot_soup"
+    },
+    "title": {
+      "translate": "technology.cooking.name"
+    },
+    "description": {
+      "translate": "technology.cooking.desc"
+    },
+    "x": 6,
+    "y": 2
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/agriculture",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "#heat"
+      },
+      [
+        {
+          "item": "#rawMeat"
+        },
+        {
+          "item": "minecraft:potato"
+        },
+        {
+          "item": "minecraft:wheat"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "VMF",
+      "WWW",
+      " B "
+    ],
+    "key": {
+      "V": [
+        {
+          "item": "minecraft:carrot",
+          "hint": "Vegetable"
+        },
+        {
+          "item": "minecraft:potato"
+        },
+        {
+          "item": "minecraft:beetroot"
+        }
+      ],
+      "M": {
+        "item": "#rawMeat",
+        "hint": "Meat"
+      },
+      "F": [
+        {
+          "item": "minecraft:apple",
+          "hint": "Fruit"
+        },
+        {
+          "item": "minecraft:melon"
+        },
+        {
+          "item": "minecraft:chorus_fruit"
+        },
+        {
+          "item": "minecraft:chorus_fruit_popped"
+        }
+      ],
+      "W": {
+        "item": "minecraft:wheat",
+        "hint": "Grain"
+      },
+      "B": [
+        {
+          "item": "minecraft:bowl",
+          "hint": "Bowl"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "slabWood"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:bread"
+    },
+    {
+      "item": "minecraft:cookie"
+    },
+    {
+      "item": "minecraft:cake"
+    },
+    {
+      "item": "minecraft:pumpkin_pie"
+    },
+    {
+      "item": "minecraft:mushroom_stew"
+    },
+    {
+      "item": "minecraft:rabbit_stew"
+    },
+    {
+      "item": "minecraft:beetroot_soup"
+    },
+    {
+      "item": "minecraft:fishing_rod"
+    },
+    {
+      "item": "minecraft:carrot_on_a_stick"
+    }
+  ]
+}

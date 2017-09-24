@@ -12,6 +12,7 @@
     "x": 4,
     "y": 0
   },
+  "headstart": true,
   "parent": "ftgumod:survival/carpentry",
   "idea": {
     "amount": 2,
@@ -38,10 +39,15 @@
         "item": "#sword",
         "hint": "Attack"
       },
-      "L": {
-        "item": "minecraft:leather",
-        "hint": "Armor"
-      },
+      "L": [
+        {
+          "item": "minecraft:leather",
+          "hint": "Armor"
+        },
+        {
+          "item": "minecraft:leather_chestplate"
+        }
+      ],
       "I": [
         {
           "type": "forge:ore_dict",
@@ -51,13 +57,21 @@
         {
           "type": "forge:ore_dict",
           "ore": "plankWood"
+        },
+        {
+          "item": "minecraft:shield"
         }
       ],
-      "S": {
-        "type": "forge:ore_dict",
-        "ore": "stickWood",
-        "hint": "Coat Stand"
-      }
+      "S": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "stickWood",
+          "hint": "Coat Stand"
+        },
+        {
+          "item": "minecraft:armor_stand"
+        }
+      ]
     }
   },
   "unlock": [

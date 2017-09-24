@@ -1,0 +1,85 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:dye",
+      "data": 12
+    },
+    "title": {
+      "translate": "technology.dyes.name"
+    },
+    "description": {
+      "translate": "technology.dyes.desc"
+    },
+    "x": 6,
+    "y": 3
+  },
+  "parent": "ftgumod:survival/agriculture",
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "#flower"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "dye"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "blockCactus"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " W ",
+      " D ",
+      " C "
+    ],
+    "key": {
+      "W": [
+        {
+          "item": "minecraft:wool",
+          "data": 32767,
+          "hint": "Dyeable"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "blockGlass"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "paneGlass"
+        },
+        {
+          "item": "minecraft:hardened_clay"
+        },
+        {
+          "item": "minecraft:stained_hardened_clay",
+          "data": 32767
+        }
+      ],
+      "D": {
+        "type": "forge:ore_dict",
+        "ore": "dye",
+        "hint": "Color"
+      },
+      "C": [
+        {
+          "item": "#flower",
+          "hint": "Flower"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "blockCactus"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "type": "forge:ore_dict",
+      "ore": "dye"
+    }
+  ]
+}

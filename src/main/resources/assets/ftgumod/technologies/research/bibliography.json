@@ -9,18 +9,20 @@
     "description": {
       "translate": "technology.bibliography.desc"
     },
-    "x": 1,
-    "y": -3
+    "x": 2,
+    "y": 0
   },
-  "parent": "ftgumod:survival/research",
+  "parent": "ftgumod:research/research",
   "idea": {
     "amount": 2,
     "ingredients": [
       {
-        "item": "minecraft:paper"
+        "type": "forge:ore_dict",
+        "ore": "paper"
       },
       {
-        "item": "minecraft:leather"
+        "type": "forge:ore_dict",
+        "ore": "leather"
       }
     ]
   },
@@ -37,11 +39,13 @@
         "hint": "Casing"
       },
       "L": {
-        "item": "minecraft:leather",
+        "type": "forge:ore_dict",
+        "ore": "leather",
         "hint": "Cover"
       },
       "P": {
-        "item": "minecraft:paper",
+        "type": "forge:ore_dict",
+        "ore": "paper",
         "hint": "Writing"
       }
     }

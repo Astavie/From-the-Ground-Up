@@ -1,8 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "minecraft:iron_ingot",
-      "data": 6
+      "item": "minecraft:iron_ingot"
     },
     "title": {
       "translate": "technology.refinement.name"
@@ -10,11 +9,11 @@
     "description": {
       "translate": "technology.refinement.desc"
     },
-    "x": 6,
+    "x": 4,
     "y": 1
   },
   "headstart": true,
-  "parent": "ftgumod:survival/stonecraft",
+  "parent": "ftgumod:survival/stoneworking",
   "idea": {
     "amount": 2,
     "ingredients": [
@@ -22,8 +21,7 @@
         "item": "#ore"
       },
       {
-        "item": "minecraft:coal",
-        "data": 32767
+        "item": "#heat"
       },
       {
         "item": "#pickaxe"

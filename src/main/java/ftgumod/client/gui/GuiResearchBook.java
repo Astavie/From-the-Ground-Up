@@ -8,6 +8,7 @@ import ftgumod.packet.server.RequestMessage;
 import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -34,6 +35,15 @@ public class GuiResearchBook extends GuiScreen {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID, "textures/gui/achievement/achievement_background.png");
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
+
+	private static float zoom = 1.0F;
+	private static int currentPage = 0;
+	private static double xScrollO = -141 / 2 - 12;
+	private static double yScrollO = -141 / 2 - 12;
+	private static boolean state = true;
+	private static Technology selected;
+	private static int scroll = 1;
+
 	private List<Technology> roots = new ArrayList<>();
 	private int x_min;
 	private int y_min;
@@ -41,10 +51,6 @@ public class GuiResearchBook extends GuiScreen {
 	private int y_max;
 	private int imageWidth;
 	private int imageHeight;
-	private float zoom;
-	private int currentPage;
-	private double xScrollO;
-	private double yScrollO;
 	private double xScrollP;
 	private double yScrollP;
 	private double xScrollTarget;
@@ -52,10 +58,7 @@ public class GuiResearchBook extends GuiScreen {
 	private int scrolling;
 	private double xLastScroll;
 	private double yLastScroll;
-	private boolean state = true;
-	private int scroll = 1;
 	private EntityPlayer player;
-	private Technology selected;
 	private int num = 4;
 	private int pages;
 
@@ -67,16 +70,17 @@ public class GuiResearchBook extends GuiScreen {
 				roots.add(tech);
 		});
 
-		imageWidth = 256;
-		imageHeight = 202;
-		zoom = 1.0F;
-		currentPage = 0;
+		if (roots.size() == 0)
+			Minecraft.getMinecraft().displayGuiScreen(null);
+		else {
+			imageWidth = 256;
+			imageHeight = 202;
 
-		int i = 141;
-		xScrollO = xScrollP = xScrollTarget = -i / 2 - 12;
-		yScrollO = yScrollP = yScrollTarget = -i / 2 - 12;
+			xScrollP = xScrollTarget = xScrollO;
+			yScrollP = yScrollTarget = yScrollO;
 
-		PacketDispatcher.sendToServer(new RequestMessage());
+			PacketDispatcher.sendToServer(new RequestMessage());
+		}
 	}
 
 	@Override
@@ -115,6 +119,8 @@ public class GuiResearchBook extends GuiScreen {
 
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
 			buttonList.add(page);
+
+			scroll = 1;
 		} else {
 			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
 			copy.enabled = false;
@@ -124,7 +130,6 @@ public class GuiResearchBook extends GuiScreen {
 
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
 			buttonList.add(copy);
-			scroll = 1;
 
 			pages = (int) Math.max(Math.ceil(((double) selected.getUnlock().size()) / num), 1);
 		}
@@ -145,7 +150,10 @@ public class GuiResearchBook extends GuiScreen {
 				currentPage++;
 				if (currentPage >= roots.size())
 					currentPage = 0;
-				button.displayString = roots.get(currentPage).getDisplay().getTitle().getUnformattedText();
+
+				xScrollP = xScrollO = xScrollTarget = -141 / 2 - 12;
+				yScrollP = yScrollO = yScrollTarget = -141 / 2 - 12;
+				initGui();
 			} else {
 				PacketDispatcher.sendToServer(new CopyTechMessage(selected));
 			}

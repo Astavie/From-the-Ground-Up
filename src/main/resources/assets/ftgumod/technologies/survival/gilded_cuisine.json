@@ -1,0 +1,85 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:golden_apple",
+      "data": 0
+    },
+    "title": {
+      "translate": "technology.gilded_cuisine.name"
+    },
+    "description": {
+      "translate": "technology.gilded_cuisine.desc"
+    },
+    "x": 8,
+    "y": 2
+  },
+  "parent": "ftgumod:survival/cooking",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "blockGold"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "ingotGold"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "nuggetGold"
+        }
+      ],
+      [
+        {
+          "item": "minecraft:apple"
+        },
+        {
+          "item": "minecraft:carrot"
+        },
+        {
+          "item": "minecraft:melon"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "NNN",
+      "NCN",
+      "NNN"
+    ],
+    "key": {
+      "N": {
+        "type": "forge:ore_dict",
+        "ore": "nuggetGold",
+        "hint": "Gilded"
+      },
+      "C": [
+        {
+          "item": "minecraft:apple",
+          "hint": "Cuisine"
+        },
+        {
+          "item": "minecraft:carrot"
+        },
+        {
+          "item": "minecraft:melon"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:golden_apple",
+      "data": 0
+    },
+    {
+      "item": "minecraft:golden_carrot"
+    },
+    {
+      "item": "minecraft:speckled_melon"
+    }
+  ]
+}

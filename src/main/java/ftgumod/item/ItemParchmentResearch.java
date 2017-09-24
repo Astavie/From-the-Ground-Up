@@ -47,6 +47,10 @@ public class ItemParchmentResearch extends Item {
 							//noinspection ConstantConditions
 							player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), t.getDisplayText()));
 
+						for (Technology child : t.getChildren())
+							if (child.isRoot() && !child.hasCustomUnlock())
+								player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.getDisplayText()));
+
 						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 						FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, t);

@@ -10,7 +10,7 @@
       "item": "#stickWood"
     },
     "P": {
-      "item": "minecraft:paper"
+      "item": "#paper"
     }
   },
   "result": {

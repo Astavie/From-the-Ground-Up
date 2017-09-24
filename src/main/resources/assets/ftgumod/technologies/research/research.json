@@ -10,13 +10,15 @@
       "translate": "technology.research.desc"
     },
     "x": 0,
-    "y": -2
+    "y": 0,
+    "theory": true
   },
   "start": true,
   "parent": "ftgumod:survival/survival",
   "unlock": [
     {
-      "item": "minecraft:paper"
+      "type": "forge:ore_dict",
+      "ore": "paper"
     },
     {
       "item": "ftgumod:parchment_empty"
