@@ -57,7 +57,9 @@ public class Technology {
 	private final IdeaRecipe idea;
 	private final ResearchRecipe research;
 
-	private Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
+	private final boolean copy;
+
+	private Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
@@ -65,6 +67,7 @@ public class Technology {
 
 		this.start = start;
 		this.headStart = headStart;
+		this.copy = copy;
 
 		this.rewards = rewards;
 		this.criteria = criteria;
@@ -95,6 +98,10 @@ public class Technology {
 
 	public static Logger getLogger() {
 		return LOGGER;
+	}
+
+	public boolean canCopy() {
+		return copy;
 	}
 
 	public Set<Technology> getChildren() {
@@ -225,7 +232,7 @@ public class Technology {
 					if (instance != null) {
 						ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());
 						if (trigger != null)
-							trigger.addListener(player.getAdvancements(), new ListenerTechnology<>(player, instance, this, entry.getKey()));
+							trigger.addListener(player.getAdvancements(), new ListenerTechnology<>(instance, this, entry.getKey()));
 					}
 				}
 			}
@@ -240,7 +247,7 @@ public class Technology {
 				if (instance != null) {
 					ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());
 					if (trigger != null)
-						trigger.removeListener(player.getAdvancements(), new ListenerTechnology<>(player, instance, this, entry.getKey()));
+						trigger.removeListener(player.getAdvancements(), new ListenerTechnology<>(instance, this, entry.getKey()));
 				}
 			}
 		}
@@ -308,10 +315,11 @@ public class Technology {
 
 		private final boolean start;
 		private final boolean headStart;
+		private final boolean copy;
 
 		private Technology parent;
 
-		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
+		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
 			this.parentId = parent;
 			this.display = display;
 			this.type = type;
@@ -320,6 +328,7 @@ public class Technology {
 			this.requirements = requirements;
 			this.start = start;
 			this.headStart = headStart;
+			this.copy = copy;
 			this.unlock = unlock;
 			this.idea = idea;
 			this.research = research;
@@ -344,7 +353,7 @@ public class Technology {
 			IdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			ResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
-			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, headStart, unlock, idea, research);
+			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, headStart, copy, unlock, idea, research);
 		}
 
 	}
@@ -418,8 +427,9 @@ public class Technology {
 
 			boolean start = JsonUtils.getBoolean(json, "start", false);
 			boolean headStart = JsonUtils.getBoolean(json, "headstart", false);
+			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
-			return new Builder(parent, display, type, rewards, criteria, requirements, start, headStart, unlock, idea, research);
+			return new Builder(parent, display, type, rewards, criteria, requirements, start, headStart, copy, unlock, idea, research);
 		}
 
 	}

@@ -40,7 +40,7 @@ public class CopyTechMessage implements IMessage {
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
 			Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(message.id));
 
-			if (tech != null && tech.isResearched(player)) {
+			if (tech != null && tech.canCopy() && tech.isResearched(player)) {
 				int index = -1;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
 					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)

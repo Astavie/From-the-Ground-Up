@@ -122,14 +122,15 @@ public class GuiResearchBook extends GuiScreen {
 
 			scroll = 1;
 		} else {
-			GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
-			copy.enabled = false;
-			for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-				if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
-					copy.enabled = true;
-
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
-			buttonList.add(copy);
+			if (selected.canCopy()) {
+				GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
+				copy.enabled = false;
+				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
+					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+						copy.enabled = true;
+				buttonList.add(copy);
+			}
 
 			pages = (int) Math.max(Math.ceil(((double) selected.getUnlock().size()) / num), 1);
 		}
