@@ -35,6 +35,54 @@ technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
 technology.decipher.tooltip=Shift Right-click to find hidden meaning in blocks
 
+commands.technology.usage=/technology <grant|revoke|test> <player>
+commands.technology.technologyNotFound=No technology was found by the name '%1$s'
+commands.technology.criterionNotFound=The technology '%1$s' does not contain the criterion '%2$s'
+
+commands.technology.grant.usage=/technology grant <player> <only|until|from|through|everything>
+commands.technology.grant.only.usage=/technology grant <player> only <technology> [criterion]
+commands.technology.grant.only.failed=Couldn't grant the technology '%1$s' to %2$s because they already have it
+commands.technology.grant.only.success=Granted the entire technology '%1$s' to %2$s
+commands.technology.grant.criterion.failed=Couldn't grant the criterion '%3$s' of technology '%1$s' to %2$s because they already have it
+commands.technology.grant.criterion.success=Granted the criterion '%3$s' of technology '%1$s' to %2$s
+commands.technology.grant.until.usage=/technology grant <player> until <technology>
+commands.technology.grant.until.failed=Couldn't grant the technology '%1$s' or its ancestors to %2$s because they already have them all
+commands.technology.grant.until.success=Granted '%1$s' and all ancestors (%3$s total granted) to %2$s
+commands.technology.grant.from.usage=/technology grant <player> from <technology>
+commands.technology.grant.from.failed=Couldn't grant the technology '%1$s' or its descendants to %2$s because they already have them all
+commands.technology.grant.from.success=Granted '%1$s' and all descendants (%3$s total granted) to %2$s
+commands.technology.grant.through.usage=/technology grant <player> through <technology>
+commands.technology.grant.through.failed=Couldn't grant the technology '%1$s', its ancestors or its descendants to %2$s because they already have them all
+commands.technology.grant.through.success=Granted '%1$s', all ancestors and all descendants (%3$s total granted) to %2$s
+commands.technology.grant.everything.usage=/technology grant <player> everything
+commands.technology.grant.everything.failed=Couldn't grant any technology to %1$s because they already have them all
+commands.technology.grant.everything.success=Granted every technology (%2$s total granted) to %1$s
+
+commands.technology.revoke.usage=/technology revoke <player> <only|until|from|through|everything>
+commands.technology.revoke.only.usage=/technology revoke <player> only <technology> [criterion]
+commands.technology.revoke.only.failed=Couldn't revoke the technology '%1$s' from %2$s because they haven't started it
+commands.technology.revoke.only.success=Revoked the entire technology '%1$s' from %2$s
+commands.technology.revoke.criterion.failed=Couldn't revoke the criterion '%3$s' of technology '%1$s' from %2$s because they haven't started it
+commands.technology.revoke.criterion.success=Revoked the criterion '%3$s' of technology '%1$s' from %2$s
+commands.technology.revoke.until.usage=/technology revoke <player> until <technology>
+commands.technology.revoke.until.failed=Couldn't revoke the technology '%1$s' or its ancestors from %2$s because they haven't started any
+commands.technology.revoke.until.success=Revoked '%1$s' and all ancestors (%3$s total revoked) from %2$s
+commands.technology.revoke.from.usage=/technology revoke <player> from <technology>
+commands.technology.revoke.from.failed=Couldn't revoke the technology '%1$s' or its descendants from %2$s because they haven't started any
+commands.technology.revoke.from.success=Revoked '%1$s' and all descendants (%3$s total revoked) from %2$s
+commands.technology.revoke.through.usage=/technology revoke <player> through <technology>
+commands.technology.revoke.through.failed=Couldn't revoke the technology '%1$s', its ancestors or its descendants from %2$s because they haven't started any
+commands.technology.revoke.through.success=Revoked '%1$s', all ancestors and all descendants (%3$s total revoked) from %2$s
+commands.technology.revoke.everything.usage=/technology revoke <player> everything
+commands.technology.revoke.everything.failed=Couldn't revoke any technology to %1$s because they haven't started any
+commands.technology.revoke.everything.success=Revoked every technology (%2$s total revoked) from %1$s
+
+commands.technology.test.usage=/technology test <player> <technology> [criterion]
+commands.technology.test.criterion.success=Player %1$s has completed criterion '%3$s' of technology '%2$s'
+commands.technology.test.criterion.notDone=Player %1$s has not completed criterion '%3$s' of technology '%2$s'
+commands.technology.test.technology.success=Player %1$s has completed technology '%2$s'
+commands.technology.test.technology.notDone=Player %1$s has not completed technology '%2$s'
+
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
 

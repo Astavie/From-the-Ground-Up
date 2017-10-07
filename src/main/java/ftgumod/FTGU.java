@@ -2,6 +2,7 @@ package ftgumod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ftgumod.command.CommandTechnology;
 import ftgumod.compat.ICompat;
 import ftgumod.compat.immersiveengineering.CompatIE;
 import ftgumod.packet.PacketDispatcher;
@@ -33,6 +34,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -51,6 +53,7 @@ public class FTGU {
 
 	public static boolean headStart = false;
 	public static boolean moddedOnly = false;
+	public static boolean copy = true;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -127,8 +130,9 @@ public class FTGU {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
-		headStart = config.get(Configuration.CATEGORY_GENERAL, "Head-Start", false, "Set this to true to automatically research Stonecraft, Stoneworking, Carpentry, Refinement, Bibliography, Advanced Combat, Building Blocks and Cooking").getBoolean();
-		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded", false, "Set this to true to automatically research all vanilla technologies").getBoolean();
+		headStart = config.get(Configuration.CATEGORY_GENERAL, "Head Start", false, "Automatically researches all technologies with the 'headstart' flag").getBoolean();
+		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded Only", false, "Automatically researches all vanilla technologies").getBoolean();
+		copy = config.get(Configuration.CATEGORY_GENERAL, "Allow Copy", true, "Enables the ability to copy technologies").getBoolean();
 
 		config.save();
 	}
@@ -147,6 +151,11 @@ public class FTGU {
 			this.compat.put("immersiveengineering", compat);
 		}
 		PROXY.postInit(event);
+	}
+
+	@Mod.EventHandler
+	public void serverStarting(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandTechnology());
 	}
 
 }

@@ -3,8 +3,6 @@ package ftgumod.technology;
 import com.google.gson.*;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.recipe.IdeaRecipe;
@@ -108,11 +106,11 @@ public class Technology {
 		return children;
 	}
 
-	public void getTree(Collection<Technology> collection) {
+	public void getChildren(Collection<Technology> collection, boolean tree) {
 		collection.add(this);
 		getChildren().forEach(tech -> {
-			if (!tech.isRoot())
-				tech.getTree(collection);
+			if (!tree || !tech.isRoot())
+				tech.getChildren(collection, tree);
 		});
 	}
 
@@ -180,6 +178,39 @@ public class Technology {
 		}
 	}
 
+	public void removeResearched(EntityPlayer player) {
+		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+		if (cap != null) {
+			if (isResearched(player)) {
+				cap.removeResearched(id.toString());
+
+				if (player instanceof EntityPlayerMP) {
+					EntityPlayerMP playerMP = (EntityPlayerMP) player;
+
+					RecipeBookServer book = playerMP.getRecipeBook();
+					if (book instanceof RecipeBookServerImpl)
+						((RecipeBookServerImpl) book).removeRecipes(unlock, playerMP);
+					else
+						LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
+
+					for (Technology child : children)
+						if (child.hasCustomUnlock())
+							child.unregisterListeners(playerMP);
+				}
+			}
+
+			if (hasCustomUnlock()) {
+				AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+				for (String criterion : progress.getCompletedCriteria())
+					if (progress.revokeCriterion(criterion))
+						cap.removeResearched(id + "#" + criterion);
+
+				if (player instanceof EntityPlayerMP)
+					registerListeners((EntityPlayerMP) player);
+			}
+		}
+	}
+
 	public Map<String, Criterion> getCriteria() {
 		return criteria;
 	}
@@ -188,7 +219,7 @@ public class Technology {
 		return requirements;
 	}
 
-	public void grantCriterion(EntityPlayer player, String name) {
+	public boolean grantCriterion(EntityPlayer player, String name) {
 		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
 		boolean done = progress.isDone();
 
@@ -204,22 +235,20 @@ public class Technology {
 
 					FTGUAPI.c_technologyUnlocked.trigger(playerMP, this);
 				}
-
-				PacketDispatcher.sendTo(new TechnologyMessage(playerMP, true), playerMP);
 			}
+			return true;
 		}
+		return false;
 	}
 
-	public void revokeCriterion(EntityPlayer player, String name) {
+	public boolean revokeCriterion(EntityPlayer player, String name) {
 		if (TechnologyHandler.getProgress(player, this).revokeCriterion(name)) {
 			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(id.toString() + "#" + name);
-			if (player instanceof EntityPlayerMP) {
-				EntityPlayerMP playerMP = (EntityPlayerMP) player;
-
-				registerListeners(playerMP);
-				PacketDispatcher.sendTo(new TechnologyMessage(player, true), playerMP);
-			}
+			if (player instanceof EntityPlayerMP)
+				registerListeners((EntityPlayerMP) player);
+			return true;
 		}
+		return false;
 	}
 
 	public void registerListeners(EntityPlayerMP player) {
@@ -239,10 +268,12 @@ public class Technology {
 	}
 
 	public void unregisterListeners(EntityPlayerMP player) {
+		boolean parent = this.parent != null && !this.parent.isResearched(player);
 		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+
 		for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
 			CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
-			if (criterionProgress != null && (criterionProgress.isObtained() || progress.isDone())) {
+			if (criterionProgress != null && (parent || criterionProgress.isObtained() || progress.isDone())) {
 				ICriterionInstance instance = entry.getValue().getCriterionInstance();
 				if (instance != null) {
 					ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());
@@ -263,6 +294,10 @@ public class Technology {
 
 	public ITextComponent getDisplayText() {
 		return displayText;
+	}
+
+	public boolean hasProgress(EntityPlayer player) {
+		return isResearched(player) || (hasCustomUnlock() && TechnologyHandler.getProgress(player, this).hasProgress());
 	}
 
 	public boolean isResearched(EntityPlayer player) {

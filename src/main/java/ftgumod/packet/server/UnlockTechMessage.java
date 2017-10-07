@@ -2,15 +2,10 @@ package ftgumod.packet.server;
 
 import ftgumod.packet.MessageHandler;
 import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.server.RecipeBookServerImpl;
-import ftgumod.technology.CapabilityTechnology;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -42,18 +37,11 @@ public class UnlockTechMessage implements IMessage {
 		@Override
 		public IMessage handleMessage(EntityPlayer player, UnlockTechMessage message, MessageContext ctx) {
 			if (player != null && player.capabilities.isCreativeMode) {
-				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				Technology t = TechnologyHandler.technologies.get(new ResourceLocation(message.tech));
 
-				if (cap != null && t != null) {
+				if (t != null) {
 					if (t.isResearched(player)) {
-						cap.removeResearched(message.tech);
-
-						RecipeBookServer book = ((EntityPlayerMP) player).getRecipeBook();
-						if (book instanceof RecipeBookServerImpl)
-							((RecipeBookServerImpl) book).removeRecipes(t.getUnlock(), (EntityPlayerMP) player);
-						else
-							Technology.getLogger().error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes revoked!");
+						t.removeResearched(player);
 					} else {
 						t.setResearched(player);
 					}

@@ -90,7 +90,7 @@ public class GuiResearchBook extends GuiScreen {
 		buttonList.clear();
 		if (state) {
 			Set<Technology> tree = new HashSet<>();
-			p.getTree(tree);
+			p.getChildren(tree, true);
 
 			x_min = (int) p.getDisplay().getX();
 			y_min = (int) p.getDisplay().getY();
@@ -123,7 +123,7 @@ public class GuiResearchBook extends GuiScreen {
 			scroll = 1;
 		} else {
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
-			if (selected.canCopy()) {
+			if (FTGU.copy && selected.canCopy()) {
 				GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
 				copy.enabled = false;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
@@ -314,7 +314,7 @@ public class GuiResearchBook extends GuiScreen {
 			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
 
 			Set<Technology> tech = new HashSet<>();
-			root.getTree(tech);
+			root.getChildren(tech, true);
 
 			if (tech != null) {
 				try {

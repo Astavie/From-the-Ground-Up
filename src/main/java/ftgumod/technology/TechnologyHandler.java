@@ -32,7 +32,7 @@ public class TechnologyHandler {
 
 	public static final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
 
-	public static final Map<ResourceLocation, Technology> technologies = new HashMap<>();
+	public static final Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
 	public static final Set<Technology> roots = new HashSet<>();
 
 	public static final Set<String> start = new HashSet<>();

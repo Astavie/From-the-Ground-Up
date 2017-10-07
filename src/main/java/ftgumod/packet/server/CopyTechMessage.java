@@ -1,5 +1,6 @@
 package ftgumod.packet.server;
 
+import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
@@ -38,24 +39,26 @@ public class CopyTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
-			Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(message.id));
+			if (FTGU.copy) {
+				Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(message.id));
 
-			if (tech != null && tech.canCopy() && tech.isResearched(player)) {
-				int index = -1;
-				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
-						index = i;
+				if (tech != null && tech.canCopy() && tech.isResearched(player)) {
+					int index = -1;
+					for (int i = 0; i < player.inventory.getSizeInventory(); i++)
+						if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+							index = i;
 
-				if (index != -1) {
-					player.inventory.getStackInSlot(index).shrink(1);
+					if (index != -1) {
+						player.inventory.getStackInSlot(index).shrink(1);
 
-					ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
-					StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
+						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
+						StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
-					if (player.inventory.getFirstEmptyStack() == -1)
-						player.dropItem(result, true);
-					else
-						player.inventory.addItemStackToInventory(result);
+						if (player.inventory.getFirstEmptyStack() == -1)
+							player.dropItem(result, true);
+						else
+							player.inventory.addItemStackToInventory(result);
+					}
 				}
 			}
 			return null;

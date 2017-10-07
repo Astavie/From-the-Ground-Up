@@ -1,9 +1,12 @@
 package ftgumod.util;
 
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.entity.player.EntityPlayerMP;
 
 public final class ListenerTechnology<T extends ICriterionInstance> extends ICriterionTrigger.Listener<T> {
 
@@ -18,7 +21,10 @@ public final class ListenerTechnology<T extends ICriterionInstance> extends ICri
 
 	@Override
 	public void grantCriterion(PlayerAdvancements playerAdvancements) {
-		technology.grantCriterion(playerAdvancements.player, name);
+		EntityPlayerMP player = playerAdvancements.player;
+
+		technology.grantCriterion(player, name);
+		PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
 	}
 
 	@Override
