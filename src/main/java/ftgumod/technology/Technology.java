@@ -176,6 +176,9 @@ public class Technology {
 				for (Technology child : children)
 					if (child.hasCustomUnlock())
 						child.registerListeners(playerMP);
+
+				FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, this);
+				MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Research(player, this));
 			}
 		}
 	}
@@ -190,8 +193,6 @@ public class Technology {
 				player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
 
 		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-		FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, this);
 	}
 
 	public void removeResearched(EntityPlayer player) {
@@ -212,17 +213,24 @@ public class Technology {
 					for (Technology child : children)
 						if (child.hasCustomUnlock())
 							child.unregisterListeners(playerMP);
+
+					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
 				}
 			}
 
 			if (hasCustomUnlock()) {
 				AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+				boolean done = progress.isDone();
+
 				for (String criterion : progress.getCompletedCriteria())
 					if (progress.revokeCriterion(criterion))
 						cap.removeResearched(id + "#" + criterion);
 
-				if (player instanceof EntityPlayerMP)
+				if (player instanceof EntityPlayerMP) {
 					registerListeners((EntityPlayerMP) player);
+					if (done)
+						MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
+				}
 			}
 		}
 	}
@@ -260,10 +268,16 @@ public class Technology {
 	}
 
 	public boolean revokeCriterion(EntityPlayer player, String name) {
-		if (TechnologyHandler.getProgress(player, this).revokeCriterion(name)) {
+		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+		boolean done = progress.isDone();
+
+		if (progress.revokeCriterion(name)) {
 			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(id.toString() + "#" + name);
-			if (player instanceof EntityPlayerMP)
+			if (player instanceof EntityPlayerMP) {
 				registerListeners((EntityPlayerMP) player);
+				if (done && !progress.isDone())
+					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
+			}
 			return true;
 		}
 		return false;

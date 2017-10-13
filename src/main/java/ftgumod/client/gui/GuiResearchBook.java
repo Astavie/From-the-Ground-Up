@@ -5,7 +5,6 @@ import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestMessage;
-import ftgumod.packet.server.UnlockTechMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import net.minecraft.client.Minecraft;
@@ -240,8 +239,6 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public void mouseClicked(int x, int y, int b) throws IOException {
-		if (b == 1 && player.capabilities.isCreativeMode && selected != null)
-			PacketDispatcher.sendToServer(new UnlockTechMessage(selected));
 		if (b == 0 && selected != null && selected.isResearched(player)) {
 			state = false;
 			initGui();

@@ -10,8 +10,6 @@ import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.CopyTechMessage.CopyTechMessageHandler;
 import ftgumod.packet.server.RequestMessage;
 import ftgumod.packet.server.RequestMessage.RequestMessageHandler;
-import ftgumod.packet.server.UnlockTechMessage;
-import ftgumod.packet.server.UnlockTechMessage.UnlockTechMessageHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -28,7 +26,6 @@ public final class PacketDispatcher {
 		dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel("ftgu");
 
 		PacketDispatcher.registerMessage(RequestMessageHandler.class, RequestMessage.class, Side.SERVER);
-		PacketDispatcher.registerMessage(UnlockTechMessageHandler.class, UnlockTechMessage.class, Side.SERVER);
 		PacketDispatcher.registerMessage(CopyTechMessageHandler.class, CopyTechMessage.class, Side.SERVER);
 
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);

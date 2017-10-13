@@ -1,7 +1,6 @@
 package ftgumod.item;
 
 import ftgumod.FTGUAPI;
-import ftgumod.event.TechnologyEvent;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
@@ -17,7 +16,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 
 public class ItemParchmentResearch extends Item {
 
@@ -40,9 +38,7 @@ public class ItemParchmentResearch extends Item {
 					if (already)
 						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getDisplayText()));
 				} else {
-					TechnologyEvent event = new TechnologyEvent.Research(player, t);
-					MinecraftForge.EVENT_BUS.post(event);
-					if (!event.isCanceled()) {
+					if (t.canResearch(player)) {
 						t.setResearched(player);
 						t.displayResearched(player);
 

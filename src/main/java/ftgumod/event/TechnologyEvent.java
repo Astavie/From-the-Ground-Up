@@ -3,7 +3,6 @@ package ftgumod.event;
 import ftgumod.technology.Technology;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
 
 public abstract class TechnologyEvent extends PlayerEvent {
 
@@ -12,14 +11,15 @@ public abstract class TechnologyEvent extends PlayerEvent {
 	public TechnologyEvent(EntityPlayer player, Technology tech) {
 		super(player);
 		this.tech = tech;
-		setCanceled(!tech.canResearch(player));
 	}
 
 	public Technology getTechnology() {
 		return tech;
 	}
 
-	@Cancelable
+	/**
+	 * Fires after a Technology is researched, using commands or with the research table
+	 */
 	public static class Research extends TechnologyEvent {
 
 		public Research(EntityPlayer player, Technology tech) {
@@ -28,9 +28,23 @@ public abstract class TechnologyEvent extends PlayerEvent {
 
 	}
 
+	/**
+	 * Fires after a Technology is unlocked
+	 */
 	public static class Unlock extends TechnologyEvent {
 
 		public Unlock(EntityPlayer player, Technology tech) {
+			super(player, tech);
+		}
+
+	}
+
+	/**
+	 * Fires after a Technology has been revoked, which can be only an unlock
+	 */
+	public static class Revoke extends TechnologyEvent {
+
+		public Revoke(EntityPlayer player, Technology tech) {
 			super(player, tech);
 		}
 
