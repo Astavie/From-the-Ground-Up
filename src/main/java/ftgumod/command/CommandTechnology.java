@@ -57,7 +57,7 @@ public class CommandTechnology extends CommandBase {
 				if (mode == null)
 					throw type.wrongUsage();
 
-				perform(server, sender, args, player, type, mode);
+				perform(sender, args, player, type, mode);
 				PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
 			} else if (!args[0].equals("test"))
 				throw new WrongUsageException(getUsage(sender));
@@ -70,7 +70,7 @@ public class CommandTechnology extends CommandBase {
 		}
 	}
 
-	private void perform(MinecraftServer server, ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
+	private void perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
 		if (mode == Mode.EVERYTHING)
 			if (args.length == 3) {
 				int affected = type.perform(player, TechnologyHandler.technologies.values());
@@ -188,6 +188,7 @@ public class CommandTechnology extends CommandBase {
 					return false;
 
 				tech.setResearched(player);
+				tech.displayResearched(player);
 				return true;
 			}
 

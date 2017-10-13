@@ -3,6 +3,7 @@ package ftgumod.technology;
 import com.google.gson.*;
 import ftgumod.FTGU;
 import ftgumod.FTGUAPI;
+import ftgumod.event.TechnologyEvent;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.recipe.IdeaRecipe;
@@ -22,6 +23,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.HoverEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import org.apache.commons.lang3.ArrayUtils;
@@ -178,6 +180,20 @@ public class Technology {
 		}
 	}
 
+	public void displayResearched(EntityPlayer player) {
+		if (player.world.getGameRules().getBoolean("announceAdvancements") && display.shouldAnnounceToChat())
+			//noinspection ConstantConditions
+			player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));
+
+		for (Technology child : children)
+			if (child.isRoot() && !child.hasCustomUnlock())
+				player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
+
+		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+		FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, this);
+	}
+
 	public void removeResearched(EntityPlayer player) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
@@ -230,6 +246,8 @@ public class Technology {
 
 				unregisterListeners(playerMP);
 				if (!done && progress.isDone()) {
+					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Unlock(playerMP, this));
+
 					playerMP.sendMessage(new TextComponentTranslation(isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
 					playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 

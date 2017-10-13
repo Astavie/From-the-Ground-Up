@@ -28,7 +28,6 @@ public abstract class TechnologyEvent extends PlayerEvent {
 
 	}
 
-	@Cancelable
 	public static class Unlock extends TechnologyEvent {
 
 		public Unlock(EntityPlayer player, Technology tech) {

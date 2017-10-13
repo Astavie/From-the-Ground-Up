@@ -9,10 +9,12 @@ import ftgumod.technology.TechnologyHandler;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -42,18 +44,7 @@ public class ItemParchmentResearch extends Item {
 					MinecraftForge.EVENT_BUS.post(event);
 					if (!event.isCanceled()) {
 						t.setResearched(player);
-
-						if (player.world.getGameRules().getBoolean("announceAdvancements") && t.getDisplay().shouldAnnounceToChat())
-							//noinspection ConstantConditions
-							player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), t.getDisplayText()));
-
-						for (Technology child : t.getChildren())
-							if (child.isRoot() && !child.hasCustomUnlock())
-								player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.getDisplayText()));
-
-						player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-						FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, t);
+						t.displayResearched(player);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);
