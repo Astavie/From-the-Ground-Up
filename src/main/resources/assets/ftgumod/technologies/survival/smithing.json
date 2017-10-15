@@ -11,7 +11,7 @@
       "translate": "technology.smithing.desc"
     },
     "x": 6,
-    "y": 1
+    "y": 2
   },
   "parent": "ftgumod:survival/refinement",
   "idea": {
@@ -31,24 +31,27 @@
     "key": {
       "I": {
         "item": "#metal",
-        "hint": "Material"
-      },
-      "F": [
-        {
-          "item": "minecraft:flint_and_steel",
-          "hint": "Fire"
-        },
-        {
-          "item": "minecraft:fire_charge"
+        "hint": {
+          "translate": "technology.hint.material"
         }
-      ],
+      },
+      "F": {
+        "item": "#fire",
+        "hint": {
+          "translate": "technology.hint.fire"
+        }
+      },
       "C": {
         "item": "#crafting",
-        "hint": "Table"
+        "hint": {
+          "translate": "technology.hint.table"
+        }
       },
       "U": {
         "item": "minecraft:furnace",
-        "hint": "Smelter"
+        "hint": {
+          "translate": "technology.hint.furnace"
+        }
       }
     }
   },
@@ -83,6 +86,9 @@
     },
     {
       "item": "minecraft:iron_hoe"
+    },
+    {
+      "item": "minecraft:shears"
     },
     {
       "item": "minecraft:golden_sword"

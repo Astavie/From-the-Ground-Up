@@ -1,0 +1,69 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:lever"
+    },
+    "title": {
+      "translate": "technology.activation.name"
+    },
+    "description": {
+      "translate": "technology.activation.desc"
+    },
+    "x": 2,
+    "y": 1
+  },
+  "headstart": true,
+  "parent": "ftgumod:construction/construction",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "stickWood"
+      },
+      [
+        {
+          "item": "minecraft:cobblestone"
+        },
+        {
+          "item": "#door"
+        },
+        {
+          "item": "#fence_gate"
+        },
+        {
+          "item": "minecraft:trapdoor"
+        },
+        {
+          "item": "minecraft:iron_door"
+        },
+        {
+          "item": "minecraft:iron_trapdoor"
+        }
+      ]
+    ]
+  },
+  "unlock": [
+    {
+      "item": "minecraft:wooden_button"
+    },
+    {
+      "item": "minecraft:wooden_pressure_plate"
+    },
+    {
+      "item": "minecraft:stone_button"
+    },
+    {
+      "item": "minecraft:stone_pressure_plate"
+    },
+    {
+      "item": "minecraft:light_weighted_pressure_plate"
+    },
+    {
+      "item": "minecraft:heavy_weighted_pressure_plate"
+    },
+    {
+      "item": "minecraft:lever"
+    }
+  ]
+}

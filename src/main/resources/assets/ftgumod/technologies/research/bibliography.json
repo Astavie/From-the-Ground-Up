@@ -26,30 +26,6 @@
       }
     ]
   },
-  "research": {
-    "pattern": [
-      "WWW",
-      "LPL",
-      "WWW"
-    ],
-    "key": {
-      "W": {
-        "type": "forge:ore_dict",
-        "ore": "plankWood",
-        "hint": "Casing"
-      },
-      "L": {
-        "type": "forge:ore_dict",
-        "ore": "leather",
-        "hint": "Cover"
-      },
-      "P": {
-        "type": "forge:ore_dict",
-        "ore": "paper",
-        "hint": "Writing"
-      }
-    }
-  },
   "unlock": [
     {
       "item": "minecraft:book"

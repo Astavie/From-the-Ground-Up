@@ -10,7 +10,7 @@
       "translate": "technology.lapidary.desc"
     },
     "x": 8,
-    "y": 1
+    "y": 2
   },
   "parent": "ftgumod:survival/smithing",
   "idea": {
@@ -35,37 +35,53 @@
     "key": {
       "P": {
         "item": "#pickaxe",
-        "hint": "Tool"
-      },
-      "D": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "gemDiamond",
-          "hint": "Gem",
-          "decipher": [
-            {
-              "block": "minecraft:diamond_ore"
-            },
-            {
-              "block": "minecraft:diamond_block"
-            },
-            {
-              "block": "minecraft:emerald_ore"
-            },
-            {
-              "block": "minecraft:emerald_block"
-            }
-          ]
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "gemEmerald"
+        "hint": {
+          "translate": "technology.hint.pickaxe"
         }
-      ],
+      },
+      "D": {
+        "item": "#gem",
+        "hint": {
+          "translate": "technology.hint.gem"
+        },
+        "decipher": [
+          {
+            "block": "minecraft:diamond_ore"
+          },
+          {
+            "block": "minecraft:diamond_block"
+          },
+          {
+            "block": "minecraft:emerald_ore"
+          },
+          {
+            "block": "minecraft:emerald_block"
+          }
+        ]
+      },
       "C": {
         "item": "#crafting",
-        "hint": "Table"
+        "hint": {
+          "translate": "technology.hint.table"
+        }
       }
     }
-  }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:diamond_sword"
+    },
+    {
+      "item": "minecraft:diamond_shovel"
+    },
+    {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    {
+      "item": "minecraft:diamond_axe"
+    },
+    {
+      "item": "minecraft:diamond_hoe"
+    }
+  ]
 }

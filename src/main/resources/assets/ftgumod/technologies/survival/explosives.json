@@ -1,0 +1,88 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:tnt"
+    },
+    "title": {
+      "translate": "technology.explosives.name"
+    },
+    "description": {
+      "translate": "technology.explosives.desc"
+    },
+    "x": 6,
+    "y": 3
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/refinement",
+  "idea": {
+    "amount": 3,
+    "ingredients": [
+      {
+        "item": "minecraft:gunpowder"
+      },
+      {
+        "item": "minecraft:sand",
+        "data": 32767
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "dye"
+      },
+      {
+        "item": "minecraft:flint_and_steel"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " F ",
+      "DGD",
+      "SSS"
+    ],
+    "key": {
+      "F": {
+        "item": "#fire",
+        "hint": {
+          "translate": "technology.hint.fire"
+        }
+      },
+      "D": {
+        "type": "forge:ore_dict",
+        "ore": "dye",
+        "hint": {
+          "translate": "technology.hint.dye"
+        }
+      },
+      "G": {
+        "item": "minecraft:gunpowder",
+        "hint": {
+          "translate": "technology.hint.gunpowder"
+        }
+      },
+      "S": {
+        "item": "minecraft:sand",
+        "data": 32767,
+        "hint": {
+          "translate": "technology.hint.sand"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:tnt"
+    },
+    {
+      "item": "minecraft:tnt_minecart"
+    },
+    {
+      "item": "minecraft:firework_charge"
+    },
+    {
+      "item": "minecraft:fireworks"
+    },
+    {
+      "item": "minecraft:fire_charge"
+    }
+  ]
+}

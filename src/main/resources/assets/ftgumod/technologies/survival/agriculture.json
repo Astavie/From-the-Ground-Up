@@ -10,7 +10,7 @@
       "translate": "technology.agriculture.desc"
     },
     "x": 4,
-    "y": 2
+    "y": 4
   },
   "headstart": true,
   "parent": "ftgumod:survival/stoneworking",
@@ -36,16 +36,22 @@
       "S": {
         "type": "forge:ore_dict",
         "ore": "stickWood",
-        "hint": "Can be leaned against"
+        "hint": {
+          "translate": "technology.hint.stick"
+        }
       },
       "C": {
         "item": "#crop",
-        "hint": "Crop"
+        "hint": {
+          "translate": "technology.hint.crop"
+        }
       },
       "D": {
         "item": "minecraft:dirt",
         "data": 0,
-        "hint": "Soil"
+        "hint": {
+          "translate": "technology.hint.soil"
+        }
       }
     }
   },
@@ -57,7 +63,10 @@
       "item": "minecraft:stone_hoe"
     },
     {
-      "item": "minecraft:sugar"
+      "item": "minecraft:hay_block"
+    },
+    {
+      "item": "minecraft:wheat"
     },
     {
       "item": "minecraft:melon_seeds"
@@ -66,10 +75,7 @@
       "item": "minecraft:pumpkin_seeds"
     },
     {
-      "item": "minecraft:hay_block"
-    },
-    {
-      "item": "minecraft:wheat"
+      "item": "minecraft:lead"
     },
     {
       "item": "minecraft:dirt",

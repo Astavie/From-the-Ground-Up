@@ -27,6 +27,10 @@
         "ore": "slabWood"
       },
       {
+        "type": "forge:ore_dict",
+        "ore": "stairWood"
+      },
+      {
         "item": "minecraft:wool",
         "data": 32767
       }
@@ -41,25 +45,27 @@
     "key": {
       "A": {
         "item": "#axe",
-        "hint": "Wood Chopper"
+        "hint": {
+          "translate": "technology.hint.axe"
+        }
       },
       "W": {
         "type": "forge:ore_dict",
         "ore": "plankWood",
-        "hint": "Material"
+        "hint": {
+          "translate": "technology.hint.material"
+        }
       },
       "S": [
         {
           "type": "forge:ore_dict",
           "ore": "slabWood",
-          "hint": "Table"
+          "hint": {
+            "translate": "technology.hint.table"
+          }
         },
         {
-          "item": "minecraft:crafting_table"
-        },
-        {
-          "item": "minecraft:anvil",
-          "data": 32767
+          "item": "#crafting"
         }
       ]
     }
@@ -67,6 +73,9 @@
   "unlock": [
     {
       "item": "#door"
+    },
+    {
+      "item": "minecraft:trapdoor"
     },
     {
       "item": "#fence"
@@ -78,7 +87,13 @@
       "item": "minecraft:chest"
     },
     {
-      "item": "minecraft:trapdoor"
+      "item": "minecraft:sign"
+    },
+    {
+      "item": "minecraft:ladder"
+    },
+    {
+      "item": "minecraft:painting"
     },
     {
       "item": "minecraft:wool",

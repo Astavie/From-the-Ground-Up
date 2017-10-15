@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:boat"
+    },
+    "title": {
+      "translate": "technology.boats.name"
+    },
+    "description": {
+      "translate": "technology.boats.desc"
+    },
+    "x": 2,
+    "y": 0
+  },
+  "headstart": true,
+  "parent": "ftgumod:survival/survival",
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "minecraft:bowl"
+      }
+    ]
+  },
+  "unlock": [
+    {
+      "item": "#boat"
+    }
+  ]
+}

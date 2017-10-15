@@ -10,7 +10,7 @@
       "translate": "technology.cooking.desc"
     },
     "x": 6,
-    "y": 2
+    "y": 4
   },
   "headstart": true,
   "parent": "ftgumod:survival/agriculture",
@@ -43,7 +43,9 @@
       "V": [
         {
           "item": "minecraft:carrot",
-          "hint": "Vegetable"
+          "hint": {
+            "translate": "technology.hint.vegetable"
+          }
         },
         {
           "item": "minecraft:potato"
@@ -54,12 +56,16 @@
       ],
       "M": {
         "item": "#rawMeat",
-        "hint": "Meat"
+        "hint": {
+          "translate": "technology.hint.meat"
+        }
       },
       "F": [
         {
           "item": "minecraft:apple",
-          "hint": "Fruit"
+          "hint": {
+            "translate": "technology.hint.fruit"
+          }
         },
         {
           "item": "minecraft:melon"
@@ -73,21 +79,31 @@
       ],
       "W": {
         "item": "minecraft:wheat",
-        "hint": "Grain"
-      },
-      "B": [
-        {
-          "item": "minecraft:bowl",
-          "hint": "Bowl"
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "slabWood"
+        "hint": {
+          "translate": "technology.hint.wheat"
         }
-      ]
+      },
+      "B": {
+        "item": "minecraft:bowl",
+        "hint": {
+          "translate": "technology.hint.bowl"
+        }
+      }
     }
   },
   "unlock": [
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:mushroom_stew"
+    },
+    {
+      "item": "minecraft:rabbit_stew"
+    },
+    {
+      "item": "minecraft:beetroot_soup"
+    },
     {
       "item": "minecraft:bread"
     },
@@ -99,15 +115,6 @@
     },
     {
       "item": "minecraft:pumpkin_pie"
-    },
-    {
-      "item": "minecraft:mushroom_stew"
-    },
-    {
-      "item": "minecraft:rabbit_stew"
-    },
-    {
-      "item": "minecraft:beetroot_soup"
     },
     {
       "item": "minecraft:fishing_rod"

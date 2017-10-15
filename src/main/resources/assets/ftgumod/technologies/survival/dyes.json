@@ -11,7 +11,7 @@
       "translate": "technology.dyes.desc"
     },
     "x": 6,
-    "y": 3
+    "y": 5
   },
   "parent": "ftgumod:survival/agriculture",
   "idea": {
@@ -41,7 +41,9 @@
         {
           "item": "minecraft:wool",
           "data": 32767,
-          "hint": "Dyeable"
+          "hint": {
+            "translate": "technology.hint.dyeable"
+          }
         },
         {
           "type": "forge:ore_dict",
@@ -62,12 +64,16 @@
       "D": {
         "type": "forge:ore_dict",
         "ore": "dye",
-        "hint": "Color"
+        "hint": {
+          "translate": "technology.hint.dye"
+        }
       },
       "C": [
         {
           "item": "#flower",
-          "hint": "Flower"
+          "hint": {
+            "translate": "technology.hint.flower"
+          }
         },
         {
           "type": "forge:ore_dict",
@@ -78,8 +84,56 @@
   },
   "unlock": [
     {
-      "type": "forge:ore_dict",
-      "ore": "dye"
+      "item": "minecraft:dye",
+      "data": 1
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 2
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 5
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 6
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 7
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 8
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 9
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 10
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 11
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 12
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 13
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 14
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 15
     }
   ]
 }

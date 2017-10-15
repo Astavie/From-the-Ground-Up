@@ -10,7 +10,7 @@
       "translate": "technology.stoneworking.desc"
     },
     "x": 2,
-    "y": 1
+    "y": 3
   },
   "headstart": true,
   "parent": "ftgumod:survival/survival",
@@ -52,16 +52,22 @@
     "key": {
       "R": {
         "item": "minecraft:string",
-        "hint": "Rope"
+        "hint": {
+          "translate": "technology.hint.rope"
+        }
       },
       "C": {
         "item": "minecraft:cobblestone",
-        "hint": "Head"
+        "hint": {
+          "translate": "technology.hint.head"
+        }
       },
       "S": {
         "type": "forge:ore_dict",
         "ore": "stickWood",
-        "hint": "Handle"
+        "hint": {
+          "translate": "technology.hint.handle"
+        }
       }
     }
   },

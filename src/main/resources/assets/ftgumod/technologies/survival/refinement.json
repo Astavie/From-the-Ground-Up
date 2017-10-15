@@ -10,7 +10,7 @@
       "translate": "technology.refinement.desc"
     },
     "x": 4,
-    "y": 1
+    "y": 2
   },
   "headstart": true,
   "parent": "ftgumod:survival/stoneworking",
@@ -37,16 +37,22 @@
     "key": {
       "C": {
         "item": "minecraft:cobblestone",
-        "hint": "Inflammable Insulator"
+        "hint": {
+          "translate": "technology.hint.insulator"
+        }
       },
       "O": {
         "item": "#ore",
-        "hint": "Smeltable"
+        "hint": {
+          "translate": "technology.hint.ore"
+        }
       },
       "F": {
         "item": "minecraft:coal",
         "data": 32767,
-        "hint": "Fuel"
+        "hint": {
+          "translate": "technology.hint.fuel"
+        }
       }
     }
   },
@@ -120,6 +126,12 @@
     {
       "type": "forge:ore_dict",
       "ore": "blockRedstone"
+    },
+    {
+      "item": "minecraft:slime_ball"
+    },
+    {
+      "item": "minecraft:Slime"
     }
   ]
 }

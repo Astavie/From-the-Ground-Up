@@ -13,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -333,8 +332,8 @@ public class TechnologyHandler {
 						reader = Files.newBufferedReader(path);
 						JsonObject[] array = JsonUtils.fromJson(FTGU.GSON, reader, JsonObject[].class);
 						context.loadConstants(array);
-					} catch (IOException e) {
-						FMLLog.log.error("Error loading _constants.json: ", e);
+					} catch (IOException | JsonParseException e) {
+						Technology.getLogger().error("Couldn't read _constants.json from {}", mod.getModId(), e);
 						return false;
 					} finally {
 						IOUtils.closeQuietly(reader);
@@ -351,7 +350,7 @@ public class TechnologyHandler {
 
 				try {
 					json.put(id, Pair.of(context, new String(Files.readAllBytes(file))));
-				} catch (IOException e) {
+				} catch (IOException | JsonParseException e) {
 					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 					return false;
 				}

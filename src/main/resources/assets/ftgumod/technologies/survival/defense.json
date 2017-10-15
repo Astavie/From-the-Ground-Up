@@ -10,7 +10,7 @@
       "translate": "technology.defense.desc"
     },
     "x": 2,
-    "y": 0
+    "y": 1
   },
   "headstart": true,
   "parent": "ftgumod:survival/survival",
@@ -26,61 +26,18 @@
           "ore": "leather"
         },
         {
-          "item": "#armorLeather"
+          "item": "#armor"
         }
       ],
       {
         "type": "forge:ore_dict",
         "ore": "ingotIron"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "plankWood"
       }
     ]
-  },
-  "research": {
-    "pattern": [
-      " S ",
-      "ALI",
-      " S "
-    ],
-    "key": {
-      "A": {
-        "item": "#sword",
-        "hint": "Attack"
-      },
-      "L": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "leather",
-          "hint": "Armor"
-        },
-        {
-          "item": "minecraft:leather_chestplate"
-        }
-      ],
-      "I": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "ingotIron",
-          "hint": "Defense"
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "plankWood"
-        },
-        {
-          "item": "minecraft:shield"
-        }
-      ],
-      "S": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "stickWood",
-          "hint": "Coat Stand"
-        },
-        {
-          "item": "minecraft:armor_stand"
-        }
-      ]
-    }
   },
   "unlock": [
     {
@@ -103,6 +60,9 @@
     },
     {
       "item": "minecraft:arrow"
+    },
+    {
+      "item": "minecraft:shield"
     }
   ]
 }

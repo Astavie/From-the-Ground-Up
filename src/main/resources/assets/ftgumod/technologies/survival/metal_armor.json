@@ -9,15 +9,15 @@
     "description": {
       "translate": "technology.metal_armor.desc"
     },
-    "x": 6,
-    "y": 0
+    "x": 4,
+    "y": 1
   },
   "parent": "ftgumod:survival/defense",
   "idea": {
     "amount": 2,
     "ingredients": [
       {
-        "item": "#armorLeather"
+        "item": "#armor"
       },
       {
         "item": "#metal"
@@ -26,32 +26,46 @@
   },
   "research": {
     "pattern": [
-      "MHM",
-      "MCM",
-      "MLM"
+      " H ",
+      "ASD",
+      " L "
     ],
     "key": {
-      "M": {
-        "item": "#metal",
-        "hint": "Material"
-      },
       "H": {
-        "item": "minecraft:leather_helmet",
-        "hint": "Armor"
+        "item": "#helmet",
+        "hint": {
+          "translate": "technology.hint.armor"
+        }
       },
-      "C": {
-        "item": "minecraft:leather_chestplate",
-        "hint": "Armor"
+      "S": {
+        "item": "minecraft:armor_stand",
+        "hint": {
+          "translate": "technology.hint.stand"
+        }
       },
       "L": [
         {
-          "item": "minecraft:leather_leggings",
-          "hint": "Armor"
+          "item": "#leggings",
+          "hint": {
+            "translate": "technology.hint.armor"
+          }
         },
         {
-          "item": "minecraft:leather_boots"
+          "item": "#boots"
         }
-      ]
+      ],
+      "A": {
+        "item": "#sword",
+        "hint": {
+          "translate": "technology.hint.attack"
+        }
+      },
+      "D": {
+        "item": "minecraft:shield",
+        "hint": {
+          "translate": "technology.hint.defense"
+        }
+      }
     }
   },
   "unlock": [

@@ -271,23 +271,6 @@
   {
     "ingredient": [
       {
-        "item": "minecraft:leather_helmet"
-      },
-      {
-        "item": "minecraft:leather_chestplate"
-      },
-      {
-        "item": "minecraft:leather_leggings"
-      },
-      {
-        "item": "minecraft:leather_boots"
-      }
-    ],
-    "name": "armorLeather"
-  },
-  {
-    "ingredient": [
-      {
         "item": "minecraft:crafting_table"
       },
       {
@@ -296,5 +279,137 @@
       }
     ],
     "name": "crafting"
+  },
+  {
+    "ingredient": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemDiamond"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemEmerald"
+      }
+    ],
+    "name": "gem"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:leather_helmet"
+      },
+      {
+        "item": "minecraft:iron_helmet"
+      },
+      {
+        "item": "minecraft:golden_helmet"
+      },
+      {
+        "item": "minecraft:diamond_helmet"
+      }
+    ],
+    "name": "helmet"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:leather_chestplate"
+      },
+      {
+        "item": "minecraft:iron_chestplate"
+      },
+      {
+        "item": "minecraft:golden_chestplate"
+      },
+      {
+        "item": "minecraft:diamond_chestplate"
+      }
+    ],
+    "name": "chestplate"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:leather_leggings"
+      },
+      {
+        "item": "minecraft:iron_leggings"
+      },
+      {
+        "item": "minecraft:golden_leggings"
+      },
+      {
+        "item": "minecraft:diamond_leggings"
+      }
+    ],
+    "name": "leggings"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:leather_boots"
+      },
+      {
+        "item": "minecraft:iron_boots"
+      },
+      {
+        "item": "minecraft:golden_boots"
+      },
+      {
+        "item": "minecraft:diamond_boots"
+      }
+    ],
+    "name": "boots"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "#helmet"
+      },
+      {
+        "item": "#chestplate"
+      },
+      {
+        "item": "#leggings"
+      },
+      {
+        "item": "#boots"
+      }
+    ],
+    "name": "armor"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:flint_and_steel"
+      },
+      {
+        "item": "minecraft:fire_charge"
+      }
+    ],
+    "name": "fire"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:boat"
+      },
+      {
+        "item": "minecraft:spruce_boat"
+      },
+      {
+        "item": "minecraft:birch_boat"
+      },
+      {
+        "item": "minecraft:jungle_boat"
+      },
+      {
+        "item": "minecraft:acacia_boat"
+      },
+      {
+        "item": "minecraft:dark_oak_boat"
+      }
+    ],
+    "name": "boat"
   }
 ]

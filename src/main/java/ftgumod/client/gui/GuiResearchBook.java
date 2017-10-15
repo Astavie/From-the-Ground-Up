@@ -35,10 +35,10 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID, "textures/gui/achievement/achievement_background.png");
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 
-	private static float zoom = 1.0F;
+	private static float[] zoom;
 	private static int currentPage = 0;
-	private static double xScrollO = -141 / 2 - 12;
-	private static double yScrollO = -141 / 2 - 12;
+	private static double[] xScrollO;
+	private static double[] yScrollO;
 	private static boolean state = true;
 	private static Technology selected;
 	private static int scroll = 1;
@@ -69,14 +69,24 @@ public class GuiResearchBook extends GuiScreen {
 				roots.add(tech);
 		});
 
+		zoom = new float[roots.size()];
+		xScrollO = new double[roots.size()];
+		yScrollO = new double[roots.size()];
+
+		for (int i = 0; i < roots.size(); i++) {
+			zoom[i] = 1F;
+			xScrollO[i] = -82;
+			yScrollO[i] = -82;
+		}
+
 		if (roots.size() == 0)
 			Minecraft.getMinecraft().displayGuiScreen(null);
 		else {
 			imageWidth = 256;
 			imageHeight = 202;
 
-			xScrollP = xScrollTarget = xScrollO;
-			yScrollP = yScrollTarget = yScrollO;
+			xScrollP = xScrollTarget = xScrollO[0];
+			yScrollP = yScrollTarget = yScrollO[0];
 
 			PacketDispatcher.sendToServer(new RequestMessage());
 		}
@@ -151,8 +161,8 @@ public class GuiResearchBook extends GuiScreen {
 				if (currentPage >= roots.size())
 					currentPage = 0;
 
-				xScrollO = xScrollP = xScrollTarget = -141 / 2 - 12;
-				yScrollO = yScrollP = yScrollTarget = -141 / 2 - 12;
+				xScrollP = xScrollTarget = xScrollO[currentPage];
+				yScrollP = yScrollTarget = yScrollO[currentPage];
 				initGui();
 			} else {
 				PacketDispatcher.sendToServer(new CopyTechMessage(selected));
@@ -183,10 +193,10 @@ public class GuiResearchBook extends GuiScreen {
 					if (scrolling == 0) {
 						scrolling = 1;
 					} else {
-						xScrollP -= (float) (x - xLastScroll) * zoom;
-						yScrollP -= (float) (y - yLastScroll) * zoom;
-						xScrollTarget = xScrollO = xScrollP;
-						yScrollTarget = yScrollO = yScrollP;
+						xScrollP -= (float) (x - xLastScroll) * zoom[currentPage];
+						yScrollP -= (float) (y - yLastScroll) * zoom[currentPage];
+						xScrollTarget = xScrollO[currentPage] = xScrollP;
+						yScrollTarget = yScrollO[currentPage] = yScrollP;
 					}
 					xLastScroll = x;
 					yLastScroll = y;
@@ -196,23 +206,23 @@ public class GuiResearchBook extends GuiScreen {
 			}
 
 			int i1 = Mouse.getDWheel();
-			float f3 = zoom;
+			float f3 = zoom[currentPage];
 			if (i1 < 0)
-				zoom += 0.25F;
+				zoom[currentPage] += 0.25F;
 			else if (i1 > 0)
-				zoom -= 0.25F;
-			zoom = MathHelper.clamp(zoom, 1.0F, 2.0F);
+				zoom[currentPage] -= 0.25F;
+			zoom[currentPage] = MathHelper.clamp(zoom[currentPage], 1.0F, 2.0F);
 
-			if (zoom != f3) {
+			if (zoom[currentPage] != f3) {
 				float f4 = f3 * imageWidth;
 				float f = f3 * imageHeight;
-				float f1 = zoom * imageWidth;
-				float f2 = zoom * imageHeight;
+				float f1 = zoom[currentPage] * imageWidth;
+				float f2 = zoom[currentPage] * imageHeight;
 
 				xScrollP -= (f1 - f4) * 0.5F;
 				yScrollP -= (f2 - f) * 0.5F;
-				xScrollTarget = xScrollO = xScrollP;
-				yScrollTarget = yScrollO = yScrollP;
+				xScrollTarget = xScrollO[currentPage] = xScrollP;
+				yScrollTarget = yScrollO[currentPage] = yScrollP;
 			}
 
 			if (xScrollTarget < x_min)
@@ -248,8 +258,8 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public void updateScreen() {
-		xScrollO = xScrollP;
-		yScrollO = yScrollP;
+		xScrollO[currentPage] = xScrollP;
+		yScrollO[currentPage] = yScrollP;
 		double d0 = xScrollTarget - xScrollP;
 		double d1 = yScrollTarget - yScrollP;
 		if (d0 * d0 + d1 * d1 < 4D) {
@@ -268,8 +278,8 @@ public class GuiResearchBook extends GuiScreen {
 	}
 
 	private void drawResearchScreen(int x, int y, float z) {
-		int i = MathHelper.floor(xScrollO + (xScrollP - xScrollO) * z);
-		int j = MathHelper.floor(yScrollO + (yScrollP - yScrollO) * z);
+		int i = MathHelper.floor(xScrollO[currentPage] + (xScrollP - xScrollO[currentPage]) * z);
+		int j = MathHelper.floor(yScrollO[currentPage] + (yScrollP - yScrollO[currentPage]) * z);
 
 		if (i < x_min)
 			i = x_min;
@@ -308,7 +318,7 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.enableDepth();
 		GlStateManager.depthFunc(515);
 		if (state) {
-			GlStateManager.scale(1.0F / zoom, 1.0F / zoom, 1.0F);
+			GlStateManager.scale(1.0F / zoom[currentPage], 1.0F / zoom[currentPage], 1.0F);
 
 			Set<Technology> tech = new HashSet<>();
 			root.getChildren(tech, true);
@@ -316,6 +326,8 @@ public class GuiResearchBook extends GuiScreen {
 			if (tech != null) {
 				try {
 					for (Technology t1 : tech) {
+						if (!t1.canResearchIgnoreResearched(player))
+							continue;
 						if (t1.hasCustomUnlock() && !t1.isResearched(player) && !t1.isUnlocked(player))
 							continue;
 						if (t1.getDisplay().isHidden() && !t1.hasCustomUnlock() && !t1.isResearched(player))
@@ -328,16 +340,11 @@ public class GuiResearchBook extends GuiScreen {
 						int yStop = (int) ((t1.getParent().getDisplay().getY() * 24 - j) + 11);
 
 						boolean flag = t1.isResearched(player);
-						boolean flag1 = t1.canResearchIgnoreResearched(player);
-						int k4 = t1.requirementsUntilAvailable(player);
 
-						if (k4 > 2)
-							continue;
-
-						int l4 = 0xff000000;
+						int l4;
 						if (flag)
 							l4 = 0xffa0a0a0;
-						else if (flag1)
+						else
 							l4 = 0xff00ff00;
 
 						drawHorizontalLine(xStart, xStop, yStart, l4);
@@ -355,8 +362,8 @@ public class GuiResearchBook extends GuiScreen {
 
 					selected = null;
 
-					float f3 = (x - i1) * zoom;
-					float f4 = (y - j1) * zoom;
+					float f3 = (x - i1) * zoom[currentPage];
+					float f4 = (y - j1) * zoom[currentPage];
 
 					RenderHelper.enableGUIStandardItemLighting();
 					GlStateManager.disableLighting();
@@ -364,26 +371,21 @@ public class GuiResearchBook extends GuiScreen {
 					GlStateManager.enableColorMaterial();
 
 					for (Technology t2 : tech) {
+						if (!t2.canResearchIgnoreResearched(player))
+							continue;
 						if (t2.hasCustomUnlock() && !t2.isResearched(player) && !t2.isUnlocked(player))
 							continue;
 						if (t2.getDisplay().isHidden() && !t2.hasCustomUnlock() && !t2.isResearched(player))
 							continue;
 						int l6 = (int) (t2.getDisplay().getX() * 24 - i);
 						int j7 = (int) (t2.getDisplay().getY() * 24 - j);
-						if (l6 < -24 || j7 < -24 || l6 > 224F * zoom || j7 > 155F * zoom)
+						if (l6 < -24 || j7 < -24 || l6 > 224F * zoom[currentPage] || j7 > 155F * zoom[currentPage])
 							continue;
 
-						int l7 = t2.requirementsUntilAvailable(player);
-						if (l7 > 2)
-							continue;
-
-						boolean flag = t2.canResearchIgnoreResearched(player);
 						if (t2.isResearched(player))
 							GlStateManager.color(0.75F, 0.75F, 0.75F, 1.0F);
-						else if (flag)
-							GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 						else
-							GlStateManager.color(0.1F, 0.1F, 0.1F, 1.0F);
+							GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 						mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 						GlStateManager.enableBlend();
@@ -392,9 +394,6 @@ public class GuiResearchBook extends GuiScreen {
 						else
 							drawTexturedModalRect(l6 - 2, j7 - 2, 0, 202, 26, 26);
 						GlStateManager.disableBlend();
-
-						if (!flag)
-							GlStateManager.color(0.1F, 0.1F, 0.1F, 1.0F);
 
 						GlStateManager.disableLighting();
 						GlStateManager.enableCull();

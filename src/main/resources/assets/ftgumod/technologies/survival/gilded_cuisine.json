@@ -11,7 +11,7 @@
       "translate": "technology.gilded_cuisine.desc"
     },
     "x": 8,
-    "y": 2
+    "y": 4
   },
   "parent": "ftgumod:survival/cooking",
   "idea": {
@@ -54,12 +54,16 @@
       "N": {
         "type": "forge:ore_dict",
         "ore": "nuggetGold",
-        "hint": "Gilded"
+        "hint": {
+          "translate": "technology.hint.gilded"
+        }
       },
       "C": [
         {
           "item": "minecraft:apple",
-          "hint": "Cuisine"
+          "hint": {
+            "translate": "technology.hint.cuisine"
+          }
         },
         {
           "item": "minecraft:carrot"

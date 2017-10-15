@@ -92,7 +92,7 @@ public class ContainerIdeaTable extends Container {
 				Technology tech = hasRecipe();
 
 				if (tech != null) {
-					ItemStack result = new ItemStack(FTGUAPI.i_parchmentIdea);
+					ItemStack result = new ItemStack(tech.hasResearchRecipe() ? FTGUAPI.i_parchmentIdea : FTGUAPI.i_parchmentResearch);
 
 					StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 

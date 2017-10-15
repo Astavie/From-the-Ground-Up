@@ -1,0 +1,9 @@
+technology.hint.armor=Armour
+technology.hint.dyeable=Colourable
+technology.hint.dye=Colour
+technology.hint.tie=Sleeper
+
+technology.metal_armor.name=Metal Armour
+technology.gem_armor.name=Crystalline Armour
+
+technology.dyes.desc=Extracting colour from plants

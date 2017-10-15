@@ -33,9 +33,6 @@
       "ore": "stickWood"
     },
     {
-      "item": "minecraft:crafting_table"
-    },
-    {
       "item": "minecraft:wooden_sword"
     },
     {
@@ -46,6 +43,15 @@
     },
     {
       "item": "minecraft:wooden_axe"
+    },
+    {
+      "item": "minecraft:crafting_table"
+    },
+    {
+      "item": "minecraft:torch"
+    },
+    {
+      "item": "minecraft:bowl"
     }
   ]
 }

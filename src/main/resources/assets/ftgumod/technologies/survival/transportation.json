@@ -1,0 +1,103 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:chest_minecart"
+    },
+    "title": {
+      "translate": "technology.transportation.name"
+    },
+    "description": {
+      "translate": "technology.transportation.desc"
+    },
+    "x": 8,
+    "y": 0
+  },
+  "parent": "ftgumod:survival/carts",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone"
+      },
+      [
+        {
+          "item": "minecraft:chest"
+        },
+        {
+          "item": "minecraft:minecart"
+        },
+        {
+          "item": "#boat"
+        },
+        {
+          "item": "minecraft:rail"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      " C ",
+      "RPR",
+      "TTT"
+    ],
+    "key": {
+      "C": {
+        "item": "minecraft:chest",
+        "hint": {
+          "translate": "technology.hint.chest"
+        }
+      },
+      "R": {
+        "item": "minecraft:redstone",
+        "hint": {
+          "translate": "technology.hint.redstone"
+        }
+      },
+      "P": [
+        {
+          "item": "minecraft:wooden_pressure_plate",
+          "hint": {
+            "translate": "technology.hint.plate"
+          }
+        },
+        {
+          "item": "minecraft:stone_pressure_plate"
+        },
+        {
+          "item": "minecraft:light_weighted_pressure_plate"
+        },
+        {
+          "item": "minecraft:heavy_weighted_pressure_plate"
+        }
+      ],
+      "T": {
+        "item": "minecraft:rail",
+        "hint": {
+          "translate": "technology.hint.rail"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:hopper"
+    },
+    {
+      "item": "minecraft:golden_rail"
+    },
+    {
+      "item": "minecraft:detector_rail"
+    },
+    {
+      "item": "minecraft:activator_rail"
+    },
+    {
+      "item": "minecraft:chest_minecart"
+    },
+    {
+      "item": "minecraft:hopper_minecart"
+    }
+  ]
+}

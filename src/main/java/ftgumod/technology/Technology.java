@@ -353,16 +353,6 @@ public class Technology {
 		return isResearched(player) || isUnlocked(player) && (parent == null || parent.isResearched(player));
 	}
 
-	public int requirementsUntilAvailable(EntityPlayer player) {
-		if (isResearched(player))
-			return 0;
-		if (canResearch(player))
-			return 1;
-		if (parent != null)
-			return parent.requirementsUntilAvailable(player) + 1;
-		return 2;
-	}
-
 	public enum Type {
 		TECHNOLOGY, THEORY
 	}

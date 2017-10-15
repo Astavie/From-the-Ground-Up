@@ -1,0 +1,79 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:diamond_chestplate"
+    },
+    "title": {
+      "translate": "technology.gem_armor.name"
+    },
+    "description": {
+      "translate": "technology.gem_armor.desc"
+    },
+    "x": 8,
+    "y": 1
+  },
+  "parent": "ftgumod:survival/metal_armor",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "#armor"
+      },
+      {
+        "item": "#gem"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "MHM",
+      "MCM",
+      "MLM"
+    ],
+    "key": {
+      "M": {
+        "item": "#gem",
+        "hint": {
+          "translate": "technology.hint.material"
+        }
+      },
+      "H": {
+        "item": "#helmet",
+        "hint": {
+          "translate": "technology.hint.armor"
+        }
+      },
+      "C": {
+        "item": "#chestplate",
+        "hint": {
+          "translate": "technology.hint.armor"
+        }
+      },
+      "L": [
+        {
+          "item": "#leggings",
+          "hint": {
+            "translate": "technology.hint.armor"
+          }
+        },
+        {
+          "item": "#boots"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:diamond_helmet"
+    },
+    {
+      "item": "minecraft:diamond_chestplate"
+    },
+    {
+      "item": "minecraft:diamond_leggings"
+    },
+    {
+      "item": "minecraft:diamond_boots"
+    }
+  ]
+}

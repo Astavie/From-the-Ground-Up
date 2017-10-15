@@ -1,9 +1,6 @@
 tile.idea_table.name=Idea Table
 tile.research_table.name=Research Table
 
-tile.null.name=End Portal
-tile.skull.name=Wither Skeleton Skull
-
 item.parchment_empty.name=Parchment
 item.parchment_idea.name=Parchment
 
@@ -29,7 +26,7 @@ chat.type.technology=%s has researched %s
 technology.complete.already=%s has already been researched
 technology.complete.understand=You do not understand this technology
 technology.complete.unlock=Unlocked the research for %s
-technology.complete.unlock.root=Unlocked a new research tab: %s
+technology.complete.unlock.root=Unlocked the research tab %s
 
 technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
@@ -83,6 +80,49 @@ commands.technology.test.criterion.notDone=Player %1$s has not completed criteri
 commands.technology.test.technology.success=Player %1$s has completed technology '%2$s'
 commands.technology.test.technology.notDone=Player %1$s has not completed technology '%2$s'
 
+technology.hint.stick=Leaned on
+technology.hint.crop=Crop
+technology.hint.soil=Soil
+technology.hint.axe=Wood Chopper
+technology.hint.material=Material
+technology.hint.table=Table
+technology.hint.rope=Rope
+technology.hint.head=Head
+technology.hint.handle=Handle
+technology.hint.pickaxe=Tool
+technology.hint.insulator=Insulator
+technology.hint.ore=Smeltable
+technology.hint.fuel=Fuel
+technology.hint.casing=Casing
+technology.hint.leather=Cover
+technology.hint.paper=Writing
+technology.hint.attack=Attack
+technology.hint.armor=Armor
+technology.hint.defense=Defense
+technology.hint.stand=Coat Stand
+technology.hint.vegetable=Vegetable
+technology.hint.fruit=Fruit
+technology.hint.meat=Meat
+technology.hint.wheat=Grain
+technology.hint.bowl=Bowl
+technology.hint.gilded=Gilded
+technology.hint.cuisine=Cuisine
+technology.hint.dyeable=Colorable
+technology.hint.dye=Color
+technology.hint.flower=Flower
+technology.hint.fire=Fire
+technology.hint.furnace=Smelter
+technology.hint.gem=Gem
+technology.hint.gunpowder=Powder
+technology.hint.sand=Silicon
+technology.hint.cart=Cart
+technology.hint.rail=Rail
+technology.hint.tie=Tie
+technology.hint.chest=Storage
+technology.hint.redstone=Power
+technology.hint.plate=Detector
+technology.hint.rail=Rail
+
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
 
@@ -111,7 +151,7 @@ technology.defense.name=Defense
 technology.defense.desc=Swords hurt
 
 technology.cooking.name=Cooking
-technology.cooking.desc=Basically just Thermal Decomposition
+technology.cooking.desc=Basically just thermal decomposition
 
 technology.gilded_cuisine.name=Gilded Cuisine
 technology.gilded_cuisine.desc=Eating gold to regenerate your health
@@ -126,52 +166,22 @@ technology.metal_armor.name=Metal Armor
 technology.metal_armor.desc=Medieval knights approve
 
 technology.lapidary.name=Lapidary
-technology.lapidary.desc=Still done with one's bare hands
+technology.lapidary.desc=Cutting gems with one's bare hands
 
 technology.gem_armor.name=Crystalline Armor
 technology.gem_armor.desc=Somehow more defensive than metal
 
-technology.enchanting.name=Enchanting
-technology.enchanting.desc=Some say it's overkill, but I strongly disagree
-
-technology.glowing_eyes.name=Glowing Eyes
-technology.glowing_eyes.desc=They look at me funny
-
-technology.ender_knowledge.name=Ender Knowledge
-technology.ender_knowledge.desc=Stealin' knowledge like it's nobody's business
-
-technology.building_blocks.name=Building Blocks
-technology.building_blocks.desc=Why would you need anything else than sand in a sandbox?
-
-technology.brewing.name=Brewing
-technology.brewing.desc=Drinking drugs for superhuman powers
-
-technology.basic_redstone.name=Basic Redstone
-technology.basic_redstone.desc=Wouldn't it be nice to automate some things?
-
-technology.time_place_destination.name=Time, Place and Destination
-technology.time_place_destination.desc=I want to know when and where I am
-
-technology.advanced_redstone.name=Advanced Redstone
-technology.advanced_redstone.desc=This redstone here seems really useful
-
 technology.explosives.name=Explosives
 technology.explosives.desc=Griefers galore!
 
-technology.redstone_machinery.name=Redstone Machinery
-technology.redstone_machinery.desc=Machines that don't need fuel to run
+technology.activation.name=Activation
+technology.activation.desc=Pressing things
 
-technology.music.name=Music
-technology.music.desc=A player has to relax sometime!
+technology.boats.name=Boats
+technology.boats.desc=Big bowls that float
 
-technology.advanced_rails.name=Advanced Rails
-technology.advanced_rails.desc=Integrating rails and redstone
+technology.carts.name=Carts
+technology.carts.desc=Inventing the wheel
 
-technology.player_transportation.name=Player Transportation
-technology.player_transportation.desc=Why run when you can ride?
-
-technology.item_transportation.name=Item Transportation
-technology.item_transportation.desc=Rails or hoppers, which do you prefer?
-
-technology.noise.whisper1=I hear whispers of an end...
-technology.noise.whisper2=I hear whispers of The End!
+technology.transportation.name=Transportation
+technology.transportation.desc=You've got mail!

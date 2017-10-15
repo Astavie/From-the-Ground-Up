@@ -40,7 +40,7 @@ public abstract class TechnologyEvent extends PlayerEvent {
 	}
 
 	/**
-	 * Fires after a Technology has been revoked, which can be only an unlock
+	 * Fires after a Technology (or unlock) has been revoked
 	 */
 	public static class Revoke extends TechnologyEvent {
 

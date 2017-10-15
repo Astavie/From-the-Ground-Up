@@ -1,0 +1,87 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:minecart"
+    },
+    "title": {
+      "translate": "technology.carts.name"
+    },
+    "description": {
+      "translate": "technology.carts.desc"
+    },
+    "x": 6,
+    "y": 0
+  },
+  "parent": "ftgumod:survival/boats",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "ingotIron"
+      },
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "stickWood"
+        },
+        {
+          "item": "#boat"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "C C",
+      "CCC",
+      "RSR"
+    ],
+    "key": {
+      "C": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "ingotIron",
+          "hint": {
+            "translate": "technology.hint.cart"
+          }
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "plankWood"
+        }
+      ],
+      "R": {
+        "type": "forge:ore_dict",
+        "ore": "ingotIron",
+        "hint": {
+          "translate": "technology.hint.rail"
+        }
+      },
+      "S": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "stickWood",
+          "hint": {
+            "translate": "technology.hint.tie"
+          }
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "slabWood"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:minecart"
+    },
+    {
+      "item": "minecraft:furnace_minecart"
+    },
+    {
+      "item": "minecraft:rail"
+    }
+  ]
+}

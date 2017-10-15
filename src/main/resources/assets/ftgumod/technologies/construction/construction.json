@@ -24,23 +24,6 @@
       }
     ]
   },
-  "research": {
-    "pattern": [
-      "P  ",
-      " SS",
-      " SS"
-    ],
-    "key": {
-      "P": {
-        "item": "#pickaxe",
-        "hint": "Miner"
-      },
-      "S": {
-        "item": "#stone",
-        "hint": "Unpolished"
-      }
-    }
-  },
   "unlock": [
     {
       "item": "minecraft:stone",
@@ -79,6 +62,12 @@
     },
     {
       "item": "minecraft:sandstone_stairs"
+    },
+    {
+      "item": "minecraft:snow"
+    },
+    {
+      "item": "minecraft:clay"
     }
   ]
 }
