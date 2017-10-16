@@ -24,13 +24,13 @@
       "item": "ftgumod:parchment_empty"
     },
     {
-      "item": "ftgumod:looking_glass"
-    },
-    {
       "item": "ftgumod:idea_table"
     },
     {
       "item": "ftgumod:research_table"
+    },
+    {
+      "item": "ftgumod:looking_glass"
     }
   ]
 }

@@ -2,6 +2,7 @@ package ftgumod.util;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class StackUtils {
 
@@ -12,6 +13,10 @@ public class StackUtils {
 			stack.setTagCompound(nbt);
 		}
 		return nbt;
+	}
+
+	public static boolean isStackOf(ItemStack ingredient, ItemStack stack) {
+		return ingredient.getItem() == stack.getItem() && (ingredient.getMetadata() == OreDictionary.WILDCARD_VALUE || ingredient.getMetadata() == stack.getMetadata()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
 	}
 
 }

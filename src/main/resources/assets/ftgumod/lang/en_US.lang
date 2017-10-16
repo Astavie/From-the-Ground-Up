@@ -160,7 +160,7 @@ technology.dyes.name=Dyes
 technology.dyes.desc=Extracting color from plants
 
 technology.smithing.name=Smithing
-technology.smithing.desc=Pressing hard metal together into the correct shape
+technology.smithing.desc=Pressing metal into the correct shape
 
 technology.metal_armor.name=Metal Armor
 technology.metal_armor.desc=Medieval knights approve
