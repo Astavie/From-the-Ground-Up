@@ -236,6 +236,9 @@
       {
         "item": "minecraft:coal",
         "data": 32767
+      },
+      {
+        "item": "minecraft:fire_charge"
       }
     ],
     "name": "heat"
@@ -411,5 +414,108 @@
       }
     ],
     "name": "boat"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:stone",
+        "data": 0
+      },
+      {
+        "item": "minecraft:stone",
+        "data": 2
+      },
+      {
+        "item": "minecraft:stone",
+        "data": 4
+      },
+      {
+        "item": "minecraft:stone",
+        "data": 6
+      }
+    ],
+    "name": "smoothStone"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:stone_stairs"
+      },
+      {
+        "item": "minecraft:brick_stairs"
+      },
+      {
+        "item": "minecraft:stone_brick_stairs"
+      },
+      {
+        "item": "minecraft:nether_brick_stairs"
+      },
+      {
+        "item": "minecraft:sandstone_stairs"
+      },
+      {
+        "item": "minecraft:quartz_stairs"
+      },
+      {
+        "item": "minecraft:red_sandstone_stairs"
+      },
+      {
+        "item": "minecraft:purpur_stairs"
+      }
+    ],
+    "name": "stairsStone"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:white_shulker_box"
+      },
+      {
+        "item": "minecraft:orange_shulker_box"
+      },
+      {
+        "item": "minecraft:magenta_shulker_box"
+      },
+      {
+        "item": "minecraft:light_blue_shulker_box"
+      },
+      {
+        "item": "minecraft:yellow_shulker_box"
+      },
+      {
+        "item": "minecraft:lime_shulker_box"
+      },
+      {
+        "item": "minecraft:pink_shulker_box"
+      },
+      {
+        "item": "minecraft:gray_shulker_box"
+      },
+      {
+        "item": "minecraft:silver_shulker_box"
+      },
+      {
+        "item": "minecraft:cyan_shulker_box"
+      },
+      {
+        "item": "minecraft:purple_shulker_box"
+      },
+      {
+        "item": "minecraft:blue_shulker_box"
+      },
+      {
+        "item": "minecraft:brown_shulker_box"
+      },
+      {
+        "item": "minecraft:green_shulker_box"
+      },
+      {
+        "item": "minecraft:red_shulker_box"
+      },
+      {
+        "item": "minecraft:black_shulker_box"
+      }
+    ],
+    "name": "shulker"
   }
 ]

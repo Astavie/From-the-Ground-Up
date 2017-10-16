@@ -38,8 +38,7 @@
       "data": 6
     },
     {
-      "item": "minecraft:sandstone",
-      "data": 0
+      "item": "minecraft:mossy_cobblestone"
     },
     {
       "item": "minecraft:stone_slab",
@@ -47,6 +46,10 @@
     },
     {
       "item": "minecraft:stone_stairs"
+    },
+    {
+      "item": "minecraft:sandstone",
+      "data": 0
     },
     {
       "item": "minecraft:sandstone",
@@ -67,7 +70,10 @@
       "item": "minecraft:snow"
     },
     {
-      "item": "minecraft:clay"
+      "item": "minecraft:nether_wart_block"
+    },
+    {
+      "item": "minecraft:item_frame"
     }
   ]
 }

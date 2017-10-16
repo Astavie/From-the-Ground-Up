@@ -1,0 +1,65 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:quartz_block",
+      "data": 0
+    },
+    "title": {
+      "translate": "technology.quartz.name"
+    },
+    "description": {
+      "translate": "technology.quartz.desc"
+    },
+    "x": 6,
+    "y": 1
+  },
+  "parent": "ftgumod:construction/brickwork",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemQuartz"
+      },
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "dustGlowstone"
+        },
+        {
+          "item": "minecraft:magma"
+        },
+        {
+          "item": "minecraft:magma_cream"
+        }
+      ]
+    ]
+  },
+  "unlock": [
+    {
+      "item": "minecraft:quartz_block",
+      "data": 0
+    },
+    {
+      "item": "minecraft:quartz_block",
+      "data": 1
+    },
+    {
+      "item": "minecraft:quartz_block",
+      "data": 2
+    },
+    {
+      "item": "minecraft:stone_slab",
+      "data": 7
+    },
+    {
+      "item": "minecraft:quartz_stairs"
+    },
+    {
+      "item": "minecraft:glowstone"
+    },
+    {
+      "item": "minecraft:magma"
+    }
+  ]
+}

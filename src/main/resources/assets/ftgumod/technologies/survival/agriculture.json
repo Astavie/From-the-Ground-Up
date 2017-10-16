@@ -80,6 +80,12 @@
     {
       "item": "minecraft:dirt",
       "data": 1
+    },
+    {
+      "item": "minecraft:lit_pumpkin"
+    },
+    {
+      "item": "minecraft:leather"
     }
   ]
 }

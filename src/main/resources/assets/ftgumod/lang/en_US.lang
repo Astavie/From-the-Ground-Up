@@ -122,6 +122,13 @@ technology.hint.chest=Storage
 technology.hint.redstone=Power
 technology.hint.plate=Detector
 technology.hint.rail=Rail
+technology.hint.slab=Roof
+technology.hint.stone=Wall
+technology.hint.stairs=Steps
+technology.hint.clay=Pot
+technology.hint.heat=Heat
+technology.hint.pillar=Pillar
+technology.hint.light=Light
 
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
@@ -185,3 +192,21 @@ technology.carts.desc=Inventing the wheel
 
 technology.transportation.name=Transportation
 technology.transportation.desc=You've got mail!
+
+technology.stonemasonry.name=Stonemasonry
+technology.stonemasonry.desc=Smoother than smooth stone
+
+technology.brickwork.name=Brickwork
+technology.brickwork.desc=Time to build the Terracotta Army
+
+technology.glassworking.name=Glassworking
+technology.glassworking.desc=Very fragile
+
+technology.purpur.name=Purpur
+technology.purpur.desc=Fabulously colored blocks
+
+technology.quartz.name=Quartz
+technology.quartz.desc=As white as the depths of hell
+
+technology.prismarine.name=Prismarine
+technology.prismarine.desc=Perfectly fit for building Atlantis

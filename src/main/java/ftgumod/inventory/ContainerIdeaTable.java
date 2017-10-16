@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collection;
@@ -115,9 +114,9 @@ public class ContainerIdeaTable extends Container {
 
 			for (int i = 0; i < 3; i++) {
 				if (!inventorySlots.get(combine + i).getStack().isEmpty()) {
-					Item t = inventorySlots.get(combine + i).getStack().getItem();
-					if (t.getContainerItem() != null)
-						inventorySlots.get(combine + i).putStack(new ItemStack(t.getContainerItem()));
+					ItemStack t = inventorySlots.get(combine + i).getStack();
+					if (t.getItem().hasContainerItem(t))
+						inventorySlots.get(combine + i).putStack(t.getItem().getContainerItem(t));
 					else
 						inventorySlots.get(combine + i).putStack(ItemStack.EMPTY);
 				}

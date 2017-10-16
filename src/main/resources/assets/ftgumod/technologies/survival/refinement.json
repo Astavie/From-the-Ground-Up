@@ -131,7 +131,14 @@
       "item": "minecraft:slime_ball"
     },
     {
-      "item": "minecraft:Slime"
+      "item": "minecraft:slime"
+    },
+    {
+      "item": "minecraft:dye",
+      "data": 15
+    },
+    {
+      "item": "minecraft:bone_block"
     }
   ]
 }

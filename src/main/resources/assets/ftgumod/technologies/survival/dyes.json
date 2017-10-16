@@ -73,7 +73,18 @@
           "item": "#flower",
           "hint": {
             "translate": "technology.hint.flower"
-          }
+          },
+          "decipher": [
+            {
+              "block": "minecraft:yellow_flower"
+            },
+            {
+              "block": "minecraft:red_flower"
+            },
+            {
+              "block": "minecraft:cactus"
+            }
+          ]
         },
         {
           "type": "forge:ore_dict",
@@ -126,10 +137,6 @@
     {
       "item": "minecraft:dye",
       "data": 14
-    },
-    {
-      "item": "minecraft:dye",
-      "data": 15
     }
   ]
 }

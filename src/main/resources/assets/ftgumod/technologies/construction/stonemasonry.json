@@ -1,0 +1,87 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:stonebrick",
+      "data": 0
+    },
+    "title": {
+      "translate": "technology.stonemasonry.name"
+    },
+    "description": {
+      "translate": "technology.stonemasonry.desc"
+    },
+    "x": 2,
+    "y": 1
+  },
+  "headstart": true,
+  "parent": "ftgumod:construction/construction",
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "#smoothStone"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "SSS",
+      "B B",
+      "BTB"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:stone_slab",
+        "data": 32767,
+        "hint": {
+          "translate": "technology.hint.slab"
+        }
+      },
+      "B": {
+        "item": "#smoothStone",
+        "hint": {
+          "translate": "technology.hint.stone"
+        }
+      },
+      "T": {
+        "item": "#stairsStone",
+        "hint": {
+          "translate": "technology.hint.stairs"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:stone_slab",
+      "data": 0
+    },
+    {
+      "item": "minecraft:stonebrick",
+      "data": 0
+    },
+    {
+      "item": "minecraft:stonebrick",
+      "data": 1
+    },
+    {
+      "item": "minecraft:stonebrick",
+      "data": 3
+    },
+    {
+      "item": "minecraft:stone_slab",
+      "data": 5
+    },
+    {
+      "item": "minecraft:stone_brick_stairs"
+    },
+    {
+      "item": "minecraft:cobblestone_wall",
+      "data": 0
+    },
+    {
+      "item": "minecraft:cobblestone_wall",
+      "data": 1
+    }
+  ]
+}

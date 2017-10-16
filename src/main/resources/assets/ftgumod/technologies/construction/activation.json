@@ -9,11 +9,11 @@
     "description": {
       "translate": "technology.activation.desc"
     },
-    "x": 2,
-    "y": 1
+    "x": 4,
+    "y": 2
   },
   "headstart": true,
-  "parent": "ftgumod:construction/construction",
+  "parent": "ftgumod:construction/stonemasonry",
   "idea": {
     "amount": 2,
     "ingredients": [

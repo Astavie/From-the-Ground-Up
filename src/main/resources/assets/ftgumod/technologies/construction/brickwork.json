@@ -1,0 +1,100 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:brick_block"
+    },
+    "title": {
+      "translate": "technology.brickwork.name"
+    },
+    "description": {
+      "translate": "technology.brickwork.desc"
+    },
+    "x": 4,
+    "y": 1
+  },
+  "parent": "ftgumod:construction/stonemasonry",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "item": "minecraft:clay"
+        },
+        {
+          "item": "minecraft:clay_ball"
+        }
+      ],
+      {
+        "item": "#heat"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "CFC",
+      " C ",
+      " H "
+    ],
+    "key": {
+      "C": {
+        "item": "minecraft:clay",
+        "hint": {
+          "translate": "technology.hint.clay"
+        }
+      },
+      "F": {
+        "item": "#flower",
+        "hint": {
+          "translate": "technology.hint.flower"
+        }
+      },
+      "H": {
+        "item": "#heat",
+        "hint": {
+          "translate": "technology.hint.heat"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:brick_block"
+    },
+    {
+      "item": "minecraft:stone_slab",
+      "data": 4
+    },
+    {
+      "item": "minecraft:brick_stairs"
+    },
+    {
+      "item": "minecraft:flower_pot"
+    },
+    {
+      "item": "minecraft:nether_brick"
+    },
+    {
+      "item": "minecraft:stone_slab",
+      "data": 6
+    },
+    {
+      "item": "minecraft:nether_brick_stairs"
+    },
+    {
+      "item": "minecraft:nether_brick_fence"
+    },
+    {
+      "item": "minecraft:red_nether_brick"
+    },
+    {
+      "item": "minecraft:end_bricks"
+    },
+    {
+      "item": "minecraft:clay"
+    },
+    {
+      "item": "minecraft:stained_hardened_clay",
+      "data": 32767
+    }
+  ]
+}

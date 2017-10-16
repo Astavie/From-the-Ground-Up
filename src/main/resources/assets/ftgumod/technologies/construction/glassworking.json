@@ -1,0 +1,43 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:stained_glass",
+      "data": 0
+    },
+    "title": {
+      "translate": "technology.glassworking.name"
+    },
+    "description": {
+      "translate": "technology.glassworking.desc"
+    },
+    "x": 4,
+    "y": 0
+  },
+  "parent": "ftgumod:construction/carpentry",
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "blockGlass"
+      },
+      {
+        "item": "minecraft:sand",
+        "data": 32767
+      }
+    ]
+  },
+  "unlock": [
+    {
+      "item": "minecraft:stained_glass",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:stained_glass_pane",
+      "data": 32767
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ]
+}

@@ -42,9 +42,9 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 
-	private static Map<Technology, Float> zoom = TechnologyHandler.roots.stream().collect(Collectors.toMap(tech -> tech, tech -> 1.0F));
-	private static Map<Technology, Double> xScrollO = TechnologyHandler.roots.stream().collect(Collectors.toMap(tech -> tech, tech -> -82.0));
-	private static Map<Technology, Double> yScrollO = TechnologyHandler.roots.stream().collect(Collectors.toMap(tech -> tech, tech -> -82.0));
+	private static Map<ResourceLocation, Float> zoom = TechnologyHandler.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+	private static Map<ResourceLocation, Double> xScrollO = TechnologyHandler.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static Map<ResourceLocation, Double> yScrollO = TechnologyHandler.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 	private static int currentPage = 0;
 	private static boolean state = true;
 	private static Technology selected;
@@ -119,8 +119,8 @@ public class GuiResearchBook extends GuiScreen {
 			x_max = x_max * 24 - 77;
 			y_max = y_max * 24 - 77;
 
-			xScrollP = xScrollTarget = xScrollO.get(root);
-			yScrollP = yScrollTarget = yScrollO.get(root);
+			xScrollP = xScrollTarget = xScrollO.get(root.getRegistryName());
+			yScrollP = yScrollTarget = yScrollO.get(root.getRegistryName());
 
 			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplay().getTitle().getUnformattedText());
 			if (roots.size() < 2)
@@ -190,14 +190,14 @@ public class GuiResearchBook extends GuiScreen {
 					if (scrolling == 0) {
 						scrolling = 1;
 					} else {
-						xScrollP -= (float) (x - xLastScroll) * zoom.get(root);
-						yScrollP -= (float) (y - yLastScroll) * zoom.get(root);
+						xScrollP -= (float) (x - xLastScroll) * zoom.get(root.getRegistryName());
+						yScrollP -= (float) (y - yLastScroll) * zoom.get(root.getRegistryName());
 
 						xScrollTarget = xScrollP;
 						yScrollTarget = yScrollP;
 
-						xScrollO.put(root, xScrollP);
-						yScrollO.put(root, yScrollP);
+						xScrollO.put(root.getRegistryName(), xScrollP);
+						yScrollO.put(root.getRegistryName(), yScrollP);
 					}
 					xLastScroll = x;
 					yLastScroll = y;
@@ -207,14 +207,14 @@ public class GuiResearchBook extends GuiScreen {
 			}
 
 			int i1 = Mouse.getDWheel();
-			float f3 = zoom.get(root);
-			zoom.put(root, MathHelper.clamp(i1 < 0 ? f3 + 0.25F : i1 > 0 ? f3 - 0.25F : f3, 1.0F, 2.0F));
+			float f3 = zoom.get(root.getRegistryName());
+			zoom.put(root.getRegistryName(), MathHelper.clamp(i1 < 0 ? f3 + 0.25F : i1 > 0 ? f3 - 0.25F : f3, 1.0F, 2.0F));
 
-			if (zoom.get(root) != f3) {
+			if (zoom.get(root.getRegistryName()) != f3) {
 				float f4 = f3 * imageWidth;
 				float f = f3 * imageHeight;
-				float f1 = zoom.get(root) * imageWidth;
-				float f2 = zoom.get(root) * imageHeight;
+				float f1 = zoom.get(root.getRegistryName()) * imageWidth;
+				float f2 = zoom.get(root.getRegistryName()) * imageHeight;
 
 				xScrollP -= (f1 - f4) * 0.5F;
 				yScrollP -= (f2 - f) * 0.5F;
@@ -222,8 +222,8 @@ public class GuiResearchBook extends GuiScreen {
 				xScrollTarget = xScrollP;
 				yScrollTarget = yScrollP;
 
-				xScrollO.put(root, xScrollP);
-				yScrollO.put(root, yScrollP);
+				xScrollO.put(root.getRegistryName(), xScrollP);
+				yScrollO.put(root.getRegistryName(), yScrollP);
 			}
 
 			if (xScrollTarget < x_min)
@@ -259,8 +259,8 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public void updateScreen() {
-		xScrollO.put(root, xScrollP);
-		yScrollO.put(root, yScrollP);
+		xScrollO.put(root.getRegistryName(), xScrollP);
+		yScrollO.put(root.getRegistryName(), yScrollP);
 		double d0 = xScrollTarget - xScrollP;
 		double d1 = yScrollTarget - yScrollP;
 		if (d0 * d0 + d1 * d1 < 4D) {
@@ -306,10 +306,10 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.enableDepth();
 		GlStateManager.depthFunc(515);
 		if (state) {
-			GlStateManager.scale(1.0F / zoom.get(root), 1.0F / zoom.get(root), 1.0F);
+			GlStateManager.scale(1.0F / zoom.get(root.getRegistryName()), 1.0F / zoom.get(root.getRegistryName()), 1.0F);
 
-			int i = MathHelper.floor(xScrollO.get(root) + (xScrollP - xScrollO.get(root)) * z);
-			int j = MathHelper.floor(yScrollO.get(root) + (yScrollP - yScrollO.get(root)) * z);
+			int i = MathHelper.floor(xScrollO.get(root.getRegistryName()) + (xScrollP - xScrollO.get(root.getRegistryName())) * z);
+			int j = MathHelper.floor(yScrollO.get(root.getRegistryName()) + (yScrollP - yScrollO.get(root.getRegistryName())) * z);
 
 			if (i < x_min)
 				i = x_min;
@@ -362,8 +362,8 @@ public class GuiResearchBook extends GuiScreen {
 
 					selected = null;
 
-					float f3 = (x - i1) * zoom.get(root);
-					float f4 = (y - j1) * zoom.get(root);
+					float f3 = (x - i1) * zoom.get(root.getRegistryName());
+					float f4 = (y - j1) * zoom.get(root.getRegistryName());
 
 					RenderHelper.enableGUIStandardItemLighting();
 					GlStateManager.disableLighting();
@@ -379,7 +379,7 @@ public class GuiResearchBook extends GuiScreen {
 							continue;
 						int l6 = (int) (t2.getDisplay().getX() * 24 - i);
 						int j7 = (int) (t2.getDisplay().getY() * 24 - j);
-						if (l6 < -24 || j7 < -24 || l6 > 224F * zoom.get(root) || j7 > 155F * zoom.get(root))
+						if (l6 < -24 || j7 < -24 || l6 > 224F * zoom.get(root.getRegistryName()) || j7 > 155F * zoom.get(root.getRegistryName()))
 							continue;
 
 						if (t2.isResearched(player))

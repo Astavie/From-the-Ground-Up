@@ -1,0 +1,122 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:purpur_block"
+    },
+    "title": {
+      "translate": "technology.purpur.name"
+    },
+    "description": {
+      "translate": "technology.purpur.desc"
+    },
+    "x": 8,
+    "y": 1
+  },
+  "parent": "ftgumod:construction/quartz",
+  "criteria": {
+    "city": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "EndCity"
+      }
+    }
+  },
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "minecraft:chorus_fruit_popped"
+      },
+      [
+        {
+          "item": "minecraft:purpur_block"
+        },
+        {
+          "item": "minecraft:purpur_pillar"
+        },
+        {
+          "item": "minecraft:purpur_stairs"
+        },
+        {
+          "item": "minecraft:purpur_slab",
+          "data": 32767
+        },
+        {
+          "item": "minecraft:end_rod"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "SSS",
+      "PRP",
+      "BTB"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:purpur_slab",
+        "data": 32767,
+        "hint": {
+          "translate": "technology.hint.slab"
+        }
+      },
+      "P": {
+        "item": "minecraft:purpur_pillar",
+        "hint": {
+          "translate": "technology.hint.pillar"
+        }
+      },
+      "B": [
+        {
+          "item": "minecraft:purpur_block",
+          "hint": {
+            "translate": "technology.hint.stone"
+          }
+        },
+        {
+          "item": "minecraft:end_bricks"
+        }
+      ],
+      "R": {
+        "item": "minecraft:end_rod",
+        "hint": {
+          "translate": "technology.hint.light"
+        },
+        "decipher": {
+          "block": "minecraft:end_rod"
+        }
+      },
+      "T": {
+        "item": "minecraft:purpur_stairs",
+        "hint": {
+          "translate": "technology.hint.stairs"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:purpur_block"
+    },
+    {
+      "item": "minecraft:purpur_pillar"
+    },
+    {
+      "item": "minecraft:purpur_slab",
+      "data": 0
+    },
+    {
+      "item": "minecraft:purpur_stairs"
+    },
+    {
+      "item": "minecraft:end_rod"
+    },
+    {
+      "item": "minecraft:purple_shulker_box"
+    },
+    {
+      "item": "#shulker"
+    }
+  ]
+}
