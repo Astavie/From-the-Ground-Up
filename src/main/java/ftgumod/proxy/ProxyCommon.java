@@ -11,7 +11,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ProxyCommon {
 
-	public void showTechnologyToast(Technology technology) {
+	public void displayToastTechnology(Technology technology) {
+	}
+
+	public void clearToasts() {
 	}
 
 	public IGuiHandler getGuiHandler() {

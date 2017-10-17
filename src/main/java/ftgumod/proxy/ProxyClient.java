@@ -21,9 +21,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ProxyClient extends ProxyCommon {
 
 	@Override
-	public void showTechnologyToast(Technology technology) {
+	public void displayToastTechnology(Technology technology) {
 		if (technology.getDisplay().shouldShowToast())
 			Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(technology));
+	}
+
+	@Override
+	public void clearToasts() {
+		Minecraft.getMinecraft().getToastGui().clear();
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package ftgumod.packet.client;
 
+import ftgumod.FTGU;
 import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.TechnologyHandler;
 import io.netty.buffer.ByteBuf;
@@ -52,6 +53,8 @@ public class TechnologyInfoMessage implements IMessage {
 			Map<ResourceLocation, Pair<JsonContext, String>> map = message.json.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> Pair.of(new JsonContext(t.getKey().getResourceDomain()), t.getValue())));
 			TechnologyHandler.loadBuiltin().forEach(map::putIfAbsent);
 			TechnologyHandler.deserialize(map);
+
+			FTGU.PROXY.clearToasts(); // Removes unnecessary recipe toasts
 			return new RequestMessage();
 		}
 

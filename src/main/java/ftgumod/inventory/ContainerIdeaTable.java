@@ -7,14 +7,12 @@ import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 
 public class ContainerIdeaTable extends Container {
@@ -52,11 +50,11 @@ public class ContainerIdeaTable extends Container {
 	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, Collections.singleton(new ItemStack(Items.FEATHER))));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, OreDictionary.getOres("feather")));
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, OreDictionary.getOres("feather")));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(FTGUAPI.i_parchmentEmpty)));
 		parchment = c;
 		c++;
 

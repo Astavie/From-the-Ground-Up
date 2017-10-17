@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
@@ -23,21 +22,17 @@ public class TechnologyMessage implements IMessage {
 
 	private Collection<String> tech;
 	private boolean force;
-	private Technology toast;
+	private Technology[] toasts;
 
 	public TechnologyMessage() {
 	}
 
-	public TechnologyMessage(EntityPlayer player, boolean force) {
-		this(player, force, null);
-	}
-
-	public TechnologyMessage(EntityPlayer player, boolean force, @Nullable Technology toast) {
+	public TechnologyMessage(EntityPlayer player, boolean force, Technology... toasts) {
 		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
 			this.tech = cap.getResearched();
 			this.force = force;
-			this.toast = toast;
+			this.toasts = toasts;
 		} else
 			throw new IllegalArgumentException();
 	}
@@ -51,8 +46,9 @@ public class TechnologyMessage implements IMessage {
 		for (int i = 0; i < size; i++)
 			tech.add(ByteBufUtils.readUTF8String(buffer));
 
-		if (buffer.readBoolean())
-			toast = TechnologyHandler.technologies.get(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
+		toasts = new Technology[buffer.readInt()];
+		for (int i = 0; i < toasts.length; i++)
+			toasts[i] = TechnologyHandler.technologies.get(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
 	}
 
 	@Override
@@ -66,11 +62,9 @@ public class TechnologyMessage implements IMessage {
 		} else
 			buffer.writeInt(0);
 
-		if (toast != null) {
-			buffer.writeBoolean(true);
+		buffer.writeInt(toasts.length);
+		for (Technology toast : toasts)
 			ByteBufUtils.writeUTF8String(buffer, toast.getRegistryName().toString());
-		} else
-			buffer.writeBoolean(false);
 	}
 
 	public static class TechnologyMessageHandler extends MessageHandler<TechnologyMessage> {
@@ -108,8 +102,8 @@ public class TechnologyMessage implements IMessage {
 							}
 						}
 
-					if (message.toast != null)
-						FTGU.PROXY.showTechnologyToast(message.toast);
+					for (Technology toast : message.toasts)
+						FTGU.PROXY.displayToastTechnology(toast);
 
 					FTGU.INSTANCE.runCompat("jei", message.tech);
 				}

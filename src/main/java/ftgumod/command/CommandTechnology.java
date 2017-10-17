@@ -13,9 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class CommandTechnology extends CommandBase {
 
@@ -57,8 +55,7 @@ public class CommandTechnology extends CommandBase {
 				if (mode == null)
 					throw type.wrongUsage();
 
-				perform(sender, args, player, type, mode);
-				PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
+				PacketDispatcher.sendTo(new TechnologyMessage(player, true, perform(sender, args, player, type, mode)), player);
 			} else if (!args[0].equals("test"))
 				throw new WrongUsageException(getUsage(sender));
 			else if (args.length == 3)
@@ -70,13 +67,15 @@ public class CommandTechnology extends CommandBase {
 		}
 	}
 
-	private void perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
+	private Technology[] perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
 		if (mode == Mode.EVERYTHING)
 			if (args.length == 3) {
-				int affected = type.perform(player, TechnologyHandler.technologies.values());
-				if (affected == 0)
+				Set<Technology> set = new LinkedHashSet<>(TechnologyHandler.technologies.values());
+				type.perform(player, set);
+				if (set.isEmpty())
 					throw mode.fail(type, player.getName());
-				mode.success(sender, this, type, player.getName(), affected);
+				mode.success(sender, this, type, player.getName(), set.size());
+				return set.toArray(new Technology[set.size()]);
 			} else throw mode.usage(type);
 		else if (args.length < 4)
 			throw mode.usage(type);
@@ -94,13 +93,15 @@ public class CommandTechnology extends CommandBase {
 				if (args.length != 4)
 					throw mode.usage(type);
 
-				List<Technology> list = getTechnologies(tech, mode);
-				int affected = type.perform(player, list);
-				if (affected == 0)
+				Set<Technology> set = getTechnologies(tech, mode);
+				type.perform(player, set);
+				if (set.isEmpty())
 					throw mode.fail(type, tech.getRegistryName(), player.getName());
-				mode.success(sender, this, type, tech.getRegistryName(), player.getName(), affected);
+				mode.success(sender, this, type, tech.getRegistryName(), player.getName(), set.size());
+				return set.toArray(new Technology[set.size()]);
 			}
 		}
+		return new Technology[0];
 	}
 
 	private void testCriterion(ICommandSender sender, EntityPlayer player, Technology tech, String criterion) throws CommandException {
@@ -161,18 +162,18 @@ public class CommandTechnology extends CommandBase {
 		}
 	}
 
-	private List<Technology> getTechnologies(Technology tech, Mode mode) {
-		List<Technology> list = new LinkedList<>();
+	private Set<Technology> getTechnologies(Technology tech, Mode mode) {
+		Set<Technology> set = new LinkedHashSet<>();
 		if (mode.parents)
 			for (Technology parent = tech.getParent(); parent != null; parent = parent.getParent())
-				list.add(parent);
+				set.add(parent);
 
 		if (mode.children)
-			tech.getChildren(list, false);
+			tech.getChildren(set, false);
 		else
-			list.add(tech);
+			set.add(tech);
 
-		return list;
+		return set;
 	}
 
 	@Override
@@ -231,14 +232,11 @@ public class CommandTechnology extends CommandBase {
 			return new CommandException(translation + ".usage");
 		}
 
-		private int perform(EntityPlayer player, Iterable<Technology> techs) {
-			int i = 0;
-
-			for (Technology t : techs)
-				if (perform(player, t))
-					i++;
-
-			return i;
+		private void perform(EntityPlayer player, Iterable<Technology> techs) {
+			Iterator<Technology> iterator = techs.iterator();
+			while (iterator.hasNext())
+				if (!perform(player, iterator.next()))
+					iterator.remove();
 		}
 
 		protected abstract boolean perform(EntityPlayer player, Technology tech);
