@@ -534,18 +534,25 @@ public class GuiResearchBook extends GuiScreen {
 				String s = selected.getDisplay().getTitle().getUnformattedText();
 				String s1 = selected.getDisplay().getDescription().getUnformattedText();
 
+				int children = 0;
+				for (Technology child : selected.getChildren())
+					if (child.isRoot())
+						children++;
+
 				int i7 = x + 12;
 				int k7 = y - 4;
 
 				int j8 = Math.max(fontRenderer.getStringWidth(s), 120);
 				int i9 = fontRenderer.getWordWrappedHeight(s1, j8);
-				if (selected.isResearched(player))
+				if (selected.isResearched(player) || children > 0)
 					i9 += 12;
 
 				drawGradientRect(i7 - 3, k7 - 3, i7 + j8 + 3, k7 + i9 + 3 + 12, 0xc0000000, 0xc0000000);
 				fontRenderer.drawSplitString(s1, i7, k7 + 12, j8, 0xffa0a0a0);
 				if (selected.isResearched(player))
 					fontRenderer.drawStringWithShadow(I18n.format("technology.researched"), i7, k7 + i9 + 4, 0xff9090ff);
+				else if (children > 0)
+					fontRenderer.drawStringWithShadow(I18n.format(children == 1 ? "technology.tab" : "technology.tabs"), i7, k7 + i9 + 4, 0xffff5555);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
 				String s1 = selected.getDisplay().getTitle().getUnformattedText();

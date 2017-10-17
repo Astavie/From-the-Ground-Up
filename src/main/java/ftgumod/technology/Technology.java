@@ -163,12 +163,7 @@ public class Technology {
 
 			if (player instanceof EntityPlayerMP) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
-
-				RecipeBookServer book = playerMP.getRecipeBook();
-				if (book instanceof RecipeBookServerImpl)
-					((RecipeBookServerImpl) book).addRecipes(unlock, playerMP);
-				else
-					LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
+				addRecipes(playerMP);
 
 				if (rewards != null)
 					rewards.apply(playerMP);
@@ -183,7 +178,15 @@ public class Technology {
 		}
 	}
 
-	public void displayResearched(EntityPlayer player) {
+	public void addRecipes(EntityPlayerMP player) {
+		RecipeBookServer book = player.getRecipeBook();
+		if (book instanceof RecipeBookServerImpl)
+			((RecipeBookServerImpl) book).addRecipes(unlock, player);
+		else
+			LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
+	}
+
+	public void announceResearched(EntityPlayer player) {
 		if (player.world.getGameRules().getBoolean("announceAdvancements") && display.shouldAnnounceToChat())
 			//noinspection ConstantConditions
 			player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));

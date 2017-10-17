@@ -1,6 +1,5 @@
 package ftgumod.server;
 
-import com.google.common.collect.Lists;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -41,7 +40,7 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 		this.isFilteringCraftable = tag.getBoolean("isFilteringCraftable");
 		NBTTagList nbttaglist = tag.getTagList("recipes", 8);
 
-		List<IRecipe> list = Lists.newArrayList();
+		List<IRecipe> list = new ArrayList<>();
 
 		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
 			ResourceLocation resourcelocation = new ResourceLocation(nbttaglist.getStringTagAt(i));
@@ -75,8 +74,8 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 
 	private List<IRecipe> getRecipeList(NonNullList<Ingredient> list) {
 		List<IRecipe> recipes = new ArrayList<>();
-		for (Ingredient ingredient : list)
-			for (IRecipe r : ForgeRegistries.RECIPES)
+		for (IRecipe r : ForgeRegistries.RECIPES)
+			for (Ingredient ingredient : list)
 				if (ingredient.test(r.getRecipeOutput()))
 					recipes.add(r);
 		return recipes;

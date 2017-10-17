@@ -52,13 +52,15 @@ public class GuiResearchTable extends GuiContainer {
 				IngredientResearch ingredient = table.recipe.getResearchRecipe().get(index);
 				if (ingredient.hasHint()) {
 					String hint = ingredient.getHint().getUnformattedText();
+					String formatting = "";
 					if (ingredient.getHint().getStyle().isEmpty())
-						hint = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString() + hint;
+						formatting = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString();
 					if (table.deciphered == null || !table.deciphered.contains(index)) {
 						if (table.deciphered == null)
 							PacketDispatcher.sendToServer(new RequestMessage(1));
-						hint = TextFormatting.OBFUSCATED + hint;
-					}
+						hint = formatting + TextFormatting.OBFUSCATED.toString() + hint;
+					} else
+						hint = formatting + hint;
 					drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 				}
 			}

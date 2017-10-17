@@ -188,7 +188,7 @@ public class CommandTechnology extends CommandBase {
 					return false;
 
 				tech.setResearched(player);
-				tech.displayResearched(player);
+				tech.announceResearched(player);
 				return true;
 			}
 

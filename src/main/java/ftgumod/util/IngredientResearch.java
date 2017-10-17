@@ -88,7 +88,7 @@ public class IngredientResearch extends Ingredient {
 	}
 
 	public boolean hasDecipher() {
-		return unlock != null;
+		return unlock != null && unlock.size() > 0;
 	}
 
 }

@@ -123,6 +123,8 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onPlayerJoin(PlayerLoggedInEvent evt) {
 		if (!evt.player.world.isRemote) {
+			replaceRecipeBook((EntityPlayerMP) evt.player);
+
 			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
 			inv.addListener(new CraftingListener((EntityPlayerMP) evt.player));
 
@@ -136,6 +138,9 @@ public class EventHandler {
 				if (FTGU.moddedOnly)
 					cap.setResearched(TechnologyHandler.vanilla);
 
+				for (String name : cap.getResearched())
+					TechnologyHandler.technologies.get(new ResourceLocation(name)).addRecipes((EntityPlayerMP) evt.player);
+
 				cap.setOld();
 			}
 
@@ -143,7 +148,6 @@ public class EventHandler {
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
 
-			replaceRecipeBook((EntityPlayerMP) evt.player);
 			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyHandler.cache), (EntityPlayerMP) evt.player);
 		}
 	}

@@ -73,7 +73,7 @@ public class ResearchRecipe {
 
 	public boolean test(NonNullList<ItemStack> inventory) {
 		for (int i = 0; i < 9; i++)
-			if (!ingredients.get(i).test(inventory.get(i)))
+			if ((!isEmpty(i) || !inventory.get(i).isEmpty()) && !ingredients.get(i).test(inventory.get(i)))
 				return false;
 		return true;
 	}

@@ -50,12 +50,17 @@
       "S  "
     ],
     "key": {
-      "R": {
-        "item": "minecraft:string",
-        "hint": {
-          "translate": "technology.hint.rope"
+      "R": [
+        {
+          "item": "minecraft:string",
+          "hint": {
+            "translate": "technology.hint.rope"
+          }
+        },
+        {
+          "item": "minecraft:reeds"
         }
-      },
+      ],
       "C": {
         "item": "minecraft:cobblestone",
         "hint": {

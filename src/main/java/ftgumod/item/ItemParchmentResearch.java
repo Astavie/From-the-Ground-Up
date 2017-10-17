@@ -40,7 +40,7 @@ public class ItemParchmentResearch extends Item {
 				} else {
 					if (t.canResearch(player)) {
 						t.setResearched(player);
-						t.displayResearched(player);
+						t.announceResearched(player);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t), (EntityPlayerMP) player);
 						return new ItemStack(FTGUAPI.i_parchmentEmpty);

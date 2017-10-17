@@ -18,6 +18,9 @@ technology.technology=%s Technology
 technology.theory=%s Theory
 technology.researched=Researched!
 
+technology.tab=Unlocks a new tab
+technology.tabs=Unlocks new tabs
+
 technology.toast.technology=Research Complete!
 technology.toast.theory=Theory Complete!
 

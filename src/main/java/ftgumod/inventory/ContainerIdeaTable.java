@@ -10,8 +10,11 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 
 public class ContainerIdeaTable extends Container {
@@ -49,17 +52,17 @@ public class ContainerIdeaTable extends Container {
 	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, new ItemStack(Items.FEATHER)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, Collections.singleton(new ItemStack(Items.FEATHER))));
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(FTGUAPI.i_parchmentEmpty)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, OreDictionary.getOres("feather")));
 		parchment = c;
 		c++;
 
 		combine = c;
 		for (int slot = 0; slot < 3; slot++) {
-			addSlotToContainer(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1));
+			addSlotToContainer(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1, (Iterable<ItemStack>) null));
 			c++;
 		}
 
@@ -136,26 +139,24 @@ public class ContainerIdeaTable extends Container {
 			itemStack1 = itemStack2.copy();
 
 			if (slotIndex == output) {
-				if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true)) {
+				if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true))
 					return ItemStack.EMPTY;
-				}
-
-				slot.onSlotChange(itemStack2, itemStack1);
-			} else if (!(slotIndex < output)) {
+			} else if (slotIndex > output) {
+				if (itemStack2.getItem() == FTGUAPI.i_parchmentEmpty) {
+					if (!mergeItemStack(itemStack2, parchment, parchment + 1, false))
+						return ItemStack.EMPTY;
+				} else if (ArrayUtils.contains(OreDictionary.getOreIDs(itemStack2), OreDictionary.getOreID("feather")))
+					if (!mergeItemStack(itemStack2, feather, feather + 1, false))
+						return ItemStack.EMPTY;
 				return ItemStack.EMPTY;
-			} else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false)) {
+			} else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false))
 				return ItemStack.EMPTY;
-			}
 
-			if (itemStack2.getCount() == 0) {
-				slot.putStack(ItemStack.EMPTY);
-			} else {
+			if (itemStack2.getCount() != 0)
 				slot.onSlotChanged();
-			}
 
-			if (itemStack2.getCount() == itemStack1.getCount()) {
+			if (itemStack2.getCount() == itemStack1.getCount())
 				return ItemStack.EMPTY;
-			}
 
 			slot.onTake(playerIn, itemStack2);
 		}
