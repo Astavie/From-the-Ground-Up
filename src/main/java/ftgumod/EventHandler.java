@@ -51,7 +51,7 @@ public class EventHandler {
 	public void onCommand(CommandEvent evt) {
 		if (evt.getCommand() instanceof CommandReload) {
 			TechnologyHandler.reload(evt.getSender().getServer().worlds[0]);
-			PacketDispatcher.sendToAll(new TechnologyInfoMessage(TechnologyHandler.cache));
+			PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyHandler.cache));
 		}
 	}
 
@@ -132,14 +132,10 @@ public class EventHandler {
 			if (cap != null && cap.isNew()) {
 				evt.player.inventory.addItemStackToInventory(new ItemStack(FTGUAPI.i_researchBook));
 
-				cap.setResearched(TechnologyHandler.start);
-				if (FTGU.headStart)
-					cap.setResearched(TechnologyHandler.headStart);
-				if (FTGU.moddedOnly)
-					cap.setResearched(TechnologyHandler.vanilla);
-
-				for (String name : cap.getResearched())
-					TechnologyHandler.technologies.get(new ResourceLocation(name)).addRecipes((EntityPlayerMP) evt.player);
+				for (Technology tech : TechnologyHandler.start) {
+					cap.setResearched(tech.getRegistryName().toString());
+					tech.addRecipes((EntityPlayerMP) evt.player);
+				}
 
 				cap.setOld();
 			}
@@ -148,7 +144,7 @@ public class EventHandler {
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
 
-			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyHandler.cache), (EntityPlayerMP) evt.player);
+			PacketDispatcher.sendTo(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyHandler.cache), (EntityPlayerMP) evt.player);
 		}
 	}
 

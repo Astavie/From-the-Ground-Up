@@ -9,6 +9,7 @@
     "description": {
       "translate": "technology.power.desc"
     },
+    "background": "minecraft:textures/blocks/quartz_block_bottom.png",
     "x": 0,
     "y": 0
   },

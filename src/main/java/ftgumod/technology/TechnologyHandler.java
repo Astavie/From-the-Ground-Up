@@ -33,12 +33,9 @@ public class TechnologyHandler {
 
 	public static final Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
 	public static final Set<Technology> roots = new HashSet<>();
+	public static final Set<Technology> start = new HashSet<>();
 
-	public static final Set<String> start = new HashSet<>();
-	public static final Set<String> headStart = new HashSet<>();
-	public static final Set<String> vanilla = new HashSet<>();
-
-	public static Map<ResourceLocation, String> cache;
+	public static Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
 
 	public static void init() {
 		/*
@@ -281,8 +278,6 @@ public class TechnologyHandler {
 		roots.clear();
 
 		start.clear();
-		headStart.clear();
-		vanilla.clear();
 	}
 
 	public static void reload(World world) {
@@ -292,38 +287,45 @@ public class TechnologyHandler {
 
 		cache = new HashMap<>();
 
-		if (dir.exists() && dir.isDirectory())
-			for (File file : FileUtils.listFiles(dir, new String[] {"json"}, true)) {
-				if (file.getParentFile().equals(dir) || file.getParentFile().getParentFile().equals(dir))
-					continue;
-				String relative = dir.toPath().relativize(file.toPath()).toString();
+		if (dir.exists() && dir.isDirectory()) {
+			for (File child : dir.listFiles(File::isDirectory)) {
+				File constants = new File(child, "_constants.json");
 
-				int index = relative.indexOf('/');
-				String domain = relative.substring(0, index);
-				String name = FilenameUtils.removeExtension(relative.substring(index));
+				String context = "[]";
+				if (constants.exists())
+					try {
+						context = new String(Files.readAllBytes(constants.toPath()));
+					} catch (IOException e) {
+						Technology.getLogger().error("Couldn't read _constants.json from {}", child.getName(), e);
+					}
 
-				ResourceLocation id = new ResourceLocation(domain, name);
+				Map<ResourceLocation, String> techs = new HashMap<>();
+				for (File file : FileUtils.listFiles(child, new String[] {"json"}, true)) {
+					if (file.getParentFile().equals(child))
+						continue;
+					ResourceLocation id = new ResourceLocation(child.getName(), FilenameUtils.removeExtension(child.toPath().relativize(file.toPath()).toString()));
 
-				try {
-					cache.put(id, new String(Files.readAllBytes(file.toPath())));
-				} catch (IOException e) {
-					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
+					try {
+						techs.put(id, new String(Files.readAllBytes(file.toPath())));
+					} catch (IOException e) {
+						Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
+					}
 				}
+				cache.put(child.getName(), Pair.of(context, techs));
 			}
-		else
+		} else
 			dir.mkdirs();
 
-		Map<ResourceLocation, Pair<JsonContext, String>> map = cache.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, t -> Pair.of(new JsonContext(t.getKey().getResourceDomain()), t.getValue())));
-		loadBuiltin().forEach(map::putIfAbsent);
-		deserialize(map);
+		load();
 	}
 
-	public static Map<ResourceLocation, Pair<JsonContext, String>> loadBuiltin() {
-		Map<ResourceLocation, Pair<JsonContext, String>> json = new HashMap<>();
+	public static Map<JsonContext, Map<ResourceLocation, String>> loadBuiltin() {
+		Map<JsonContext, Map<ResourceLocation, String>> json = new HashMap<>();
 
 		Loader.instance().getActiveModList().forEach(mod -> {
 			JsonContextPublic context = new JsonContextPublic(mod.getModId());
 
+			Map<ResourceLocation, String> map = new HashMap<>();
 			CraftingHelper.findFiles(mod, "assets/" + mod.getModId() + "/technologies", root -> {
 				Path path = root.resolve("_constants.json");
 				if (path != null && Files.exists(path)) {
@@ -349,7 +351,7 @@ public class TechnologyHandler {
 				ResourceLocation id = new ResourceLocation(mod.getModId(), name);
 
 				try {
-					json.put(id, Pair.of(context, new String(Files.readAllBytes(file))));
+					map.put(id, new String(Files.readAllBytes(file)));
 				} catch (IOException | JsonParseException e) {
 					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 					return false;
@@ -357,49 +359,84 @@ public class TechnologyHandler {
 
 				return true;
 			}, true, true);
+			json.put(context, map);
 		});
 		return json;
 	}
 
-	public static void deserialize(Map<ResourceLocation, Pair<JsonContext, String>> json) {
-		Map<ResourceLocation, Pair<JsonContext, Technology.Builder>> builders = new HashMap<>();
-		Map<ResourceLocation, Technology> technologies = new HashMap<>();
+	public static void removeFromCache(ResourceLocation technology) {
+		Map<ResourceLocation, String> map = cache.get(technology.getResourceDomain()).getRight();
+		map.remove(technology);
+		if (map.isEmpty())
+			cache.remove(technology.getResourceDomain());
+	}
 
-		for (Map.Entry<ResourceLocation, Pair<JsonContext, String>> file : json.entrySet())
+	public static void load() {
+		Map<JsonContext, Map<ResourceLocation, String>> json = cache.entrySet().stream().collect(Collectors.toMap(entry -> {
+			JsonContextPublic context = new JsonContextPublic(entry.getKey());
 			try {
-				builders.put(file.getKey(), Pair.of(file.getValue().getLeft(), FTGU.GSON.fromJson(file.getValue().getRight(), Technology.Builder.class)));
+				JsonObject[] array = FTGU.GSON.fromJson(entry.getValue().getLeft(), JsonObject[].class);
+				context.loadConstants(array);
 			} catch (JsonParseException e) {
-				cache.remove(file.getKey());
-				Technology.getLogger().error("Couldn't load technology " + file.getKey(), e);
+				Technology.getLogger().error("Couldn't read _constants.json from {}", context.getModId(), e);
 			}
+			return context;
+		}, entry -> entry.getValue().getRight()));
+
+		if (!FTGU.custom)
+			loadBuiltin().forEach((context, map) -> {
+				if (!json.containsKey(context))
+					json.put(context, map);
+				else
+					map.forEach(json.get(context)::putIfAbsent);
+			});
+
+		Map<JsonContext, Map<ResourceLocation, Technology.Builder>> builders = new HashMap<>();
+		Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
+
+		for (Map.Entry<JsonContext, Map<ResourceLocation, String>> domain : json.entrySet()) {
+			Map<ResourceLocation, Technology.Builder> map = new HashMap<>();
+			for (Map.Entry<ResourceLocation, String> file : domain.getValue().entrySet()) {
+				try {
+					map.put(file.getKey(), FTGU.GSON.fromJson(file.getValue(), Technology.Builder.class));
+				} catch (JsonParseException e) {
+					removeFromCache(file.getKey());
+					Technology.getLogger().error("Couldn't load technology " + file.getKey(), e);
+				}
+			}
+			builders.put(domain.getKey(), map);
+		}
 
 		boolean load = true;
 		while (!builders.isEmpty() && load) {
 			load = false;
 
-			Iterator<Map.Entry<ResourceLocation, Pair<JsonContext, Technology.Builder>>> iterator = builders.entrySet().iterator();
-			while (iterator.hasNext()) {
-				Map.Entry<ResourceLocation, Pair<JsonContext, Technology.Builder>> entry = iterator.next();
+			for (Map.Entry<JsonContext, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet()) {
+				Iterator<Map.Entry<ResourceLocation, Technology.Builder>> iterator = domain.getValue().entrySet().iterator();
+				while (iterator.hasNext()) {
+					Map.Entry<ResourceLocation, Technology.Builder> entry = iterator.next();
 
-				if (entry.getValue().getRight().resolveParent(technologies)) {
-					try {
-						Technology technology = entry.getValue().getRight().build(entry.getKey(), entry.getValue().getLeft());
-						technologies.put(technology.getRegistryName(), technology);
-						load = true;
-					} catch (JsonParseException e) {
-						cache.remove(entry.getKey());
-						Technology.getLogger().error("Couldn't load technology " + entry.getKey(), e);
+					if (entry.getValue().resolveParent(technologies)) {
+						try {
+							Technology technology = entry.getValue().build(entry.getKey(), domain.getKey());
+							technologies.put(technology.getRegistryName(), technology);
+							load = true;
+						} catch (JsonParseException e) {
+							removeFromCache(entry.getKey());
+							Technology.getLogger().error("Couldn't load technology " + entry.getKey(), e);
+						}
+
+						iterator.remove();
 					}
-
-					iterator.remove();
 				}
 			}
 
 			if (!load)
-				for (Map.Entry<ResourceLocation, ?> entry : builders.entrySet()) {
-					cache.remove(entry.getKey());
-					Technology.getLogger().error("Couldn't load technology " + entry.getKey());
-				}
+				for (Map.Entry<JsonContext, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet())
+					for (Map.Entry<ResourceLocation, Technology.Builder> entry : domain.getValue().entrySet()) {
+						removeFromCache(entry.getKey());
+						Technology.getLogger().error("Couldn't load technology " + entry.getKey());
+					}
 		}
 
 		technologies.values().forEach(tech -> {
@@ -407,12 +444,7 @@ public class TechnologyHandler {
 				tech.getParent().getChildren().add(tech);
 
 			if (tech.start)
-				start.add(tech.getRegistryName().toString());
-			if (tech.headStart)
-				headStart.add(tech.getRegistryName().toString());
-			if (tech.getRegistryName().getResourceDomain().equals(FTGU.MODID))
-				vanilla.add(tech.getRegistryName().toString());
-
+				start.add(tech);
 			if (tech.isRoot())
 				roots.add(tech);
 		});

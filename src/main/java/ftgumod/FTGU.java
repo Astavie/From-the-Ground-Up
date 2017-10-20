@@ -19,9 +19,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumTypeAdapterFactory;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraftforge.common.MinecraftForge;
@@ -38,8 +36,6 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -51,9 +47,8 @@ public class FTGU {
 
 	public static final String MODID = "ftgumod";
 
-	public static boolean headStart = false;
-	public static boolean moddedOnly = false;
 	public static boolean copy = true;
+	public static boolean custom = false;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -61,26 +56,6 @@ public class FTGU {
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon PROXY;
 	public final Map<String, ICompat> compat = new HashMap<>();
-
-	private ResourceLocation getRecipeGroup(ItemStack output) {
-		String s = output.getUnlocalizedName();
-		int idx = s.lastIndexOf(":");
-		if (idx >= 0)
-			s = s.substring(idx + 1);
-		return new ResourceLocation(MODID, s);
-	}
-
-	private ShapedOreRecipe addShapedRecipe(ItemStack output, Object... recipe) {
-		ShapedOreRecipe r = new ShapedOreRecipe(getRecipeGroup(output), output, recipe);
-		ForgeRegistries.RECIPES.register(r.setRegistryName(r.getGroup()));
-		return r;
-	}
-
-	private ShapelessOreRecipe addShapelessRecipe(ItemStack output, Object... recipe) {
-		ShapelessOreRecipe r = new ShapelessOreRecipe(getRecipeGroup(output), output, recipe);
-		ForgeRegistries.RECIPES.register(r.setRegistryName(r.getGroup()));
-		return r;
-	}
 
 	private void registerItem(Item item, String name) {
 		item.setRegistryName(name);
@@ -130,9 +105,8 @@ public class FTGU {
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
-		headStart = config.get(Configuration.CATEGORY_GENERAL, "Head Start", false, "Automatically researches all technologies with the 'headstart' flag").getBoolean();
-		moddedOnly = config.get(Configuration.CATEGORY_GENERAL, "Modded Only", false, "Automatically researches all vanilla technologies").getBoolean();
-		copy = config.get(Configuration.CATEGORY_GENERAL, "Allow Copy", true, "Enables the ability to copy technologies").getBoolean();
+		copy = config.get(Configuration.CATEGORY_GENERAL, "Copy", true, "Enables technology copying").getBoolean();
+		custom = config.get(Configuration.CATEGORY_GENERAL, "Custom", false, "Disables loading of built-in technologies").getBoolean();
 
 		config.save();
 	}

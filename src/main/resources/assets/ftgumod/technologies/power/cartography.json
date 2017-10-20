@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "minecraft:compas"
+      "item": "minecraft:compass"
     },
     "title": {
       "translate": "technology.cartography.name"
@@ -10,7 +10,7 @@
       "translate": "technology.cartography.desc"
     },
     "x": 2,
-    "y": 0
+    "y": 1
   },
   "parent": "ftgumod:power/power",
   "idea": {
@@ -38,7 +38,7 @@
   },
   "unlock": [
     {
-      "item": "minecraft:compas"
+      "item": "minecraft:compass"
     },
     {
       "item": "minecraft:clock"

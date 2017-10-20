@@ -38,7 +38,6 @@ public class Technology {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	public final boolean start;
-	public final boolean headStart;
 
 	private final Set<Technology> children = new HashSet<>();
 
@@ -59,14 +58,13 @@ public class Technology {
 
 	private final boolean copy;
 
-	private Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
+	private Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
 		this.type = type;
 
 		this.start = start;
-		this.headStart = headStart;
 		this.copy = copy;
 
 		this.rewards = rewards;
@@ -374,12 +372,11 @@ public class Technology {
 		private final JsonObject research;
 
 		private final boolean start;
-		private final boolean headStart;
 		private final boolean copy;
 
 		private Technology parent;
 
-		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean headStart, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
+		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
 			this.parentId = parent;
 			this.display = display;
 			this.type = type;
@@ -387,7 +384,6 @@ public class Technology {
 			this.criteria = criteria;
 			this.requirements = requirements;
 			this.start = start;
-			this.headStart = headStart;
 			this.copy = copy;
 			this.unlock = unlock;
 			this.idea = idea;
@@ -413,7 +409,7 @@ public class Technology {
 			IdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			ResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
-			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, headStart, copy, unlock, idea, research);
+			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);
 		}
 
 	}
@@ -486,10 +482,9 @@ public class Technology {
 			JsonObject research = json.has("research") ? JsonUtils.getJsonObject(json, "research") : null;
 
 			boolean start = JsonUtils.getBoolean(json, "start", false);
-			boolean headStart = JsonUtils.getBoolean(json, "headstart", false);
 			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
-			return new Builder(parent, display, type, rewards, criteria, requirements, start, headStart, copy, unlock, idea, research);
+			return new Builder(parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);
 		}
 
 	}
