@@ -1,0 +1,90 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:dropper"
+    },
+    "title": {
+      "translate": "technology.redstone_machinery.name"
+    },
+    "description": {
+      "translate": "technology.redstone_machinery.desc"
+    },
+    "x": 4,
+    "y": 0
+  },
+  "parent": "ftgumod:power/circuitry",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "minecraft:bow"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      "   ",
+      "ISR",
+      "CPC"
+    ],
+    "key": {
+      "I": {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone",
+        "hint": {
+          "translate": "technology.hint.input"
+        }
+      },
+      "S": {
+        "item": "minecraft:stone",
+        "data": 0,
+        "hint": {
+          "translate": "technology.hint.pulse"
+        }
+      },
+      "R": {
+        "item": "minecraft:repeater",
+        "hint": {
+          "translate": "technology.hint.pulse"
+        }
+      },
+      "P": {
+        "item": "minecraft:sticky_piston",
+        "hint": {
+          "translate": "technology.hint.pulse"
+        }
+      },
+      "C": [
+        {
+          "item": "minecraft:stone",
+          "data": 0,
+          "hint": {
+            "translate": "technology.hint.circuit"
+          }
+        },
+        {
+          "item": "minecraft:stone_slab",
+          "data": 0
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:dispenser"
+    },
+    {
+      "item": "minecraft:dropper"
+    },
+    {
+      "item": "minecraft:observer"
+    },
+    {
+      "item": "minecraft:daylight_detector"
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:redstone"
+    },
+    "title": {
+      "translate": "technology.power.name"
+    },
+    "description": {
+      "translate": "technology.power.desc"
+    },
+    "x": 0,
+    "y": 0
+  },
+  "parent": "ftgumod:construction/activation",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone"
+      },
+      [
+        {
+          "item": "minecraft:wooden_button"
+        },
+        {
+          "item": "minecraft:wooden_pressure_plate"
+        },
+        {
+          "item": "minecraft:stone_button"
+        },
+        {
+          "item": "minecraft:stone_pressure_plate"
+        },
+        {
+          "item": "minecraft:light_weighted_pressure_plate"
+        },
+        {
+          "item": "minecraft:heavy_weighted_pressure_plate"
+        },
+        {
+          "item": "minecraft:lever"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "stickWood"
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "R  ",
+      "SRR",
+      "CCC"
+    ],
+    "key": {
+      "R": {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone",
+        "hint": {
+          "translate": "technology.hint.power"
+        }
+      },
+      "S": {
+        "type": "forge:ore_dict",
+        "ore": "stickWood",
+        "hint": {
+          "translate": "technology.hint.rod"
+        }
+      },
+      "C": [
+        {
+          "item": "minecraft:stone",
+          "data": 0,
+          "hint": {
+            "translate": "technology.hint.circuit"
+          }
+        },
+        {
+          "item": "minecraft:stone_slab",
+          "data": 0
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:redstone_torch"
+    },
+    {
+      "item": "minecraft:tripwire_hook"
+    },
+    {
+      "item": "minecraft:trapped_chest"
+    },
+    {
+      "item": "minecraft:redstone_lamp"
+    }
+  ]
+}

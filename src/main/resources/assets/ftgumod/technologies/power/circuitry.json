@@ -1,0 +1,100 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:comparator"
+    },
+    "title": {
+      "translate": "technology.circuitry.name"
+    },
+    "description": {
+      "translate": "technology.circuitry.desc"
+    },
+    "x": 2,
+    "y": 0
+  },
+  "parent": "ftgumod:power/power",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "dustRedstone"
+        },
+        {
+          "item": "minecraft:redstone_torch"
+        }
+      ],
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "gemQuartz"
+        },
+        {
+          "item": "minecraft:stone",
+          "data": 0
+        },
+        {
+          "item": "minecraft:stone_slab",
+          "data": 0
+        }
+      ]
+    ]
+  },
+  "research": {
+    "pattern": [
+      "   ",
+      "RST",
+      "CCC"
+    ],
+    "key": {
+      "R": {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone",
+        "hint": {
+          "translate": "technology.hint.input"
+        }
+      },
+      "S": {
+        "item": "minecraft:stone",
+        "data": 0,
+        "hint": {
+          "translate": "technology.hint.not"
+        }
+      },
+      "T": {
+        "item": "minecraft:redstone_torch",
+        "hint": {
+          "translate": "technology.hint.not"
+        }
+      },
+      "C": [
+        {
+          "item": "minecraft:stone",
+          "data": 0,
+          "hint": {
+            "translate": "technology.hint.circuit"
+          }
+        },
+        {
+          "item": "minecraft:stone_slab",
+          "data": 0
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:repeater"
+    },
+    {
+      "item": "minecraft:comparator"
+    },
+    {
+      "item": "minecraft:piston"
+    },
+    {
+      "item": "minecraft:sticky_piston"
+    }
+  ]
+}

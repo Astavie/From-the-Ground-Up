@@ -1,0 +1,50 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:compas"
+    },
+    "title": {
+      "translate": "technology.cartography.name"
+    },
+    "description": {
+      "translate": "technology.cartography.desc"
+    },
+    "x": 2,
+    "y": 0
+  },
+  "parent": "ftgumod:power/power",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "paper"
+      },
+      [
+        {
+          "type": "forge:ore_dict",
+          "ore": "dustRedstone"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "feather"
+        },
+        {
+          "item": "minecraft:dye",
+          "data": 0
+        }
+      ]
+    ]
+  },
+  "unlock": [
+    {
+      "item": "minecraft:compas"
+    },
+    {
+      "item": "minecraft:clock"
+    },
+    {
+      "item": "minecraft:map"
+    }
+  ]
+}

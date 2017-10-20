@@ -132,6 +132,12 @@ technology.hint.clay=Pot
 technology.hint.heat=Heat
 technology.hint.pillar=Pillar
 technology.hint.light=Light
+technology.hint.power=Power
+technology.hint.rod=Rod
+technology.hint.circuit=Circuit Board
+technology.hint.input=Input
+technology.hint.not=NOT Gate
+technology.hint.pulse=Pulse Generator
 
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
@@ -213,3 +219,15 @@ technology.quartz.desc=As white as the depths of hell
 
 technology.prismarine.name=Prismarine
 technology.prismarine.desc=Perfectly fit for building Atlantis
+
+technology.power.name=Power
+technology.power.desc=Let's start the Industrial Revolution
+
+technology.circuitry.name=Circuitry
+technology.circuitry.desc=Redstone miniaturization
+
+technology.redstone_machinery.name=Redstone Machinery
+technology.redstone_machinery.desc=Never breaks down
+
+technology.cartography.name=Cartography
+technology.cartography.desc=Maps, and lots of 'em!

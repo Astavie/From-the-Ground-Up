@@ -4,7 +4,8 @@
       "item": "minecraft:barrier"
     },
     "title": "Locked Recipes",
-    "description": "Try to craft something not yet researched"
+    "description": "Try to craft something not yet researched",
+    "hidden": true
   },
   "parent": "ftgumod:research/root",
   "criteria": {

@@ -6,7 +6,7 @@
     "title": "Sherlock Holmes",
     "description": "Find hidden meaning in a block"
   },
-  "parent": "ftgumod:research/unlock_decipher",
+  "parent": "ftgumod:research/research",
   "criteria": {
     "ftgu": {
       "trigger": "ftgumod:block_inspected"
