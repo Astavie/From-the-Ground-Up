@@ -28,7 +28,7 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	void removeCallback(Predicate<? super T> predicate);
 
 	/**
-	 * When a new {@code Technology} is about to be added, the specified {@code Consumer} will look at it.
+	 * When a new {@code Technology} has just been added, the specified {@code Consumer} will look at it.
 	 * This can be used to edit {@code Technologies} before they're added.
 	 *
 	 * @param action The {@code Consumer} which will accept all new {@code Technologies}
@@ -37,7 +37,7 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 
 	/**
 	 * Before {@code Technologies} are (re)loaded, the specified {@code Runnable} will run.
-	 * When this is executed after a reload, all old {@code Technologies} will still be accessible.
+	 * This can be used to register {@code Technologies} that do no depend on others.
 	 *
 	 * @param action The {@code Runnable} to run
 	 */

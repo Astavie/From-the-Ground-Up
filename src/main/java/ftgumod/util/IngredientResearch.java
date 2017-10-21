@@ -13,6 +13,7 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +28,7 @@ public class IngredientResearch extends Ingredient {
 	public IngredientResearch(Ingredient ingredient, @Nullable ITextComponent hint, @Nullable Set<BlockPredicate> unlock) {
 		this.ingredient = ingredient;
 		this.hint = hint;
-		this.unlock = unlock;
+		this.unlock = unlock != null ? unlock : Collections.emptySet();
 	}
 
 	public static IngredientResearch deserialize(JsonElement element, JsonContext context) {

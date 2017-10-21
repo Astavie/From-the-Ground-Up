@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,6 +54,7 @@ public class ItemLookingGlass extends Item {
 
 				IBlockState state = world.getBlockState(pos);
 				BlockSerializable block = new BlockSerializable(world, pos, state);
+				List<BlockSerializable> singleton = Collections.singletonList(block);
 
 				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, pos, state, face);
 				event.setCanceled(true);
@@ -61,7 +63,7 @@ public class ItemLookingGlass extends Item {
 				for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
 					if (tech.hasResearchRecipe() && tech.canResearch(player))
 						for (int i = 0; i < 9; i++)
-							if (!tech.getResearchRecipe().testDecipher(i, list)) {
+							if (tech.getResearchRecipe().testDecipher(i, singleton) && !tech.getResearchRecipe().testDecipher(i, list)) {
 								event.setCanceled(false);
 								break loop;
 							}

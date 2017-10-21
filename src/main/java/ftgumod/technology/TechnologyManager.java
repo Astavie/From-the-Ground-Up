@@ -148,12 +148,12 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	public void clear() {
 		progress.clear();
 		technologies.clear();
+
+		createCallback.forEach(Runnable::run);
 	}
 
 	public void reload(World world) {
-		createCallback.forEach(Runnable::run);
-		if (!technologies.isEmpty())
-			clear();
+		clear();
 
 		File dir = new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies");
 

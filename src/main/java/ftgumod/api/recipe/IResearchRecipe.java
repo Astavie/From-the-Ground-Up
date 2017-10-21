@@ -22,14 +22,15 @@ public interface IResearchRecipe {
 	Set<BlockPredicate> getDecipher(int index);
 
 	default boolean testDecipher(int index, List<BlockSerializable> inspected) {
-		loop:
-		for (BlockPredicate predicate : getDecipher(index)) {
+		if (getDecipher(index).size() == 0)
+			return true;
+
+		for (BlockPredicate predicate : getDecipher(index))
 			for (BlockSerializable block : inspected)
 				if (block.test(predicate))
-					continue loop;
-			return false;
-		}
-		return true;
+					return true;
+
+		return false;
 	}
 
 	boolean test(NonNullList<ItemStack> inventory);
