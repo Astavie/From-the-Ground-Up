@@ -2,7 +2,7 @@ package ftgumod.packet.client;
 
 import ftgumod.FTGU;
 import ftgumod.packet.server.RequestMessage;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -72,10 +72,10 @@ public class TechnologyInfoMessage implements IMessage {
 			FTGU.copy = message.copy;
 			FTGU.custom = message.custom;
 
-			TechnologyHandler.clear();
+			TechnologyManager.INSTANCE.clear();
 
-			TechnologyHandler.cache = message.json;
-			TechnologyHandler.load();
+			TechnologyManager.INSTANCE.cache = message.json;
+			TechnologyManager.INSTANCE.load();
 
 			FTGU.PROXY.clearToasts(); // Removes unnecessary recipe toasts
 			return new RequestMessage();

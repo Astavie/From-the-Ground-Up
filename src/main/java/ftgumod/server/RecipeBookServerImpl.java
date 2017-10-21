@@ -1,7 +1,7 @@
 package ftgumod.server;
 
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -29,7 +29,7 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 
 	@Override
 	public void add(List<IRecipe> recipes, EntityPlayerMP player) {
-		recipes.removeIf(recipe -> TechnologyHandler.getLocked(recipe.getRecipeOutput()) != null);
+		recipes.removeIf(recipe -> TechnologyManager.INSTANCE.getLocked(recipe.getRecipeOutput()) != null);
 		if (!recipes.isEmpty())
 			super.add(recipes, player);
 	}
@@ -50,7 +50,7 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 				LOGGER.info("Tried to load unrecognized recipe: {} removed now.", resourcelocation);
 			else {
 				this.setRecipes(irecipe);
-				Technology tech = TechnologyHandler.getLocked(irecipe.getRecipeOutput());
+				Technology tech = TechnologyManager.INSTANCE.getLocked(irecipe.getRecipeOutput());
 				if (tech != null && !tech.isResearched(player))
 					list.add(irecipe);
 			}

@@ -1,18 +1,18 @@
 package ftgumod.client.gui;
 
+import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.FTGUAPI;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.RequestMessage;
 import ftgumod.tileentity.TileEntityInventory;
-import ftgumod.util.IngredientResearch;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 
 import java.util.Collections;
@@ -40,7 +40,7 @@ public class GuiResearchTable extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String s = FTGUAPI.b_researchTable.getLocalizedName();
+		String s = Content.b_researchTable.getLocalizedName();
 		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
 		fontRenderer.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 
@@ -48,20 +48,21 @@ public class GuiResearchTable extends GuiContainer {
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 			int index = slot.getSlotIndex() - table.combine;
-			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && !table.recipe.getResearchRecipe().isEmpty(index)) {
-				IngredientResearch ingredient = table.recipe.getResearchRecipe().get(index);
-				if (ingredient.hasHint()) {
-					String hint = ingredient.getHint().getUnformattedText();
+			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && table.recipe.getResearchRecipe().hasHint(index)) {
+				ITextComponent hint = table.recipe.getResearchRecipe().getHint(index);
+				String text = hint.getUnformattedText();
+
+				if (!text.isEmpty()) {
 					String formatting = "";
-					if (ingredient.getHint().getStyle().isEmpty())
+					if (hint.getStyle().isEmpty())
 						formatting = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString();
 					if (table.deciphered == null || !table.deciphered.contains(index)) {
 						if (table.deciphered == null)
 							PacketDispatcher.sendToServer(new RequestMessage(1));
-						hint = formatting + TextFormatting.OBFUSCATED.toString() + hint;
+						text = formatting + TextFormatting.OBFUSCATED.toString() + text;
 					} else
-						hint = formatting + hint;
-					drawHoveringText(Collections.singletonList(hint), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
+						text = formatting + text;
+					drawHoveringText(Collections.singletonList(text), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 				}
 			}
 		}
@@ -76,7 +77,7 @@ public class GuiResearchTable extends GuiContainer {
 		ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 		if (table.recipe != null)
 			for (int i = 0; i < 9; i++)
-				if (!table.recipe.getResearchRecipe().isEmpty(i)) {
+				if (table.recipe.getResearchRecipe().hasHint(i)) {
 					Slot slot = inventorySlots.inventorySlots.get(i + table.combine);
 					if (!slot.getHasStack())
 						this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);

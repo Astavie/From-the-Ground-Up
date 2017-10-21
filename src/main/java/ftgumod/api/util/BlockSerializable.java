@@ -1,4 +1,4 @@
-package ftgumod.util;
+package ftgumod.api.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -6,11 +6,11 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,8 +77,8 @@ public class BlockSerializable {
 		return new ItemStack(block, 1, data).getDisplayName();
 	}
 
-	public boolean test(BlockPredicate predicate, MinecraftServer server) {
-		return predicate.test(server.getWorld(dimension.getId()), pos, block, properties);
+	public boolean test(BlockPredicate predicate) {
+		return predicate.test(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimension.getId()), pos, block, properties);
 	}
 
 }

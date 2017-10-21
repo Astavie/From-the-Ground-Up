@@ -9,7 +9,6 @@ import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.DefaultImpl;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.CapabilityTechnology.Storage;
 import ftgumod.technology.Technology;
 import ftgumod.tileentity.TileEntityIdeaTable;
@@ -76,24 +75,24 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		GameRegistry.registerTileEntity(TileEntityIdeaTable.class, FTGUAPI.n_ideaTable);
-		GameRegistry.registerTileEntity(TileEntityResearchTable.class, FTGUAPI.n_researchTable);
+		GameRegistry.registerTileEntity(TileEntityIdeaTable.class, Content.n_ideaTable);
+		GameRegistry.registerTileEntity(TileEntityResearchTable.class, Content.n_researchTable);
 
-		registerBlock(FTGUAPI.b_ideaTable, FTGUAPI.i_ideaTable, FTGUAPI.n_ideaTable);
-		registerBlock(FTGUAPI.b_researchTable, FTGUAPI.i_researchTable, FTGUAPI.n_researchTable);
+		registerBlock(Content.b_ideaTable, Content.i_ideaTable, Content.n_ideaTable);
+		registerBlock(Content.b_researchTable, Content.i_researchTable, Content.n_researchTable);
 
-		registerItem(FTGUAPI.i_parchmentEmpty, FTGUAPI.n_parchmentEmpty);
-		registerItem(FTGUAPI.i_parchmentIdea, FTGUAPI.n_parchmentIdea);
-		registerItem(FTGUAPI.i_parchmentResearch, FTGUAPI.n_parchmentResearch);
-		registerItem(FTGUAPI.i_researchBook, FTGUAPI.n_researchBook);
-		registerItem(FTGUAPI.i_lookingGlass, FTGUAPI.n_lookingGlass);
+		registerItem(Content.i_parchmentEmpty, Content.n_parchmentEmpty);
+		registerItem(Content.i_parchmentIdea, Content.n_parchmentIdea);
+		registerItem(Content.i_parchmentResearch, Content.n_parchmentResearch);
+		registerItem(Content.i_researchBook, Content.n_researchBook);
+		registerItem(Content.i_lookingGlass, Content.n_lookingGlass);
 
-		CriteriaTriggers.register(FTGUAPI.c_technologyUnlocked);
-		CriteriaTriggers.register(FTGUAPI.c_technologyResearched);
-		CriteriaTriggers.register(FTGUAPI.c_itemLocked);
-		CriteriaTriggers.register(FTGUAPI.c_inspect);
+		CriteriaTriggers.register(Content.c_technologyUnlocked);
+		CriteriaTriggers.register(Content.c_technologyResearched);
+		CriteriaTriggers.register(Content.c_itemLocked);
+		CriteriaTriggers.register(Content.c_inspect);
 
-		CapabilityManager.INSTANCE.register(ITechnology.class, new Storage(), DefaultImpl::new);
+		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 
 		MinecraftForge.EVENT_BUS.register(new CapabilityTechnology());
 		MinecraftForge.EVENT_BUS.register(new EventHandler());

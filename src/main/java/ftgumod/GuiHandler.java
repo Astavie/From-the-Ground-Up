@@ -2,7 +2,7 @@ package ftgumod;
 
 import ftgumod.inventory.ContainerIdeaTable;
 import ftgumod.inventory.ContainerResearchTable;
-import ftgumod.technology.TechnologyHandler.GUI;
+import ftgumod.technology.TechnologyManager.GUI;
 import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;

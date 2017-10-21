@@ -1,10 +1,10 @@
 package ftgumod.item;
 
-import ftgumod.FTGUAPI;
+import ftgumod.Content;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -22,7 +22,7 @@ public class ItemParchmentResearch extends Item {
 	public ItemParchmentResearch(String name) {
 		setUnlocalizedName(name);
 		setMaxStackSize(1);
-		setContainerItem(FTGUAPI.i_parchmentEmpty);
+		setContainerItem(Content.i_parchmentEmpty);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class ItemParchmentResearch extends Item {
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
 		if (!player.world.isRemote) {
-			Technology t = TechnologyHandler.technologies.get(new ResourceLocation(StackUtils.getItemData(item).getString("FTGU")));
+			Technology t = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(StackUtils.getItemData(item).getString("FTGU")));
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already)
@@ -43,7 +43,7 @@ public class ItemParchmentResearch extends Item {
 						t.announceResearched(player);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t), (EntityPlayerMP) player);
-						return new ItemStack(FTGUAPI.i_parchmentEmpty);
+						return new ItemStack(Content.i_parchmentEmpty);
 					} else
 						player.sendMessage(new TextComponentTranslation("technology.complete.understand"));
 				}

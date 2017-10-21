@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +24,7 @@ public class TriggerTechnology extends TriggerFTGU<TriggerTechnology.Instance> {
 		Technology technology = null;
 		if (jsonObject.has("technology")) {
 			String name = JsonUtils.getString(jsonObject, "technology");
-			technology = TechnologyHandler.technologies.get(new ResourceLocation(name));
+			technology = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(name));
 			if (technology == null)
 				throw new JsonSyntaxException("Unknown technology '" + name + "'");
 		}

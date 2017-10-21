@@ -1,11 +1,13 @@
 package ftgumod.technology;
 
 import com.google.gson.*;
+import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.FTGUAPI;
+import ftgumod.api.ITechnology;
+import ftgumod.api.recipe.IIdeaRecipe;
+import ftgumod.api.recipe.IResearchRecipe;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.server.RecipeBookServerImpl;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
 import ftgumod.util.ListenerTechnology;
@@ -33,32 +35,32 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class Technology {
+public class Technology implements ITechnology<Technology> {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	public final boolean start;
-
 	private final Set<Technology> children = new HashSet<>();
 
-	private final int level;
-	private final ITextComponent displayText;
-	private final DisplayInfo display;
-	private final Type type;
-	private final NonNullList<Ingredient> unlock;
-	private final Technology parent;
 	private final ResourceLocation id;
+	private final int level; // TODO: Use this variable for something
 
-	private final AdvancementRewards rewards;
-	private final Map<String, Criterion> criteria;
-	private final String[][] requirements;
+	ITextComponent displayText;
+	DisplayInfo display;
+	Type type;
+	NonNullList<Ingredient> unlock;
+	Technology parent;
 
-	private final IdeaRecipe idea;
-	private final ResearchRecipe research;
+	AdvancementRewards rewards;
+	Map<String, Criterion> criteria;
+	String[][] requirements;
 
-	private final boolean copy;
+	IIdeaRecipe idea;
+	IResearchRecipe research;
 
-	private Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IdeaRecipe idea, @Nullable ResearchRecipe research) {
+	boolean start;
+	boolean copy;
+
+	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
@@ -80,6 +82,14 @@ public class Technology {
 		else
 			level = parent.level + 1;
 
+		updateDisplayText();
+	}
+
+	public static Logger getLogger() {
+		return LOGGER;
+	}
+
+	void updateDisplayText() {
 		this.displayText = new TextComponentString("[");
 		this.displayText.getStyle().setColor(display.getFrame().getFormat());
 		ITextComponent itextcomponent = display.getTitle().createCopy();
@@ -94,14 +104,17 @@ public class Technology {
 		this.displayText.appendText("]");
 	}
 
-	public static Logger getLogger() {
-		return LOGGER;
-	}
-
+	@Override
 	public boolean canCopy() {
 		return copy;
 	}
 
+	@Override
+	public boolean researchedAtStart() {
+		return start;
+	}
+
+	@Override
 	public Set<Technology> getChildren() {
 		return children;
 	}
@@ -114,50 +127,66 @@ public class Technology {
 		});
 	}
 
-	public ResearchRecipe getResearchRecipe() {
+	@Override
+	public IResearchRecipe getResearchRecipe() {
 		return research;
 	}
 
+	@Override
 	public boolean hasResearchRecipe() {
 		return research != null;
 	}
 
-	public IdeaRecipe getIdeaRecipe() {
+	@Override
+	public IIdeaRecipe getIdeaRecipe() {
 		return idea;
 	}
 
+	@Override
 	public boolean hasIdeaRecipe() {
 		return idea != null;
 	}
 
+	@Override
 	public boolean isRoot() {
-		return !hasParent() || !id.getResourcePath().substring(0, id.getResourcePath().indexOf('/')).equals(parent.id.getResourcePath().substring(0, parent.id.getResourcePath().indexOf('/')));
+		return !hasParent() || !getRegistryName().getResourcePath().substring(0, getRegistryName().getResourcePath().indexOf('/')).equals(parent.getRegistryName().getResourcePath().substring(0, parent.getRegistryName().getResourcePath().indexOf('/')));
 	}
 
-	public DisplayInfo getDisplay() {
+	@Override
+	public boolean displayed() {
+		return display != null;
+	}
+
+	@Override
+	public DisplayInfo getDisplayInfo() {
 		return display;
 	}
 
+	@Override
 	public Technology getParent() {
 		return parent;
 	}
 
+	@Override
 	public boolean hasParent() {
 		return parent != null;
 	}
 
+	@Override
 	public NonNullList<Ingredient> getUnlock() {
 		return unlock;
 	}
 
+	@Override
 	public boolean hasCustomUnlock() {
 		return requirements.length > 0;
 	}
 
+	@Override
 	public void setResearched(EntityPlayer player) {
-		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+		CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
-			cap.setResearched(id.toString());
+			cap.setResearched(getRegistryName().toString());
 
 			if (player instanceof EntityPlayerMP) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
@@ -170,7 +199,7 @@ public class Technology {
 					if (child.hasCustomUnlock())
 						child.registerListeners(playerMP);
 
-				FTGUAPI.c_technologyResearched.trigger((EntityPlayerMP) player, this);
+				Content.c_technologyResearched.trigger((EntityPlayerMP) player, this);
 				MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Research(player, this));
 			}
 		}
@@ -184,6 +213,7 @@ public class Technology {
 			LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
 	}
 
+	@Override
 	public void announceResearched(EntityPlayer player) {
 		if (player.world.getGameRules().getBoolean("announceAdvancements") && display.shouldAnnounceToChat())
 			//noinspection ConstantConditions
@@ -196,11 +226,12 @@ public class Technology {
 		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	}
 
+	@Override
 	public void removeResearched(EntityPlayer player) {
-		ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+		CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
 			if (isResearched(player)) {
-				cap.removeResearched(id.toString());
+				cap.removeResearched(getRegistryName().toString());
 
 				if (player instanceof EntityPlayerMP) {
 					EntityPlayerMP playerMP = (EntityPlayerMP) player;
@@ -220,12 +251,12 @@ public class Technology {
 			}
 
 			if (hasCustomUnlock()) {
-				AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+				AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 				boolean done = progress.isDone();
 
 				for (String criterion : progress.getCompletedCriteria())
 					if (progress.revokeCriterion(criterion))
-						cap.removeResearched(id + "#" + criterion);
+						cap.removeResearched(getRegistryName() + "#" + criterion);
 
 				if (player instanceof EntityPlayerMP) {
 					registerListeners((EntityPlayerMP) player);
@@ -236,20 +267,23 @@ public class Technology {
 		}
 	}
 
+	@Override
 	public Map<String, Criterion> getCriteria() {
 		return criteria;
 	}
 
+	@Override
 	public String[][] getRequirements() {
 		return requirements;
 	}
 
+	@Override
 	public boolean grantCriterion(EntityPlayer player, String name) {
-		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		boolean done = progress.isDone();
 
 		if (progress.grantCriterion(name)) {
-			player.getCapability(CapabilityTechnology.TECH_CAP, null).setResearched(id.toString() + "#" + name);
+			player.getCapability(CapabilityTechnology.TECH_CAP, null).setResearched(getRegistryName() + "#" + name);
 			if (player instanceof EntityPlayerMP) {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
@@ -260,7 +294,7 @@ public class Technology {
 					playerMP.sendMessage(new TextComponentTranslation(isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
 					playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-					FTGUAPI.c_technologyUnlocked.trigger(playerMP, this);
+					Content.c_technologyUnlocked.trigger(playerMP, this);
 				}
 			}
 			return true;
@@ -268,12 +302,13 @@ public class Technology {
 		return false;
 	}
 
+	@Override
 	public boolean revokeCriterion(EntityPlayer player, String name) {
-		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		boolean done = progress.isDone();
 
 		if (progress.revokeCriterion(name)) {
-			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(id.toString() + "#" + name);
+			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(getRegistryName() + "#" + name);
 			if (player instanceof EntityPlayerMP) {
 				registerListeners((EntityPlayerMP) player);
 				if (done && !progress.isDone())
@@ -285,7 +320,7 @@ public class Technology {
 	}
 
 	public void registerListeners(EntityPlayerMP player) {
-		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		if (!progress.isDone())
 			for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
 				CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
@@ -302,7 +337,7 @@ public class Technology {
 
 	public void unregisterListeners(EntityPlayerMP player) {
 		boolean parent = this.parent != null && !this.parent.isResearched(player);
-		AdvancementProgress progress = TechnologyHandler.getProgress(player, this);
+		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 
 		for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
 			CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
@@ -317,33 +352,39 @@ public class Technology {
 		}
 	}
 
+	@Override
 	public Type getType() {
 		return type;
 	}
 
-	public ResourceLocation getRegistryName() {
-		return id;
-	}
-
+	@Override
 	public ITextComponent getDisplayText() {
 		return displayText;
 	}
 
 	public boolean hasProgress(EntityPlayer player) {
-		return isResearched(player) || (hasCustomUnlock() && TechnologyHandler.getProgress(player, this).hasProgress());
+		return isResearched(player) || (hasCustomUnlock() && TechnologyManager.INSTANCE.getProgress(player, this).hasProgress());
 	}
 
+	@Override
 	public boolean isResearched(EntityPlayer player) {
-		final ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-		return cap != null && cap.isResearched(id.toString());
+		CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+		return cap != null && cap.isResearched(getRegistryName().toString());
 	}
 
+	@Override
 	public boolean isUnlocked(EntityPlayer player) {
-		return !hasCustomUnlock() || TechnologyHandler.getProgress(player, this).isDone();
+		return !hasCustomUnlock() || TechnologyManager.INSTANCE.getProgress(player, this).isDone();
 	}
 
+	@Override
 	public boolean canResearch(EntityPlayer player) {
 		return !isResearched(player) && isUnlocked(player) && (parent == null || parent.isResearched(player));
+	}
+
+	@Override
+	public TechnologyBuilder toBuilder() {
+		return new TechnologyBuilder(this);
 	}
 
 	public boolean canResearchIgnoreCustomUnlock(EntityPlayer player) {
@@ -354,8 +395,19 @@ public class Technology {
 		return isResearched(player) || isUnlocked(player) && (parent == null || parent.isResearched(player));
 	}
 
-	public enum Type {
-		TECHNOLOGY, THEORY
+	@Override
+	public ResourceLocation getRegistryName() {
+		return id;
+	}
+
+	@Override
+	public Technology setRegistryName(ResourceLocation name) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public Class<Technology> getRegistryType() {
+		return Technology.class;
 	}
 
 	public static class Builder {
@@ -406,8 +458,8 @@ public class Technology {
 					unlock.add(CraftingHelper.getIngredient(element, context));
 				}
 
-			IdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
-			ResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
+			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
+			IResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
 			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);
 		}
@@ -481,7 +533,7 @@ public class Technology {
 			JsonObject idea = json.has("idea") ? JsonUtils.getJsonObject(json, "idea") : null;
 			JsonObject research = json.has("research") ? JsonUtils.getJsonObject(json, "research") : null;
 
-			boolean start = JsonUtils.getBoolean(json, "start", false);
+			boolean start = JsonUtils.getBoolean(json, "researchedAtStart", false);
 			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
 			return new Builder(parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);

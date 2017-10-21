@@ -3,7 +3,7 @@ package ftgumod.command;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.advancements.CriterionProgress;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +18,7 @@ import java.util.*;
 public class CommandTechnology extends CommandBase {
 
 	public static Technology findTechnology(String id) throws CommandException {
-		Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(id));
+		Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(id));
 		if (tech == null)
 			throw new CommandException("commands.technology.technologyNotFound", id);
 		return tech;
@@ -70,7 +70,7 @@ public class CommandTechnology extends CommandBase {
 	private Technology[] perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
 		if (mode == Mode.EVERYTHING)
 			if (args.length == 3) {
-				Set<Technology> set = new LinkedHashSet<>(TechnologyHandler.technologies.values());
+				Set<Technology> set = new LinkedHashSet<>(TechnologyManager.INSTANCE.technologies.values());
 				type.perform(player, set);
 				if (set.isEmpty())
 					throw mode.fail(type, player.getName());
@@ -108,7 +108,7 @@ public class CommandTechnology extends CommandBase {
 		if (!tech.hasCustomUnlock())
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 
-		CriterionProgress progress = TechnologyHandler.getProgress(player, tech).getCriterionProgress(criterion);
+		CriterionProgress progress = TechnologyManager.INSTANCE.getProgress(player, tech).getCriterionProgress(criterion);
 		if (progress == null)
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 		if (!progress.isObtained())
@@ -137,9 +137,9 @@ public class CommandTechnology extends CommandBase {
 				Mode mode = Mode.byName(args[2]);
 				if (mode != null && mode != Mode.EVERYTHING) {
 					if (args.length == 4)
-						return getListOfStringsMatchingLastWord(args, TechnologyHandler.technologies.keySet());
+						return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.technologies.keySet());
 					if (args.length == 5 && mode == Mode.ONLY) {
-						Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(args[3]));
+						Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(args[3]));
 						if (tech != null)
 							return getListOfStringsMatchingLastWord(args, tech.getCriteria().keySet());
 					}
@@ -150,9 +150,9 @@ public class CommandTechnology extends CommandBase {
 				if (args.length == 2)
 					return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 				if (args.length == 3)
-					return getListOfStringsMatchingLastWord(args, TechnologyHandler.technologies.keySet());
+					return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.technologies.keySet());
 				if (args.length == 4) {
-					Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(args[2]));
+					Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(args[2]));
 					if (tech != null)
 						return getListOfStringsMatchingLastWord(args, tech.getCriteria().keySet());
 				}

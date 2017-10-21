@@ -3,6 +3,7 @@ package ftgumod.util;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.advancements.ICriterionInstance;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
@@ -23,7 +24,8 @@ public final class ListenerTechnology<T extends ICriterionInstance> extends ICri
 	public void grantCriterion(PlayerAdvancements playerAdvancements) {
 		EntityPlayerMP player = playerAdvancements.player;
 
-		technology.grantCriterion(player, name);
+		if (TechnologyManager.INSTANCE.containsValue(technology))
+			technology.grantCriterion(player, name);
 		PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
 	}
 

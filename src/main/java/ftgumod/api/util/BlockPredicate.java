@@ -1,4 +1,4 @@
-package ftgumod.util;
+package ftgumod.api.util;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;

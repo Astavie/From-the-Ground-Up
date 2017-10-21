@@ -1,7 +1,7 @@
 package ftgumod.block;
 
 import ftgumod.FTGU;
-import ftgumod.technology.TechnologyHandler.GUI;
+import ftgumod.technology.TechnologyManager.GUI;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.block.Block;

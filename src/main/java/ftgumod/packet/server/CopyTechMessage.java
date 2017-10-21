@@ -1,10 +1,10 @@
 package ftgumod.packet.server;
 
+import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.FTGUAPI;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,18 +40,18 @@ public class CopyTechMessage implements IMessage {
 		@Override
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
 			if (FTGU.copy) {
-				Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(message.id));
+				Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(message.id));
 
 				if (tech != null && tech.canCopy() && tech.isResearched(player)) {
 					int index = -1;
 					for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-						if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty)
+						if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == Content.i_parchmentEmpty)
 							index = i;
 
 					if (index != -1) {
 						player.inventory.getStackInSlot(index).shrink(1);
 
-						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
+						ItemStack result = new ItemStack(Content.i_parchmentResearch);
 						StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
 						if (player.inventory.getFirstEmptyStack() == -1)

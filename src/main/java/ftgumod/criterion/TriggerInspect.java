@@ -3,7 +3,7 @@ package ftgumod.criterion;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import ftgumod.FTGU;
-import ftgumod.util.BlockPredicate;
+import ftgumod.api.util.BlockPredicate;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;

@@ -4,6 +4,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
+import ftgumod.api.util.BlockPredicate;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -75,20 +76,12 @@ public class IngredientResearch extends Ingredient {
 		return ingredient.getValidItemStacksPacked();
 	}
 
-	public boolean hasHint() {
-		return hint != null;
-	}
-
 	public ITextComponent getHint() {
 		return hint;
 	}
 
 	public Set<BlockPredicate> getDecipher() {
 		return unlock;
-	}
-
-	public boolean hasDecipher() {
-		return unlock != null && unlock.size() > 0;
 	}
 
 }

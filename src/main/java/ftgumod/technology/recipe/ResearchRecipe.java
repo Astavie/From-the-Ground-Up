@@ -6,16 +6,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.api.recipe.IResearchRecipe;
+import ftgumod.api.util.BlockPredicate;
 import ftgumod.util.IngredientResearch;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.crafting.JsonContext;
 
 import java.util.Map;
 import java.util.Set;
 
-public class ResearchRecipe {
+public class ResearchRecipe implements IResearchRecipe {
 
 	private final NonNullList<IngredientResearch> ingredients;
 
@@ -71,15 +74,22 @@ public class ResearchRecipe {
 		return new ResearchRecipe(input);
 	}
 
-	public boolean test(NonNullList<ItemStack> inventory) {
-		for (int i = 0; i < 9; i++)
-			if ((!isEmpty(i) || !inventory.get(i).isEmpty()) && !ingredients.get(i).test(inventory.get(i)))
-				return false;
-		return true;
+	@Override
+	public ITextComponent getHint(int index) {
+		return get(index).getHint();
 	}
 
-	public boolean isEmpty(int index) {
-		return ingredients.get(index) == IngredientResearch.EMPTY;
+	@Override
+	public Set<BlockPredicate> getDecipher(int index) {
+		return get(index).getDecipher();
+	}
+
+	@Override
+	public boolean test(NonNullList<ItemStack> inventory) {
+		for (int i = 0; i < 9; i++)
+			if (!ingredients.get(i).test(inventory.get(i)))
+				return false;
+		return true;
 	}
 
 	public IngredientResearch get(int index) {

@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -48,7 +48,7 @@ public class CompatIE implements ICompat {
 	@SubscribeEvent
 	public void onMultiblockForm(MultiblockHandler.MultiblockFormEvent evt) {
 		if (unlock.containsKey(evt.getMultiblock())) {
-			Technology technology = TechnologyHandler.technologies.get(unlock.get(evt.getMultiblock()));
+			Technology technology = TechnologyManager.INSTANCE.technologies.get(unlock.get(evt.getMultiblock()));
 			if (technology != null && !technology.isResearched(evt.getEntityPlayer()))
 				evt.setCanceled(true); // TODO: Send message?
 		}

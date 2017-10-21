@@ -28,7 +28,7 @@ public class ToastTechnology implements IToast {
 		gui.drawTexturedModalRect(0, 0, 0, 0, 160, 32);
 
 		String display = I18n.format("technology.toast." + (tech.getType() == Technology.Type.THEORY ? "theory" : "technology"));
-		String title = tech.getDisplay().getTitle().getUnformattedText();
+		String title = tech.getDisplayInfo().getTitle().getUnformattedText();
 
 		List<String> list = gui.getMinecraft().fontRenderer.listFormattedStringToWidth(title, 125);
 
@@ -51,7 +51,7 @@ public class ToastTechnology implements IToast {
 		}
 
 		RenderHelper.enableGUIStandardItemLighting();
-		gui.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(null, tech.getDisplay().getIcon(), 8, 8);
+		gui.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(null, tech.getDisplayInfo().getIcon(), 8, 8);
 
 		return delta >= 5000L ? IToast.Visibility.HIDE : IToast.Visibility.SHOW;
 	}

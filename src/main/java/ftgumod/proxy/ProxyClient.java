@@ -1,7 +1,7 @@
 package ftgumod.proxy;
 
+import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.FTGUAPI;
 import ftgumod.client.GuiHandlerClient;
 import ftgumod.client.gui.toast.ToastTechnology;
 import ftgumod.technology.Technology;
@@ -22,7 +22,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void displayToastTechnology(Technology technology) {
-		if (technology.getDisplay().shouldShowToast())
+		if (technology.getDisplayInfo().shouldShowToast())
 			Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(technology));
 	}
 
@@ -45,14 +45,14 @@ public class ProxyClient extends ProxyCommon {
 	public void init(FMLInitializationEvent event) {
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(FTGUAPI.b_ideaTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_ideaTable, "inventory"));
-		renderItem.getItemModelMesher().register(Item.getItemFromBlock(FTGUAPI.b_researchTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_researchTable, "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Content.b_ideaTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_ideaTable, "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Content.b_researchTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchTable, "inventory"));
 
-		renderItem.getItemModelMesher().register(FTGUAPI.i_parchmentEmpty, 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_parchmentEmpty, "inventory"));
-		renderItem.getItemModelMesher().register(FTGUAPI.i_parchmentIdea, 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_parchmentIdea, "inventory"));
-		renderItem.getItemModelMesher().register(FTGUAPI.i_parchmentResearch, 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_parchmentResearch, "inventory"));
-		renderItem.getItemModelMesher().register(FTGUAPI.i_researchBook, 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_researchBook, "inventory"));
-		renderItem.getItemModelMesher().register(FTGUAPI.i_lookingGlass, 0, new ModelResourceLocation(FTGU.MODID + ":" + FTGUAPI.n_lookingGlass, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_parchmentEmpty, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentEmpty, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_parchmentIdea, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentIdea, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_parchmentResearch, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentResearch, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_researchBook, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchBook, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_lookingGlass, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_lookingGlass, "inventory"));
 	}
 
 }

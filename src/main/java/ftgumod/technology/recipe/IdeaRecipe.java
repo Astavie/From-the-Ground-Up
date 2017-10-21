@@ -3,6 +3,7 @@ package ftgumod.technology.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import ftgumod.api.recipe.IIdeaRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
@@ -10,12 +11,11 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class IdeaRecipe {
+public class IdeaRecipe implements IIdeaRecipe {
 
 	private final NonNullList<Ingredient> recipe;
 	private final int needed;
@@ -36,7 +36,8 @@ public class IdeaRecipe {
 		return new IdeaRecipe(recipe, amount);
 	}
 
-	public boolean test(Collection<ItemStack> inventory) {
+	@Override
+	public boolean test(NonNullList<ItemStack> inventory) {
 		if (inventory.size() >= needed) {
 			Set<Ingredient> copy = new HashSet<>(recipe);
 

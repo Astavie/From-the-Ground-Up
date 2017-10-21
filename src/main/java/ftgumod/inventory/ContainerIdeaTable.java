@@ -1,19 +1,17 @@
 package ftgumod.inventory;
 
-import ftgumod.FTGUAPI;
+import ftgumod.Content;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 public class ContainerIdeaTable extends Container {
 
@@ -54,7 +52,7 @@ public class ContainerIdeaTable extends Container {
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(FTGUAPI.i_parchmentEmpty)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(Content.i_parchmentEmpty)));
 		parchment = c;
 		c++;
 
@@ -72,12 +70,12 @@ public class ContainerIdeaTable extends Container {
 	}
 
 	private Technology hasRecipe() {
-		Collection<ItemStack> inventory = new HashSet<>();
+		NonNullList<ItemStack> inventory = NonNullList.create();
 		for (int i = 0; i < 3; i++)
 			if (inventorySlots.get(i + combine).getHasStack())
 				inventory.add(inventorySlots.get(i + combine).getStack());
 
-		for (Technology tech : TechnologyHandler.technologies.values()) {
+		for (Technology tech : TechnologyManager.INSTANCE.technologies.values()) {
 			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player))
 				if (tech.getIdeaRecipe().test(inventory))
 					return tech;
@@ -92,7 +90,7 @@ public class ContainerIdeaTable extends Container {
 				Technology tech = hasRecipe();
 
 				if (tech != null) {
-					ItemStack result = new ItemStack(tech.hasResearchRecipe() ? FTGUAPI.i_parchmentIdea : FTGUAPI.i_parchmentResearch);
+					ItemStack result = new ItemStack(tech.hasResearchRecipe() ? Content.i_parchmentIdea : Content.i_parchmentResearch);
 
 					StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
 
@@ -140,7 +138,7 @@ public class ContainerIdeaTable extends Container {
 				if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true))
 					return ItemStack.EMPTY;
 			} else if (slotIndex > output) {
-				if (itemStack2.getItem() == FTGUAPI.i_parchmentEmpty) {
+				if (itemStack2.getItem() == Content.i_parchmentEmpty) {
 					if (!mergeItemStack(itemStack2, parchment, parchment + 1, false))
 						return ItemStack.EMPTY;
 				} else if (ArrayUtils.contains(OreDictionary.getOreIDs(itemStack2), OreDictionary.getOreID("feather")))

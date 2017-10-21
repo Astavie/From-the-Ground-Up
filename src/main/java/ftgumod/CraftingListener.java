@@ -30,7 +30,7 @@ public class CraftingListener implements IContainerListener {
 
 			if (!event.isCanceled()) {
 				slot.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
-				FTGUAPI.c_itemLocked.trigger(player, recipe, stack);
+				Content.c_itemLocked.trigger(player, recipe, stack);
 			}
 		}
 	}

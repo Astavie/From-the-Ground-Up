@@ -1,7 +1,7 @@
 package ftgumod.event;
 
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -22,7 +22,7 @@ public class PlayerLockEvent extends PlayerEvent {
 		this.stack = stack;
 		this.recipe = recipe;
 
-		Technology tech = TechnologyHandler.getLocked(stack);
+		Technology tech = TechnologyManager.INSTANCE.getLocked(stack);
 		setCanceled(tech == null || tech.isResearched(player));
 	}
 

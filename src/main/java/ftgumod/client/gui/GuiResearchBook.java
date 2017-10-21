@@ -1,12 +1,12 @@
 package ftgumod.client.gui;
 
+import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.FTGUAPI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -42,9 +42,9 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 
-	private static Map<ResourceLocation, Float> zoom = TechnologyHandler.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-	private static Map<ResourceLocation, Double> xScrollO = TechnologyHandler.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-	private static Map<ResourceLocation, Double> yScrollO = TechnologyHandler.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static Map<ResourceLocation, Float> zoom = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+	private static Map<ResourceLocation, Double> xScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static Map<ResourceLocation, Double> yScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 	private static int currentPage = 0;
 	private static boolean state = true;
 	private static Technology selected;
@@ -72,8 +72,8 @@ public class GuiResearchBook extends GuiScreen {
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
 
-		TechnologyHandler.roots.forEach(tech -> {
-			if (tech.canResearchIgnoreResearched(player))
+		TechnologyManager.INSTANCE.roots.forEach(tech -> {
+			if (tech.displayed() && tech.canResearchIgnoreResearched(player))
 				roots.add(tech);
 		});
 
@@ -98,20 +98,20 @@ public class GuiResearchBook extends GuiScreen {
 			Set<Technology> tree = new HashSet<>();
 			root.getChildren(tree, true);
 
-			x_min = (int) root.getDisplay().getX();
-			y_min = (int) root.getDisplay().getY();
-			x_max = (int) root.getDisplay().getX();
-			y_max = (int) root.getDisplay().getY();
+			x_min = (int) root.getDisplayInfo().getX();
+			y_min = (int) root.getDisplayInfo().getY();
+			x_max = (int) root.getDisplayInfo().getX();
+			y_max = (int) root.getDisplayInfo().getY();
 
 			for (Technology technology : tree) {
-				if (technology.getDisplay().getX() < x_min)
-					x_min = (int) technology.getDisplay().getX();
-				else if (technology.getDisplay().getX() > x_max)
-					x_max = (int) technology.getDisplay().getX();
-				if (technology.getDisplay().getY() < y_min)
-					y_min = (int) technology.getDisplay().getY();
-				else if (technology.getDisplay().getY() > y_max)
-					y_max = (int) technology.getDisplay().getY();
+				if (technology.getDisplayInfo().getX() < x_min)
+					x_min = (int) technology.getDisplayInfo().getX();
+				else if (technology.getDisplayInfo().getX() > x_max)
+					x_max = (int) technology.getDisplayInfo().getX();
+				if (technology.getDisplayInfo().getY() < y_min)
+					y_min = (int) technology.getDisplayInfo().getY();
+				else if (technology.getDisplayInfo().getY() > y_max)
+					y_max = (int) technology.getDisplayInfo().getY();
 			}
 
 			x_min = x_min * 24 - 112;
@@ -122,7 +122,7 @@ public class GuiResearchBook extends GuiScreen {
 			xScrollP = xScrollTarget = xScrollO.get(root.getRegistryName());
 			yScrollP = yScrollTarget = yScrollO.get(root.getRegistryName());
 
-			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplay().getTitle().getUnformattedText());
+			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplayInfo().getTitle().getUnformattedText());
 			if (roots.size() < 2)
 				page.enabled = false;
 
@@ -136,7 +136,7 @@ public class GuiResearchBook extends GuiScreen {
 				GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
 				copy.enabled = false;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
-					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == FTGUAPI.i_parchmentEmpty) {
+					if (!player.inventory.getStackInSlot(i).isEmpty() && player.inventory.getStackInSlot(i).getItem() == Content.i_parchmentEmpty) {
 						copy.enabled = true;
 						break;
 					}
@@ -294,10 +294,10 @@ public class GuiResearchBook extends GuiScreen {
 
 		for (int l3 = 0; l3 < 10; l3++) {
 			for (int i4 = 0; i4 < 14; i4++) {
-				if (root.getDisplay().getBackground() == null)
+				if (root.getDisplayInfo().getBackground() == null)
 					mc.getTextureManager().bindTexture(STAINED_CLAY);
 				else
-					mc.getTextureManager().bindTexture(root.getDisplay().getBackground());
+					mc.getTextureManager().bindTexture(root.getDisplayInfo().getBackground());
 				drawModalRectWithCustomSizedTexture(i4 * 16, l3 * 16, 0, 0, 16, 16, 16, 16);
 			}
 		}
@@ -326,18 +326,20 @@ public class GuiResearchBook extends GuiScreen {
 			if (tech != null) {
 				try {
 					for (Technology t1 : tech) {
+						if (!t1.displayed())
+							continue;
 						if (!t1.canResearchIgnoreResearched(player))
 							continue;
 						if (t1.hasCustomUnlock() && !t1.isResearched(player) && !t1.isUnlocked(player))
 							continue;
-						if (t1.getDisplay().isHidden() && !t1.hasCustomUnlock() && !t1.isResearched(player))
+						if (t1.getDisplayInfo().isHidden() && !t1.hasCustomUnlock() && !t1.isResearched(player))
 							continue;
 						if (t1.getParent() == null || !tech.contains(t1.getParent()))
 							continue;
-						int xStart = (int) ((t1.getDisplay().getX() * 24 - i) + 11);
-						int yStart = (int) ((t1.getDisplay().getY() * 24 - j) + 11);
-						int xStop = (int) ((t1.getParent().getDisplay().getX() * 24 - i) + 11);
-						int yStop = (int) ((t1.getParent().getDisplay().getY() * 24 - j) + 11);
+						int xStart = (int) ((t1.getDisplayInfo().getX() * 24 - i) + 11);
+						int yStart = (int) ((t1.getDisplayInfo().getY() * 24 - j) + 11);
+						int xStop = (int) ((t1.getParent().getDisplayInfo().getX() * 24 - i) + 11);
+						int yStop = (int) ((t1.getParent().getDisplayInfo().getY() * 24 - j) + 11);
 
 						boolean flag = t1.isResearched(player);
 
@@ -371,14 +373,16 @@ public class GuiResearchBook extends GuiScreen {
 					GlStateManager.enableColorMaterial();
 
 					for (Technology t2 : tech) {
+						if (!t2.displayed())
+							continue;
 						if (!t2.canResearchIgnoreResearched(player))
 							continue;
 						if (t2.hasCustomUnlock() && !t2.isResearched(player) && !t2.isUnlocked(player))
 							continue;
-						if (t2.getDisplay().isHidden() && !t2.hasCustomUnlock() && !t2.isResearched(player))
+						if (t2.getDisplayInfo().isHidden() && !t2.hasCustomUnlock() && !t2.isResearched(player))
 							continue;
-						int l6 = (int) (t2.getDisplay().getX() * 24 - i);
-						int j7 = (int) (t2.getDisplay().getY() * 24 - j);
+						int l6 = (int) (t2.getDisplayInfo().getX() * 24 - i);
+						int j7 = (int) (t2.getDisplayInfo().getY() * 24 - j);
 						if (l6 < -24 || j7 < -24 || l6 > 224F * zoom.get(root.getRegistryName()) || j7 > 155F * zoom.get(root.getRegistryName()))
 							continue;
 
@@ -397,7 +401,7 @@ public class GuiResearchBook extends GuiScreen {
 
 						GlStateManager.disableLighting();
 						GlStateManager.enableCull();
-						itemRender.renderItemAndEffectIntoGUI(t2.getDisplay().getIcon(), l6 + 3, j7 + 3);
+						itemRender.renderItemAndEffectIntoGUI(t2.getDisplayInfo().getIcon(), l6 + 3, j7 + 3);
 						GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 						GlStateManager.disableLighting();
 
@@ -531,8 +535,8 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			if (state) {
-				String s = selected.getDisplay().getTitle().getUnformattedText();
-				String s1 = selected.getDisplay().getDescription().getUnformattedText();
+				String s = selected.getDisplayInfo().getTitle().getUnformattedText();
+				String s1 = selected.getDisplayInfo().getDescription().getUnformattedText();
 
 				int children = 0;
 				for (Technology child : selected.getChildren())
@@ -555,11 +559,11 @@ public class GuiResearchBook extends GuiScreen {
 					fontRenderer.drawStringWithShadow(I18n.format(children == 1 ? "technology.tab" : "technology.tabs"), i7, k7 + i9 + 4, 0xffff5555);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getDisplay().getTitle().getUnformattedText();
+				String s1 = selected.getDisplayInfo().getTitle().getUnformattedText();
 				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
 				fontRenderer.drawStringWithShadow(s1, x1, l + 22, 0xffffff);
 
-				String s2 = selected.getDisplay().getDescription().getUnformattedText();
+				String s2 = selected.getDisplayInfo().getDescription().getUnformattedText();
 				int x2 = width / 2;
 				int y2 = l + 32;
 

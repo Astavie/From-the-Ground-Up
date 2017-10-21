@@ -1,7 +1,7 @@
 package ftgumod.client.gui;
 
+import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.FTGUAPI;
 import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -29,7 +29,7 @@ public class GuiIdeaTable extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String s = FTGUAPI.b_ideaTable.getLocalizedName();
+		String s = Content.b_ideaTable.getLocalizedName();
 		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
 		fontRenderer.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 	}

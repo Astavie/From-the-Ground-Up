@@ -1,14 +1,13 @@
 package ftgumod.inventory;
 
-import ftgumod.FTGUAPI;
+import ftgumod.Content;
+import ftgumod.api.util.BlockSerializable;
 import ftgumod.item.ItemLookingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.DecipherMessage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;
-import ftgumod.util.BlockPredicate;
-import ftgumod.util.BlockSerializable;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -67,7 +66,7 @@ public class ContainerResearchTable extends Container {
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 8, 24, 1, new ItemStack(FTGUAPI.i_parchmentIdea)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 8, 24, 1, new ItemStack(Content.i_parchmentIdea)));
 		parchment = c;
 		c++;
 
@@ -79,7 +78,7 @@ public class ContainerResearchTable extends Container {
 			}
 		}
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 150, 35, 1, new ItemStack(FTGUAPI.i_lookingGlass)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 150, 35, 1, new ItemStack(Content.i_lookingGlass)));
 		glass = c;
 		c++;
 
@@ -96,7 +95,7 @@ public class ContainerResearchTable extends Container {
 			if (inventorySlots.get(parchment).getHasStack()) {
 				NBTTagCompound tag = StackUtils.getItemData(inventorySlots.get(parchment).getStack());
 				String s = tag.getString("FTGU");
-				Technology tech = TechnologyHandler.technologies.get(new ResourceLocation(s));
+				Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(s));
 
 				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player))
 					recipe = tech;
@@ -114,23 +113,12 @@ public class ContainerResearchTable extends Container {
 					deciphered = new HashSet<>();
 
 					boolean allow = true;
-					for (int i = 0; i < 9; i++) {
-						if (!recipe.getResearchRecipe().isEmpty(i) && recipe.getResearchRecipe().get(i).hasDecipher()) {
-							Set<BlockPredicate> set = recipe.getResearchRecipe().get(i).getDecipher();
-							boolean perms = false;
-							for (BlockSerializable block : blocks)
-								for (BlockPredicate predicate : set)
-									if (block.test(predicate, invPlayer.player.getServer())) {
-										perms = true;
-										break;
-									}
-							if (!perms)
-								allow = false;
-							else
-								deciphered.add(i);
-						} else
+					for (int i = 0; i < 9; i++)
+						if (recipe.getResearchRecipe().testDecipher(i, blocks))
 							deciphered.add(i);
-					}
+						else
+							allow = false;
+
 					PacketDispatcher.sendTo(new DecipherMessage(deciphered), (EntityPlayerMP) invPlayer.player);
 					if (!allow) {
 						inventorySlots.get(output).putStack(ItemStack.EMPTY);
@@ -144,7 +132,7 @@ public class ContainerResearchTable extends Container {
 						inventory.add(inventorySlots.get(combine + i).getStack());
 
 					if (recipe.getResearchRecipe().test(inventory)) {
-						ItemStack result = new ItemStack(FTGUAPI.i_parchmentResearch);
+						ItemStack result = new ItemStack(Content.i_parchmentResearch);
 
 						StackUtils.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
 
@@ -195,7 +183,7 @@ public class ContainerResearchTable extends Container {
 				if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true))
 					return ItemStack.EMPTY;
 			} else if (slotIndex > output) {
-				if (itemStack2.getItem() == FTGUAPI.i_parchmentIdea) {
+				if (itemStack2.getItem() == Content.i_parchmentIdea) {
 					if (!mergeItemStack(itemStack2, parchment, parchment + 1, false))
 						return ItemStack.EMPTY;
 				} else if (ArrayUtils.contains(OreDictionary.getOreIDs(itemStack2), OreDictionary.getOreID("feather")))

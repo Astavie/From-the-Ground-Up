@@ -3,7 +3,7 @@ package ftgumod.client;
 import ftgumod.GuiHandler;
 import ftgumod.client.gui.GuiIdeaTable;
 import ftgumod.client.gui.GuiResearchTable;
-import ftgumod.technology.TechnologyHandler;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -20,9 +20,9 @@ public class GuiHandlerClient extends GuiHandler {
 		TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
 
 		if (tileEntity != null) {
-			if (ID == TechnologyHandler.GUI.IDEATABLE.ordinal()) {
+			if (ID == TechnologyManager.GUI.IDEATABLE.ordinal()) {
 				return new GuiIdeaTable(player.inventory, (TileEntityInventory) tileEntity);
-			} else if (ID == TechnologyHandler.GUI.RESEARCHTABLE.ordinal()) {
+			} else if (ID == TechnologyManager.GUI.RESEARCHTABLE.ordinal()) {
 				return new GuiResearchTable(player.inventory, (TileEntityInventory) tileEntity);
 			}
 		}
