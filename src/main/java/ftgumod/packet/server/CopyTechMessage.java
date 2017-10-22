@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class CopyTechMessage implements IMessage {
 
@@ -39,7 +38,7 @@ public class CopyTechMessage implements IMessage {
 	public static class CopyTechMessageHandler extends MessageHandler<CopyTechMessage> {
 
 		@Override
-		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message) {
 			if (FTGU.copy) {
 				Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(message.id));
 

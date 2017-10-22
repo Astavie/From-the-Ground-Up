@@ -5,7 +5,6 @@ import ftgumod.packet.MessageHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -40,7 +39,7 @@ public class DecipherMessage implements IMessage {
 	public static class DecipherMessageHandler extends MessageHandler<DecipherMessage> {
 
 		@Override
-		public IMessage handleMessage(EntityPlayer player, DecipherMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, DecipherMessage message) {
 			if (player.openContainer instanceof ContainerResearchTable) {
 				ContainerResearchTable table = (ContainerResearchTable) player.openContainer;
 				table.deciphered = message.deciphered;

@@ -8,10 +8,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public abstract class MessageHandler<T extends IMessage> implements IMessageHandler<T, IMessage> {
 
-	public abstract IMessage handleMessage(EntityPlayer player, T message, MessageContext ctx);
+	public abstract IMessage handleMessage(EntityPlayer player, T message);
 
 	@Override
 	public IMessage onMessage(T message, MessageContext ctx) {
-		return handleMessage(FTGU.PROXY.getPlayerEntity(ctx), message, ctx);
+		return handleMessage(FTGU.PROXY.getPlayerEntity(ctx), message);
 	}
 }

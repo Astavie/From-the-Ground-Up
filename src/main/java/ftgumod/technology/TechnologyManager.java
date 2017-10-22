@@ -57,11 +57,11 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 
 	public final Map<ResourceLocation, ?> slaves = new HashMap<>();
 
-	public Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
+	private final List<Predicate<? super Technology>> removeCallback = new LinkedList<>();
+	private final List<Consumer<? super Technology>> addCallback = new LinkedList<>();
+	private final List<Runnable> createCallback = new LinkedList<>();
 
-	private List<Predicate<? super Technology>> removeCallback = new LinkedList<>();
-	private List<Consumer<? super Technology>> addCallback = new LinkedList<>();
-	private List<Runnable> createCallback = new LinkedList<>();
+	public Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
 
 	private Map<JsonContext, Map<ResourceLocation, String>> loadBuiltin() {
 		Map<JsonContext, Map<ResourceLocation, String>> json = new HashMap<>();
@@ -388,7 +388,7 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	public Iterator<Technology> iterator() {
 		return new Iterator<Technology>() {
 
-			Iterator<Technology> iterator = technologies.values().iterator();
+			private final Iterator<Technology> iterator = technologies.values().iterator();
 
 			@Override
 			public boolean hasNext() {

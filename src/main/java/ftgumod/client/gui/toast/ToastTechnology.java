@@ -1,7 +1,6 @@
 package ftgumod.client.gui.toast;
 
 import ftgumod.api.technology.ITechnology;
-import ftgumod.technology.Technology;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,7 +27,7 @@ public class ToastTechnology implements IToast {
 		GlStateManager.color(1.0F, 1.0F, 1.0F);
 		gui.drawTexturedModalRect(0, 0, 0, 0, 160, 32);
 
-		String display = I18n.format("technology.toast." + (tech.getType() == Technology.Type.THEORY ? "theory" : "technology"));
+		String display = I18n.format("technology.toast");
 		String title = tech.getDisplayInfo().getTitle().getUnformattedText();
 
 		List<String> list = gui.getMinecraft().fontRenderer.listFormattedStringToWidth(title, 125);

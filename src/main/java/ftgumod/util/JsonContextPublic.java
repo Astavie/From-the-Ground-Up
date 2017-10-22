@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class JsonContextPublic extends JsonContext {
 
-	private Map<String, Ingredient> constants = new HashMap<>();
+	private final Map<String, Ingredient> constants = new HashMap<>();
 
 	public JsonContextPublic(String modId) {
 		super(modId);

@@ -17,8 +17,6 @@ public interface ITechnologyBuilder {
 
 	void setDisplayInfo(DisplayInfo display);
 
-	void setType(ITechnology.Type type);
-
 	void setRewards(AdvancementRewards rewards);
 
 	void setCriteria(Map<String, Criterion> criteria, String[][] requirements);

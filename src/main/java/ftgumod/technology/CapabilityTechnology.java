@@ -115,7 +115,7 @@ public class CapabilityTechnology {
 
 	public static class DefaultImpl implements ITechnology {
 
-		private Collection<String> tech = new HashSet<>();
+		private final Collection<String> tech = new HashSet<>();
 		private boolean isNew = true;
 
 		@Override

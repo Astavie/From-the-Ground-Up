@@ -160,11 +160,6 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	void removeResearched(EntityPlayer player);
 
 	/**
-	 * @return The {@code Type} of this {@code Technology}
-	 */
-	Type getType();
-
-	/**
 	 * @return The {@code DisplayInfo} of this {@code Technology}
 	 */
 	DisplayInfo getDisplayInfo();
@@ -202,9 +197,5 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	 * @see ITechnologyManager#createBuilder(ResourceLocation)
 	 */
 	ITechnologyBuilder toBuilder();
-
-	enum Type {
-		TECHNOLOGY, THEORY
-	}
 
 }

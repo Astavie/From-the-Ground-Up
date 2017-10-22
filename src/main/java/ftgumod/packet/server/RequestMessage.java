@@ -7,7 +7,6 @@ import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class RequestMessage implements IMessage {
 
@@ -33,7 +32,7 @@ public class RequestMessage implements IMessage {
 	public static class RequestMessageHandler extends MessageHandler<RequestMessage> {
 
 		@Override
-		public IMessage handleMessage(EntityPlayer player, RequestMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, RequestMessage message) {
 			if (message.id == 0)
 				return new TechnologyMessage(player, false);
 			else if (message.id == 1 && player.openContainer instanceof ContainerResearchTable)

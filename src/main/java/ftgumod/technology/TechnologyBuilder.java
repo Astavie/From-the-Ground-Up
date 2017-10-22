@@ -1,6 +1,5 @@
 package ftgumod.technology;
 
-import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.ITechnologyBuilder;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
@@ -23,7 +22,6 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 
 	private ResourceLocation parent;
 	private DisplayInfo display;
-	private ITechnology.Type type;
 	private AdvancementRewards rewards;
 	private Map<String, Criterion> criteria;
 	private String[][] requirements;
@@ -37,7 +35,6 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		this.original = null;
 		this.id = id;
 
-		type = ITechnology.Type.TECHNOLOGY;
 		rewards = AdvancementRewards.EMPTY;
 		criteria = Collections.emptyMap();
 		requirements = new String[0][];
@@ -53,7 +50,6 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		if (tech.hasParent())
 			parent = tech.parent.getRegistryName();
 		display = tech.display;
-		type = tech.type;
 		rewards = tech.rewards;
 		criteria = tech.criteria;
 		requirements = tech.requirements;
@@ -72,11 +68,6 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 	@Override
 	public void setDisplayInfo(DisplayInfo display) {
 		this.display = display;
-	}
-
-	@Override
-	public void setType(ITechnology.Type type) {
-		this.type = type;
 	}
 
 	@Override
@@ -131,7 +122,6 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 
 		original.parent = parent;
 		original.display = display;
-		original.type = type;
 		original.rewards = rewards;
 		original.criteria = criteria;
 		original.requirements = requirements;
@@ -148,7 +138,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		if (parent == null)
 			throw new NullPointerException("Unknown technology '" + this.parent + "'");
 
-		original = new Technology(id, parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);
+		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
 		return original;
 	}
 

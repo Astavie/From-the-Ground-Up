@@ -18,7 +18,7 @@ public class SubCollection<T> extends AbstractCollection<T> {
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
 
-			private Iterator<? extends T> iterator = iterable.iterator();
+			private final Iterator<? extends T> iterator = iterable.iterator();
 			private T next = getNext();
 
 			@Override

@@ -42,15 +42,19 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 
-	private static Map<ResourceLocation, Float> zoom = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-	private static Map<ResourceLocation, Double> xScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-	private static Map<ResourceLocation, Double> yScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static final Map<ResourceLocation, Float> zoom = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+	private static final Map<ResourceLocation, Double> xScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static final Map<ResourceLocation, Double> yScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+
 	private static int currentPage = 0;
 	private static boolean state = true;
 	private static Technology selected;
 	private static int scroll = 1;
 
-	private List<Technology> roots = new ArrayList<>();
+	private final List<Technology> roots = new ArrayList<>();
+	private final EntityPlayer player;
+	private final int num = 4;
+
 	private Technology root;
 	private int x_min;
 	private int y_min;
@@ -65,8 +69,6 @@ public class GuiResearchBook extends GuiScreen {
 	private int scrolling;
 	private double xLastScroll;
 	private double yLastScroll;
-	private EntityPlayer player;
-	private int num = 4;
 	private int pages;
 
 	public GuiResearchBook(EntityPlayer player) {

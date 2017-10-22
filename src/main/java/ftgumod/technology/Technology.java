@@ -46,7 +46,6 @@ public class Technology implements ITechnology<Technology> {
 
 	ITextComponent displayText;
 	DisplayInfo display;
-	Type type;
 	NonNullList<Ingredient> unlock;
 	Technology parent;
 
@@ -60,11 +59,10 @@ public class Technology implements ITechnology<Technology> {
 	boolean start;
 	boolean copy;
 
-	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research) {
+	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
-		this.type = type;
 
 		this.start = start;
 		this.copy = copy;
@@ -353,11 +351,6 @@ public class Technology implements ITechnology<Technology> {
 	}
 
 	@Override
-	public Type getType() {
-		return type;
-	}
-
-	@Override
 	public ITextComponent getDisplayText() {
 		return displayText;
 	}
@@ -414,7 +407,6 @@ public class Technology implements ITechnology<Technology> {
 
 		private final ResourceLocation parentId;
 		private final DisplayInfo display;
-		private final Type type;
 		private final AdvancementRewards rewards;
 		private final Map<String, Criterion> criteria;
 		private final String[][] requirements;
@@ -428,10 +420,9 @@ public class Technology implements ITechnology<Technology> {
 
 		private Technology parent;
 
-		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, Type type, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
+		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
 			this.parentId = parent;
 			this.display = display;
-			this.type = type;
 			this.rewards = rewards;
 			this.criteria = criteria;
 			this.requirements = requirements;
@@ -461,7 +452,7 @@ public class Technology implements ITechnology<Technology> {
 			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			IResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
-			return new Technology(location, parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);
+			return new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
 		}
 
 	}
@@ -481,8 +472,6 @@ public class Technology implements ITechnology<Technology> {
 
 			if (displayObject.has("x") || displayObject.has("y"))
 				display.setPosition(JsonUtils.getInt(displayObject, "x"), JsonUtils.getInt(displayObject, "y"));
-
-			Type type = displayObject.has("theory") && JsonUtils.getBoolean(displayObject, "theory") ? Type.THEORY : Type.TECHNOLOGY;
 
 			AdvancementRewards rewards = JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context, AdvancementRewards.class);
 			Map<String, Criterion> criteria = json.has("criteria") ? Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context) : Collections.emptyMap();
@@ -536,7 +525,7 @@ public class Technology implements ITechnology<Technology> {
 			boolean start = JsonUtils.getBoolean(json, "researchedAtStart", false);
 			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
-			return new Builder(parent, display, type, rewards, criteria, requirements, start, copy, unlock, idea, research);
+			return new Builder(parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
 		}
 
 	}

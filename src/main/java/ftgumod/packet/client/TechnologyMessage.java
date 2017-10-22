@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
@@ -70,7 +69,7 @@ public class TechnologyMessage implements IMessage {
 	public static class TechnologyMessageHandler extends MessageHandler<TechnologyMessage> {
 
 		@Override
-		public IMessage handleMessage(EntityPlayer player, TechnologyMessage message, MessageContext ctx) {
+		public IMessage handleMessage(EntityPlayer player, TechnologyMessage message) {
 			if (player == null)
 				return null;
 

@@ -99,8 +99,6 @@ public class FTGU {
 
 		PacketDispatcher.registerPackets();
 
-		PROXY.preInit(event);
-
 		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 
@@ -123,7 +121,6 @@ public class FTGU {
 			MinecraftForge.EVENT_BUS.register(compat);
 			this.compat.put("immersiveengineering", compat);
 		}
-		PROXY.postInit(event);
 	}
 
 	@Mod.EventHandler
