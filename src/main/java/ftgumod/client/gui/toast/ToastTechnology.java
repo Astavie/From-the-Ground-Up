@@ -1,5 +1,6 @@
 package ftgumod.client.gui.toast;
 
+import ftgumod.api.ITechnology;
 import ftgumod.technology.Technology;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
@@ -15,9 +16,9 @@ import java.util.List;
 @SideOnly(Side.CLIENT)
 public class ToastTechnology implements IToast {
 
-	private final Technology tech;
+	private final ITechnology tech;
 
-	public ToastTechnology(Technology tech) {
+	public ToastTechnology(ITechnology tech) {
 		this.tech = tech;
 	}
 

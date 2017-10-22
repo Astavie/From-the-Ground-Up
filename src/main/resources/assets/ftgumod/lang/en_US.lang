@@ -8,8 +8,8 @@ item.parchment_research.name=Parchment
 item.parchment_research.complete=Right-click this item to complete the research
 
 item.research_book.name=Research Book
-item.looking_glass.name=Looking Glass
-item.looking_glass.shift=Press Shift for more information
+item.magnifying_glass.name=Magnifying Glass
+item.magnifying_glass.shift=Press Shift for more information
 
 gui.copy=Copy
 

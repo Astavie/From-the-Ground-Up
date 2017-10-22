@@ -1,6 +1,7 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
+import ftgumod.api.IStackUtils;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;
@@ -90,11 +91,7 @@ public class ContainerIdeaTable extends Container {
 				Technology tech = hasRecipe();
 
 				if (tech != null) {
-					ItemStack result = new ItemStack(tech.hasResearchRecipe() ? Content.i_parchmentIdea : Content.i_parchmentResearch);
-
-					StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
-
-					inventorySlots.get(output).putStack(result);
+					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(tech.getRegistryName(), tech.hasResearchRecipe() ? IStackUtils.Parchment.IDEA : IStackUtils.Parchment.RESEARCH));
 					return;
 				}
 			}

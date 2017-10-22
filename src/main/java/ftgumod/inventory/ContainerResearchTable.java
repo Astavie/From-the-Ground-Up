@@ -1,12 +1,12 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
+import ftgumod.api.IStackUtils;
 import ftgumod.api.util.BlockSerializable;
-import ftgumod.item.ItemLookingGlass;
+import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.DecipherMessage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,9 +14,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -78,7 +76,7 @@ public class ContainerResearchTable extends Container {
 			}
 		}
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 150, 35, 1, new ItemStack(Content.i_lookingGlass)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 150, 35, 1, new ItemStack(Content.i_magnifyingGlass)));
 		glass = c;
 		c++;
 
@@ -93,10 +91,7 @@ public class ContainerResearchTable extends Container {
 	public void onCraftMatrixChanged(IInventory inv) {
 		if (inv == invInput) {
 			if (inventorySlots.get(parchment).getHasStack()) {
-				NBTTagCompound tag = StackUtils.getItemData(inventorySlots.get(parchment).getStack());
-				String s = tag.getString("FTGU");
-				Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(s));
-
+				Technology tech = StackUtils.INSTANCE.getTechnology(inventorySlots.get(parchment).getStack());
 				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player))
 					recipe = tech;
 			} else
@@ -109,7 +104,7 @@ public class ContainerResearchTable extends Container {
 						return;
 					}
 				} else {
-					List<BlockSerializable> blocks = ItemLookingGlass.getInspected(inventorySlots.get(glass).getStack());
+					List<BlockSerializable> blocks = ItemMagnifyingGlass.getInspected(inventorySlots.get(glass).getStack());
 					deciphered = new HashSet<>();
 
 					boolean allow = true;
@@ -132,11 +127,7 @@ public class ContainerResearchTable extends Container {
 						inventory.add(inventorySlots.get(combine + i).getStack());
 
 					if (recipe.getResearchRecipe().test(inventory)) {
-						ItemStack result = new ItemStack(Content.i_parchmentResearch);
-
-						StackUtils.getItemData(result).setString("FTGU", recipe.getRegistryName().toString());
-
-						inventorySlots.get(output).putStack(result);
+						inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(recipe.getRegistryName(), IStackUtils.Parchment.RESEARCH));
 						return;
 					}
 				}

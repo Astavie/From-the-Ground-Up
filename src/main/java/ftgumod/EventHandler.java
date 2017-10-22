@@ -2,7 +2,7 @@ package ftgumod;
 
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.event.PlayerLockEvent;
-import ftgumod.item.ItemLookingGlass;
+import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyInfoMessage;
@@ -23,7 +23,6 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -64,30 +63,28 @@ public class EventHandler {
 	@SideOnly(Side.CLIENT)
 	public void onItemTooltip(ItemTooltipEvent evt) {
 		Item item = evt.getItemStack().getItem();
-		if (item == Content.i_lookingGlass) {
-			List<BlockSerializable> blocks = ItemLookingGlass.getInspected(evt.getItemStack());
+		if (item == Content.i_magnifyingGlass) {
+			List<BlockSerializable> blocks = ItemMagnifyingGlass.getInspected(evt.getItemStack());
 			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				for (BlockSerializable block : blocks)
 					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + block.getLocalizedName());
 				if (blocks.size() > 0)
 					evt.getToolTip().add("");
 			} else if (blocks.size() > 0) {
-				evt.getToolTip().add(I18n.format("item.looking_glass.shift"));
+				evt.getToolTip().add(I18n.format(Content.i_magnifyingGlass.getUnlocalizedName() + ".shift"));
 				evt.getToolTip().add("");
 			}
 
 			evt.getToolTip().add(TextFormatting.DARK_RED + I18n.format("technology.decipher.tooltip"));
 		} else if (item == Content.i_parchmentIdea) {
-			Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
-
+			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
 				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
 				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getDisplayInfo().getTitle().getUnformattedText()));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().getUnformattedText());
 			}
 		} else if (item == Content.i_parchmentResearch) {
-			Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(StackUtils.getItemData(evt.getItemStack()).getString("FTGU")));
-
+			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
 				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());
 				String k = can ? "" : "" + TextFormatting.OBFUSCATED;

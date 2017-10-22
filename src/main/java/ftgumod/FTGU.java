@@ -85,7 +85,7 @@ public class FTGU {
 		registerItem(Content.i_parchmentIdea, Content.n_parchmentIdea);
 		registerItem(Content.i_parchmentResearch, Content.n_parchmentResearch);
 		registerItem(Content.i_researchBook, Content.n_researchBook);
-		registerItem(Content.i_lookingGlass, Content.n_lookingGlass);
+		registerItem(Content.i_magnifyingGlass, Content.n_magnifyingGlass);
 
 		CriteriaTriggers.register(Content.c_technologyUnlocked);
 		CriteriaTriggers.register(Content.c_technologyResearched);

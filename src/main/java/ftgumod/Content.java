@@ -19,7 +19,7 @@ public final class Content {
 	public static final String n_parchmentIdea = "parchment_idea";
 	public static final String n_parchmentResearch = "parchment_research";
 	public static final String n_researchBook = "research_book";
-	public static final String n_lookingGlass = "looking_glass";
+	public static final String n_magnifyingGlass = "magnifying_glass";
 
 	public static final Block b_ideaTable = new BlockIdeaTable(n_ideaTable);
 	public static final Block b_researchTable = new BlockResearchTable(n_researchTable);
@@ -28,7 +28,7 @@ public final class Content {
 	public static final Item i_parchmentIdea = new ItemParchmentIdea(n_parchmentIdea);
 	public static final Item i_parchmentResearch = new ItemParchmentResearch(n_parchmentResearch);
 	public static final Item i_researchBook = new ItemResearchBook(n_researchBook);
-	public static final Item i_lookingGlass = new ItemLookingGlass(n_lookingGlass);
+	public static final Item i_magnifyingGlass = new ItemMagnifyingGlass(n_magnifyingGlass);
 
 	public static final TriggerTechnology c_technologyUnlocked = new TriggerTechnology("technology_unlocked");
 	public static final TriggerTechnology c_technologyResearched = new TriggerTechnology("technology_researched");

@@ -4,7 +4,6 @@ import ftgumod.Content;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
-import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
@@ -32,7 +30,7 @@ public class ItemParchmentResearch extends Item {
 
 	public ItemStack research(ItemStack item, EntityPlayer player, boolean already) {
 		if (!player.world.isRemote) {
-			Technology t = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(StackUtils.getItemData(item).getString("FTGU")));
+			Technology t = StackUtils.INSTANCE.getTechnology(item);
 			if (t != null) {
 				if (t.isResearched(player)) {
 					if (already)

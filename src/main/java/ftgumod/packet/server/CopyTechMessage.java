@@ -2,6 +2,7 @@ package ftgumod.packet.server;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
+import ftgumod.api.IStackUtils;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -51,9 +52,7 @@ public class CopyTechMessage implements IMessage {
 					if (index != -1) {
 						player.inventory.getStackInSlot(index).shrink(1);
 
-						ItemStack result = new ItemStack(Content.i_parchmentResearch);
-						StackUtils.getItemData(result).setString("FTGU", tech.getRegistryName().toString());
-
+						ItemStack result = StackUtils.INSTANCE.getParchment(tech.getRegistryName(), IStackUtils.Parchment.RESEARCH);
 						if (player.inventory.getFirstEmptyStack() == -1)
 							player.dropItem(result, true);
 						else

@@ -1,10 +1,10 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
+import ftgumod.api.ITechnology;
 import ftgumod.packet.MessageHandler;
 import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.CapabilityTechnology;
-import ftgumod.technology.CapabilityTechnology.ITechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
@@ -22,12 +22,12 @@ public class TechnologyMessage implements IMessage {
 
 	private Collection<String> tech;
 	private boolean force;
-	private Technology[] toasts;
+	private ITechnology[] toasts;
 
 	public TechnologyMessage() {
 	}
 
-	public TechnologyMessage(EntityPlayer player, boolean force, Technology... toasts) {
+	public TechnologyMessage(EntityPlayer player, boolean force, ITechnology... toasts) {
 		CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
 			this.tech = cap.getResearched();
@@ -46,7 +46,7 @@ public class TechnologyMessage implements IMessage {
 		for (int i = 0; i < size; i++)
 			tech.add(ByteBufUtils.readUTF8String(buffer));
 
-		toasts = new Technology[buffer.readInt()];
+		toasts = new ITechnology[buffer.readInt()];
 		for (int i = 0; i < toasts.length; i++)
 			toasts[i] = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
 	}
@@ -63,7 +63,7 @@ public class TechnologyMessage implements IMessage {
 			buffer.writeInt(0);
 
 		buffer.writeInt(toasts.length);
-		for (Technology toast : toasts)
+		for (ITechnology toast : toasts)
 			ByteBufUtils.writeUTF8String(buffer, toast.getRegistryName().toString());
 	}
 
@@ -75,7 +75,7 @@ public class TechnologyMessage implements IMessage {
 				return null;
 
 			try {
-				ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+				CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 				if (cap != null) {
 					if (!message.force && cap.getResearched().size() == message.tech.size())
 						return null;
@@ -102,13 +102,13 @@ public class TechnologyMessage implements IMessage {
 							}
 						}
 
-					for (Technology toast : message.toasts)
+					for (ITechnology toast : message.toasts)
 						FTGU.PROXY.displayToastTechnology(toast);
 
-					FTGU.INSTANCE.runCompat("jei", message.tech);
+					FTGU.INSTANCE.runCompat("jei", message.tech); // TODO: Do something with JEI
 				}
 			} catch (ConcurrentModificationException ignore) {
-				return new RequestMessage();
+				return new RequestMessage(); // A different thread changed the researched technologies, data might be lost
 			}
 
 			return null;

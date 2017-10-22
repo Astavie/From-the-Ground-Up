@@ -1,5 +1,7 @@
 package ftgumod.api;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -53,7 +55,7 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 */
 	@SuppressWarnings("unchecked")
 	default void registerTechnology(ITechnology value) {
-		if (!getRegistrySuperType().isAssignableFrom(value.getClass()))
+		if (!getRegistrySuperType().isInstance(value))
 			throw new IllegalArgumentException("Tried to register a technology with an unexpected class");
 		register((T) value);
 	}
@@ -73,8 +75,18 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * Used to create {@code Technologies} at runtime.
 	 * <p><strong>Only call this method if using JSON files is impossible!</strong>
 	 *
+	 * @param id The registry name of the new {@code Technology}
 	 * @return A new {@code TechnologyBuilder}
 	 */
 	ITechnologyBuilder createBuilder(ResourceLocation id);
+
+	/**
+	 * Sends a message to the client to sync the researched {@code Technologies}.
+	 * <p><strong>Should always be invoked after calling {@link ITechnology#setResearched(EntityPlayer)}!</strong></p>
+	 *
+	 * @param player The {@code EntityPlayer} to synchronize
+	 * @param toasts The {@code Technologies} to show a toast of
+	 */
+	void sync(EntityPlayerMP player, ITechnology... toasts);
 
 }

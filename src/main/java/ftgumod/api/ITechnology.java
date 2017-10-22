@@ -5,6 +5,7 @@ import ftgumod.api.recipe.IResearchRecipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -120,7 +121,8 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	/**
 	 * Notifies the specified player (and the rest of the server, if announceAdvancements is enabled) that this {@code Technology} has been researched.
 	 * <p>Should only be called if the player has actually researched this {@code Technology}.
-	 * You can use {@link #setResearched(EntityPlayer)} for that.
+	 * You can use {@link #setResearched(EntityPlayer)} for that.</p>
+	 * <p><strong>{@link ITechnologyManager#sync(EntityPlayerMP, ITechnology[])} should always be invoked after calling this method!</strong></p>
 	 *
 	 * @param player The {@code EntityPlayer} to notify
 	 */

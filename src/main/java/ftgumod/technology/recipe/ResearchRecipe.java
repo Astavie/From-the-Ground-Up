@@ -15,6 +15,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.crafting.JsonContext;
 
+import javax.annotation.Nullable;
 import java.util.Map;
 import java.util.Set;
 
@@ -74,6 +75,7 @@ public class ResearchRecipe implements IResearchRecipe {
 		return new ResearchRecipe(input);
 	}
 
+	@Nullable
 	@Override
 	public ITextComponent getHint(int index) {
 		return get(index).getHint();

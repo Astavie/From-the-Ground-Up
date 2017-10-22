@@ -474,7 +474,7 @@ public class GuiResearchBook extends GuiScreen {
 				if (x >= i1 + 6 && x < i1 + 32 && y >= j1 + 37 + (pos * 28) && y < j1 + 63 + (pos * 28)) {
 					int r = 0;
 					for (IRecipe recipe : ForgeRegistries.RECIPES) {
-						if (StackUtils.isStackOf(item, recipe.getRecipeOutput())) {
+						if (StackUtils.INSTANCE.isStackOf(item, recipe.getRecipeOutput())) {
 							mc.getTextureManager().bindTexture(RECIPE_BOOK);
 
 							int xp = 31 + (r * 25);

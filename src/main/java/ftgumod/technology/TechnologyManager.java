@@ -8,10 +8,13 @@ import ftgumod.FTGU;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.ITechnology;
 import ftgumod.api.ITechnologyManager;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.util.JsonContextPublic;
 import ftgumod.util.SubCollection;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
@@ -356,6 +359,10 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 		return new TechnologyBuilder(id);
 	}
 
+	@Override
+	public void sync(EntityPlayerMP player, ITechnology... toasts) {
+		PacketDispatcher.sendTo(new TechnologyMessage(player, false, toasts), player);
+	}
 
 	@Nonnull
 	@Override

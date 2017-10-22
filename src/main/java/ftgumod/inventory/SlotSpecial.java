@@ -28,7 +28,7 @@ public class SlotSpecial extends Slot {
 			return true;
 
 		for (ItemStack s : special)
-			if (StackUtils.isStackOf(s, stack))
+			if (StackUtils.INSTANCE.isStackOf(s, stack))
 				return true;
 		return false;
 	}

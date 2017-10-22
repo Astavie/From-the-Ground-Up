@@ -1,7 +1,7 @@
 package ftgumod.proxy;
 
 import ftgumod.GuiHandler;
-import ftgumod.technology.Technology;
+import ftgumod.api.ITechnology;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ProxyCommon {
 
-	public void displayToastTechnology(Technology technology) {
+	public void displayToastTechnology(ITechnology technology) {
 	}
 
 	public void clearToasts() {
