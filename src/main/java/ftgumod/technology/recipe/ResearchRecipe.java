@@ -6,11 +6,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.FTGU;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockPredicate;
-import ftgumod.crafting.IngredientFluid;
-import ftgumod.util.IngredientResearch;
 import ftgumod.util.StackUtils;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
@@ -20,29 +20,77 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nullable;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ResearchRecipe implements IResearchRecipe {
 
-	private final NonNullList<IngredientResearch> ingredients;
+	private final NonNullList<Set<ItemPredicate>> ingredients;
+	private final NonNullList<Set<BlockPredicate>> deciphers;
+	private final List<ITextComponent> hints;
 
-	public ResearchRecipe(NonNullList<IngredientResearch> ingredients) {
+	public ResearchRecipe(NonNullList<Set<ItemPredicate>> ingredients, NonNullList<Set<BlockPredicate>> deciphers, List<ITextComponent> hints) {
 		this.ingredients = ingredients;
+		this.deciphers = deciphers;
+		this.hints = hints;
 	}
 
 	public static ResearchRecipe deserialize(JsonObject object, JsonContext context) {
-		Map<Character, IngredientResearch> ingMap = Maps.newHashMap();
+		Map<Character, Set<ItemPredicate>> ingMap = Maps.newHashMap();
+		Map<Character, Set<BlockPredicate>> decipherMap = Maps.newHashMap();
+		Map<Character, ITextComponent> hintMap = Maps.newHashMap();
+
 		for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(object, "key").entrySet()) {
 			if (entry.getKey().length() != 1)
 				throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
 			if (" ".equals(entry.getKey()))
 				throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
 
-			ingMap.put(entry.getKey().toCharArray()[0], IngredientResearch.deserialize(entry.getValue(), context));
+			JsonElement element = entry.getValue();
+			char c = entry.getKey().toCharArray()[0];
+
+			ingMap.put(c, StackUtils.INSTANCE.getItemPredicate(element, context));
+
+			while (!element.isJsonObject()) {
+				if (element.isJsonArray())
+					element = element.getAsJsonArray().get(0);
+				else throw new JsonSyntaxException("Expected predicate to be an object or array of objects");
+			}
+
+			JsonObject first = element.getAsJsonObject();
+
+			Set<BlockPredicate> decipher = new HashSet<>();
+			if (first.has("decipher")) {
+				JsonElement i = first.get("decipher");
+				if (i.isJsonArray())
+					for (JsonElement j : i.getAsJsonArray())
+						if (j.isJsonObject())
+							decipher.add(BlockPredicate.deserialize(j.getAsJsonObject()));
+						else
+							throw new JsonSyntaxException("Expected decipher to be an object or array of objects");
+				else if (i.isJsonObject())
+					decipher.add(BlockPredicate.deserialize(i.getAsJsonObject()));
+				else
+					throw new JsonSyntaxException("Expected decipher to be an object or array of objects");
+			}
+
+			decipherMap.put(c, decipher);
+
+			ITextComponent hint = null;
+			if (first.has("hint"))
+				hint = FTGU.GSON.fromJson(first.get("hint"), ITextComponent.class);
+
+			hintMap.put(c, hint);
 		}
 
-		ingMap.put(' ', IngredientResearch.EMPTY);
+		ingMap.put(' ', Collections.singleton(new ItemPredicate() {
+
+			@Override
+			public boolean test(ItemStack item) {
+				return item.isEmpty();
+			}
+
+		}));
+		decipherMap.put(' ', Collections.emptySet());
 
 		JsonArray patternJ = JsonUtils.getJsonArray(object, "pattern");
 
@@ -57,7 +105,9 @@ public class ResearchRecipe implements IResearchRecipe {
 			pattern[x] = line;
 		}
 
-		NonNullList<IngredientResearch> input = NonNullList.withSize(9, IngredientResearch.EMPTY);
+		NonNullList<Set<ItemPredicate>> predicates = NonNullList.withSize(9, ingMap.get(' '));
+		NonNullList<Set<BlockPredicate>> deciphers = NonNullList.withSize(9, decipherMap.get(' '));
+		List<ITextComponent> hints = new ArrayList<>(9);
 
 		Set<Character> keys = Sets.newHashSet(ingMap.keySet());
 		keys.remove(' ');
@@ -65,10 +115,12 @@ public class ResearchRecipe implements IResearchRecipe {
 		int x = 0;
 		for (String line : pattern) {
 			for (char chr : line.toCharArray()) {
-				IngredientResearch ing = ingMap.get(chr);
+				Set<ItemPredicate> ing = ingMap.get(chr);
 				if (ing == null)
 					throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
-				input.set(x++, ing);
+				predicates.set(x, ing);
+				deciphers.set(x++, decipherMap.get(chr));
+				hints.add(hintMap.get(chr));
 				keys.remove(chr);
 			}
 		}
@@ -76,36 +128,33 @@ public class ResearchRecipe implements IResearchRecipe {
 		if (!keys.isEmpty())
 			throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + keys);
 
-		return new ResearchRecipe(input);
+		return new ResearchRecipe(predicates, deciphers, hints);
 	}
 
 	@Nullable
 	@Override
 	public ITextComponent getHint(int index) {
-		return get(index).getHint();
+		return hints.get(index);
 	}
 
 	@Override
 	public Set<BlockPredicate> getDecipher(int index) {
-		return get(index).getDecipher();
+		return deciphers.get(index);
 	}
 
 	@Override
 	public NonNullList<ItemStack> test(InventoryCrafting inventory) {
-		for (int i = 0; i < 9; i++)
-			if (!ingredients.get(i).test(inventory.getStackInSlot(i)))
-				return null;
-
 		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(inventory);
-		for (int i = 0; i < 9; i++)
-			if (get(i).getIngredient() instanceof IngredientFluid)
-				remaining.set(i, StackUtils.INSTANCE.drain(inventory.getStackInSlot(i).copy(), ((IngredientFluid) get(i).getIngredient()).getFluid()));
+
+		loop:
+		for (int i = 0; i < 9; i++) {
+			for (ItemPredicate predicate : ingredients.get(i))
+				if (predicate.test(inventory.getStackInSlot(i)))
+					continue loop;
+			return null;
+		}
 
 		return remaining;
-	}
-
-	public IngredientResearch get(int index) {
-		return ingredients.get(index);
 	}
 
 }

@@ -14,17 +14,10 @@
   },
   "parent": "ftgumod:research/research",
   "criteria": {
-    "hurt_witch": {
-      "trigger": "minecraft:entity_hurt_player",
-      "conditions": {
-        "damage": {
-          "source_entity": {
-            "type": "minecraft:witch"
-          }
-        }
-      }
+    "effect": {
+      "trigger": "minecraft:effects_changed"
     },
-    "kill_witch": {
+    "witch": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
         "entity": {
@@ -44,11 +37,19 @@
   },
   "requirements": [
     [
-      "hurt_witch",
-      "kill_witch",
+      "effect",
+      "witch",
       "inspect"
     ]
   ],
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "minecraft:potion"
+      }
+    ]
+  },
   "unlock": [
     {
       "item": "minecraft:brewing_stand"

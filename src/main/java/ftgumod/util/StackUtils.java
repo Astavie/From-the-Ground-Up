@@ -1,5 +1,8 @@
 package ftgumod.util;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import ftgumod.Content;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.util.BlockSerializable;
@@ -7,16 +10,23 @@ import ftgumod.api.util.IStackUtils;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class StackUtils implements IStackUtils<Technology> {
 
@@ -46,6 +56,36 @@ public class StackUtils implements IStackUtils<Technology> {
 			return handler.getContainer();
 		}
 		return stack;
+	}
+
+	public Set<ItemPredicate> getItemPredicate(JsonElement element, JsonContext context) {
+		Set<ItemPredicate> predicates = new HashSet<>();
+
+		if (element.isJsonArray())
+			for (JsonElement json : element.getAsJsonArray())
+				predicates.addAll(getItemPredicate(json, context));
+		else if (element.isJsonObject()) {
+			JsonObject object = element.getAsJsonObject();
+			if (!object.has("type")) {
+				String item = JsonUtils.getString(object, "item");
+				if (item.startsWith("#")) {
+					Ingredient constant = context.getConstant(item.substring(1));
+					if (constant == null)
+						throw new JsonSyntaxException("Predicate referenced invalid constant: " + item);
+					return Collections.singleton(new ItemPredicate() {
+
+						@Override
+						public boolean test(ItemStack item) {
+							return constant.test(item);
+						}
+
+					});
+				}
+			}
+			return Collections.singleton(ItemPredicate.deserialize(object));
+		} else throw new JsonSyntaxException("Expected predicate to be an object or array of objects");
+
+		return predicates;
 	}
 
 	@Override

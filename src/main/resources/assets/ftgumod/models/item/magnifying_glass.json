@@ -37,6 +37,6 @@
     }
   },
   "textures": {
-    "layer0": "ftgumod:items/looking_glass"
+    "layer0": "ftgumod:items/magnifying_glass"
   }
 }

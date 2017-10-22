@@ -75,7 +75,9 @@ public class CommandTechnology extends CommandBase {
 				if (set.isEmpty())
 					throw mode.fail(type, player.getName());
 				mode.success(sender, this, type, player.getName(), set.size());
-				return set.toArray(new Technology[set.size()]);
+
+				if (type == ActionType.GRANT)
+					return set.toArray(new Technology[set.size()]);
 			} else throw mode.usage(type);
 		else if (args.length < 4)
 			throw mode.usage(type);
@@ -98,7 +100,9 @@ public class CommandTechnology extends CommandBase {
 				if (set.isEmpty())
 					throw mode.fail(type, tech.getRegistryName(), player.getName());
 				mode.success(sender, this, type, tech.getRegistryName(), player.getName(), set.size());
-				return set.toArray(new Technology[set.size()]);
+
+				if (type == ActionType.GRANT)
+					return set.toArray(new Technology[set.size()]);
 			}
 		}
 		return new Technology[0];

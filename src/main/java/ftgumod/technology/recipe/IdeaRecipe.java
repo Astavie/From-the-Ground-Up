@@ -4,15 +4,13 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
-import ftgumod.crafting.IngredientFluid;
 import ftgumod.util.StackUtils;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 
 import java.util.HashSet;
@@ -21,10 +19,10 @@ import java.util.Set;
 
 public class IdeaRecipe implements IIdeaRecipe {
 
-	private final NonNullList<Ingredient> recipe;
+	private final NonNullList<Set<ItemPredicate>> recipe;
 	private final int needed;
 
-	public IdeaRecipe(NonNullList<Ingredient> recipe, int needed) {
+	public IdeaRecipe(NonNullList<Set<ItemPredicate>> recipe, int needed) {
 		this.needed = needed;
 		this.recipe = recipe;
 	}
@@ -33,9 +31,9 @@ public class IdeaRecipe implements IIdeaRecipe {
 		int amount = JsonUtils.getInt(object, "amount");
 		JsonArray ingredients = JsonUtils.getJsonArray(object, "ingredients");
 
-		NonNullList<Ingredient> recipe = NonNullList.create();
+		NonNullList<Set<ItemPredicate>> recipe = NonNullList.create();
 		for (JsonElement element : ingredients)
-			recipe.add(CraftingHelper.getIngredient(element, context));
+			recipe.add(StackUtils.INSTANCE.getItemPredicate(element, context));
 
 		return new IdeaRecipe(recipe, amount);
 	}
@@ -44,7 +42,7 @@ public class IdeaRecipe implements IIdeaRecipe {
 	public NonNullList<ItemStack> test(InventoryCrafting inventory) {
 		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(inventory);
 
-		Set<Ingredient> copy = new HashSet<>(recipe);
+		Set<Set<ItemPredicate>> copy = new HashSet<>(recipe);
 
 		loop:
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -52,17 +50,15 @@ public class IdeaRecipe implements IIdeaRecipe {
 			if (stack.isEmpty())
 				continue;
 
-			Iterator<Ingredient> iterator = copy.iterator();
+			Iterator<Set<ItemPredicate>> iterator = copy.iterator();
 			while (iterator.hasNext()) {
-				Ingredient match = iterator.next();
-				if (match.test(stack)) {
-					iterator.remove();
+				Set<ItemPredicate> match = iterator.next();
+				for (ItemPredicate predicate : match)
+					if (predicate.test(stack)) {
+						iterator.remove();
 
-					if (match instanceof IngredientFluid)
-						remaining.set(i, StackUtils.INSTANCE.drain(stack.copy(), ((IngredientFluid) match).getFluid()));
-
-					continue loop;
-				}
+						continue loop;
+					}
 			}
 			return null;
 		}
