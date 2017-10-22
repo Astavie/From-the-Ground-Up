@@ -26,6 +26,8 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * If this returns {@code true}, then the {@code Technology} will be discarded.
 	 *
 	 * @param predicate The {@code Predicate} to check
+	 * @see #addCallback(Consumer)
+	 * @see #createCallback(Runnable)
 	 */
 	void removeCallback(Predicate<? super T> predicate);
 
@@ -34,6 +36,8 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * This can be used to edit {@code Technologies} before they're added.
 	 *
 	 * @param action The {@code Consumer} which will accept all new {@code Technologies}
+	 * @see #removeCallback(Predicate)
+	 * @see #createCallback(Runnable)
 	 */
 	void addCallback(Consumer<? super T> action);
 
@@ -42,6 +46,8 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * This can be used to register {@code Technologies} that do no depend on others.
 	 *
 	 * @param action The {@code Runnable} to run
+	 * @see #removeCallback(Predicate)
+	 * @see #addCallback(Consumer)
 	 */
 	void createCallback(Runnable action);
 
@@ -77,6 +83,7 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 *
 	 * @param id The registry name of the new {@code Technology}
 	 * @return A new {@code TechnologyBuilder}
+	 * @see ITechnology#toBuilder()
 	 */
 	ITechnologyBuilder createBuilder(ResourceLocation id);
 

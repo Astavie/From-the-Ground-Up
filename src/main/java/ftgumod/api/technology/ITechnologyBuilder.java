@@ -37,16 +37,17 @@ public interface ITechnologyBuilder {
 	 * If this {@code TechnologyBuilder} was built from an existing {@code Technology}, that {@code Technology} will be modified.
 	 *
 	 * @throws NullPointerException If this {@code TechnologyBuilder} is not a copy or if the parent does not exist
+	 * @see #build()
 	 */
 	void save();
 
 	/**
 	 * Builds a new {@code Technology}.
 	 * All saves afterwards will then change it.
-	 * <p>If you want to modify an existing {@code Technology}, call the {@link #save()} method.
 	 *
 	 * @return A new {@code Technology}
 	 * @throws NullPointerException If the parent does not exist
+	 * @see #save()
 	 */
 	ITechnology build();
 
