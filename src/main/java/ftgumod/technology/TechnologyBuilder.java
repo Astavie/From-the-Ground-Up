@@ -1,9 +1,9 @@
 package ftgumod.technology;
 
-import ftgumod.api.ITechnology;
-import ftgumod.api.ITechnologyBuilder;
-import ftgumod.api.recipe.IIdeaRecipe;
-import ftgumod.api.recipe.IResearchRecipe;
+import ftgumod.api.technology.ITechnology;
+import ftgumod.api.technology.ITechnologyBuilder;
+import ftgumod.api.technology.recipe.IIdeaRecipe;
+import ftgumod.api.technology.recipe.IResearchRecipe;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;

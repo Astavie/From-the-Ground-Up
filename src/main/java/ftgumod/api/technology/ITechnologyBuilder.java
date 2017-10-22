@@ -1,7 +1,7 @@
-package ftgumod.api;
+package ftgumod.api.technology;
 
-import ftgumod.api.recipe.IIdeaRecipe;
-import ftgumod.api.recipe.IResearchRecipe;
+import ftgumod.api.technology.recipe.IIdeaRecipe;
+import ftgumod.api.technology.recipe.IResearchRecipe;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;

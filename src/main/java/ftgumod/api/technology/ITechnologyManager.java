@@ -1,4 +1,4 @@
-package ftgumod.api;
+package ftgumod.api.technology;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

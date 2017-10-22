@@ -1,4 +1,4 @@
-package ftgumod.api.recipe;
+package ftgumod.api.technology.recipe;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;

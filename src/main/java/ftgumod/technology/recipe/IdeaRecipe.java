@@ -3,7 +3,7 @@ package ftgumod.technology.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import ftgumod.api.recipe.IIdeaRecipe;
+import ftgumod.api.technology.recipe.IIdeaRecipe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;

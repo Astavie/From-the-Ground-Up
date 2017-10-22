@@ -1,7 +1,7 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
-import ftgumod.api.IStackUtils;
+import ftgumod.api.util.IStackUtils;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;

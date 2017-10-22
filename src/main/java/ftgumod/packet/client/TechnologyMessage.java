@@ -1,7 +1,7 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
-import ftgumod.api.ITechnology;
+import ftgumod.api.technology.ITechnology;
 import ftgumod.packet.MessageHandler;
 import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.CapabilityTechnology;

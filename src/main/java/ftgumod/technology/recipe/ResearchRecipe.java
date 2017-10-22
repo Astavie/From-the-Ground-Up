@@ -6,7 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import ftgumod.api.recipe.IResearchRecipe;
+import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockPredicate;
 import ftgumod.util.IngredientResearch;
 import net.minecraft.item.ItemStack;

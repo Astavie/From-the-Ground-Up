@@ -1,7 +1,7 @@
 package ftgumod.proxy;
 
 import ftgumod.GuiHandler;
-import ftgumod.api.ITechnology;
+import ftgumod.api.technology.ITechnology;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;

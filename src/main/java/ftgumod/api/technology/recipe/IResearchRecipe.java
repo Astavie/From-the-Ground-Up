@@ -1,4 +1,4 @@
-package ftgumod.api.recipe;
+package ftgumod.api.technology.recipe;
 
 import ftgumod.api.util.BlockPredicate;
 import ftgumod.api.util.BlockSerializable;

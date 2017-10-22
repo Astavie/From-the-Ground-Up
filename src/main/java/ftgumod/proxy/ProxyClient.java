@@ -2,7 +2,7 @@ package ftgumod.proxy;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.api.ITechnology;
+import ftgumod.api.technology.ITechnology;
 import ftgumod.client.GuiHandlerClient;
 import ftgumod.client.gui.toast.ToastTechnology;
 import net.minecraft.client.Minecraft;

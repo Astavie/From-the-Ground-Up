@@ -1,8 +1,8 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
-import ftgumod.api.IStackUtils;
 import ftgumod.api.util.BlockSerializable;
+import ftgumod.api.util.IStackUtils;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.DecipherMessage;

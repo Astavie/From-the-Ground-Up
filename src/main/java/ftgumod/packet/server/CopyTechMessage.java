@@ -2,7 +2,7 @@ package ftgumod.packet.server;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.api.IStackUtils;
+import ftgumod.api.util.IStackUtils;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;

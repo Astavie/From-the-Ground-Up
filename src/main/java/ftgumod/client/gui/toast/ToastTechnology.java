@@ -1,6 +1,6 @@
 package ftgumod.client.gui.toast;
 
-import ftgumod.api.ITechnology;
+import ftgumod.api.technology.ITechnology;
 import ftgumod.technology.Technology;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;

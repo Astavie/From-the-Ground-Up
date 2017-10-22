@@ -1,6 +1,6 @@
-package ftgumod.api;
+package ftgumod.api.util;
 
-import ftgumod.api.util.BlockSerializable;
+import ftgumod.api.technology.ITechnology;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 

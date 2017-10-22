@@ -2,8 +2,8 @@ package ftgumod.util;
 
 import ftgumod.Content;
 import ftgumod.api.FTGUAPI;
-import ftgumod.api.IStackUtils;
 import ftgumod.api.util.BlockSerializable;
+import ftgumod.api.util.IStackUtils;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
