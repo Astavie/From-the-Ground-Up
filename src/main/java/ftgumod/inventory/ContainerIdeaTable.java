@@ -17,7 +17,8 @@ import org.apache.commons.lang3.ArrayUtils;
 public class ContainerIdeaTable extends Container {
 
 	private final TileEntityInventory invInput;
-	private final IInventory invResult = new InventoryCraftResult();
+
+	private final InventoryCrafting craftMatrix;
 	private final InventoryPlayer invPlayer;
 
 	private final int sizeInventory;
@@ -26,6 +27,8 @@ public class ContainerIdeaTable extends Container {
 	private int parchment;
 	private int combine;
 	private int output;
+
+	private NonNullList<ItemStack> remaining;
 
 	public ContainerIdeaTable(TileEntityInventory tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
@@ -43,6 +46,7 @@ public class ContainerIdeaTable extends Container {
 			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
+		craftMatrix = new InventoryCraftingPersistent(this, tileEntity, combine, 3, 1);
 		onCraftMatrixChanged(tileEntity);
 	}
 
@@ -63,7 +67,7 @@ public class ContainerIdeaTable extends Container {
 			c++;
 		}
 
-		addSlotToContainer(new Slot(invResult, c, 124, 35));
+		addSlotToContainer(new Slot(new InventoryCraftResult(), c, 124, 35));
 		output = c;
 		c++;
 
@@ -71,15 +75,12 @@ public class ContainerIdeaTable extends Container {
 	}
 
 	private Technology hasRecipe() {
-		NonNullList<ItemStack> inventory = NonNullList.create();
-		for (int i = 0; i < 3; i++)
-			if (inventorySlots.get(i + combine).getHasStack())
-				inventory.add(inventorySlots.get(i + combine).getStack());
-
 		for (Technology tech : TechnologyManager.INSTANCE.technologies.values()) {
-			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player))
-				if (tech.getIdeaRecipe().test(inventory))
+			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player)) {
+				remaining = tech.getIdeaRecipe().test(craftMatrix);
+				if (remaining != null)
 					return tech;
+			}
 		}
 		return null;
 	}
@@ -101,24 +102,14 @@ public class ContainerIdeaTable extends Container {
 
 	@Override
 	public ItemStack slotClick(int index, int mouse, ClickType mode, EntityPlayer player) {
-		ItemStack clickItemStack = super.slotClick(index, mouse, mode, player);
-
-		onCraftMatrixChanged(invInput);
 		if (index == output && inventorySlots.get(output).getHasStack()) {
 			inventorySlots.get(parchment).decrStackSize(1);
-			inventorySlots.get(output).putStack(ItemStack.EMPTY);
-
-			for (int i = 0; i < 3; i++) {
-				if (!inventorySlots.get(combine + i).getStack().isEmpty()) {
-					ItemStack t = inventorySlots.get(combine + i).getStack();
-					if (t.getItem().hasContainerItem(t))
-						inventorySlots.get(combine + i).putStack(t.getItem().getContainerItem(t));
-					else
-						inventorySlots.get(combine + i).putStack(ItemStack.EMPTY);
-				}
-			}
+			for (int i = 0; i < craftMatrix.getSizeInventory(); i++)
+				craftMatrix.setInventorySlotContents(i, remaining.get(i));
 		}
 
+		ItemStack clickItemStack = super.slotClick(index, mouse, mode, player);
+		onCraftMatrixChanged(invInput);
 		return clickItemStack;
 	}
 

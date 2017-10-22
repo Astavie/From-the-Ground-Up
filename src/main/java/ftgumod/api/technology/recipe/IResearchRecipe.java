@@ -2,6 +2,7 @@ package ftgumod.api.technology.recipe;
 
 import ftgumod.api.util.BlockPredicate;
 import ftgumod.api.util.BlockSerializable;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -33,6 +34,10 @@ public interface IResearchRecipe {
 		return false;
 	}
 
-	boolean test(NonNullList<ItemStack> inventory);
+	/**
+	 * @param inventory The inventory to compare to
+	 * @return The remaining items, or {@code null} if there is no match
+	 */
+	NonNullList<ItemStack> test(InventoryCrafting inventory);
 
 }

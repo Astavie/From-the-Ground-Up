@@ -25,18 +25,20 @@ import java.util.Set;
 public class ContainerResearchTable extends Container {
 
 	public final TileEntityInventory invInput;
-	private final IInventory invResult = new InventoryCraftResult();
+
+	private final InventoryCrafting craftMatrix;
 	private final InventoryPlayer invPlayer;
 
 	private final int sizeInventory;
 
-	public Technology recipe = null;
 	public int combine;
 	public int output;
 	public int glass;
 	public Set<Integer> deciphered;
+	public Technology recipe;
 	private int feather;
 	private int parchment;
+	private NonNullList<ItemStack> remaining;
 
 	public ContainerResearchTable(TileEntityInventory tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
@@ -54,6 +56,7 @@ public class ContainerResearchTable extends Container {
 			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
+		craftMatrix = new InventoryCraftingPersistent(this, tileEntity, combine, 3, 3);
 		onCraftMatrixChanged(tileEntity);
 	}
 
@@ -80,7 +83,7 @@ public class ContainerResearchTable extends Container {
 		glass = c;
 		c++;
 
-		addSlotToContainer(new Slot(invResult, c, 124, 35));
+		addSlotToContainer(new Slot(new InventoryCraftResult(), c, 124, 35));
 		output = c;
 		c++;
 
@@ -122,11 +125,8 @@ public class ContainerResearchTable extends Container {
 				}
 
 				if (inventorySlots.get(feather).getHasStack()) {
-					NonNullList<ItemStack> inventory = NonNullList.create();
-					for (int i = 0; i < 9; i++)
-						inventory.add(inventorySlots.get(combine + i).getStack());
-
-					if (recipe.getResearchRecipe().test(inventory)) {
+					remaining = recipe.getResearchRecipe().test(craftMatrix);
+					if (remaining != null) {
 						inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(recipe.getRegistryName(), IStackUtils.Parchment.RESEARCH));
 						return;
 					}
@@ -139,25 +139,14 @@ public class ContainerResearchTable extends Container {
 
 	@Override
 	public ItemStack slotClick(int index, int mouse, ClickType mode, EntityPlayer player) {
-		ItemStack clickItemStack = super.slotClick(index, mouse, mode, player);
-
-		onCraftMatrixChanged(invInput);
 		if (index == output && inventorySlots.get(output).getHasStack()) {
 			inventorySlots.get(parchment).decrStackSize(1);
-			inventorySlots.get(output).putStack(ItemStack.EMPTY);
-
-			for (int i = 0; i < 9; i++) {
-				if (!inventorySlots.get(combine + i).getStack().isEmpty()) {
-					ItemStack t = inventorySlots.get(combine + i).getStack();
-					if (t.getItem().hasContainerItem(t))
-						inventorySlots.get(combine + i).putStack(t.getItem().getContainerItem(t));
-					else
-						inventorySlots.get(combine + i).putStack(ItemStack.EMPTY);
-				}
-			}
-			recipe = null;
+			for (int i = 0; i < 9; i++)
+				craftMatrix.setInventorySlotContents(i, remaining.get(i));
 		}
 
+		ItemStack clickItemStack = super.slotClick(index, mouse, mode, player);
+		onCraftMatrixChanged(invInput);
 		return clickItemStack;
 	}
 

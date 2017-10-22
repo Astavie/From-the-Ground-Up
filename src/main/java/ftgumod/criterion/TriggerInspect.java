@@ -23,14 +23,20 @@ public class TriggerInspect extends TriggerFTGU<TriggerInspect.Instance> {
 		return new Instance(BlockPredicate.deserialize(jsonObject));
 	}
 
-	public void trigger(EntityPlayerMP player, BlockPos pos, IBlockState state) {
+	public boolean trigger(EntityPlayerMP player, BlockPos pos, IBlockState state) {
+		boolean trigger = false;
+
 		Set<Listener<Instance>> listeners = this.listeners.get(player.getAdvancements());
 		if (listeners != null) {
 			WorldServer world = player.getServerWorld();
 			for (Listener<Instance> listener : listeners)
-				if (listener.getCriterionInstance().test(world, pos, state))
+				if (listener.getCriterionInstance().test(world, pos, state)) {
 					listener.grantCriterion(player.getAdvancements());
+					trigger = true;
+				}
 		}
+
+		return trigger;
 	}
 
 	public class Instance extends TriggerFTGU.Instance {

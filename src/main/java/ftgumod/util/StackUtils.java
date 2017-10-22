@@ -10,6 +10,9 @@ import ftgumod.technology.TechnologyManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -36,6 +39,15 @@ public class StackUtils implements IStackUtils<Technology> {
 		return ingredient.getItem() == stack.getItem() && (ingredient.getMetadata() == OreDictionary.WILDCARD_VALUE || ingredient.getMetadata() == stack.getMetadata()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
 	}
 
+	public ItemStack drain(ItemStack stack, FluidStack fluid) {
+		IFluidHandlerItem handler = FluidUtil.getFluidHandler(stack);
+		if (handler != null) {
+			handler.drain(fluid.amount, true);
+			return handler.getContainer();
+		}
+		return stack;
+	}
+
 	@Override
 	public ItemStack getParchment(ResourceLocation tech, Parchment type) {
 		ItemStack stack = new ItemStack(type == Parchment.IDEA ? Content.i_parchmentIdea : Content.i_parchmentResearch);
@@ -46,7 +58,7 @@ public class StackUtils implements IStackUtils<Technology> {
 	@Nullable
 	@Override
 	public Technology getTechnology(ItemStack parchment) {
-		return TechnologyManager.INSTANCE.technologies.get(getItemData(parchment).getString("FTGU"));
+		return TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(getItemData(parchment).getString("FTGU")));
 	}
 
 	@Override

@@ -138,6 +138,9 @@ technology.hint.circuit=Circuit Board
 technology.hint.input=Input
 technology.hint.not=NOT Gate
 technology.hint.pulse=Pulse Generator
+technology.hint.arm=Tone Arm
+technology.hint.arm=Stylus
+technology.hint.record=Music
 
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
@@ -231,3 +234,6 @@ technology.redstone_machinery.desc=Never breaks down
 
 technology.cartography.name=Cartography
 technology.cartography.desc=Maps, and lots of 'em!
+
+technology.music.name=Music
+technology.music.desc=Me and my records all alone feels right

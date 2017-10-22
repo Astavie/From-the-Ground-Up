@@ -57,16 +57,19 @@ public class ItemMagnifyingGlass extends Item {
 				List<BlockSerializable> singleton = Collections.singletonList(block);
 
 				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, pos, state, face);
-				event.setCanceled(true);
 
-				loop:
-				for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
-					if (tech.hasResearchRecipe() && tech.canResearch(player))
-						for (int i = 0; i < 9; i++)
-							if (tech.getResearchRecipe().testDecipher(i, singleton) && !tech.getResearchRecipe().testDecipher(i, list)) {
-								event.setCanceled(false);
-								break loop;
-							}
+				if (!Content.c_inspect.trigger((EntityPlayerMP) player, pos, state)) {
+					event.setCanceled(true);
+
+					loop:
+					for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
+						if (tech.hasResearchRecipe() && tech.canResearch(player))
+							for (int i = 0; i < 9; i++)
+								if (tech.getResearchRecipe().testDecipher(i, singleton) && !tech.getResearchRecipe().testDecipher(i, list)) {
+									event.setCanceled(false);
+									break loop;
+								}
+				}
 
 				MinecraftForge.EVENT_BUS.post(event);
 
@@ -78,8 +81,6 @@ public class ItemMagnifyingGlass extends Item {
 
 				player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
 				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-				Content.c_inspect.trigger((EntityPlayerMP) player, pos, state);
 
 				NBTTagCompound tag = StackUtils.INSTANCE.getItemData(item);
 				NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);

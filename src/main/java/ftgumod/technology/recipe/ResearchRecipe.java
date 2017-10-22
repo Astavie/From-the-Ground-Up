@@ -8,11 +8,15 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockPredicate;
+import ftgumod.crafting.IngredientFluid;
 import ftgumod.util.IngredientResearch;
+import ftgumod.util.StackUtils;
+import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nullable;
@@ -87,11 +91,17 @@ public class ResearchRecipe implements IResearchRecipe {
 	}
 
 	@Override
-	public boolean test(NonNullList<ItemStack> inventory) {
+	public NonNullList<ItemStack> test(InventoryCrafting inventory) {
 		for (int i = 0; i < 9; i++)
-			if (!ingredients.get(i).test(inventory.get(i)))
-				return false;
-		return true;
+			if (!ingredients.get(i).test(inventory.getStackInSlot(i)))
+				return null;
+
+		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(inventory);
+		for (int i = 0; i < 9; i++)
+			if (get(i).getIngredient() instanceof IngredientFluid)
+				remaining.set(i, StackUtils.INSTANCE.drain(inventory.getStackInSlot(i).copy(), ((IngredientFluid) get(i).getIngredient()).getFluid()));
+
+		return remaining;
 	}
 
 	public IngredientResearch get(int index) {

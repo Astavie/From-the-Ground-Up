@@ -194,11 +194,13 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 		load();
 	}
 
-	public void removeFromCache(ResourceLocation technology) {
-		Map<ResourceLocation, String> map = cache.get(technology.getResourceDomain()).getRight();
-		map.remove(technology);
-		if (map.isEmpty())
-			cache.remove(technology.getResourceDomain());
+	public void removeFromCache(ResourceLocation tech) {
+		if (cache.containsKey(tech.getResourceDomain())) {
+			Map<ResourceLocation, String> map = cache.get(tech.getResourceDomain()).getRight();
+			map.remove(tech);
+			if (map.isEmpty())
+				cache.remove(tech.getResourceDomain());
+		}
 	}
 
 	public void load() {

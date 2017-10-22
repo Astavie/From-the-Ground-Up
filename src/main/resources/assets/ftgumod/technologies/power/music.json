@@ -1,0 +1,100 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:jukebox"
+    },
+    "title": {
+      "translate": "technology.music.name"
+    },
+    "description": {
+      "translate": "technology.music.desc"
+    },
+    "x": 2,
+    "y": 2
+  },
+  "parent": "ftgumod:power/power",
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "gemDiamond"
+      },
+      {
+        "type": "forge:ore_dict",
+        "ore": "plankWood"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " DI",
+      " R ",
+      "WWW"
+    ],
+    "key": {
+      "I": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "stickWood",
+          "hint": {
+            "translate": "technology.hint.arm"
+          }
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "ingotIron"
+        }
+      ],
+      "D": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "nuggetIron",
+          "hint": {
+            "translate": "technology.hint.stylus"
+          }
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "nuggetGold"
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "gemDiamond"
+        }
+      ],
+      "R": {
+        "type": "forge:ore_dict",
+        "ore": "record",
+        "hint": {
+          "translate": "technology.hint.record"
+        }
+      },
+      "W": [
+        {
+          "type": "forge:ore_dict",
+          "ore": "plankWood",
+          "hint": {
+            "translate": "technology.hint.table"
+          }
+        },
+        {
+          "type": "forge:ore_dict",
+          "ore": "slabWood"
+        }
+      ]
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:noteblock"
+    },
+    {
+      "item": "minecraft:jukebox"
+    }
+  ]
+}

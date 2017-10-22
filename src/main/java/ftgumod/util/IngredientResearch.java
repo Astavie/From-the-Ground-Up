@@ -19,7 +19,7 @@ import java.util.Set;
 
 public class IngredientResearch extends Ingredient {
 
-	public static IngredientResearch EMPTY = new IngredientResearch(Ingredient.EMPTY, null, null);
+	public static final IngredientResearch EMPTY = new IngredientResearch(Ingredient.EMPTY, null, null);
 
 	private final Ingredient ingredient;
 	private final ITextComponent hint;
@@ -83,6 +83,10 @@ public class IngredientResearch extends Ingredient {
 
 	public Set<BlockPredicate> getDecipher() {
 		return unlock;
+	}
+
+	public Ingredient getIngredient() {
+		return ingredient;
 	}
 
 }
