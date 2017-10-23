@@ -178,7 +178,7 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 				for (File file : FileUtils.listFiles(child, new String[] {"json"}, true)) {
 					if (file.getParentFile().equals(child))
 						continue;
-					ResourceLocation id = new ResourceLocation(child.getName(), FilenameUtils.removeExtension(child.toPath().relativize(file.toPath()).toString()));
+					ResourceLocation id = new ResourceLocation(child.getName(), FilenameUtils.removeExtension(child.toPath().relativize(file.toPath()).toString().replace('\\', '/')));
 
 					try {
 						techs.put(id, new String(Files.readAllBytes(file.toPath())));
