@@ -62,6 +62,66 @@
   {
     "ingredient": [
       {
+        "item": "minecraft:wooden_shovel"
+      },
+      {
+        "item": "minecraft:stone_shovel"
+      },
+      {
+        "item": "minecraft:iron_shovel"
+      },
+      {
+        "item": "minecraft:golden_shovel"
+      },
+      {
+        "item": "minecraft:diamond_shovel"
+      }
+    ],
+    "name": "shovel"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:wooden_hoe"
+      },
+      {
+        "item": "minecraft:stone_hoe"
+      },
+      {
+        "item": "minecraft:iron_hoe"
+      },
+      {
+        "item": "minecraft:golden_hoe"
+      },
+      {
+        "item": "minecraft:diamond_hoe"
+      }
+    ],
+    "name": "hoe"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "#pickaxe"
+      },
+      {
+        "item": "#axe"
+      },
+      {
+        "item": "#sword"
+      },
+      {
+        "item": "#shovel"
+      },
+      {
+        "item": "#hoe"
+      }
+    ],
+    "name": "tool"
+  },
+  {
+    "ingredient": [
+      {
         "type": "forge:ore_dict",
         "ore": "oreIron"
       },

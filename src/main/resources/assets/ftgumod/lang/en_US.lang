@@ -89,7 +89,7 @@ technology.hint.table=Table
 technology.hint.rope=Rope
 technology.hint.head=Head
 technology.hint.handle=Handle
-technology.hint.pickaxe=Tool
+technology.hint.tool=Tool
 technology.hint.insulator=Insulator
 technology.hint.ore=Smeltable
 technology.hint.fuel=Fuel
@@ -141,12 +141,13 @@ technology.hint.record=Music
 technology.hint.swiftness=Swiftness
 technology.hint.awkward=Awkward
 technology.hint.water=Liquid
+technology.hint.enchantment=Enchantment
 
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
 
 technology.research.name=Research
-technology.research.desc=Combining random items to see what results in a new idea
+technology.research.desc=What's your favorite idea?
 
 technology.agriculture.name=Agriculture
 technology.agriculture.desc=Commanding plants to do your bidding

@@ -1,0 +1,69 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:enchanting_table"
+    },
+    "title": {
+      "translate": "technology.enchanting.name"
+    },
+    "description": {
+      "translate": "technology.enchanting.desc"
+    },
+    "x": 4,
+    "y": 0
+  },
+  "parent": "ftgumod:research/bibliography",
+  "criteria": {
+    "item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "type": "ftgumod:enchantment"
+          }
+        ]
+      }
+    }
+  },
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "type": "ftgumod:enchantment"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " E ",
+      " T ",
+      " A "
+    ],
+    "key": {
+      "E": {
+        "type": "ftgumod:enchantment",
+        "hint": {
+          "translate": "technology.hint.enchantment"
+        }
+      },
+      "T": {
+        "item": "#tool",
+        "hint": {
+          "translate": "technology.hint.tool"
+        }
+      },
+      "A": {
+        "item": "minecraft:anvil",
+        "data": 0,
+        "hint": {
+          "translate": "technology.hint.table"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:enchanting_table"
+    }
+  ]
+}

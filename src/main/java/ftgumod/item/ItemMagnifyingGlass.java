@@ -6,6 +6,7 @@ import ftgumod.event.PlayerInspectEvent;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -73,10 +74,11 @@ public class ItemMagnifyingGlass extends Item {
 
 				if (event.isCanceled()) {
 					player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
-					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					SoundType sound = state.getBlock().getSoundType(state, world, pos, player);
+					world.playSound(null, pos, sound.getHitSound(), SoundCategory.NEUTRAL, (sound.getVolume() + 1.0F) / 4.0F, sound.getPitch() * 0.5F);
 				} else {
 					player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
-					world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+					world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.75F, 1.0F);
 
 					NBTTagCompound tag = StackUtils.INSTANCE.getItemData(item);
 					NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);

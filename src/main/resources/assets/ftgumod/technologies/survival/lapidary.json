@@ -36,7 +36,7 @@
       "P": {
         "item": "#pickaxe",
         "hint": {
-          "translate": "technology.hint.pickaxe"
+          "translate": "technology.hint.tool"
         }
       },
       "D": {

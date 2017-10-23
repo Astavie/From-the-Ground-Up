@@ -16,9 +16,12 @@ import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.util.FluidPredicate;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.block.Block;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -96,6 +99,14 @@ public class FTGU {
 		CriteriaTriggers.register(Content.c_inspect);
 
 		ItemPredicates.register(new ResourceLocation(MODID, "fluid"), FluidPredicate::new);
+		ItemPredicates.register(new ResourceLocation(MODID, "enchantment"), object -> new ItemPredicate() {
+
+			@Override
+			public boolean test(ItemStack item) {
+				return EnchantmentHelper.getEnchantments(item).size() > 0;
+			}
+
+		});
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 
