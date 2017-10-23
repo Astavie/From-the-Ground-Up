@@ -9,7 +9,7 @@ import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockPredicate;
-import ftgumod.criterion.FluidPredicate;
+import ftgumod.util.FluidPredicate;
 import ftgumod.util.StackUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;

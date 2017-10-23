@@ -53,39 +53,36 @@ public class ItemMagnifyingGlass extends Item {
 				List<BlockSerializable> list = getInspected(item);
 
 				IBlockState state = world.getBlockState(pos);
-				BlockSerializable block = new BlockSerializable(world, pos, state);
+				BlockSerializable block = new BlockSerializable(world, pos, state, player);
 				List<BlockSerializable> singleton = Collections.singletonList(block);
 
 				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, pos, state, face);
+				event.setCanceled(true);
 
-				if (!Content.c_inspect.trigger((EntityPlayerMP) player, pos, state)) {
-					event.setCanceled(true);
-
-					loop:
-					for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
-						if (tech.hasResearchRecipe() && tech.canResearch(player))
-							for (int i = 0; i < 9; i++)
-								if (tech.getResearchRecipe().testDecipher(i, singleton) && !tech.getResearchRecipe().testDecipher(i, list)) {
-									event.setCanceled(false);
-									break loop;
-								}
-				}
+				loop:
+				for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
+					if (tech.hasResearchRecipe() && tech.canResearch(player))
+						for (int i = 0; i < 9; i++)
+							if (tech.getResearchRecipe().testDecipher(i, singleton) && !tech.getResearchRecipe().testDecipher(i, list)) {
+								event.setCanceled(false);
+								break loop;
+							}
 
 				MinecraftForge.EVENT_BUS.post(event);
+				Content.c_inspect.trigger((EntityPlayerMP) player, pos, state, !event.isCanceled());
 
 				if (event.isCanceled()) {
 					player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
 					world.playSound(null, player.getPosition(), SoundEvents.BLOCK_STONE_BREAK, SoundCategory.PLAYERS, 1.0F, 1.0F);
-					return EnumActionResult.SUCCESS;
+				} else {
+					player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
+					world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+					NBTTagCompound tag = StackUtils.INSTANCE.getItemData(item);
+					NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
+					nbt.appendTag(block.serialize());
+					tag.setTag("FTGU", nbt);
 				}
-
-				player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
-				world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-				NBTTagCompound tag = StackUtils.INSTANCE.getItemData(item);
-				NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
-				nbt.appendTag(block.serialize());
-				tag.setTag("FTGU", nbt);
 			}
 			return EnumActionResult.SUCCESS;
 		} else

@@ -1,8 +1,9 @@
-package ftgumod.criterion;
+package ftgumod.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.fluids.Fluid;
@@ -10,6 +11,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
 public class FluidPredicate extends ItemPredicate {
 
@@ -27,7 +29,7 @@ public class FluidPredicate extends ItemPredicate {
 			if (fluid == null)
 				throw new JsonSyntaxException("Unknown fluid '" + name + "'");
 		}
-		this.fluid = new FluidStack(fluid, JsonUtils.getInt(object, "count", 1000));
+		this.fluid = new FluidStack(fluid, JsonUtils.getInt(object, "count", Fluid.BUCKET_VOLUME));
 	}
 
 	@Override
@@ -39,6 +41,9 @@ public class FluidPredicate extends ItemPredicate {
 	public ItemStack drain(ItemStack item) {
 		IFluidHandlerItem handler = FluidUtil.getFluidHandler(item);
 		if (handler != null) {
+			if (handler instanceof FluidBucketWrapper && ((FluidBucketWrapper) handler).getFluid().isFluidEqual(fluid))
+				return new ItemStack(Items.BUCKET);
+
 			handler.drain(fluid, true);
 			return handler.getContainer();
 		}

@@ -43,12 +43,67 @@
     ]
   ],
   "idea": {
-    "amount": 1,
+    "amount": 2,
     "ingredients": [
-      {
-        "item": "minecraft:potion"
-      }
+      [
+        {
+          "potion": "minecraft:water"
+        },
+        {
+          "type": "ftgumod:fluid",
+          "fluid": "water",
+          "count": 250
+        }
+      ],
+      [
+        {
+          "item": "minecraft:nether_wart"
+        },
+        {
+          "item": "minecraft:sugar"
+        }
+      ]
     ]
+  },
+  "research": {
+    "pattern": [
+      " S ",
+      " W ",
+      " F "
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:sugar",
+        "hint": {
+          "translate": "technology.hint.swiftness"
+        }
+      },
+      "W": {
+        "item": "minecraft:nether_wart",
+        "hint": {
+          "translate": "technology.hint.awkward"
+        }
+      },
+      "F": [
+        {
+          "potion": "minecraft:water",
+          "hint": {
+            "translate": "technology.hint.water"
+          },
+          "decipher": {
+            "block": "minecraft:cauldron",
+            "location": {
+              "biome": "swampland"
+            }
+          }
+        },
+        {
+          "type": "ftgumod:fluid",
+          "fluid": "water",
+          "count": 250
+        }
+      ]
+    }
   },
   "unlock": [
     {

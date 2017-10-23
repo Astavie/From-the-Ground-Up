@@ -138,6 +138,9 @@ technology.hint.pulse=Pulse Generator
 technology.hint.arm=Tone Arm
 technology.hint.arm=Stylus
 technology.hint.record=Music
+technology.hint.swiftness=Swiftness
+technology.hint.awkward=Awkward
+technology.hint.water=Liquid
 
 technology.survival.name=Survival
 technology.survival.desc=You should know this, if you want to survive
@@ -234,3 +237,6 @@ technology.cartography.desc=Maps, and lots of 'em!
 
 technology.music.name=Music
 technology.music.desc=Me and my records all alone feels right
+
+technology.brewing.name=Brewing
+technology.brewing.desc=Not alchemy

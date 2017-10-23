@@ -54,7 +54,7 @@ public class StackUtils implements IStackUtils<Technology> {
 				predicates.addAll(getItemPredicate(json, context));
 		else if (element.isJsonObject()) {
 			JsonObject object = element.getAsJsonObject();
-			if (!object.has("type")) {
+			if (!object.has("type") && object.has("item")) {
 				String item = JsonUtils.getString(object, "item");
 				if (item.startsWith("#")) {
 					Ingredient constant = context.getConstant(item.substring(1));

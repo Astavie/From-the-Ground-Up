@@ -20,6 +20,8 @@ import java.util.Map;
 
 public class BlockPredicate {
 
+	public static final BlockPredicate ANY = new BlockPredicate(null, null, LocationPredicate.ANY);
+
 	private final Block block;
 	private final Map<IProperty<?>, Object> properties;
 	private final LocationPredicate location;
@@ -31,6 +33,9 @@ public class BlockPredicate {
 	}
 
 	public static BlockPredicate deserialize(JsonObject object) {
+		if (!object.has("block") && !object.has("state") && !object.has("location"))
+			return ANY;
+
 		Block block = null;
 		if (object.has("block")) {
 			ResourceLocation location = new ResourceLocation(JsonUtils.getString(object, "block"));
@@ -71,6 +76,8 @@ public class BlockPredicate {
 	}
 
 	public boolean test(WorldServer world, BlockPos pos, IBlockState state) {
+		if (this == ANY)
+			return true;
 		if (this.block != null && state.getBlock() != this.block)
 			return false;
 		if (this.properties != null)
@@ -81,6 +88,8 @@ public class BlockPredicate {
 	}
 
 	public boolean test(WorldServer world, BlockPos pos, Block block, Map<IProperty<?>, Object> properties) {
+		if (this == ANY)
+			return true;
 		if (this.block != null && block != this.block)
 			return false;
 		if (this.properties != null)
