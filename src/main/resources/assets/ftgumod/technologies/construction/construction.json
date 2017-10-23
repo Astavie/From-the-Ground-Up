@@ -11,8 +11,7 @@
       "translate": "technology.construction.desc"
     },
     "x": 0,
-    "y": 0,
-    "theory": true
+    "y": 0
   },
   "headstart": true,
   "parent": "ftgumod:survival/stoneworking",

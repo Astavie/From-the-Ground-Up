@@ -577,5 +577,20 @@
       }
     ],
     "name": "shulker"
+  },
+  {
+    "ingredient": [
+      {
+        "item": "minecraft:dragon_egg"
+      },
+      {
+        "item": "minecraft:dragon_breath"
+      },
+      {
+        "item": "minecraft:skull",
+        "data": 5
+      }
+    ],
+    "name": "dragon"
   }
 ]

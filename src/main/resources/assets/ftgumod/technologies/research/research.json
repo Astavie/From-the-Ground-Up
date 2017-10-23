@@ -11,8 +11,7 @@
     },
     "background": "ftgumod:textures/gui/advancements/backgrounds/parchment.png",
     "x": 0,
-    "y": 0,
-    "theory": true
+    "y": 0
   },
   "start": true,
   "parent": "ftgumod:survival/survival",

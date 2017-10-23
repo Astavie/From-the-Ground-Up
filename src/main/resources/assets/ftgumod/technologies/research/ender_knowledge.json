@@ -1,0 +1,91 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:end_crystal"
+    },
+    "title": {
+      "translate": "technology.ender_knowledge.name"
+    },
+    "description": {
+      "translate": "technology.ender_knowledge.desc"
+    },
+    "x": 8,
+    "y": 0
+  },
+  "parent": "ftgumod:research/glowing_eyes",
+  "criteria": {
+    "dragon": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "ender_dragon"
+        }
+      }
+    }
+  },
+  "idea": {
+    "amount": 1,
+    "ingredients": [
+      {
+        "item": "#dragon"
+      },
+      {
+        "item": "minecraft:nether_star"
+      }
+    ]
+  },
+  "research": {
+    "pattern": [
+      " S ",
+      " P ",
+      " D "
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:nether_star",
+        "hint": {
+          "translate": "technology.hint.star"
+        },
+        "decipher": {
+          "block": "minecraft:soul_sand"
+        }
+      },
+      "P": [
+        {
+          "item": "minecraft:crafting_table",
+          "hint": {
+            "translate": "technology.hint.man"
+          },
+          "decipher": [
+            {
+              "block": "minecraft:crafting_table"
+            },
+            {
+              "block": "minecraft:bed"
+            }
+          ]
+        },
+        {
+          "item": "minecraft:bed"
+        }
+      ],
+      "D": {
+        "item": "#dragon",
+        "hint": {
+          "translate": "technology.hint.dragon"
+        }
+      }
+    }
+  },
+  "unlock": [
+    {
+      "item": "minecraft:end_crystal"
+    },
+    {
+      "item": "minecraft:ender_chest"
+    },
+    {
+      "item": "minecraft:beacon"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:ender_eye"
+    },
+    "title": {
+      "translate": "technology.glowing_eyes.name"
+    },
+    "description": {
+      "translate": "technology.glowing_eyes.desc"
+    },
+    "x": 6,
+    "y": 0
+  },
+  "parent": "ftgumod:research/enchanting",
+  "criteria": {
+    "enderman": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "minecraft:enderman",
+          "location": {
+            "dimension": "the_nether"
+          }
+        }
+      }
+    }
+  },
+  "idea": {
+    "amount": 2,
+    "ingredients": [
+      {
+        "item": "minecraft:ender_pearl"
+      },
+      {
+        "item": "minecraft:blaze_powder"
+      }
+    ]
+  },
+  "unlock": [
+    {
+      "item": "minecraft:ender_eye"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.Collection;
@@ -23,17 +24,14 @@ public class CapabilityTechnology {
 	public static Capability<ITechnology> TECH_CAP;
 
 	@SubscribeEvent
-	public void onPlayerClone(net.minecraftforge.event.entity.player.PlayerEvent.Clone evt) {
-		if (evt.isWasDeath()) {
-			ITechnology cap1 = evt.getOriginal().getCapability(TECH_CAP, null);
-			ITechnology cap2 = evt.getEntityPlayer().getCapability(TECH_CAP, null);
+	public void onPlayerClone(PlayerEvent.Clone evt) {
+		ITechnology cap1 = evt.getOriginal().getCapability(TECH_CAP, null);
+		ITechnology cap2 = evt.getEntityPlayer().getCapability(TECH_CAP, null);
 
-			if (cap1 != null && cap2 != null) {
-				cap2.setResearched(cap1.getResearched());
-
-				if (!cap1.isNew())
-					cap2.setOld();
-			}
+		if (cap1 != null && cap2 != null) {
+			cap2.setResearched(cap1.getResearched());
+			if (!cap1.isNew())
+				cap2.setOld();
 		}
 	}
 

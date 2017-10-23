@@ -113,10 +113,13 @@
       "item": "minecraft:cauldron"
     },
     {
-      "item": "minecraft:fermented_spider_eye"
+      "item": "minecraft:blaze_powder"
     },
     {
       "item": "minecraft:magma_cream"
+    },
+    {
+      "item": "minecraft:fermented_spider_eye"
     }
   ]
 }
