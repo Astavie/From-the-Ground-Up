@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
+import ftgumod.criterion.FluidPredicate;
 import ftgumod.util.StackUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;
@@ -56,7 +57,8 @@ public class IdeaRecipe implements IIdeaRecipe {
 				for (ItemPredicate predicate : match)
 					if (predicate.test(stack)) {
 						iterator.remove();
-
+						if (predicate instanceof FluidPredicate)
+							remaining.set(i, ((FluidPredicate) predicate).drain(stack.copy()));
 						continue loop;
 					}
 			}

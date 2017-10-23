@@ -17,9 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.JsonContext;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
@@ -47,15 +44,6 @@ public class StackUtils implements IStackUtils<Technology> {
 
 	public boolean isStackOf(ItemStack ingredient, ItemStack stack) {
 		return ingredient.getItem() == stack.getItem() && (ingredient.getMetadata() == OreDictionary.WILDCARD_VALUE || ingredient.getMetadata() == stack.getMetadata()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
-	}
-
-	public ItemStack drain(ItemStack stack, FluidStack fluid) {
-		IFluidHandlerItem handler = FluidUtil.getFluidHandler(stack);
-		if (handler != null) {
-			handler.drain(fluid.amount, true);
-			return handler.getContainer();
-		}
-		return stack;
 	}
 
 	public Set<ItemPredicate> getItemPredicate(JsonElement element, JsonContext context) {

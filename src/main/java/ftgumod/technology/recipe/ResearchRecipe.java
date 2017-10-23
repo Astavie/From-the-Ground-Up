@@ -9,6 +9,7 @@ import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockPredicate;
+import ftgumod.criterion.FluidPredicate;
 import ftgumod.util.StackUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;
@@ -149,8 +150,11 @@ public class ResearchRecipe implements IResearchRecipe {
 		loop:
 		for (int i = 0; i < 9; i++) {
 			for (ItemPredicate predicate : ingredients.get(i))
-				if (predicate.test(inventory.getStackInSlot(i)))
+				if (predicate.test(inventory.getStackInSlot(i))) {
+					if (predicate instanceof FluidPredicate)
+						remaining.set(i, ((FluidPredicate) predicate).drain(inventory.getStackInSlot(i).copy()));
 					continue loop;
+				}
 			return null;
 		}
 

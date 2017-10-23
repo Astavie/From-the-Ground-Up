@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import ftgumod.command.CommandTechnology;
 import ftgumod.compat.ICompat;
 import ftgumod.compat.immersiveengineering.CompatIE;
+import ftgumod.criterion.FluidPredicate;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
@@ -19,8 +20,10 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumTypeAdapterFactory;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraftforge.advancements.critereon.ItemPredicates;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
@@ -91,6 +94,8 @@ public class FTGU {
 		CriteriaTriggers.register(Content.c_technologyResearched);
 		CriteriaTriggers.register(Content.c_itemLocked);
 		CriteriaTriggers.register(Content.c_inspect);
+
+		ItemPredicates.register(new ResourceLocation(MODID, "fluid"), FluidPredicate::new);
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 
