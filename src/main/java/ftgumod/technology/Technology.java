@@ -522,7 +522,7 @@ public class Technology implements ITechnology<Technology> {
 			JsonObject idea = json.has("idea") ? JsonUtils.getJsonObject(json, "idea") : null;
 			JsonObject research = json.has("research") ? JsonUtils.getJsonObject(json, "research") : null;
 
-			boolean start = JsonUtils.getBoolean(json, "researchedAtStart", false);
+			boolean start = JsonUtils.getBoolean(json, "start", false);
 			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
 			return new Builder(parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);

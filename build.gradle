@@ -74,7 +74,7 @@ install {
     repositories.mavenInstaller {
         dependsOn 'build'
         pom {
-            groupId = "theractivator"
+            groupId = "astavie"
             artifactId = mod_package
             version = project.version
         }
@@ -83,7 +83,7 @@ install {
 
 task pushMaven(type: Exec) {
     workingDir '/home/arie/Code/Maven'
-    commandLine 'bash', 'push.sh', "theractivator/${mod_package}", "Maven, ${mod_id}, ${project.version}"
+    commandLine 'bash', 'push.sh', "astavie/${mod_package}", "Maven, ${mod_id}, ${project.version}"
 }
 
 task increaseVersion {
