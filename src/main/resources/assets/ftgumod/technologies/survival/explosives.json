@@ -61,7 +61,6 @@
       },
       "S": {
         "item": "minecraft:sand",
-        "data": 32767,
         "hint": {
           "translate": "technology.hint.sand"
         }

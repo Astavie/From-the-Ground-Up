@@ -8,7 +8,6 @@ import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -79,14 +78,10 @@ public class GuiResearchBook extends GuiScreen {
 				roots.add(tech);
 		});
 
-		if (roots.size() == 0)
-			Minecraft.getMinecraft().displayGuiScreen(null);
-		else {
-			imageWidth = 256;
-			imageHeight = 202;
+		imageWidth = 256;
+		imageHeight = 202;
 
-			PacketDispatcher.sendToServer(new RequestMessage());
-		}
+		PacketDispatcher.sendToServer(new RequestMessage());
 	}
 
 	@Override

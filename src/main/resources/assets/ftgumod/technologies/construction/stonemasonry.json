@@ -32,7 +32,6 @@
     "key": {
       "S": {
         "item": "minecraft:stone_slab",
-        "data": 32767,
         "hint": {
           "translate": "technology.hint.slab"
         }

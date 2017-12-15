@@ -40,7 +40,6 @@
       "W": [
         {
           "item": "minecraft:wool",
-          "data": 32767,
           "hint": {
             "translate": "technology.hint.dyeable"
           }
@@ -57,8 +56,7 @@
           "item": "minecraft:hardened_clay"
         },
         {
-          "item": "minecraft:stained_hardened_clay",
-          "data": 32767
+          "item": "minecraft:stained_hardened_clay"
         }
       ],
       "D": {

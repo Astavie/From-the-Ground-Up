@@ -1,6 +1,7 @@
 package ftgumod.item;
 
 import ftgumod.client.gui.GuiResearchBook;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +25,7 @@ public class ItemResearchBook extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (world.isRemote)
+		if (world.isRemote && TechnologyManager.INSTANCE.roots.stream().anyMatch(tech -> tech.displayed() && tech.canResearchIgnoreResearched(player)))
 			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}

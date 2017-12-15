@@ -48,8 +48,7 @@
         }
       },
       "F": {
-        "item": "minecraft:coal",
-        "data": 32767,
+        "item": "#heat",
         "hint": {
           "translate": "technology.hint.fuel"
         }

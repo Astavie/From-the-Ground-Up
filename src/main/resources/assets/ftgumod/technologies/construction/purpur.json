@@ -56,7 +56,6 @@
     "key": {
       "S": {
         "item": "minecraft:purpur_slab",
-        "data": 32767,
         "hint": {
           "translate": "technology.hint.slab"
         }
