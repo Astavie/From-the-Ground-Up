@@ -2,6 +2,7 @@ package ftgumod.technology;
 
 import com.google.gson.*;
 import ftgumod.Content;
+import ftgumod.FTGU;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
@@ -55,10 +56,12 @@ public class Technology implements ITechnology<Technology> {
 	IIdeaRecipe idea;
 	IResearchRecipe research;
 
+	String stage;
+
 	boolean start;
 	boolean copy;
 
-	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<IUnlock> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research) {
+	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<IUnlock> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research, String stage) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
@@ -73,6 +76,8 @@ public class Technology implements ITechnology<Technology> {
 		this.unlock = unlock == null ? NonNullList.create() : unlock;
 		this.idea = idea;
 		this.research = research;
+
+		this.stage = stage;
 
 		if (parent == null)
 			level = 1;
@@ -213,7 +218,7 @@ public class Technology implements ITechnology<Technology> {
 			player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));
 
 		for (Technology child : children)
-			if (child.isRoot() && !child.hasCustomUnlock())
+			if (child.isRoot() && child.isUnlocked(player))
 				player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
 
 		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -276,18 +281,21 @@ public class Technology implements ITechnology<Technology> {
 				EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
 				unregisterListeners(playerMP);
-				if (!done && progress.isDone()) {
-					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Unlock(playerMP, this));
-
-					playerMP.sendMessage(new TextComponentTranslation(isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
-					playerMP.world.playSound(null, playerMP.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
-					Content.c_technologyUnlocked.trigger(playerMP, this);
-				}
+				if (!done && progress.isDone() && unlockedStage(player))
+					unlock(playerMP);
 			}
 			return true;
 		}
 		return false;
+	}
+
+	public void unlock(EntityPlayerMP player) {
+		MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Unlock(player, this));
+
+		player.sendMessage(new TextComponentTranslation(isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
+		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+		Content.c_technologyUnlocked.trigger(player, this);
 	}
 
 	@Override
@@ -355,9 +363,13 @@ public class Technology implements ITechnology<Technology> {
 		return cap != null && cap.isResearched(getRegistryName().toString());
 	}
 
+	public boolean isUnlockedIgnoreStage(EntityPlayer player) {
+		return !hasCustomUnlock() || TechnologyManager.INSTANCE.getProgress(player, this).isDone();
+	}
+
 	@Override
 	public boolean isUnlocked(EntityPlayer player) {
-		return !hasCustomUnlock() || TechnologyManager.INSTANCE.getProgress(player, this).isDone();
+		return unlockedStage(player) && isUnlockedIgnoreStage(player);
 	}
 
 	@Override
@@ -368,6 +380,15 @@ public class Technology implements ITechnology<Technology> {
 	@Override
 	public TechnologyBuilder toBuilder() {
 		return new TechnologyBuilder(this);
+	}
+
+	@Override
+	public String getGameStage() {
+		return stage;
+	}
+
+	private boolean unlockedStage(EntityPlayer player) {
+		return stage == null || !FTGU.INSTANCE.runCompat("gamestages", player, stage);
 	}
 
 	public boolean canResearchIgnoreCustomUnlock(EntityPlayer player) {
@@ -405,12 +426,14 @@ public class Technology implements ITechnology<Technology> {
 		private final JsonObject idea;
 		private final JsonObject research;
 
+		private final String stage;
+
 		private final boolean start;
 		private final boolean copy;
 
 		private Technology parent;
 
-		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research) {
+		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research, String stage) {
 			this.parentId = parent;
 			this.display = display;
 			this.rewards = rewards;
@@ -421,6 +444,7 @@ public class Technology implements ITechnology<Technology> {
 			this.unlock = unlock;
 			this.idea = idea;
 			this.research = research;
+			this.stage = stage;
 		}
 
 		public boolean resolveParent(Map<ResourceLocation, Technology> map) {
@@ -439,7 +463,7 @@ public class Technology implements ITechnology<Technology> {
 			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			IResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
-			return new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
+			return new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
 		}
 
 		public IUnlock getUnlock(JsonElement element, JsonContext context, ResourceLocation tech) {
@@ -525,10 +549,12 @@ public class Technology implements ITechnology<Technology> {
 			JsonObject idea = json.has("idea") ? JsonUtils.getJsonObject(json, "idea") : null;
 			JsonObject research = json.has("research") ? JsonUtils.getJsonObject(json, "research") : null;
 
+			String stage = JsonUtils.getString(json, "gamestage", null);
+
 			boolean start = JsonUtils.getBoolean(json, "start", false);
 			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
-			return new Builder(parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
+			return new Builder(parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
 		}
 
 	}

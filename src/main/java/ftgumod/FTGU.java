@@ -4,13 +4,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ftgumod.command.CommandTechnology;
 import ftgumod.compat.ICompat;
+import ftgumod.compat.gamestages.CompatGameStages;
+import ftgumod.compat.gamestages.UnlockGameStage;
 import ftgumod.compat.immersiveengineering.CompatIE;
+import ftgumod.compat.immersiveengineering.UnlockMultiblockFactory;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.CapabilityTechnology.DefaultImpl;
 import ftgumod.technology.CapabilityTechnology.Storage;
 import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.util.FluidPredicate;
@@ -133,7 +137,15 @@ public class FTGU {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		if (Loader.isModLoaded("immersiveengineering"))
-			new CompatIE().run();
+			MinecraftForge.EVENT_BUS.register(new CompatIE());
+		TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"), new UnlockMultiblockFactory());
+		if (Loader.isModLoaded("gamestages")) {
+			ICompat compat = new CompatGameStages();
+			this.compat.put("gamestages", compat);
+			MinecraftForge.EVENT_BUS.register(compat);
+
+			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
+		}
 	}
 
 	@Mod.EventHandler

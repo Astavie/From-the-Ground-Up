@@ -198,4 +198,11 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	 */
 	ITechnologyBuilder toBuilder();
 
+	/**
+	 * Game Stages is a mod that adds... Game Stages
+	 *
+	 * @return The Game Stage needed to research this technology, or {@code null} if none are required
+	 */
+	String getGameStage();
+
 }

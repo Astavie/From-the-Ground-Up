@@ -31,6 +31,8 @@ public interface ITechnologyBuilder {
 
 	void setResearchRecipe(IResearchRecipe research);
 
+	void setGameStage(String stage);
+
 	/**
 	 * If this {@code TechnologyBuilder} was built from an existing {@code Technology}, that {@code Technology} will be modified.
 	 *

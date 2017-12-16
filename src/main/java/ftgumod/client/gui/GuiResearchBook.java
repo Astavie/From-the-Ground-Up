@@ -141,7 +141,7 @@ public class GuiResearchBook extends GuiScreen {
 				buttonList.add(copy);
 			}
 
-			pages = (int) Math.max(Math.ceil(((double) selected.getUnlock().size()) / num), 1);
+			pages = (int) Math.max(Math.ceil(((double) selected.getUnlock().stream().filter(IUnlock::isDisplayed).count()) / num), 1);
 		}
 	}
 
@@ -328,9 +328,9 @@ public class GuiResearchBook extends GuiScreen {
 							continue;
 						if (!t1.canResearchIgnoreResearched(player))
 							continue;
-						if (t1.hasCustomUnlock() && !t1.isResearched(player) && !t1.isUnlocked(player))
+						if (!t1.isResearched(player) && !t1.isUnlocked(player))
 							continue;
-						if (t1.getDisplayInfo().isHidden() && !t1.hasCustomUnlock() && !t1.isResearched(player))
+						if (t1.getDisplayInfo().isHidden() && !t1.isResearched(player))
 							continue;
 						if (t1.getParent() == null || !tech.contains(t1.getParent()))
 							continue;
@@ -375,9 +375,9 @@ public class GuiResearchBook extends GuiScreen {
 							continue;
 						if (!t2.canResearchIgnoreResearched(player))
 							continue;
-						if (t2.hasCustomUnlock() && !t2.isResearched(player) && !t2.isUnlocked(player))
+						if (!t2.isResearched(player) && !t2.isUnlocked(player))
 							continue;
-						if (t2.getDisplayInfo().isHidden() && !t2.hasCustomUnlock() && !t2.isResearched(player))
+						if (t2.getDisplayInfo().isHidden() && !t2.isResearched(player))
 							continue;
 						int l6 = (int) (t2.getDisplayInfo().getX() * 24 - i);
 						int j7 = (int) (t2.getDisplayInfo().getY() * 24 - j);

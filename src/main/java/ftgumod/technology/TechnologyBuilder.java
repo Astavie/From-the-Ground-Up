@@ -30,6 +30,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 	private NonNullList<IUnlock> unlock;
 	private IIdeaRecipe idea;
 	private IResearchRecipe research;
+	private String stage;
 
 	public TechnologyBuilder(ResourceLocation id) {
 		this.original = null;
@@ -58,6 +59,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		unlock = tech.unlock;
 		idea = tech.idea;
 		research = tech.research;
+		stage = tech.stage;
 	}
 
 	@Override
@@ -107,6 +109,11 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 	}
 
 	@Override
+	public void setGameStage(String stage) {
+		this.stage = stage;
+	}
+
+	@Override
 	public void save() {
 		if (original == null)
 			throw new NullPointerException("Trying to save to a null technology");
@@ -138,7 +145,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		if (parent == null)
 			throw new NullPointerException("Unknown technology '" + this.parent + "'");
 
-		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
+		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
 		return original;
 	}
 
