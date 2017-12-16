@@ -1,12 +1,15 @@
 package ftgumod.api.technology;
 
+import ftgumod.api.technology.unlock.IUnlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
@@ -95,5 +98,12 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * @param toasts The {@code Technologies} to show a toast of
 	 */
 	void sync(EntityPlayerMP player, ITechnology... toasts);
+
+	/**
+	 * Bypasses FTGU's regulation of recipe unlocking and adds all specified recipes to the Recipe Book
+	 */
+	void addRecipes(List<IRecipe> recipes, EntityPlayerMP player);
+
+	void registerUnlock(ResourceLocation name, IUnlock.Factory<?> factory);
 
 }

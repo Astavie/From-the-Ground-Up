@@ -5,13 +5,10 @@ import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.stats.RecipeBookServer;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -49,7 +46,7 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 			if (irecipe == null)
 				LOGGER.info("Tried to load unrecognized recipe: {} removed now.", resourcelocation);
 			else {
-				this.setRecipes(irecipe);
+				this.unlock(irecipe);
 				Technology tech = TechnologyManager.INSTANCE.getLocked(irecipe.getRecipeOutput());
 				if (tech != null && !tech.isResearched(player))
 					list.add(irecipe);
@@ -65,28 +62,15 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 			if (irecipe1 == null)
 				LOGGER.info("Tried to load unrecognized recipe: {} removed now.", resourcelocation1);
 			else
-				this.addDisplayedRecipe(irecipe1);
+				this.markNew(irecipe1);
 		}
 
 		if (!list.isEmpty())
 			remove(list, player); // Invoke remove method so the client also gets updated
 	}
 
-	private List<IRecipe> getRecipeList(NonNullList<Ingredient> list) {
-		List<IRecipe> recipes = new ArrayList<>();
-		for (IRecipe r : ForgeRegistries.RECIPES)
-			for (Ingredient ingredient : list)
-				if (ingredient.test(r.getRecipeOutput()))
-					recipes.add(r);
-		return recipes;
-	}
-
-	public void addRecipes(NonNullList<Ingredient> list, EntityPlayerMP player) {
-		super.add(getRecipeList(list), player);
-	}
-
-	public void removeRecipes(NonNullList<Ingredient> list, EntityPlayerMP player) {
-		remove(getRecipeList(list), player);
+	public void addRecipes(List<IRecipe> recipes, EntityPlayerMP player) {
+		super.add(recipes, player);
 	}
 
 }

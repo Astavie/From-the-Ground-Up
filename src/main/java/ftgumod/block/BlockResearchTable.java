@@ -32,7 +32,7 @@ public class BlockResearchTable extends Block implements ITileEntityProvider {
 		setSoundType(SoundType.STONE);
 		setUnlocalizedName(name);
 		setCreativeTab(CreativeTabs.DECORATIONS);
-		isBlockContainer = true;
+		hasTileEntity = true;
 	}
 
 	@Override

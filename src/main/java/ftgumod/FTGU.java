@@ -132,11 +132,8 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		if (Loader.isModLoaded("immersiveengineering")) {
-			ICompat compat = new CompatIE();
-			MinecraftForge.EVENT_BUS.register(compat);
-			this.compat.put("immersiveengineering", compat);
-		}
+		if (Loader.isModLoaded("immersiveengineering"))
+			new CompatIE().run();
 	}
 
 	@Mod.EventHandler

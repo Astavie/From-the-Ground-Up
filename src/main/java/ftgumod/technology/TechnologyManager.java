@@ -8,15 +8,18 @@ import ftgumod.FTGU;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.ITechnologyManager;
+import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.util.JsonContextPublic;
 import ftgumod.util.SubCollection;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -55,6 +58,7 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	public final Collection<Technology> roots = new SubCollection<>(technologies.values(), Technology::isRoot);
 	public final Collection<Technology> start = new SubCollection<>(technologies.values(), Technology::researchedAtStart);
 
+	public final Map<ResourceLocation, IUnlock.Factory<?>> unlocks = new HashMap<>();
 	public final Map<ResourceLocation, ?> slaves = new HashMap<>();
 
 	private final List<Predicate<? super Technology>> removeCallback = new LinkedList<>();
@@ -113,8 +117,8 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	public Technology getLocked(ItemStack item) {
 		if (!item.isEmpty())
 			for (Technology t : technologies.values())
-				for (Ingredient ingredient : t.getUnlock())
-					if (ingredient.test(item))
+				for (IUnlock unlock : t.getUnlock())
+					if (unlock.unlocks(item))
 						return t;
 		return null;
 	}
@@ -364,6 +368,20 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	@Override
 	public void sync(EntityPlayerMP player, ITechnology... toasts) {
 		PacketDispatcher.sendTo(new TechnologyMessage(player, false, toasts), player);
+	}
+
+	@Override
+	public void addRecipes(List<IRecipe> recipes, EntityPlayerMP player) {
+		RecipeBookServer book = player.recipeBook;
+		if (book instanceof RecipeBookServerImpl)
+			((RecipeBookServerImpl) book).addRecipes(recipes, player);
+		else
+			book.add(recipes, player);
+	}
+
+	@Override
+	public void registerUnlock(ResourceLocation name, IUnlock.Factory<?> factory) {
+		unlocks.put(name, factory);
 	}
 
 	@Nonnull

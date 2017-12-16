@@ -2,12 +2,13 @@ package ftgumod.technology;
 
 import com.google.gson.*;
 import ftgumod.Content;
-import ftgumod.FTGU;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
+import ftgumod.api.technology.unlock.IUnlock;
+import ftgumod.api.technology.unlock.UnlockCompound;
+import ftgumod.api.technology.unlock.UnlockRecipe;
 import ftgumod.event.TechnologyEvent;
-import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
 import ftgumod.util.ListenerTechnology;
@@ -15,8 +16,6 @@ import net.minecraft.advancements.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
@@ -46,7 +45,7 @@ public class Technology implements ITechnology<Technology> {
 
 	ITextComponent displayText;
 	DisplayInfo display;
-	NonNullList<Ingredient> unlock;
+	NonNullList<IUnlock> unlock;
 	Technology parent;
 
 	AdvancementRewards rewards;
@@ -59,7 +58,7 @@ public class Technology implements ITechnology<Technology> {
 	boolean start;
 	boolean copy;
 
-	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<Ingredient> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research) {
+	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<IUnlock> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
@@ -171,7 +170,7 @@ public class Technology implements ITechnology<Technology> {
 	}
 
 	@Override
-	public NonNullList<Ingredient> getUnlock() {
+	public NonNullList<IUnlock> getUnlock() {
 		return unlock;
 	}
 
@@ -204,11 +203,7 @@ public class Technology implements ITechnology<Technology> {
 	}
 
 	public void addRecipes(EntityPlayerMP player) {
-		RecipeBookServer book = player.getRecipeBook();
-		if (book instanceof RecipeBookServerImpl)
-			((RecipeBookServerImpl) book).addRecipes(unlock, player);
-		else
-			LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
+		unlock.forEach(unlock -> unlock.unlock(player));
 	}
 
 	@Override
@@ -234,12 +229,7 @@ public class Technology implements ITechnology<Technology> {
 				if (player instanceof EntityPlayerMP) {
 					EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
-					RecipeBookServer book = playerMP.getRecipeBook();
-					if (book instanceof RecipeBookServerImpl)
-						((RecipeBookServerImpl) book).removeRecipes(unlock, playerMP);
-					else
-						LOGGER.error("RecipeBookServer of " + player.getDisplayNameString() + " wasn't an instance of RecipeBookServerImpl: no recipes granted!");
-
+					unlock.forEach(unlock -> unlock.lock(playerMP));
 					for (Technology child : children)
 						if (child.hasCustomUnlock())
 							child.unregisterListeners(playerMP);
@@ -441,18 +431,31 @@ public class Technology implements ITechnology<Technology> {
 		}
 
 		public Technology build(ResourceLocation location, JsonContext context) {
-			NonNullList<Ingredient> unlock = NonNullList.create();
+			NonNullList<IUnlock> unlock = NonNullList.create();
 			if (this.unlock != null)
-				for (JsonElement element : this.unlock) {
-					if (element.isJsonObject())
-						FTGU.INSTANCE.runCompat("immersiveengineering", location, element.getAsJsonObject());
-					unlock.add(CraftingHelper.getIngredient(element, context));
-				}
+				for (JsonElement element : this.unlock)
+					unlock.add(getUnlock(element, context, location));
 
 			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			IResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
 			return new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research);
+		}
+
+		public IUnlock getUnlock(JsonElement element, JsonContext context, ResourceLocation tech) {
+			if (element.isJsonArray()) {
+				NonNullList<IUnlock> unlocks = NonNullList.create();
+				element.getAsJsonArray().forEach(json -> unlocks.add(getUnlock(json, context, tech)));
+				return new UnlockCompound(unlocks);
+			} else if (element.isJsonObject()) {
+				JsonObject object = element.getAsJsonObject();
+				if (object.has("type")) {
+					ResourceLocation type = new ResourceLocation(JsonUtils.getString(object, "type"));
+					if (TechnologyManager.INSTANCE.unlocks.containsKey(type))
+						return TechnologyManager.INSTANCE.unlocks.get(type).deserialize(object, context, tech);
+				}
+				return new UnlockRecipe(CraftingHelper.getIngredient(element, context));
+			} else throw new JsonSyntaxException("Expected unlock to be an object or an array of objects");
 		}
 
 	}

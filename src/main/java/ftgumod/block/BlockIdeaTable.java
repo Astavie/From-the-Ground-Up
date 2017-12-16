@@ -32,7 +32,7 @@ public class BlockIdeaTable extends Block implements ITileEntityProvider {
 		setSoundType(SoundType.WOOD);
 		setUnlocalizedName(name);
 		setCreativeTab(CreativeTabs.DECORATIONS);
-		isBlockContainer = true;
+		hasTileEntity = true;
 	}
 
 	@Override

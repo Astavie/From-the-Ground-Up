@@ -2,11 +2,11 @@ package ftgumod.api.technology;
 
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
+import ftgumod.api.technology.unlock.IUnlock;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -87,9 +87,9 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	T getParent();
 
 	/**
-	 * @return All {@code Ingredients} that are unlocked when researching this {@code Technology}
+	 * @return All {@code IUnlocks} that are unlocked when researching this {@code Technology}
 	 */
-	NonNullList<Ingredient> getUnlock();
+	NonNullList<IUnlock> getUnlock();
 
 	/**
 	 * @return If this {@code Technology} needs to be unlocked

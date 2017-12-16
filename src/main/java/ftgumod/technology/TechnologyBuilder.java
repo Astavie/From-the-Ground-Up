@@ -3,10 +3,10 @@ package ftgumod.technology;
 import ftgumod.api.technology.ITechnologyBuilder;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
+import ftgumod.api.technology.unlock.IUnlock;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
@@ -27,7 +27,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 	private String[][] requirements;
 	private boolean start;
 	private boolean copy;
-	private NonNullList<Ingredient> unlock;
+	private NonNullList<IUnlock> unlock;
 	private IIdeaRecipe idea;
 	private IResearchRecipe research;
 
@@ -92,7 +92,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 	}
 
 	@Override
-	public void addUnlock(Ingredient... ingredients) {
+	public void addUnlock(IUnlock... ingredients) {
 		unlock.addAll(Arrays.asList(ingredients));
 	}
 

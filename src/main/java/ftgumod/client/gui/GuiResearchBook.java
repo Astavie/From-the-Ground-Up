@@ -2,6 +2,7 @@ package ftgumod.client.gui;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
+import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestMessage;
@@ -421,12 +422,13 @@ public class GuiResearchBook extends GuiScreen {
 			GlStateManager.disableLighting();
 			GlStateManager.enableRescaleNormal();
 			GlStateManager.enableColorMaterial();
+			List<IUnlock> display = selected.getUnlock().stream().filter(IUnlock::isDisplayed).collect(Collectors.toList());
 			for (int pos = 0; pos < num; pos++) {
 				int n = pos + (num * (scroll - 1));
-				if (n >= selected.getUnlock().size())
+				if (n >= display.size())
 					break;
 
-				ItemStack[] list = selected.getUnlock().get(n).getMatchingStacks();
+				ItemStack[] list = display.get(n).getIcon().getMatchingStacks();
 
 				NonNullList[] sub = new NonNullList[list.length];
 				int length = 0;

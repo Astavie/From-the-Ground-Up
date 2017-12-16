@@ -2,10 +2,10 @@ package ftgumod.api.technology;
 
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
+import ftgumod.api.technology.unlock.IUnlock;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
@@ -25,7 +25,7 @@ public interface ITechnologyBuilder {
 
 	void setCanCopy(boolean copy);
 
-	void addUnlock(Ingredient... ingredients);
+	void addUnlock(IUnlock... ingredients);
 
 	void setIdeaRecipe(IIdeaRecipe idea);
 

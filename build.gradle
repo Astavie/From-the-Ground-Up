@@ -30,12 +30,13 @@ compileJava {
 minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
-    mappings = "snapshot_20170624"
+    mappings = "snapshot_20171003"
 }
 
 repositories {
     maven { url "http://dvs1.progwml6.com/files/maven" }
     maven { url "http://maven.blamejared.com/" }
+    maven { url "https://maven.mcmoddev.com/" }
 }
 
 dependencies {
@@ -43,9 +44,12 @@ dependencies {
     deobfCompile "mezz.jei:jei_${mc_version}:+:api"
     deobfCompile "blusunrize:ImmersiveEngineering:0.${mc_major}+" // API didn't work 26/07/2017
 
+    deobfCompile "net.darkhax.bookshelf:Bookshelf-${mc_version}:+"
+    deobfCompile "net.darkhax.gamestages:GameStages-${mc_version}:+"
+
     // Runtime Mods
-    runtime "slimeknights.mantle:Mantle:1.${mc_major}+"
-    runtime "slimeknights:TConstruct:1.${mc_major}+"
+    // runtime "slimeknights.mantle:Mantle:1.${mc_major}+"
+    // runtime "slimeknights:TConstruct:1.${mc_major}+"
 
     runtime "mezz.jei:jei_${mc_version}:+"
 }
