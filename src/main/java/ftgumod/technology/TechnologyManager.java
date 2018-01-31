@@ -1,14 +1,16 @@
 package ftgumod.technology;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.ITechnologyManager;
 import ftgumod.api.technology.unlock.IUnlock;
+import ftgumod.api.technology.unlock.UnlockCompound;
+import ftgumod.api.technology.unlock.UnlockRecipe;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
@@ -21,18 +23,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.JsonUtils;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.registries.IForgeRegistryInternal;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,7 +45,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class TechnologyManager implements ITechnologyManager<Technology>, IForgeRegistryInternal<Technology> {
+public class TechnologyManager implements ITechnologyManager, Iterable<Technology> {
 
 	public static final TechnologyManager INSTANCE = new TechnologyManager();
 
@@ -52,20 +53,19 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 		FTGUAPI.technologyManager = INSTANCE;
 	}
 
-	public final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
+	private final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
 
-	public final Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
-	public final Collection<Technology> roots = new SubCollection<>(technologies.values(), Technology::isRoot);
-	public final Collection<Technology> start = new SubCollection<>(technologies.values(), Technology::researchedAtStart);
+	private final Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
+	private final Collection<Technology> roots = new SubCollection<>(technologies.values(), Technology::isRoot);
+	private final Collection<Technology> start = new SubCollection<>(technologies.values(), Technology::researchedAtStart);
 
-	public final Map<ResourceLocation, IUnlock.Factory<?>> unlocks = new HashMap<>();
-	public final Map<ResourceLocation, ?> slaves = new HashMap<>();
+	private final Map<ResourceLocation, IUnlock.Factory<?>> unlocks = new HashMap<>();
 
-	private final List<Predicate<? super Technology>> removeCallback = new LinkedList<>();
-	private final List<Consumer<? super Technology>> addCallback = new LinkedList<>();
+	private final List<Predicate<? super ITechnology>> removeCallback = new LinkedList<>();
+	private final List<Consumer<? super ITechnology>> addCallback = new LinkedList<>();
 	private final List<Runnable> createCallback = new LinkedList<>();
 
-	public Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
+	private Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
 
 	private Map<JsonContext, Map<ResourceLocation, String>> loadBuiltin() {
 		Map<JsonContext, Map<ResourceLocation, String>> json = new HashMap<>();
@@ -112,6 +112,38 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 		return json;
 	}
 
+	public void unloadProgress(EntityPlayer player) {
+		progress.remove(player.getUniqueID());
+	}
+
+	public Map<String, Pair<String, Map<ResourceLocation, String>>> getCache() {
+		return cache;
+	}
+
+	public IUnlock getUnlock(JsonElement element, JsonContext context, ResourceLocation tech) {
+		if (element.isJsonArray()) {
+			NonNullList<IUnlock> unlocks = NonNullList.create();
+			element.getAsJsonArray().forEach(json -> unlocks.add(getUnlock(json, context, tech)));
+			return new UnlockCompound(unlocks);
+		} else if (element.isJsonObject()) {
+			JsonObject object = element.getAsJsonObject();
+			if (object.has("type")) {
+				ResourceLocation type = new ResourceLocation(JsonUtils.getString(object, "type"));
+				if (unlocks.containsKey(type))
+					return unlocks.get(type).deserialize(object, context, tech);
+			}
+			return new UnlockRecipe(CraftingHelper.getIngredient(element, context));
+		} else throw new JsonSyntaxException("Expected unlock to be an object or an array of objects");
+	}
+
+	public Collection<Technology> getRoots() {
+		return roots;
+	}
+
+	public Collection<Technology> getStart() {
+		return start;
+	}
+
 	@Nullable
 	@Override
 	public Technology getLocked(ItemStack item) {
@@ -124,12 +156,12 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	}
 
 	@Override
-	public void removeCallback(Predicate<? super Technology> predicate) {
+	public void removeCallback(Predicate<? super ITechnology> predicate) {
 		removeCallback.add(predicate);
 	}
 
 	@Override
-	public void addCallback(Consumer<? super Technology> action) {
+	public void addCallback(Consumer<? super ITechnology> action) {
 		addCallback.add(action);
 	}
 
@@ -282,21 +314,13 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 		Technology.getLogger().info("Loaded " + size + " technolog" + (size != 1 ? "ies" : "y"));
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public void setSlaveMap(ResourceLocation name, Object obj) {
-		((Map<ResourceLocation, Object>) slaves).put(name, obj);
-	}
 
 	@Override
-	public Class<Technology> getRegistrySuperType() {
-		return Technology.class;
-	}
-
-	@Override
-	public void register(Technology value) {
-		if (_register(value))
-			addCallback.forEach(action -> action.accept(value));
+	public void register(ITechnology value) {
+		if (value instanceof Technology) {
+			if (_register((Technology) value))
+				addCallback.forEach(action -> action.accept(value));
+		} else throw new IllegalArgumentException("Technology instance is of unexpected class!");
 	}
 
 	private boolean _register(Technology value) {
@@ -315,54 +339,36 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 	}
 
 	@Override
-	public void registerAll(Technology... values) {
-		RuntimeException throwable = null;
-
-		List<Technology> registered = new LinkedList<>();
-		for (Technology tech : values)
-			try {
-				if (_register(tech))
-					registered.add(tech);
-			} catch (NullPointerException e) {
-				throwable = e;
-			}
-
-		registered.forEach(tech -> addCallback.forEach(action -> action.accept(tech)));
-		if (throwable != null)
-			throw throwable;
+	public void registerAll(ITechnology... values) {
+		for (ITechnology tech : values)
+			register(tech);
 	}
 
 	@Override
-	public boolean containsKey(ResourceLocation key) {
+	public boolean contains(ResourceLocation key) {
 		return technologies.containsKey(key);
 	}
 
-	@Override
-	public boolean containsValue(Technology value) {
-		return containsValue((ITechnology) value);
-	}
-
 	@Nullable
 	@Override
-	public Technology getValue(ResourceLocation key) {
+	public Technology getTechnology(ResourceLocation key) {
 		return technologies.get(key);
-	}
-
-	@Nullable
-	@Override
-	public ResourceLocation getKey(Technology value) {
-		return getKey((ITechnology) value);
-	}
-
-	@Nonnull
-	@Override
-	public Set<ResourceLocation> getKeys() {
-		return ImmutableSet.copyOf(technologies.keySet());
 	}
 
 	@Override
 	public TechnologyBuilder createBuilder(ResourceLocation id) {
 		return new TechnologyBuilder(id);
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public Collection<ITechnology> getTechnologies() {
+		return (Collection) technologies.values();
+	}
+
+	@Override
+	public Set<ResourceLocation> getRegistryNames() {
+		return technologies.keySet();
 	}
 
 	@Override
@@ -384,46 +390,9 @@ public class TechnologyManager implements ITechnologyManager<Technology>, IForge
 		unlocks.put(name, factory);
 	}
 
-	@Nonnull
-	@Override
-	public List<Technology> getValues() {
-		return ImmutableList.copyOf(technologies.values());
-	}
-
-	@Nonnull
-	@Override
-	public Set<Map.Entry<ResourceLocation, Technology>> getEntries() {
-		return ImmutableSet.copyOf(technologies.entrySet());
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getSlaveMap(ResourceLocation slaveMapName, Class<T> type) {
-		return (T) slaves.get(slaveMapName);
-	}
-
 	@Override
 	public Iterator<Technology> iterator() {
-		return new Iterator<Technology>() {
-
-			private final Iterator<Technology> iterator = technologies.values().iterator();
-
-			@Override
-			public boolean hasNext() {
-				return iterator.hasNext();
-			}
-
-			@Override
-			public Technology next() {
-				return iterator.next();
-			}
-
-			@Override
-			public void forEachRemaining(Consumer<? super Technology> action) {
-				iterator.forEachRemaining(action);
-			}
-
-		};
+		return technologies.values().iterator();
 	}
 
 	public enum GUI {

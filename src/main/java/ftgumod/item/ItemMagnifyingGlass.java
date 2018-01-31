@@ -61,7 +61,7 @@ public class ItemMagnifyingGlass extends Item {
 				event.setCanceled(true);
 
 				loop:
-				for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
+				for (Technology tech : TechnologyManager.INSTANCE)
 					if (tech.hasResearchRecipe() && tech.canResearch(player))
 						for (int i = 0; i < 9; i++)
 							if (tech.getResearchRecipe().testDecipher(i, singleton) && !tech.getResearchRecipe().testDecipher(i, list)) {

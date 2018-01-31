@@ -37,8 +37,7 @@ public class ItemParchmentResearch extends Item {
 						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getDisplayText()));
 				} else {
 					if (t.canResearch(player)) {
-						t.setResearched(player);
-						t.announceResearched(player);
+						t.setResearched(player, true);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t), (EntityPlayerMP) player);
 						return new ItemStack(Content.i_parchmentEmpty);

@@ -25,7 +25,7 @@ public class ItemResearchBook extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (world.isRemote && TechnologyManager.INSTANCE.roots.stream().anyMatch(tech -> tech.displayed() && tech.canResearchIgnoreResearched(player)))
+		if (world.isRemote && TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(player)))
 			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}

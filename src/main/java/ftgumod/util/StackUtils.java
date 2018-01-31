@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class StackUtils implements IStackUtils<Technology> {
+public class StackUtils implements IStackUtils {
 
 	public static final StackUtils INSTANCE = new StackUtils();
 
@@ -71,7 +71,7 @@ public class StackUtils implements IStackUtils<Technology> {
 				}
 			}
 			return Collections.singleton(ItemPredicate.deserialize(object));
-		} else throw new JsonSyntaxException("Expected predicate to be an object or array of objects");
+		} else throw new JsonSyntaxException("Expected predicate to be an object or an array of objects");
 
 		return predicates;
 	}
@@ -86,7 +86,7 @@ public class StackUtils implements IStackUtils<Technology> {
 	@Nullable
 	@Override
 	public Technology getTechnology(ItemStack parchment) {
-		return TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(getItemData(parchment).getString("FTGU")));
+		return TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(getItemData(parchment).getString("FTGU")));
 	}
 
 	@Override

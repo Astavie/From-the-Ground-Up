@@ -8,7 +8,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 ext {
     if (mc_minor == "0") {
@@ -40,18 +40,12 @@ repositories {
 }
 
 dependencies {
-    // Mod APIs
-    deobfCompile "mezz.jei:jei_${mc_version}:+:api"
-    deobfCompile "blusunrize:ImmersiveEngineering:0.${mc_major}+" // API didn't work 26/07/2017
+    compileOnly "blusunrize:ImmersiveEngineering:0.${mc_major}+:deobf" // API didn't work 26/07/2017
 
-    deobfCompile "net.darkhax.bookshelf:Bookshelf-${mc_version}:+"
-    deobfCompile "net.darkhax.gamestages:GameStages-${mc_version}:+"
+    compileOnly "net.darkhax.bookshelf:Bookshelf-${mc_version}:+:deobf"
+    compileOnly "net.darkhax.gamestages:GameStages-${mc_version}:+:deobf"
 
-    // Runtime Mods
-    // runtime "slimeknights.mantle:Mantle:1.${mc_major}+"
-    // runtime "slimeknights:TConstruct:1.${mc_major}+"
-
-    runtime "mezz.jei:jei_${mc_version}:+"
+    // runtime "mezz.jei:jei_${mc_version}:+"
 }
 
 processResources {
@@ -72,15 +66,48 @@ jar {
     manifest {
         attributes 'FMLAT': 'ftgumod_at.cfg'
     }
+    finalizedBy reobfJar
 }
 
-install {
-    repositories.mavenInstaller {
-        dependsOn 'build'
-        pom {
-            groupId = "astavie"
-            artifactId = mod_package
-            version = project.version
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+    manifest {
+        attributes 'FMLAT': 'ftgumod_at.cfg'
+    }
+}
+
+task apiJar(type: Jar) {
+    from(sourceSets.main.java) {
+        include "ftgumod/api/**"
+    }
+    classifier = 'api'
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allJava
+    classifier = 'sources'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId "astavie"
+            artifactId mod_package
+            version project.version
+
+            artifact jar
+            artifact apiJar
+            artifact deobfJar
+            artifact sourcesJar
+        }
+    }
+}
+
+publishing {
+    repositories {
+        maven {
+            url "/home/arie/Code/Maven"
         }
     }
 }
@@ -122,4 +149,4 @@ task increaseVersion {
     }
 }
 
-pushMaven.dependsOn install
+pushMaven.dependsOn publish

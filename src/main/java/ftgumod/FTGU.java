@@ -136,9 +136,10 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		if (Loader.isModLoaded("immersiveengineering"))
+		if (Loader.isModLoaded("immersiveengineering")) {
 			MinecraftForge.EVENT_BUS.register(new CompatIE());
-		TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"), new UnlockMultiblockFactory());
+			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"), new UnlockMultiblockFactory());
+		}
 		if (Loader.isModLoaded("gamestages")) {
 			ICompat compat = new CompatGameStages();
 			this.compat.put("gamestages", compat);

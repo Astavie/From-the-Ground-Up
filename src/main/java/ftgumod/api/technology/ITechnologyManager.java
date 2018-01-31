@@ -6,14 +6,15 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.registries.IForgeRegistry;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegistry<T> { // Weird generics are due to how extending IForgeRegistry works
+public interface ITechnologyManager {
 
 	/**
 	 * Looks through all registered {@code Technologies}' unlocks and returns the one unlocking the specified {@code ItemStack}.
@@ -22,7 +23,7 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * @return The {@code Technology} that unlocks the specified {@code ItemStack}, or {@code null} if there isn't one
 	 */
 	@Nullable
-	T getLocked(ItemStack stack);
+	ITechnology getLocked(ItemStack stack);
 
 	/**
 	 * When a new {@code Technology} is about to be added, the specified {@code Predicate} will be tested.
@@ -32,17 +33,17 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * @see #addCallback(Consumer)
 	 * @see #createCallback(Runnable)
 	 */
-	void removeCallback(Predicate<? super T> predicate);
+	void removeCallback(Predicate<? super ITechnology> predicate);
 
 	/**
 	 * When a new {@code Technology} has just been added, the specified {@code Consumer} will look at it.
-	 * This can be used to edit {@code Technologies} before they're added.
+	 * This can be used to edit {@code Technologies}.
 	 *
 	 * @param action The {@code Consumer} which will accept all new {@code Technologies}
 	 * @see #removeCallback(Predicate)
 	 * @see #createCallback(Runnable)
 	 */
-	void addCallback(Consumer<? super T> action);
+	void addCallback(Consumer<? super ITechnology> action);
 
 	/**
 	 * Before {@code Technologies} are (re)loaded, the specified {@code Runnable} will run.
@@ -62,23 +63,21 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 	 * @throws IllegalArgumentException If the specified {@code Technology} is of an unexpected class
 	 * @throws NullPointerException     If the specified {@code Technology} is {@code null} or has a {@code null} registry name
 	 */
-	@SuppressWarnings("unchecked")
-	default void registerTechnology(ITechnology value) {
-		if (!getRegistrySuperType().isInstance(value))
-			throw new IllegalArgumentException("Tried to register a technology with an unexpected class");
-		register((T) value);
+	void register(ITechnology value);
+
+	void registerAll(ITechnology... values);
+
+	boolean contains(ResourceLocation key);
+
+	default boolean contains(ITechnology value) {
+		return contains(value.getRegistryName());
 	}
 
-	@Override
-	default boolean containsValue(ITechnology value) {
-		return containsKey(value.getRegistryName());
-	}
+	ITechnology getTechnology(ResourceLocation key);
 
-	@Nullable
-	@Override
-	default ResourceLocation getKey(ITechnology value) {
-		return containsValue(value) ? value.getRegistryName() : null;
-	}
+	Collection<ITechnology> getTechnologies();
+
+	Set<ResourceLocation> getRegistryNames();
 
 	/**
 	 * Used to create {@code Technologies} at runtime.
@@ -92,10 +91,10 @@ public interface ITechnologyManager<T extends ITechnology<T>> extends IForgeRegi
 
 	/**
 	 * Sends a message to the client to sync the researched {@code Technologies}.
-	 * <p><strong>Should always be invoked after calling {@link ITechnology#setResearched(EntityPlayer)}!</strong></p>
+	 * <p><strong>Should always be invoked after calling {@link ITechnology#setResearched(EntityPlayer, boolean)}!</strong></p>
 	 *
 	 * @param player The {@code EntityPlayer} to synchronize
-	 * @param toasts The {@code Technologies} to show a toast of
+	 * @param toasts The {@code Technologies} to show toasts of
 	 */
 	void sync(EntityPlayerMP player, ITechnology... toasts);
 

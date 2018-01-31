@@ -2,6 +2,7 @@ package ftgumod.client.gui;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
+import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
@@ -33,6 +34,7 @@ import org.lwjgl.input.Mouse;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @SideOnly(Side.CLIENT)
 public class GuiResearchBook extends GuiScreen {
@@ -42,9 +44,10 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 
-	private static final Map<ResourceLocation, Float> zoom = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-	private static final Map<ResourceLocation, Double> xScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-	private static final Map<ResourceLocation, Double> yScrollO = TechnologyManager.INSTANCE.roots.stream().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static final Stream<Technology> stream = TechnologyManager.INSTANCE.getRoots().stream();
+	private static final Map<ResourceLocation, Float> zoom = stream.collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+	private static final Map<ResourceLocation, Double> xScrollO = stream.collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static final Map<ResourceLocation, Double> yScrollO = stream.collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 	private static int currentPage = 0;
 	private static boolean state = true;
@@ -74,8 +77,8 @@ public class GuiResearchBook extends GuiScreen {
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
 
-		TechnologyManager.INSTANCE.roots.forEach(tech -> {
-			if (tech.displayed() && tech.canResearchIgnoreResearched(player))
+		TechnologyManager.INSTANCE.getRoots().forEach(tech -> {
+			if (tech.canResearchIgnoreResearched(player))
 				roots.add(tech);
 		});
 
@@ -324,8 +327,6 @@ public class GuiResearchBook extends GuiScreen {
 			if (tech != null) {
 				try {
 					for (Technology t1 : tech) {
-						if (!t1.displayed())
-							continue;
 						if (!t1.canResearchIgnoreResearched(player))
 							continue;
 						if (!t1.isResearched(player) && !t1.isUnlocked(player))
@@ -371,8 +372,6 @@ public class GuiResearchBook extends GuiScreen {
 					GlStateManager.enableColorMaterial();
 
 					for (Technology t2 : tech) {
-						if (!t2.displayed())
-							continue;
 						if (!t2.canResearchIgnoreResearched(player))
 							continue;
 						if (!t2.isResearched(player) && !t2.isUnlocked(player))
@@ -538,7 +537,7 @@ public class GuiResearchBook extends GuiScreen {
 				String s1 = selected.getDisplayInfo().getDescription().getUnformattedText();
 
 				int children = 0;
-				for (Technology child : selected.getChildren())
+				for (ITechnology child : selected.getChildren())
 					if (child.isRoot())
 						children++;
 

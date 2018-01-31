@@ -75,7 +75,7 @@ public class ContainerIdeaTable extends Container {
 	}
 
 	private Technology hasRecipe() {
-		for (Technology tech : TechnologyManager.INSTANCE.technologies.values()) {
+		for (Technology tech : TechnologyManager.INSTANCE) {
 			if (tech.hasIdeaRecipe() && tech.canResearch(invPlayer.player)) {
 				remaining = tech.getIdeaRecipe().test(craftMatrix);
 				if (remaining != null)

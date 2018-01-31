@@ -16,7 +16,7 @@ public class CompatIE {
 	@SubscribeEvent
 	public void onMultiblockForm(MultiblockHandler.MultiblockFormEvent evt) {
 		if (UNLOCK.containsKey(evt.getMultiblock())) {
-			Technology technology = TechnologyManager.INSTANCE.technologies.get(UNLOCK.get(evt.getMultiblock()));
+			Technology technology = TechnologyManager.INSTANCE.getTechnology(UNLOCK.get(evt.getMultiblock()));
 			if (technology != null && !technology.isResearched(evt.getEntityPlayer()))
 				evt.setCanceled(true); // TODO: Send message?
 		}

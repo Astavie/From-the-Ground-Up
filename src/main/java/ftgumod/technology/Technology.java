@@ -7,8 +7,6 @@ import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
-import ftgumod.api.technology.unlock.UnlockCompound;
-import ftgumod.api.technology.unlock.UnlockRecipe;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
@@ -26,7 +24,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,7 +32,7 @@ import org.apache.logging.log4j.Logger;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class Technology implements ITechnology<Technology> {
+public class Technology implements ITechnology {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
@@ -117,13 +114,14 @@ public class Technology implements ITechnology<Technology> {
 	}
 
 	@Override
-	public Set<Technology> getChildren() {
-		return children;
+	@SuppressWarnings("unchecked")
+	public Set<ITechnology> getChildren() {
+		return (Set) children;
 	}
 
 	public void getChildren(Collection<Technology> collection, boolean tree) {
 		collection.add(this);
-		getChildren().forEach(tech -> {
+		children.forEach(tech -> {
 			if (!tree || !tech.isRoot())
 				tech.getChildren(collection, tree);
 		});
@@ -155,11 +153,6 @@ public class Technology implements ITechnology<Technology> {
 	}
 
 	@Override
-	public boolean displayed() {
-		return display != null;
-	}
-
-	@Override
 	public DisplayInfo getDisplayInfo() {
 		return display;
 	}
@@ -185,7 +178,7 @@ public class Technology implements ITechnology<Technology> {
 	}
 
 	@Override
-	public void setResearched(EntityPlayer player) {
+	public void setResearched(EntityPlayer player, boolean announce) {
 		CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 		if (cap != null) {
 			cap.setResearched(getRegistryName().toString());
@@ -204,24 +197,18 @@ public class Technology implements ITechnology<Technology> {
 				Content.c_technologyResearched.trigger((EntityPlayerMP) player, this);
 				MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Research(player, this));
 			}
+			if (announce) {
+				player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));
+				for (Technology child : children)
+					if (child.isRoot() && child.isUnlocked(player))
+						player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			}
 		}
 	}
 
 	public void addRecipes(EntityPlayerMP player) {
 		unlock.forEach(unlock -> unlock.unlock(player));
-	}
-
-	@Override
-	public void announceResearched(EntityPlayer player) {
-		if (player.world.getGameRules().getBoolean("announceAdvancements") && display.shouldAnnounceToChat())
-			//noinspection ConstantConditions
-			player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));
-
-		for (Technology child : children)
-			if (child.isRoot() && child.isUnlocked(player))
-				player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
-
-		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	}
 
 	@Override
@@ -404,16 +391,6 @@ public class Technology implements ITechnology<Technology> {
 		return id;
 	}
 
-	@Override
-	public Technology setRegistryName(ResourceLocation name) {
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public Class<Technology> getRegistryType() {
-		return Technology.class;
-	}
-
 	public static class Builder {
 
 		private final ResourceLocation parentId;
@@ -458,28 +435,12 @@ public class Technology implements ITechnology<Technology> {
 			NonNullList<IUnlock> unlock = NonNullList.create();
 			if (this.unlock != null)
 				for (JsonElement element : this.unlock)
-					unlock.add(getUnlock(element, context, location));
+					unlock.add(TechnologyManager.INSTANCE.getUnlock(element, context, location));
 
 			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
 			IResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
 
 			return new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
-		}
-
-		public IUnlock getUnlock(JsonElement element, JsonContext context, ResourceLocation tech) {
-			if (element.isJsonArray()) {
-				NonNullList<IUnlock> unlocks = NonNullList.create();
-				element.getAsJsonArray().forEach(json -> unlocks.add(getUnlock(json, context, tech)));
-				return new UnlockCompound(unlocks);
-			} else if (element.isJsonObject()) {
-				JsonObject object = element.getAsJsonObject();
-				if (object.has("type")) {
-					ResourceLocation type = new ResourceLocation(JsonUtils.getString(object, "type"));
-					if (TechnologyManager.INSTANCE.unlocks.containsKey(type))
-						return TechnologyManager.INSTANCE.unlocks.get(type).deserialize(object, context, tech);
-				}
-				return new UnlockRecipe(CraftingHelper.getIngredient(element, context));
-			} else throw new JsonSyntaxException("Expected unlock to be an object or an array of objects");
 		}
 
 	}

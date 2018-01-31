@@ -10,12 +10,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraftforge.registries.IForgeRegistryEntry;
 
 import java.util.Map;
 import java.util.Set;
 
-public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<T> { // Weird generics are due to how extending IForgeRegistry works
+public interface ITechnology {
 
 	/**
 	 * @return If you can copy this {@code Technology}
@@ -30,7 +29,7 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	/**
 	 * @return All children of this {@code Technology}
 	 */
-	Set<T> getChildren();
+	Set<ITechnology> getChildren();
 
 	/**
 	 * @return If this {@code Technology} has an {@code IdeaRecipe}
@@ -70,11 +69,6 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	boolean isRoot();
 
 	/**
-	 * @return If this {@code Technology} is displayed in the Research Book
-	 */
-	boolean displayed();
-
-	/**
 	 * @return If this {@code Technology} has a parent
 	 * @see #getParent()
 	 */
@@ -84,7 +78,7 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	 * @return This {@code Technology}'s parent
 	 * @see #hasParent()
 	 */
-	T getParent();
+	ITechnology getParent();
 
 	/**
 	 * @return All {@code IUnlocks} that are unlocked when researching this {@code Technology}
@@ -132,30 +126,19 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	/**
 	 * Gives this {@code Technology} to the specified player.
 	 * <p>This method does <i>not</i> notify the player.
-	 * If you want to notify the player, call {@link #announceResearched(EntityPlayer)} after this method.</p>
 	 * <p><strong>{@link ITechnologyManager#sync(EntityPlayerMP, ITechnology[])} should always be invoked after calling this method!</strong></p>
 	 *
 	 * @param player The {@code EntityPlayer} to give this {@code Technology} to
-	 * @see #announceResearched(EntityPlayer)
+	 * @param announce Whether or not to notify the player
 	 * @see #removeResearched(EntityPlayer)
 	 */
-	void setResearched(EntityPlayer player);
-
-	/**
-	 * Notifies the specified player (and the rest of the server, if announceAdvancements is enabled) that this {@code Technology} has been researched.
-	 * <p>Should only be called if the player has actually researched this {@code Technology}.
-	 * You can use {@link #setResearched(EntityPlayer)} for that.</p>
-	 *
-	 * @param player The {@code EntityPlayer} to notify
-	 * @see #setResearched(EntityPlayer)
-	 */
-	void announceResearched(EntityPlayer player);
+	void setResearched(EntityPlayer player, boolean announce);
 
 	/**
 	 * Removes this {@code Technology} from the specified player.
 	 *
 	 * @param player The {@code EntityPlayer} to remove this {@code Technology} from
-	 * @see #setResearched(EntityPlayer)
+	 * @see #setResearched(EntityPlayer, boolean)
 	 */
 	void removeResearched(EntityPlayer player);
 
@@ -204,5 +187,7 @@ public interface ITechnology<T extends ITechnology> extends IForgeRegistryEntry<
 	 * @return The Game Stage needed to research this technology, or {@code null} if none are required
 	 */
 	String getGameStage();
+
+	ResourceLocation getRegistryName();
 
 }

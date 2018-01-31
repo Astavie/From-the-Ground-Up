@@ -40,7 +40,7 @@ public class CopyTechMessage implements IMessage {
 		@Override
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message) {
 			if (FTGU.copy) {
-				Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(message.id));
+				Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(message.id));
 
 				if (tech != null && tech.canCopy() && tech.isResearched(player)) {
 					int index = -1;

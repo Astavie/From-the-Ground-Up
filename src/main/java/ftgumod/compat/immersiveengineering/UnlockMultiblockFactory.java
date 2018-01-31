@@ -39,7 +39,7 @@ public class UnlockMultiblockFactory implements IUnlock.Factory<UnlockRecipe> {
 			object.remove("multiblock");
 			return new UnlockRecipe(CraftingHelper.getIngredient(object, context));
 		} else {
-			String block = name.split(":")[1].replaceAll("(.)(\\p{Lu})", "$1_$2").toUpperCase(Locale.ENGLISH);
+			String block = name.split(":")[1].replaceAll("(.)(\\p{Lu})", "$1_$2").toUpperCase(Locale.ROOT);
 
 			ItemStack icon;
 			if (EnumUtils.isValidEnum(BlockTypes_StoneDevices.class, block))

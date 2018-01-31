@@ -49,7 +49,7 @@ public class EventHandler {
 	public void onCommand(CommandEvent evt) {
 		if (evt.getCommand() instanceof CommandReload) {
 			TechnologyManager.INSTANCE.reload(evt.getSender().getServer().worlds[0]);
-			PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
+			PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.getCache()));
 		}
 	}
 
@@ -128,7 +128,7 @@ public class EventHandler {
 			if (cap != null && cap.isNew()) {
 				evt.player.inventory.addItemStackToInventory(new ItemStack(Content.i_researchBook));
 
-				for (Technology tech : TechnologyManager.INSTANCE.start) {
+				for (Technology tech : TechnologyManager.INSTANCE.getStart()) {
 					cap.setResearched(tech.getRegistryName().toString());
 					tech.addRecipes((EntityPlayerMP) evt.player);
 				}
@@ -136,17 +136,17 @@ public class EventHandler {
 				cap.setOld();
 			}
 
-			for (Technology tech : TechnologyManager.INSTANCE.technologies.values())
+			for (Technology tech : TechnologyManager.INSTANCE)
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
 
-			PacketDispatcher.sendTo(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache), (EntityPlayerMP) evt.player);
+			PacketDispatcher.sendTo(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.getCache()), (EntityPlayerMP) evt.player);
 		}
 	}
 
 	@SubscribeEvent
 	public void onPlayerLeave(PlayerLoggedOutEvent evt) {
-		TechnologyManager.INSTANCE.progress.remove(evt.player.getUniqueID());
+		TechnologyManager.INSTANCE.unloadProgress(evt.player);
 	}
 
 	@SubscribeEvent

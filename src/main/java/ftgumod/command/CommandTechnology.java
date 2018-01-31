@@ -18,7 +18,7 @@ import java.util.*;
 public class CommandTechnology extends CommandBase {
 
 	public static Technology findTechnology(String id) throws CommandException {
-		Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(id));
+		Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(id));
 		if (tech == null)
 			throw new CommandException("commands.technology.technologyNotFound", id);
 		return tech;
@@ -70,7 +70,8 @@ public class CommandTechnology extends CommandBase {
 	private Technology[] perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
 		if (mode == Mode.EVERYTHING)
 			if (args.length == 3) {
-				Set<Technology> set = new LinkedHashSet<>(TechnologyManager.INSTANCE.technologies.values());
+				//noinspection unchecked
+				Set<Technology> set = new LinkedHashSet(TechnologyManager.INSTANCE.getTechnologies());
 				type.perform(player, set);
 				if (set.isEmpty())
 					throw mode.fail(type, player.getName());
@@ -141,9 +142,9 @@ public class CommandTechnology extends CommandBase {
 				Mode mode = Mode.byName(args[2]);
 				if (mode != null && mode != Mode.EVERYTHING) {
 					if (args.length == 4)
-						return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.technologies.keySet());
+						return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.getRegistryNames());
 					if (args.length == 5 && mode == Mode.ONLY) {
-						Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(args[3]));
+						Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(args[3]));
 						if (tech != null)
 							return getListOfStringsMatchingLastWord(args, tech.getCriteria().keySet());
 					}
@@ -154,9 +155,9 @@ public class CommandTechnology extends CommandBase {
 				if (args.length == 2)
 					return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 				if (args.length == 3)
-					return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.technologies.keySet());
+					return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.getRegistryNames());
 				if (args.length == 4) {
-					Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(args[2]));
+					Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(args[2]));
 					if (tech != null)
 						return getListOfStringsMatchingLastWord(args, tech.getCriteria().keySet());
 				}
@@ -192,8 +193,7 @@ public class CommandTechnology extends CommandBase {
 				if (tech.isResearched(player))
 					return false;
 
-				tech.setResearched(player);
-				tech.announceResearched(player);
+				tech.setResearched(player, true);
 				return true;
 			}
 

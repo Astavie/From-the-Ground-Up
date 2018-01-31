@@ -24,7 +24,7 @@ public final class ListenerTechnology<T extends ICriterionInstance> extends ICri
 	public void grantCriterion(PlayerAdvancements playerAdvancements) {
 		EntityPlayerMP player = playerAdvancements.player;
 
-		if (TechnologyManager.INSTANCE.containsValue(technology))
+		if (TechnologyManager.INSTANCE.contains(technology))
 			technology.grantCriterion(player, name);
 		PacketDispatcher.sendTo(new TechnologyMessage(player, true), player);
 	}

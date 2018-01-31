@@ -7,7 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public interface IStackUtils<T extends ITechnology<T>> {
+public interface IStackUtils {
 
 	/**
 	 * @param tech The identifier of a {@code Technology}
@@ -23,7 +23,7 @@ public interface IStackUtils<T extends ITechnology<T>> {
 	 * @see #getParchment(ResourceLocation, Parchment)
 	 */
 	@Nullable
-	T getTechnology(ItemStack parchment);
+	ITechnology getTechnology(ItemStack parchment);
 
 	/**
 	 * @param inspector A magnifying glass item

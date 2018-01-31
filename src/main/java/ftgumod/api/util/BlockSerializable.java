@@ -40,7 +40,6 @@ public class BlockSerializable {
 		Vec3d target = eyes.add(player.getLookVec().scale(depth));
 
 		ItemStack pick = block.getPickBlock(state, state.collisionRayTrace(world, pos, eyes, target), world, pos, player);
-		System.out.println(pick.isEmpty());
 		if (pick.isEmpty())
 			display = new ItemStack(block, 1, block.getMetaFromState(state));
 		else

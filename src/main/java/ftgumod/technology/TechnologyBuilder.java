@@ -118,13 +118,15 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		if (original == null)
 			throw new NullPointerException("Trying to save to a null technology");
 
-		Technology parent = TechnologyManager.INSTANCE.technologies.get(this.parent);
-		if (parent == null)
+		Technology parent = this.parent == null ? null : TechnologyManager.INSTANCE.getTechnology(this.parent);
+		if (this.parent != null && parent == null)
 			throw new NullPointerException("Unknown technology '" + this.parent + "'");
 
-		if (parent != original.parent && TechnologyManager.INSTANCE.containsValue(original)) {
-			original.parent.getChildren().remove(original);
-			parent.getChildren().add(original);
+		if (parent != original.parent) {
+			if (original.parent != null)
+				original.parent.getChildren().remove(original);
+			if (parent != null)
+				parent.getChildren().add(original);
 		}
 
 		original.parent = parent;
@@ -141,8 +143,8 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 
 	@Override
 	public Technology build() {
-		Technology parent = TechnologyManager.INSTANCE.technologies.get(this.parent);
-		if (parent == null)
+		Technology parent = this.parent == null ? null : TechnologyManager.INSTANCE.getTechnology(this.parent);
+		if (this.parent != null && parent == null)
 			throw new NullPointerException("Unknown technology '" + this.parent + "'");
 
 		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
