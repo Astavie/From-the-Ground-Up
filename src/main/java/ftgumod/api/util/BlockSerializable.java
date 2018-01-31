@@ -4,16 +4,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,7 +25,7 @@ public class BlockSerializable {
 
 	private final ItemStack display;
 
-	public BlockSerializable(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+	public BlockSerializable(World world, BlockPos pos, IBlockState state, @Nullable ItemStack display) {
 		this.dimension = world.provider.getDimensionType();
 		this.pos = pos;
 		this.block = state.getBlock();
@@ -35,15 +34,10 @@ public class BlockSerializable {
 		for (IProperty<?> property : state.getPropertyKeys())
 			properties.put(property, state.getValue(property));
 
-		double depth = player.isCreative() ? 5.0 : 4.5;
-		Vec3d eyes = player.getPositionEyes(1.0F);
-		Vec3d target = eyes.add(player.getLookVec().scale(depth));
-
-		ItemStack pick = block.getPickBlock(state, state.collisionRayTrace(world, pos, eyes, target), world, pos, player);
-		if (pick.isEmpty())
-			display = new ItemStack(block, 1, block.getMetaFromState(state));
+		if (display == null || display.isEmpty())
+			this.display = new ItemStack(block, 1, block.getMetaFromState(state));
 		else
-			display = pick;
+			this.display = display;
 	}
 
 	public BlockSerializable(NBTTagCompound compound) {
