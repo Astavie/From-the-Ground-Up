@@ -49,7 +49,7 @@ public class EventHandler {
 	public void onCommand(CommandEvent evt) {
 		if (evt.getCommand() instanceof CommandReload) {
 			TechnologyManager.INSTANCE.reload(evt.getSender().getServer().worlds[0]);
-			PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.getCache()));
+			PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
 		}
 	}
 
@@ -140,7 +140,7 @@ public class EventHandler {
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
 
-			PacketDispatcher.sendTo(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.getCache()), (EntityPlayerMP) evt.player);
+			PacketDispatcher.sendTo(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache), (EntityPlayerMP) evt.player);
 		}
 	}
 

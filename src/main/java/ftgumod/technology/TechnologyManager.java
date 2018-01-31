@@ -65,7 +65,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	private final List<Consumer<? super ITechnology>> addCallback = new LinkedList<>();
 	private final List<Runnable> createCallback = new LinkedList<>();
 
-	private Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
+	public Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
 
 	private Map<JsonContext, Map<ResourceLocation, String>> loadBuiltin() {
 		Map<JsonContext, Map<ResourceLocation, String>> json = new HashMap<>();

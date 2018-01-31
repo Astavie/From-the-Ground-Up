@@ -47,7 +47,7 @@ public class TechnologyMessage implements IMessage {
 
 		toasts = new ITechnology[buffer.readInt()];
 		for (int i = 0; i < toasts.length; i++)
-			toasts[i] = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
+			toasts[i] = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class TechnologyMessage implements IMessage {
 
 							String[] split = name.split("#");
 							if (split.length == 2) {
-								Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(split[0]));
+								Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
 								TechnologyManager.INSTANCE.getProgress(player, tech).revokeCriterion(split[1]);
 							}
 						}
@@ -96,7 +96,7 @@ public class TechnologyMessage implements IMessage {
 
 							String[] split = name.split("#");
 							if (split.length == 2) {
-								Technology tech = TechnologyManager.INSTANCE.technologies.get(new ResourceLocation(split[0]));
+								Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
 								TechnologyManager.INSTANCE.getProgress(player, tech).grantCriterion(split[1]);
 							}
 						}
