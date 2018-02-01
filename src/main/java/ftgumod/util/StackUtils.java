@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.Content;
 import ftgumod.api.FTGUAPI;
+import ftgumod.api.technology.ITechnology;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.item.ItemMagnifyingGlass;
@@ -77,9 +78,9 @@ public class StackUtils implements IStackUtils {
 	}
 
 	@Override
-	public ItemStack getParchment(ResourceLocation tech, Parchment type) {
+	public ItemStack getParchment(ITechnology tech, Parchment type) {
 		ItemStack stack = new ItemStack(type == Parchment.IDEA ? Content.i_parchmentIdea : Content.i_parchmentResearch);
-		getItemData(stack).setString("FTGU", tech.toString());
+		getItemData(stack).setString("FTGU", tech.getRegistryName().toString());
 		return stack;
 	}
 

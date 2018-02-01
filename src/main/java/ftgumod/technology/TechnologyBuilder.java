@@ -63,54 +63,64 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 	}
 
 	@Override
-	public void setParent(@Nullable ResourceLocation parent) {
+	public ITechnologyBuilder setParent(@Nullable ResourceLocation parent) {
 		this.parent = parent;
+		return this;
 	}
 
 	@Override
-	public void setDisplayInfo(DisplayInfo display) {
+	public ITechnologyBuilder setDisplayInfo(DisplayInfo display) {
 		this.display = display;
+		return this;
 	}
 
 	@Override
-	public void setRewards(AdvancementRewards rewards) {
+	public ITechnologyBuilder setRewards(AdvancementRewards rewards) {
 		this.rewards = rewards;
+		return this;
 	}
 
 	@Override
-	public void setCriteria(Map<String, Criterion> criteria, String[][] requirements) {
+	public ITechnologyBuilder setCriteria(Map<String, Criterion> criteria, String[][] requirements) {
 		this.criteria = criteria;
 		this.requirements = requirements;
+		return this;
 	}
 
 	@Override
-	public void setResearchedAtStart(boolean start) {
+	public ITechnologyBuilder setResearchedAtStart(boolean start) {
 		this.start = start;
+		return this;
 	}
 
 	@Override
-	public void setCanCopy(boolean copy) {
+	public ITechnologyBuilder setCanCopy(boolean copy) {
 		this.copy = copy;
+		return this;
 	}
 
 	@Override
-	public void addUnlock(IUnlock... ingredients) {
+	public ITechnologyBuilder addUnlock(IUnlock... ingredients) {
 		unlock.addAll(Arrays.asList(ingredients));
+		return this;
 	}
 
 	@Override
-	public void setIdeaRecipe(IIdeaRecipe idea) {
+	public ITechnologyBuilder setIdeaRecipe(IIdeaRecipe idea) {
 		this.idea = idea;
+		return this;
 	}
 
 	@Override
-	public void setResearchRecipe(IResearchRecipe research) {
+	public ITechnologyBuilder setResearchRecipe(IResearchRecipe research) {
 		this.research = research;
+		return this;
 	}
 
 	@Override
-	public void setGameStage(String stage) {
+	public ITechnologyBuilder setGameStage(String stage) {
 		this.stage = stage;
+		return this;
 	}
 
 	@Override
@@ -139,6 +149,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		original.unlock = unlock;
 		original.idea = idea;
 		original.research = research;
+		original.updateDisplayText();
 	}
 
 	@Override

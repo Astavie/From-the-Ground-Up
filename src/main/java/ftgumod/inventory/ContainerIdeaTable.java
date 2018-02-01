@@ -92,7 +92,7 @@ public class ContainerIdeaTable extends Container {
 				Technology tech = hasRecipe();
 
 				if (tech != null) {
-					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(tech.getRegistryName(), tech.hasResearchRecipe() ? IStackUtils.Parchment.IDEA : IStackUtils.Parchment.RESEARCH));
+					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(tech, tech.hasResearchRecipe() ? IStackUtils.Parchment.IDEA : IStackUtils.Parchment.RESEARCH));
 					return;
 				}
 			}

@@ -13,25 +13,25 @@ import java.util.Map;
 
 public interface ITechnologyBuilder {
 
-	void setParent(@Nullable ResourceLocation parent);
+	ITechnologyBuilder setParent(@Nullable ResourceLocation parent);
 
-	void setDisplayInfo(DisplayInfo display);
+	ITechnologyBuilder setDisplayInfo(DisplayInfo display);
 
-	void setRewards(AdvancementRewards rewards);
+	ITechnologyBuilder setRewards(AdvancementRewards rewards);
 
-	void setCriteria(Map<String, Criterion> criteria, String[][] requirements);
+	ITechnologyBuilder setCriteria(Map<String, Criterion> criteria, String[][] requirements);
 
-	void setResearchedAtStart(boolean start);
+	ITechnologyBuilder setResearchedAtStart(boolean start);
 
-	void setCanCopy(boolean copy);
+	ITechnologyBuilder setCanCopy(boolean copy);
 
-	void addUnlock(IUnlock... ingredients);
+	ITechnologyBuilder addUnlock(IUnlock... ingredients);
 
-	void setIdeaRecipe(IIdeaRecipe idea);
+	ITechnologyBuilder setIdeaRecipe(IIdeaRecipe idea);
 
-	void setResearchRecipe(IResearchRecipe research);
+	ITechnologyBuilder setResearchRecipe(IResearchRecipe research);
 
-	void setGameStage(String stage);
+	ITechnologyBuilder setGameStage(String stage);
 
 	/**
 	 * If this {@code TechnologyBuilder} was built from an existing {@code Technology}, that {@code Technology} will be modified.

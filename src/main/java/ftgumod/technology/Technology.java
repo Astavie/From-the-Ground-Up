@@ -229,7 +229,6 @@ public class Technology implements ITechnology {
 					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
 				}
 			}
-
 			if (hasCustomUnlock()) {
 				AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 				boolean done = progress.isDone();

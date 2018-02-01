@@ -327,7 +327,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		if (value == null || value.getRegistryName() == null)
 			throw new NullPointerException("Tried to register a technology that is null or has a null registry name");
 
-		for (Predicate<? super Technology> predicate : removeCallback)
+		for (Predicate<? super ITechnology> predicate : removeCallback)
 			if (predicate.test(value))
 				return false;
 

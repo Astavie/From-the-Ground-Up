@@ -51,7 +51,7 @@ public class CopyTechMessage implements IMessage {
 					if (index != -1) {
 						player.inventory.getStackInSlot(index).shrink(1);
 
-						ItemStack result = StackUtils.INSTANCE.getParchment(tech.getRegistryName(), IStackUtils.Parchment.RESEARCH);
+						ItemStack result = StackUtils.INSTANCE.getParchment(tech, IStackUtils.Parchment.RESEARCH);
 						if (player.inventory.getFirstEmptyStack() == -1)
 							player.dropItem(result, true);
 						else

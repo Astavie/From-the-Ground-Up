@@ -127,7 +127,7 @@ public class ContainerResearchTable extends Container {
 				if (inventorySlots.get(feather).getHasStack()) {
 					remaining = recipe.getResearchRecipe().test(craftMatrix);
 					if (remaining != null) {
-						inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(recipe.getRegistryName(), IStackUtils.Parchment.RESEARCH));
+						inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(recipe, IStackUtils.Parchment.RESEARCH));
 						return;
 					}
 				}

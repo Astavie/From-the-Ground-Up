@@ -7,6 +7,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.JsonContext;
 
+import javax.annotation.Nullable;
+
 public interface IUnlock {
 
 	/**
@@ -19,6 +21,7 @@ public interface IUnlock {
 	 * @return The icon in the Research Book, or {@code null} if {@link #isDisplayed()} is false
 	 * @see #isDisplayed()
 	 */
+	@Nullable
 	Ingredient getIcon();
 
 	/**
