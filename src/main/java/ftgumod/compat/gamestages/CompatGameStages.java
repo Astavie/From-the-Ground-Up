@@ -18,10 +18,10 @@ public class CompatGameStages implements ICompat {
 
 	@SubscribeEvent
 	public void onGameStage(GameStageEvent.Added event) {
-		if (!event.getPlayer().world.isRemote)
+		if (!event.getEntityPlayer().world.isRemote)
 			for (Technology tech : TechnologyManager.INSTANCE)
-				if (event.getStageName().equals(tech.getGameStage()) && tech.canResearch(event.getPlayer()))
-					tech.unlock((EntityPlayerMP) event.getPlayer());
+				if (event.getStageName().equals(tech.getGameStage()) && tech.canResearch(event.getEntityPlayer()))
+					tech.unlock((EntityPlayerMP) event.getEntityPlayer());
 	}
 
 }

@@ -3,6 +3,7 @@ package ftgumod.technology;
 import ftgumod.FTGU;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.EnumFacing;
@@ -11,6 +12,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -39,7 +41,7 @@ public class CapabilityTechnology {
 	@SubscribeEvent
 	public void onEntityConstruct(AttachCapabilitiesEvent evt) {
 		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagList>() {
+			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagCompound>() {
 
 				private final ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
 
@@ -54,12 +56,12 @@ public class CapabilityTechnology {
 				}
 
 				@Override
-				public NBTTagList serializeNBT() {
-					return (NBTTagList) CapabilityTechnology.TECH_CAP.getStorage().writeNBT(CapabilityTechnology.TECH_CAP, inst, null);
+				public NBTTagCompound serializeNBT() {
+					return (NBTTagCompound) CapabilityTechnology.TECH_CAP.getStorage().writeNBT(CapabilityTechnology.TECH_CAP, inst, null);
 				}
 
 				@Override
-				public void deserializeNBT(NBTTagList nbt) {
+				public void deserializeNBT(NBTTagCompound nbt) {
 					CapabilityTechnology.TECH_CAP.getStorage().readNBT(CapabilityTechnology.TECH_CAP, inst, null, nbt);
 				}
 
@@ -91,22 +93,23 @@ public class CapabilityTechnology {
 
 		@Override
 		public NBTBase writeNBT(Capability<ITechnology> capability, ITechnology instance, EnumFacing side) {
+			NBTTagCompound compound = new NBTTagCompound();
 			NBTTagList list = new NBTTagList();
-			list.appendTag(new NBTTagString(Boolean.toString(instance.isNew())));
-			for (String s : instance.getResearched()) {
+			for (String s : instance.getResearched())
 				list.appendTag(new NBTTagString(s));
-			}
-			return list;
+			compound.setBoolean("new", instance.isNew());
+			compound.setTag("researched", list);
+			return compound;
 		}
 
 		@Override
 		public void readNBT(Capability<ITechnology> capability, ITechnology instance, EnumFacing side, NBTBase nbt) {
-			NBTTagList list = (NBTTagList) nbt;
-			if (list.getStringTagAt(0).equalsIgnoreCase("false"))
+			NBTTagCompound compound = (NBTTagCompound) nbt;
+			if (!compound.getBoolean("new"))
 				instance.setOld();
-			for (int i = 1; i < list.tagCount(); i++) {
+			NBTTagList list = compound.getTagList("researched", Constants.NBT.TAG_STRING);
+			for (int i = 0; i < list.tagCount(); i++)
 				instance.setResearched(list.getStringTagAt(i));
-			}
 		}
 
 	}

@@ -33,6 +33,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -44,10 +45,10 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 
-	private static final Stream<Technology> stream = TechnologyManager.INSTANCE.getRoots().stream();
-	private static final Map<ResourceLocation, Float> zoom = stream.collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-	private static final Map<ResourceLocation, Double> xScrollO = stream.collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-	private static final Map<ResourceLocation, Double> yScrollO = stream.collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static final Supplier<Stream<Technology>> stream = TechnologyManager.INSTANCE.getRoots()::stream;
+	private static final Map<ResourceLocation, Float> zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+	private static final Map<ResourceLocation, Double> xScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private static final Map<ResourceLocation, Double> yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 	private static int currentPage = 0;
 	private static boolean state = true;
