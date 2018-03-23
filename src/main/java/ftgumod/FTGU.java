@@ -17,6 +17,7 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
+import ftgumod.util.EmptyNBTPredicate;
 import ftgumod.util.FluidPredicate;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriteriaTriggers;
@@ -111,6 +112,7 @@ public class FTGU {
 			}
 
 		});
+		ItemPredicates.register(new ResourceLocation(MODID, "empty_nbt"), EmptyNBTPredicate::deserialize);
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 
