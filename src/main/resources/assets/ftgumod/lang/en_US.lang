@@ -32,7 +32,7 @@ technology.decipher.flawless=You find hidden meaning in this block
 technology.decipher.understand=You find nothing of interest in this block
 technology.decipher.tooltip=Shift Right-click to find hidden meaning in blocks
 
-commands.technology.usage=/technology <grant|revoke|test> <player>
+commands.technology.usage=/technology <grant|revoke|test|reload>
 commands.technology.technologyNotFound=No technology was found by the name '%1$s'
 commands.technology.criterionNotFound=The technology '%1$s' does not contain the criterion '%2$s'
 
@@ -79,6 +79,9 @@ commands.technology.test.criterion.success=Player %1$s has completed criterion '
 commands.technology.test.criterion.notDone=Player %1$s has not completed criterion '%3$s' of technology '%2$s'
 commands.technology.test.technology.success=Player %1$s has completed technology '%2$s'
 commands.technology.test.technology.notDone=Player %1$s has not completed technology '%2$s'
+
+commands.technology.reload.usage=/technology reload
+commands.technology.reload.success=Successfully reloaded technologies
 
 technology.hint.stick=Leaned on
 technology.hint.crop=Crop

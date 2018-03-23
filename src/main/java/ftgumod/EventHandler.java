@@ -15,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.command.CommandReload;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerPlayer;
@@ -26,7 +25,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -44,14 +42,6 @@ import java.util.List;
 public class EventHandler {
 
 	private ItemStack stack = ItemStack.EMPTY;
-
-	@SubscribeEvent
-	public void onCommand(CommandEvent evt) {
-		if (evt.getCommand() instanceof CommandReload) {
-			TechnologyManager.INSTANCE.reload(evt.getSender().getServer().worlds[0]);
-			PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
-		}
-	}
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {

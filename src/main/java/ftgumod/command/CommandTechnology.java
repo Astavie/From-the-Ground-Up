@@ -1,6 +1,8 @@
 package ftgumod.command;
 
+import ftgumod.FTGU;
 import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -44,26 +46,35 @@ public class CommandTechnology extends CommandBase {
 		if (args.length == 0)
 			throw new WrongUsageException(getUsage(sender));
 		else {
-			ActionType type = ActionType.byName(args[0]);
-			if (type != null) {
-				if (args.length < 3)
-					throw type.wrongUsage();
+			if (args[0].equals("reload")) {
+				if (args.length == 1) {
+					TechnologyManager.INSTANCE.reload(sender.getServer().worlds[0]);
+					PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
+					notifyCommandListener(sender, this, "commands.technology.reload.success");
+				} else
+					throw new WrongUsageException("commands.technology.reload.usage");
+			} else {
+				ActionType type = ActionType.byName(args[0]);
+				if (type != null) {
+					if (args.length < 3)
+						throw type.wrongUsage();
 
-				EntityPlayerMP player = getPlayer(server, sender, args[1]);
-				Mode mode = Mode.byName(args[2]);
+					EntityPlayerMP player = getPlayer(server, sender, args[1]);
+					Mode mode = Mode.byName(args[2]);
 
-				if (mode == null)
-					throw type.wrongUsage();
+					if (mode == null)
+						throw type.wrongUsage();
 
-				PacketDispatcher.sendTo(new TechnologyMessage(player, true, perform(sender, args, player, type, mode)), player);
-			} else if (!args[0].equals("test"))
-				throw new WrongUsageException(getUsage(sender));
-			else if (args.length == 3)
-				testTechnology(sender, getPlayer(server, sender, args[1]), findTechnology(args[2]));
-			else if (args.length == 4)
-				testCriterion(sender, getPlayer(server, sender, args[1]), findTechnology(args[2]), args[3]);
-			else
-				throw new WrongUsageException("commands.technology.test.usage");
+					PacketDispatcher.sendTo(new TechnologyMessage(player, true, perform(sender, args, player, type, mode)), player);
+				} else if (!args[0].equals("test"))
+					throw new WrongUsageException(getUsage(sender));
+				else if (args.length == 3)
+					testTechnology(sender, getPlayer(server, sender, args[1]), findTechnology(args[2]));
+				else if (args.length == 4)
+					testCriterion(sender, getPlayer(server, sender, args[1]), findTechnology(args[2]), args[3]);
+				else
+					throw new WrongUsageException("commands.technology.test.usage");
+			}
 		}
 	}
 
@@ -130,7 +141,7 @@ public class CommandTechnology extends CommandBase {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		if (args.length == 1)
-			return getListOfStringsMatchingLastWord(args, "grant", "revoke", "test");
+			return getListOfStringsMatchingLastWord(args, "grant", "revoke", "test", "reload");
 		else {
 			ActionType type = ActionType.byName(args[0]);
 			if (type != null) {
