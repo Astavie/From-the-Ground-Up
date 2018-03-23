@@ -34,15 +34,13 @@ public class SubCollection<T> extends AbstractCollection<T> {
 			}
 
 			private T getNext() {
-				T t = null;
-				if (iterator.hasNext()) {
-					t = iterator.next();
-					while (t != null && !predicate.test(t))
-						if (iterator.hasNext())
-							t = iterator.next();
-						else
-							t = null;
-				}
+				T t;
+				do {
+					if (iterator.hasNext())
+						t = iterator.next();
+					else
+						t = null;
+				} while (t != null && !predicate.test(t));
 				return t;
 			}
 

@@ -125,15 +125,17 @@ public class EventHandler {
 			inv.addListener(new CraftingListener((EntityPlayerMP) evt.player));
 
 			CapabilityTechnology.ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
-			if (cap != null && cap.isNew()) {
-				evt.player.inventory.addItemStackToInventory(new ItemStack(Content.i_researchBook));
-
+			if (cap != null) {
 				for (Technology tech : TechnologyManager.INSTANCE.getStart()) {
-					cap.setResearched(tech.getRegistryName().toString());
-					tech.addRecipes((EntityPlayerMP) evt.player);
+					if (!cap.isResearched(tech.getRegistryName().toString())) {
+						cap.setResearched(tech.getRegistryName().toString());
+						tech.addRecipes((EntityPlayerMP) evt.player);
+					}
 				}
-
-				cap.setOld();
+				if (cap.isNew()) {
+					evt.player.inventory.addItemStackToInventory(new ItemStack(Content.i_researchBook));
+					cap.setOld();
+				}
 			}
 
 			for (Technology tech : TechnologyManager.INSTANCE)

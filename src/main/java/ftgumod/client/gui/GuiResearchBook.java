@@ -46,14 +46,15 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 
 	private static final Supplier<Stream<Technology>> stream = TechnologyManager.INSTANCE.getRoots()::stream;
-	private static final Map<ResourceLocation, Float> zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-	private static final Map<ResourceLocation, Double> xScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-	private static final Map<ResourceLocation, Double> yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 	private static int currentPage = 0;
 	private static boolean state = true;
 	private static Technology selected;
 	private static int scroll = 1;
+
+	private final Map<ResourceLocation, Float> zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+	private final Map<ResourceLocation, Double> xScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+	private final Map<ResourceLocation, Double> yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 	private final List<Technology> roots = new ArrayList<>();
 	private final EntityPlayer player;
@@ -91,6 +92,11 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public void initGui() {
+		if (selected != null && !TechnologyManager.INSTANCE.contains(selected)) {
+			selected = null;
+			state = true;
+		}
+
 		if (currentPage >= roots.size())
 			currentPage = 0;
 		root = roots.get(currentPage);

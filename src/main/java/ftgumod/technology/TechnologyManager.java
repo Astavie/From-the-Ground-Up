@@ -335,6 +335,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			value.getParent().getChildren().add(value);
 
 		technologies.put(value.getRegistryName(), value);
+		if (value.start)
+			FTGU.PROXY.autoResearch(value);
 		return true;
 	}
 

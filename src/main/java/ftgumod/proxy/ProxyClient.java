@@ -5,11 +5,14 @@ import ftgumod.FTGU;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.client.GuiHandlerClient;
 import ftgumod.client.gui.toast.ToastTechnology;
+import ftgumod.technology.CapabilityTechnology;
+import ftgumod.technology.Technology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -39,6 +42,16 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
 		return ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx);
+	}
+
+	@Override
+	public void autoResearch(Technology tech) {
+		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
+			super.autoResearch(tech);
+		} else {
+			CapabilityTechnology.ITechnology cap = Minecraft.getMinecraft().player.getCapability(CapabilityTechnology.TECH_CAP, null);
+			cap.setResearched(tech.getRegistryName().toString());
+		}
 	}
 
 	@Override
