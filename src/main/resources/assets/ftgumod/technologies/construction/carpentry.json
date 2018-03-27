@@ -31,8 +31,7 @@
         "ore": "stairWood"
       },
       {
-        "item": "minecraft:wool",
-        "data": 32767
+        "item": "minecraft:wool"
       }
     ]
   },

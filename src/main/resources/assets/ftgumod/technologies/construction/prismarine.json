@@ -26,8 +26,7 @@
     "ingredients": [
       [
         {
-          "item": "minecraft:prismarine",
-          "data": 32767
+          "item": "minecraft:prismarine"
         },
         {
           "item": "minecraft:sea_lantern"

@@ -22,8 +22,7 @@
         "ore": "blockGlass"
       },
       {
-        "item": "minecraft:sand",
-        "data": 32767
+        "item": "minecraft:sand"
       }
     ]
   },

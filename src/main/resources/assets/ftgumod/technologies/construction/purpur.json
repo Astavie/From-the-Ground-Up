@@ -38,8 +38,7 @@
           "item": "minecraft:purpur_stairs"
         },
         {
-          "item": "minecraft:purpur_slab",
-          "data": 32767
+          "item": "minecraft:purpur_slab"
         },
         {
           "item": "minecraft:end_rod"
