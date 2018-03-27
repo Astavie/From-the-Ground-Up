@@ -112,7 +112,7 @@ public class FTGU {
 			}
 
 		});
-		ItemPredicates.register(new ResourceLocation(MODID, "empty_nbt"), EmptyNBTPredicate::deserialize);
+		ItemPredicates.register(new ResourceLocation(MODID, "empty_nbt"), EmptyNBTPredicate::factory);
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 

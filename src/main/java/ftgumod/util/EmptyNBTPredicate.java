@@ -26,11 +26,11 @@ public class EmptyNBTPredicate extends ItemPredicate {
 
 	};
 
-	public EmptyNBTPredicate(@Nullable Item item, @Nullable Integer data, MinMaxBounds count, MinMaxBounds durability, EnchantmentPredicate[] enchantments, @Nullable PotionType potion) {
+	private EmptyNBTPredicate(@Nullable Item item, @Nullable Integer data, MinMaxBounds count, MinMaxBounds durability, EnchantmentPredicate[] enchantments, @Nullable PotionType potion) {
 		super(item, data, count, durability, enchantments, potion, EMPTY);
 	}
 
-	public static ItemPredicate deserialize(@Nullable JsonElement element) {
+	public static ItemPredicate factory(@Nullable JsonElement element) {
 		if (element != null && !element.isJsonNull()) {
 			JsonObject jsonobject = JsonUtils.getJsonObject(element, "item");
 			MinMaxBounds minmaxbounds = MinMaxBounds.deserialize(jsonobject.get("count"));
