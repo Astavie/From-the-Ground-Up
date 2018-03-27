@@ -25,20 +25,24 @@ import java.util.*;
 
 public class ResearchRecipe implements IResearchRecipe {
 
-	private final NonNullList<Set<ItemPredicate>> ingredients;
-	private final NonNullList<Set<BlockPredicate>> deciphers;
-	private final List<ITextComponent> hints;
+	private final Set<ItemPredicate>[] ingredients;
+	private final Set<BlockPredicate>[] deciphers;
+	private final ITextComponent[] hints;
+	private final Boolean[] consume;
 
-	public ResearchRecipe(NonNullList<Set<ItemPredicate>> ingredients, NonNullList<Set<BlockPredicate>> deciphers, List<ITextComponent> hints) {
+	public ResearchRecipe(Set<ItemPredicate>[] ingredients, Set<BlockPredicate>[] deciphers, ITextComponent[] hints, Boolean[] consume) {
 		this.ingredients = ingredients;
 		this.deciphers = deciphers;
 		this.hints = hints;
+		this.consume = consume;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static ResearchRecipe deserialize(JsonObject object, JsonContext context) {
 		Map<Character, Set<ItemPredicate>> ingMap = Maps.newHashMap();
 		Map<Character, Set<BlockPredicate>> decipherMap = Maps.newHashMap();
 		Map<Character, ITextComponent> hintMap = Maps.newHashMap();
+		Map<Character, Boolean> useMap = Maps.newHashMap();
 
 		for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(object, "key").entrySet()) {
 			if (entry.getKey().length() != 1)
@@ -80,7 +84,12 @@ public class ResearchRecipe implements IResearchRecipe {
 			if (first.has("hint"))
 				hint = FTGU.GSON.fromJson(first.get("hint"), ITextComponent.class);
 
+			Boolean use = null;
+			if (first.has("consume"))
+				use = JsonUtils.getBoolean(first, "consume");
+
 			hintMap.put(c, hint);
+			useMap.put(c, use);
 		}
 
 		ingMap.put(' ', Collections.singleton(new ItemPredicate() {
@@ -106,9 +115,13 @@ public class ResearchRecipe implements IResearchRecipe {
 			pattern[x] = line;
 		}
 
-		NonNullList<Set<ItemPredicate>> predicates = NonNullList.withSize(9, ingMap.get(' '));
-		NonNullList<Set<BlockPredicate>> deciphers = NonNullList.withSize(9, decipherMap.get(' '));
-		List<ITextComponent> hints = new ArrayList<>(9);
+		Set<ItemPredicate>[] predicates = (Set<ItemPredicate>[]) new Set[9];
+		Set<BlockPredicate>[] deciphers = (Set<BlockPredicate>[]) new Set[9];
+		ITextComponent[] hints = new ITextComponent[9];
+		Boolean[] consume = new Boolean[9];
+
+		Arrays.fill(predicates, ingMap.get(' '));
+		Arrays.fill(deciphers, decipherMap.get(' '));
 
 		Set<Character> keys = Sets.newHashSet(ingMap.keySet());
 		keys.remove(' ');
@@ -119,9 +132,11 @@ public class ResearchRecipe implements IResearchRecipe {
 				Set<ItemPredicate> ing = ingMap.get(chr);
 				if (ing == null)
 					throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
-				predicates.set(x, ing);
-				deciphers.set(x++, decipherMap.get(chr));
-				hints.add(hintMap.get(chr));
+				predicates[x] = ing;
+				deciphers[x] = decipherMap.get(chr);
+				hints[x] = hintMap.get(chr);
+				consume[x] = useMap.get(chr);
+				x++;
 				keys.remove(chr);
 			}
 		}
@@ -129,18 +144,18 @@ public class ResearchRecipe implements IResearchRecipe {
 		if (!keys.isEmpty())
 			throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + keys);
 
-		return new ResearchRecipe(predicates, deciphers, hints);
+		return new ResearchRecipe(predicates, deciphers, hints, consume);
 	}
 
 	@Nullable
 	@Override
 	public ITextComponent getHint(int index) {
-		return hints.get(index);
+		return hints[index];
 	}
 
 	@Override
 	public Set<BlockPredicate> getDecipher(int index) {
-		return deciphers.get(index);
+		return deciphers[index];
 	}
 
 	@Override
@@ -149,9 +164,14 @@ public class ResearchRecipe implements IResearchRecipe {
 
 		loop:
 		for (int i = 0; i < 9; i++) {
-			for (ItemPredicate predicate : ingredients.get(i))
+			for (ItemPredicate predicate : ingredients[i])
 				if (predicate.test(inventory.getStackInSlot(i))) {
-					if (predicate instanceof FluidPredicate)
+					if (consume[i] != null) {
+						if (consume[i])
+							remaining.set(i, ItemStack.EMPTY);
+						else
+							remaining.set(i, inventory.getStackInSlot(i).copy());
+					} else if (predicate instanceof FluidPredicate)
 						remaining.set(i, ((FluidPredicate) predicate).drain(inventory.getStackInSlot(i).copy()));
 					continue loop;
 				}

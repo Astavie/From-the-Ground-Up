@@ -13,6 +13,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.JsonContext;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,10 +21,10 @@ import java.util.Set;
 
 public class IdeaRecipe implements IIdeaRecipe {
 
-	private final NonNullList<Set<ItemPredicate>> recipe;
+	private final NonNullList<Pair<Set<ItemPredicate>, Boolean>> recipe;
 	private final int needed;
 
-	public IdeaRecipe(NonNullList<Set<ItemPredicate>> recipe, int needed) {
+	public IdeaRecipe(NonNullList<Pair<Set<ItemPredicate>, Boolean>> recipe, int needed) {
 		this.needed = needed;
 		this.recipe = recipe;
 	}
@@ -32,9 +33,14 @@ public class IdeaRecipe implements IIdeaRecipe {
 		int amount = JsonUtils.getInt(object, "amount");
 		JsonArray ingredients = JsonUtils.getJsonArray(object, "ingredients");
 
-		NonNullList<Set<ItemPredicate>> recipe = NonNullList.create();
-		for (JsonElement element : ingredients)
-			recipe.add(StackUtils.INSTANCE.getItemPredicate(element, context));
+		NonNullList<Pair<Set<ItemPredicate>, Boolean>> recipe = NonNullList.create();
+		for (JsonElement element : ingredients) {
+			Set<ItemPredicate> predicate = StackUtils.INSTANCE.getItemPredicate(element, context);
+			JsonElement first = element;
+			while (first.isJsonArray())
+				first = first.getAsJsonArray().get(0);
+			recipe.add(Pair.of(predicate, first.getAsJsonObject().has("consume") ? JsonUtils.getBoolean(first.getAsJsonObject(), "consume") : null));
+		}
 
 		return new IdeaRecipe(recipe, amount);
 	}
@@ -43,7 +49,7 @@ public class IdeaRecipe implements IIdeaRecipe {
 	public NonNullList<ItemStack> test(InventoryCrafting inventory) {
 		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(inventory);
 
-		Set<Set<ItemPredicate>> copy = new HashSet<>(recipe);
+		Set<Pair<Set<ItemPredicate>, Boolean>> copy = new HashSet<>(recipe);
 
 		loop:
 		for (int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -51,13 +57,18 @@ public class IdeaRecipe implements IIdeaRecipe {
 			if (stack.isEmpty())
 				continue;
 
-			Iterator<Set<ItemPredicate>> iterator = copy.iterator();
+			Iterator<Pair<Set<ItemPredicate>, Boolean>> iterator = copy.iterator();
 			while (iterator.hasNext()) {
-				Set<ItemPredicate> match = iterator.next();
-				for (ItemPredicate predicate : match)
+				Pair<Set<ItemPredicate>, Boolean> match = iterator.next();
+				for (ItemPredicate predicate : match.getLeft())
 					if (predicate.test(stack)) {
 						iterator.remove();
-						if (predicate instanceof FluidPredicate)
+						if (match.getRight() != null) {
+							if (match.getRight())
+								remaining.set(i, ItemStack.EMPTY);
+							else
+								remaining.set(i, stack.copy());
+						} else if (predicate instanceof FluidPredicate)
 							remaining.set(i, ((FluidPredicate) predicate).drain(stack.copy()));
 						continue loop;
 					}
