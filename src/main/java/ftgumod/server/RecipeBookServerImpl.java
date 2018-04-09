@@ -13,6 +13,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class RecipeBookServerImpl extends RecipeBookServer {
@@ -26,6 +27,7 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 
 	@Override
 	public void add(List<IRecipe> recipes, EntityPlayerMP player) {
+		recipes = new LinkedList<>(recipes);
 		recipes.removeIf(recipe -> TechnologyManager.INSTANCE.getLocked(recipe.getRecipeOutput()) != null);
 		if (!recipes.isEmpty())
 			super.add(recipes, player);
