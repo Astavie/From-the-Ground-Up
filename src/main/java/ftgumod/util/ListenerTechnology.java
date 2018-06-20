@@ -31,7 +31,9 @@ public final class ListenerTechnology<T extends ICriterionInstance> extends ICri
 
 	@Override
 	public boolean equals(Object obj) {
-		return this == obj || obj instanceof ListenerTechnology && hashCode() == obj.hashCode();
+		return this == obj || obj instanceof ListenerTechnology && (
+				this.getCriterionInstance().equals(((ListenerTechnology) obj).getCriterionInstance()) &&
+						this.technology == ((ListenerTechnology) obj).technology);
 	}
 
 	@Override

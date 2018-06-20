@@ -14,23 +14,15 @@ import java.util.Set;
 public interface IResearchRecipe {
 
 	@Nullable
-	ITextComponent getHint(int index);
+	ITextComponent getHint(int index, List<BlockSerializable> inspected);
 
-	default boolean hasHint(int index) {
-		return getHint(index) != null && !getHint(index).getUnformattedText().isEmpty();
-	}
+	boolean hasHint(int index);
 
-	Set<BlockPredicate> getDecipher(int index);
-
-	default boolean testDecipher(int index, List<BlockSerializable> inspected) {
-		if (getDecipher(index).size() == 0)
-			return true;
-
-		for (BlockPredicate predicate : getDecipher(index))
+	default boolean testDecipher(Set<BlockPredicate> index, List<BlockSerializable> inspected) {
+		for (BlockPredicate predicate : index)
 			for (BlockSerializable block : inspected)
 				if (block.test(predicate))
 					return true;
-
 		return false;
 	}
 

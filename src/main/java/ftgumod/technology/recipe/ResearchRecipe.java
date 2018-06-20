@@ -6,9 +6,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import ftgumod.FTGU;
+import ftgumod.api.technology.recipe.Hint;
 import ftgumod.api.technology.recipe.IResearchRecipe;
-import ftgumod.api.util.BlockPredicate;
+import ftgumod.api.util.BlockSerializable;
 import ftgumod.util.FluidPredicate;
 import ftgumod.util.StackUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -26,13 +26,11 @@ import java.util.*;
 public class ResearchRecipe implements IResearchRecipe {
 
 	private final Set<ItemPredicate>[] ingredients;
-	private final Set<BlockPredicate>[] deciphers;
-	private final ITextComponent[] hints;
+	private final Hint[] hints;
 	private final Boolean[] consume;
 
-	public ResearchRecipe(Set<ItemPredicate>[] ingredients, Set<BlockPredicate>[] deciphers, ITextComponent[] hints, Boolean[] consume) {
+	public ResearchRecipe(Set<ItemPredicate>[] ingredients, Hint[] hints, Boolean[] consume) {
 		this.ingredients = ingredients;
-		this.deciphers = deciphers;
 		this.hints = hints;
 		this.consume = consume;
 	}
@@ -40,8 +38,7 @@ public class ResearchRecipe implements IResearchRecipe {
 	@SuppressWarnings("unchecked")
 	public static ResearchRecipe deserialize(JsonObject object, JsonContext context) {
 		Map<Character, Set<ItemPredicate>> ingMap = Maps.newHashMap();
-		Map<Character, Set<BlockPredicate>> decipherMap = Maps.newHashMap();
-		Map<Character, ITextComponent> hintMap = Maps.newHashMap();
+		Map<Character, Hint> hintMap = Maps.newHashMap();
 		Map<Character, Boolean> useMap = Maps.newHashMap();
 
 		for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(object, "key").entrySet()) {
@@ -63,26 +60,9 @@ public class ResearchRecipe implements IResearchRecipe {
 
 			JsonObject first = element.getAsJsonObject();
 
-			Set<BlockPredicate> decipher = new HashSet<>();
-			if (first.has("decipher")) {
-				JsonElement i = first.get("decipher");
-				if (i.isJsonArray())
-					for (JsonElement j : i.getAsJsonArray())
-						if (j.isJsonObject())
-							decipher.add(BlockPredicate.deserialize(j.getAsJsonObject()));
-						else
-							throw new JsonSyntaxException("Expected decipher to be an object or array of objects");
-				else if (i.isJsonObject())
-					decipher.add(BlockPredicate.deserialize(i.getAsJsonObject()));
-				else
-					throw new JsonSyntaxException("Expected decipher to be an object or array of objects");
-			}
-
-			decipherMap.put(c, decipher);
-
-			ITextComponent hint = null;
+			Hint hint = null;
 			if (first.has("hint"))
-				hint = FTGU.GSON.fromJson(first.get("hint"), ITextComponent.class);
+				hint = Hint.deserialize(first.get("hint"));
 
 			Boolean use = null;
 			if (first.has("consume"))
@@ -100,7 +80,6 @@ public class ResearchRecipe implements IResearchRecipe {
 			}
 
 		}));
-		decipherMap.put(' ', Collections.emptySet());
 
 		JsonArray patternJ = JsonUtils.getJsonArray(object, "pattern");
 
@@ -116,12 +95,10 @@ public class ResearchRecipe implements IResearchRecipe {
 		}
 
 		Set<ItemPredicate>[] predicates = (Set<ItemPredicate>[]) new Set[9];
-		Set<BlockPredicate>[] deciphers = (Set<BlockPredicate>[]) new Set[9];
-		ITextComponent[] hints = new ITextComponent[9];
+		Hint[] hints = new Hint[9];
 		Boolean[] consume = new Boolean[9];
 
 		Arrays.fill(predicates, ingMap.get(' '));
-		Arrays.fill(deciphers, decipherMap.get(' '));
 
 		Set<Character> keys = Sets.newHashSet(ingMap.keySet());
 		keys.remove(' ');
@@ -133,7 +110,6 @@ public class ResearchRecipe implements IResearchRecipe {
 				if (ing == null)
 					throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
 				predicates[x] = ing;
-				deciphers[x] = decipherMap.get(chr);
 				hints[x] = hintMap.get(chr);
 				consume[x] = useMap.get(chr);
 				x++;
@@ -144,18 +120,18 @@ public class ResearchRecipe implements IResearchRecipe {
 		if (!keys.isEmpty())
 			throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + keys);
 
-		return new ResearchRecipe(predicates, deciphers, hints, consume);
+		return new ResearchRecipe(predicates, hints, consume);
 	}
 
 	@Nullable
 	@Override
-	public ITextComponent getHint(int index) {
-		return hints[index];
+	public ITextComponent getHint(int index, List<BlockSerializable> inspected) {
+		return hints[index].getHint(inspected);
 	}
 
 	@Override
-	public Set<BlockPredicate> getDecipher(int index) {
-		return deciphers[index];
+	public boolean hasHint(int index) {
+		return hints[index] != null;
 	}
 
 	@Override

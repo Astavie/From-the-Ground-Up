@@ -47,7 +47,7 @@ public interface ITechnologyManager {
 
 	/**
 	 * Before {@code Technologies} are (re)loaded, the specified {@code Runnable} will run.
-	 * This can be used to register {@code Technologies} that do no depend on others.
+	 * This can be used to register {@code Technologies} that do not depend on others.
 	 *
 	 * @param action The {@code Runnable} to run
 	 * @see #removeCallback(Predicate)
