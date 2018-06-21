@@ -1,7 +1,9 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
+import ftgumod.client.gui.GuiResearchBook;
 import ftgumod.packet.server.RequestMessage;
+import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
@@ -13,6 +15,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TechnologyInfoMessage implements IMessage {
 
@@ -76,6 +81,11 @@ public class TechnologyInfoMessage implements IMessage {
 
 			TechnologyManager.INSTANCE.cache = message.json;
 			TechnologyManager.INSTANCE.load();
+
+			Supplier<Stream<Technology>> stream = TechnologyManager.INSTANCE.getRoots()::stream;
+			GuiResearchBook.zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
+			GuiResearchBook.xScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+			GuiResearchBook.yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 			FTGU.PROXY.clearToasts(); // Removes unnecessary recipe toasts
 			return new RequestMessage();

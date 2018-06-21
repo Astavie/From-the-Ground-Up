@@ -17,19 +17,11 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      {
-        "item": "#heat"
-      },
+      "#heat",
       [
-        {
-          "item": "#rawMeat"
-        },
-        {
-          "item": "minecraft:potato"
-        },
-        {
-          "item": "minecraft:wheat"
-        }
+        "#rawMeat",
+        "minecraft:potato",
+        "minecraft:wheat"
       ]
     ]
   },
@@ -40,43 +32,33 @@
       " B "
     ],
     "key": {
-      "V": [
-        {
-          "item": "minecraft:carrot",
-          "hint": {
-            "translate": "technology.hint.vegetable"
-          }
-        },
-        {
-          "item": "minecraft:potato"
-        },
-        {
-          "item": "minecraft:beetroot"
+      "V": {
+        "item": [
+          "minecraft:carrot",
+          "minecraft:potato",
+          "minecraft:beetroot"
+        ],
+        "hint": {
+          "translate": "technology.hint.vegetable"
         }
-      ],
+      },
       "M": {
         "item": "#rawMeat",
         "hint": {
           "translate": "technology.hint.meat"
         }
       },
-      "F": [
-        {
-          "item": "minecraft:apple",
-          "hint": {
-            "translate": "technology.hint.fruit"
-          }
-        },
-        {
-          "item": "minecraft:melon"
-        },
-        {
-          "item": "minecraft:chorus_fruit"
-        },
-        {
-          "item": "minecraft:chorus_fruit_popped"
+      "F": {
+        "item": [
+          "minecraft:apple",
+          "minecraft:melon",
+          "minecraft:chorus_fruit",
+          "minecraft:chorus_fruit_popped"
+        ],
+        "hint": {
+          "translate": "technology.hint.fruit"
         }
-      ],
+      },
       "W": {
         "item": "minecraft:wheat",
         "hint": {

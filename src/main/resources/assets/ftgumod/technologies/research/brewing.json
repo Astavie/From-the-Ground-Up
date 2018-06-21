@@ -56,12 +56,8 @@
         }
       ],
       [
-        {
-          "item": "minecraft:nether_wart"
-        },
-        {
-          "item": "minecraft:sugar"
-        }
+        "minecraft:nether_wart",
+        "minecraft:sugar"
       ]
     ]
   },
@@ -84,25 +80,30 @@
           "translate": "technology.hint.awkward"
         }
       },
-      "F": [
-        {
-          "potion": "minecraft:water",
-          "hint": {
-            "translate": "technology.hint.water"
+      "F": {
+        "item": [
+          {
+            "potion": "minecraft:water"
           },
+          {
+            "type": "ftgumod:fluid",
+            "fluid": "water",
+            "count": 250
+          }
+        ],
+        "hint": {
+          "translate": "technology.hint.water"
+        },
+        "decipher": {
           "decipher": {
             "block": "minecraft:cauldron",
             "location": {
               "biome": "swampland"
             }
-          }
-        },
-        {
-          "type": "ftgumod:fluid",
-          "fluid": "water",
-          "count": 250
+          },
+          "hint": "Cauldron"
         }
-      ]
+      }
     }
   },
   "unlock": [

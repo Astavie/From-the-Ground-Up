@@ -58,32 +58,38 @@
     ],
     "key": {
       "R": {
-        "type": "forge:ore_dict",
-        "ore": "dustRedstone",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "dustRedstone"
+        },
         "hint": {
           "translate": "technology.hint.power"
         }
       },
       "S": {
-        "type": "forge:ore_dict",
-        "ore": "stickWood",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "stickWood"
+        },
         "hint": {
           "translate": "technology.hint.rod"
         }
       },
-      "C": [
-        {
-          "item": "minecraft:stone",
-          "data": 0,
-          "hint": {
-            "translate": "technology.hint.circuit"
+      "C": {
+        "item": [
+          {
+            "item": "minecraft:stone",
+            "data": 0
+          },
+          {
+            "item": "minecraft:stone_slab",
+            "data": 0
           }
-        },
-        {
-          "item": "minecraft:stone_slab",
-          "data": 0
+        ],
+        "hint": {
+          "translate": "technology.hint.circuit"
         }
-      ]
+      }
     }
   },
   "unlock": [

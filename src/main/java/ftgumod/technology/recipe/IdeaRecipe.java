@@ -38,8 +38,8 @@ public class IdeaRecipe implements IIdeaRecipe {
 			Set<ItemPredicate> predicate = StackUtils.INSTANCE.getItemPredicate(element, context);
 			JsonElement first = element;
 			while (first.isJsonArray())
-				first = first.getAsJsonArray().get(0);
-			recipe.add(Pair.of(predicate, first.getAsJsonObject().has("consume") ? JsonUtils.getBoolean(first.getAsJsonObject(), "consume") : null));
+				first = first.getAsJsonArray().get(0); // TODO: Make consume not be first
+			recipe.add(Pair.of(predicate, first.isJsonObject() && first.getAsJsonObject().has("consume") ? JsonUtils.getBoolean(first.getAsJsonObject(), "consume") : null));
 		}
 
 		return new IdeaRecipe(recipe, amount);

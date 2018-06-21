@@ -33,9 +33,7 @@ import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @SideOnly(Side.CLIENT)
 public class GuiResearchBook extends GuiScreen {
@@ -44,19 +42,12 @@ public class GuiResearchBook extends GuiScreen {
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID, "textures/gui/achievement/achievement_background.png");
 	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
-
-	private static final Supplier<Stream<Technology>> stream = TechnologyManager.INSTANCE.getRoots()::stream;
-
-	private static int currentPage = 0;
+	public static Map<ResourceLocation, Float> zoom;
+	public static Map<ResourceLocation, Double> xScrollO;
+	public static Map<ResourceLocation, Double> yScrollO;
 	private static boolean state = true;
 	private static Technology selected;
 	private static int scroll = 1;
-
-	private final Map<ResourceLocation, Float> zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-	private final Map<ResourceLocation, Double> xScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-	private final Map<ResourceLocation, Double> yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-
-	private final List<Technology> roots = new ArrayList<>();
 	private final EntityPlayer player;
 	private final int num = 4;
 
@@ -79,13 +70,15 @@ public class GuiResearchBook extends GuiScreen {
 	public GuiResearchBook(EntityPlayer player) {
 		this.player = player;
 
-		TechnologyManager.INSTANCE.getRoots().forEach(tech -> {
-			if (tech.canResearchIgnoreResearched(player))
-				roots.add(tech);
-		});
-
 		imageWidth = 256;
 		imageHeight = 202;
+
+		for (Technology technology : TechnologyManager.INSTANCE.getRoots()) {
+			if (technology.canResearchIgnoreResearched(player)) {
+				root = technology;
+				break;
+			}
+		}
 
 		PacketDispatcher.sendToServer(new RequestMessage());
 	}
@@ -96,10 +89,6 @@ public class GuiResearchBook extends GuiScreen {
 			selected = null;
 			state = true;
 		}
-
-		if (currentPage >= roots.size())
-			currentPage = 0;
-		root = roots.get(currentPage);
 
 		buttonList.clear();
 		if (state) {
@@ -131,7 +120,7 @@ public class GuiResearchBook extends GuiScreen {
 			yScrollP = yScrollTarget = yScrollO.get(root.getRegistryName());
 
 			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplayInfo().getTitle().getUnformattedText());
-			if (roots.size() < 2)
+			if (TechnologyManager.INSTANCE.getRoots().stream().filter(t -> t.canResearchIgnoreResearched(player)).count() < 2)
 				page.enabled = false;
 
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
@@ -167,7 +156,23 @@ public class GuiResearchBook extends GuiScreen {
 			}
 		} else if (button.id == 2) {
 			if (state) {
-				currentPage++;
+				Technology first = null;
+				boolean next = false;
+				for (Technology technology : TechnologyManager.INSTANCE.getRoots()) {
+					if (technology.canResearchIgnoreResearched(player)) {
+						if (next) {
+							next = false;
+							root = technology;
+							break;
+						}
+						if (first == null)
+							first = technology;
+					}
+					if (technology == root)
+						next = true;
+				}
+				if (next)
+					root = first;
 				initGui();
 			} else {
 				PacketDispatcher.sendToServer(new CopyTechMessage(selected));

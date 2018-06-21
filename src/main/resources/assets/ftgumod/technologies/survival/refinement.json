@@ -17,15 +17,9 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      {
-        "item": "#ore"
-      },
-      {
-        "item": "#heat"
-      },
-      {
-        "item": "#pickaxe"
-      }
+      "#ore",
+      "#heat",
+      "#pickaxe"
     ]
   },
   "research": {

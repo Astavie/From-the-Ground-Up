@@ -46,8 +46,10 @@
         }
       },
       "D": {
-        "type": "forge:ore_dict",
-        "ore": "dye",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "dye"
+        },
         "hint": {
           "translate": "technology.hint.dye"
         }

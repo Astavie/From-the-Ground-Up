@@ -18,9 +18,7 @@
   "idea": {
     "amount": 1,
     "ingredients": [
-      {
-        "item": "#smoothStone"
-      }
+      "#smoothStone"
     ]
   },
   "research": {

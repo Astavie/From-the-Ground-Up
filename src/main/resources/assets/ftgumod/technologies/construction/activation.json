@@ -22,24 +22,12 @@
         "ore": "stickWood"
       },
       [
-        {
-          "item": "minecraft:cobblestone"
-        },
-        {
-          "item": "#door"
-        },
-        {
-          "item": "#fence_gate"
-        },
-        {
-          "item": "minecraft:trapdoor"
-        },
-        {
-          "item": "minecraft:iron_door"
-        },
-        {
-          "item": "minecraft:iron_trapdoor"
-        }
+        "minecraft:cobblestone",
+        "#door",
+        "#fence_gate",
+        "minecraft:trapdoor",
+        "minecraft:iron_door",
+        "minecraft:iron_trapdoor"
       ]
     ]
   },

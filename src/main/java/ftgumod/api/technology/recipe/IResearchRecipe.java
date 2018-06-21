@@ -1,30 +1,26 @@
 package ftgumod.api.technology.recipe;
 
-import ftgumod.api.util.BlockPredicate;
 import ftgumod.api.util.BlockSerializable;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Set;
 
 public interface IResearchRecipe {
 
 	@Nullable
-	ITextComponent getHint(int index, List<BlockSerializable> inspected);
+	Hint getHint(int index);
 
 	boolean hasHint(int index);
 
-	default boolean testDecipher(Set<BlockPredicate> index, List<BlockSerializable> inspected) {
-		for (BlockPredicate predicate : index)
-			for (BlockSerializable block : inspected)
-				if (block.test(predicate))
-					return true;
-		return false;
-	}
+	/**
+	 * @param block     The new block that has been inspected
+	 * @param inspected The already inspected block listed on the magnifying glass
+	 * @return If the newly inspected block will help with researching this
+	 */
+	boolean inspect(BlockSerializable block, List<BlockSerializable> inspected);
 
 	/**
 	 * @param inventory The inventory to compare to

@@ -37,56 +37,64 @@
       "WWW"
     ],
     "key": {
-      "I": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "stickWood",
-          "hint": {
-            "translate": "technology.hint.arm"
+      "I": {
+        "item": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+          },
+          {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
           }
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "ingotIron"
+        ],
+        "hint": {
+          "translate": "technology.hint.arm"
         }
-      ],
-      "D": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "nuggetIron",
-          "hint": {
-            "translate": "technology.hint.stylus"
+      },
+      "D": {
+        "item": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "nuggetIron"
+          },
+          {
+            "type": "forge:ore_dict",
+            "ore": "nuggetGold"
+          },
+          {
+            "type": "forge:ore_dict",
+            "ore": "gemDiamond"
           }
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "nuggetGold"
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "gemDiamond"
+        ],
+        "hint": {
+          "translate": "technology.hint.stylus"
         }
-      ],
+      },
       "R": {
-        "type": "forge:ore_dict",
-        "ore": "record",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "record"
+        },
         "hint": {
           "translate": "technology.hint.record"
         }
       },
-      "W": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "plankWood",
-          "hint": {
-            "translate": "technology.hint.table"
+      "W": {
+        "item": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "plankWood"
+          },
+          {
+            "type": "forge:ore_dict",
+            "ore": "slabWood"
           }
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "slabWood"
+        ],
+        "hint": {
+          "translate": "technology.hint.table"
         }
-      ]
+      }
     }
   },
   "unlock": [

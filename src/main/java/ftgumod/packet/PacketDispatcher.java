@@ -1,7 +1,7 @@
 package ftgumod.packet;
 
-import ftgumod.packet.client.DecipherMessage;
-import ftgumod.packet.client.DecipherMessage.DecipherMessageHandler;
+import ftgumod.packet.client.HintMessage;
+import ftgumod.packet.client.HintMessage.HintMessageHandler;
 import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyInfoMessage.TechnologyInfoMessageHandler;
 import ftgumod.packet.client.TechnologyMessage;
@@ -30,7 +30,7 @@ public final class PacketDispatcher {
 
 		PacketDispatcher.registerMessage(TechnologyMessageHandler.class, TechnologyMessage.class, Side.CLIENT);
 		PacketDispatcher.registerMessage(TechnologyInfoMessageHandler.class, TechnologyInfoMessage.class, Side.CLIENT);
-		PacketDispatcher.registerMessage(DecipherMessageHandler.class, DecipherMessage.class, Side.CLIENT);
+		PacketDispatcher.registerMessage(HintMessageHandler.class, HintMessage.class, Side.CLIENT);
 	}
 
 	@SuppressWarnings({"unchecked"})

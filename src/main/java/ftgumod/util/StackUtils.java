@@ -50,6 +50,25 @@ public class StackUtils implements IStackUtils {
 	public Set<ItemPredicate> getItemPredicate(JsonElement element, JsonContext context) {
 		Set<ItemPredicate> predicates = new HashSet<>();
 
+		if (element.isJsonPrimitive()) {
+			String item = element.getAsString();
+			if (item.startsWith("#")) {
+				Ingredient constant = context.getConstant(item.substring(1));
+				if (constant == null)
+					throw new JsonSyntaxException("Predicate referenced invalid constant: " + item);
+				return Collections.singleton(new ItemPredicate() {
+
+					@Override
+					public boolean test(ItemStack item) {
+						return constant.test(item);
+					}
+
+				});
+			}
+			JsonObject object = new JsonObject();
+			object.add("item", element);
+			return Collections.singleton(ItemPredicate.deserialize(object));
+		}
 		if (element.isJsonArray())
 			for (JsonElement json : element.getAsJsonArray())
 				predicates.addAll(getItemPredicate(json, context));

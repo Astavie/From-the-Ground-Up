@@ -2,7 +2,7 @@ package ftgumod.packet.server;
 
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.MessageHandler;
-import ftgumod.packet.client.DecipherMessage;
+import ftgumod.packet.client.HintMessage;
 import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,8 +35,8 @@ public class RequestMessage implements IMessage {
 		public IMessage handleMessage(EntityPlayer player, RequestMessage message) {
 			if (message.id == 0)
 				return new TechnologyMessage(player, false);
-			else if (message.id == 1 && player.openContainer instanceof ContainerResearchTable)
-				return new DecipherMessage(((ContainerResearchTable) player.openContainer).deciphered);
+			if (message.id == 1 && player.openContainer instanceof ContainerResearchTable)
+				return new HintMessage(((ContainerResearchTable) player.openContainer).hints);
 			return null;
 		}
 

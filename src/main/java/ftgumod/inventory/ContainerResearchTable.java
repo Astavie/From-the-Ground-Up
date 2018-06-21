@@ -3,9 +3,8 @@ package ftgumod.inventory;
 import ftgumod.Content;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.api.util.IStackUtils;
-import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.DecipherMessage;
+import ftgumod.packet.client.HintMessage;
 import ftgumod.technology.Technology;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.StackUtils;
@@ -15,12 +14,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 public class ContainerResearchTable extends Container {
 
@@ -34,11 +34,12 @@ public class ContainerResearchTable extends Container {
 	public int combine;
 	public int output;
 	public int glass;
-	public Set<Integer> deciphered;
 	public Technology recipe;
 	private int feather;
 	private int parchment;
 	private NonNullList<ItemStack> remaining;
+
+	public List<ITextComponent> hints;
 
 	public ContainerResearchTable(TileEntityInventory tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
@@ -93,6 +94,9 @@ public class ContainerResearchTable extends Container {
 	@Override
 	public void onCraftMatrixChanged(IInventory inv) {
 		if (inv == invInput) {
+			if (!invPlayer.player.world.isRemote)
+				hints = new ArrayList<>();
+
 			if (inventorySlots.get(parchment).getHasStack()) {
 				Technology tech = StackUtils.INSTANCE.getTechnology(inventorySlots.get(parchment).getStack());
 				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player))
@@ -101,28 +105,15 @@ public class ContainerResearchTable extends Container {
 				recipe = null;
 
 			if (recipe != null) {
-				if (invPlayer.player.world.isRemote) {
-					if (deciphered == null || deciphered.size() < 9) {
-						inventorySlots.get(output).putStack(ItemStack.EMPTY);
-						return;
-					}
-				} else {
-					List<BlockSerializable> blocks = ItemMagnifyingGlass.getInspected(inventorySlots.get(glass).getStack());
-					deciphered = new HashSet<>();
-
-					boolean allow = true;
+				List<BlockSerializable> inspected = Collections.emptyList();
+				if (inventorySlots.get(glass).getHasStack())
+					inspected = StackUtils.INSTANCE.getInspected(inventorySlots.get(glass).getStack());
+				if (!invPlayer.player.world.isRemote)
 					for (int i = 0; i < 9; i++)
-						if (recipe.getResearchRecipe().testDecipher(i, blocks))
-							deciphered.add(i);
+						if (recipe.getResearchRecipe().hasHint(i))
+							hints.add(recipe.getResearchRecipe().getHint(i).getHint(inspected));
 						else
-							allow = false;
-
-					PacketDispatcher.sendTo(new DecipherMessage(deciphered), (EntityPlayerMP) invPlayer.player);
-					if (!allow) {
-						inventorySlots.get(output).putStack(ItemStack.EMPTY);
-						return;
-					}
-				}
+							hints.add(null);
 
 				if (inventorySlots.get(feather).getHasStack()) {
 					remaining = recipe.getResearchRecipe().test(craftMatrix);
@@ -133,6 +124,8 @@ public class ContainerResearchTable extends Container {
 				}
 			}
 
+			if (!invPlayer.player.world.isRemote)
+				PacketDispatcher.sendTo(new HintMessage(hints), (EntityPlayerMP) invPlayer.player);
 			inventorySlots.get(output).putStack(ItemStack.EMPTY);
 		}
 	}

@@ -13,9 +13,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
 
-import java.util.Collections;
+import java.util.Arrays;
 
 public class GuiResearchTable extends GuiContainer {
 
@@ -47,23 +46,14 @@ public class GuiResearchTable extends GuiContainer {
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
+			if (table.hints == null)
+				PacketDispatcher.sendToServer(new RequestMessage(1));
+
 			int index = slot.getSlotIndex() - table.combine;
 			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && table.recipe.getResearchRecipe().hasHint(index)) {
-				ITextComponent hint = table.recipe.getResearchRecipe().getHint(index);
-				String text = hint.getUnformattedText();
-
-				if (!text.isEmpty()) {
-					String formatting = "";
-					if (hint.getStyle().isEmpty())
-						formatting = TextFormatting.GRAY.toString() + TextFormatting.ITALIC.toString();
-					if (table.deciphered == null || !table.deciphered.contains(index)) {
-						if (table.deciphered == null)
-							PacketDispatcher.sendToServer(new RequestMessage(1));
-						text = formatting + TextFormatting.OBFUSCATED.toString() + text;
-					} else
-						text = formatting + text;
-					drawHoveringText(Collections.singletonList(text), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
-				}
+				ITextComponent hint = table.hints == null ? table.recipe.getResearchRecipe().getHint(index).getObfuscatedHint() : table.hints.get(index);
+				if (!hint.getUnformattedText().isEmpty())
+					drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
 			}
 		}
 	}

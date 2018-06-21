@@ -26,12 +26,8 @@
   "idea": {
     "amount": 1,
     "ingredients": [
-      {
-        "item": "#dragon"
-      },
-      {
-        "item": "minecraft:nether_star"
-      }
+      "#dragon",
+      "minecraft:nether_star"
     ]
   },
   "research": {
@@ -47,15 +43,21 @@
           "translate": "technology.hint.star"
         },
         "decipher": {
-          "block": "minecraft:soul_sand"
+          "decipher": {
+            "block": "minecraft:soul_sand"
+          },
+          "hint": "Nether Star"
         }
       },
-      "P": [
-        {
-          "item": "minecraft:crafting_table",
-          "hint": {
-            "translate": "technology.hint.man"
-          },
+      "P": {
+        "item": [
+          "minecraft:crafting_table",
+          "minecraft:bed"
+        ],
+        "hint": {
+          "translate": "technology.hint.man"
+        },
+        "decipher": {
           "decipher": [
             {
               "block": "minecraft:crafting_table"
@@ -63,12 +65,10 @@
             {
               "block": "minecraft:bed"
             }
-          ]
-        },
-        {
-          "item": "minecraft:bed"
+          ],
+          "hint": "Crafting Table"
         }
-      ],
+      },
       "D": {
         "item": "#dragon",
         "hint": {

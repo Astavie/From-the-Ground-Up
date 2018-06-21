@@ -34,8 +34,10 @@
     ],
     "key": {
       "S": {
-        "type": "forge:ore_dict",
-        "ore": "stickWood",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "stickWood"
+        },
         "hint": {
           "translate": "technology.hint.stick"
         }
@@ -47,8 +49,10 @@
         }
       },
       "D": {
-        "item": "minecraft:dirt",
-        "data": 0,
+        "item": {
+          "item": "minecraft:dirt",
+          "data": 0
+        },
         "hint": {
           "translate": "technology.hint.soil"
         }

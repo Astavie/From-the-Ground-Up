@@ -32,15 +32,9 @@
         }
       ],
       [
-        {
-          "item": "minecraft:apple"
-        },
-        {
-          "item": "minecraft:carrot"
-        },
-        {
-          "item": "minecraft:melon"
-        }
+        "minecraft:apple",
+        "minecraft:carrot",
+        "minecraft:melon"
       ]
     ]
   },
@@ -52,26 +46,24 @@
     ],
     "key": {
       "N": {
-        "type": "forge:ore_dict",
-        "ore": "nuggetGold",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "nuggetGold"
+        },
         "hint": {
           "translate": "technology.hint.gilded"
         }
       },
-      "C": [
-        {
-          "item": "minecraft:apple",
-          "hint": {
-            "translate": "technology.hint.cuisine"
-          }
-        },
-        {
-          "item": "minecraft:carrot"
-        },
-        {
-          "item": "minecraft:melon"
+      "C": {
+        "item": [
+          "minecraft:apple",
+          "minecraft:carrot",
+          "minecraft:melon"
+        ],
+        "hint": {
+          "translate": "technology.hint.cuisine"
         }
-      ]
+      }
     }
   },
   "unlock": [

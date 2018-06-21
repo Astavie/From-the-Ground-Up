@@ -17,9 +17,7 @@
   "idea": {
     "amount": 1,
     "ingredients": [
-      {
-        "item": "minecraft:bowl"
-      }
+      "minecraft:bowl"
     ]
   },
   "unlock": [

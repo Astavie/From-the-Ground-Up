@@ -16,7 +16,6 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.crafting.JsonContext;
 
@@ -50,19 +49,15 @@ public class ResearchRecipe implements IResearchRecipe {
 			JsonElement element = entry.getValue();
 			char c = entry.getKey().toCharArray()[0];
 
-			ingMap.put(c, StackUtils.INSTANCE.getItemPredicate(element, context));
-
-			while (!element.isJsonObject()) {
-				if (element.isJsonArray())
-					element = element.getAsJsonArray().get(0);
-				else throw new JsonSyntaxException("Expected predicate to be an object or array of objects");
-			}
+			if (!element.isJsonObject())
+				throw new JsonSyntaxException("Expected predicate to be an object");
 
 			JsonObject first = element.getAsJsonObject();
+			ingMap.put(c, StackUtils.INSTANCE.getItemPredicate(first.get("item"), context));
 
 			Hint hint = null;
 			if (first.has("hint"))
-				hint = Hint.deserialize(first.get("hint"));
+				hint = Hint.deserialize(first.get("hint"), first.get("decipher"));
 
 			Boolean use = null;
 			if (first.has("consume"))
@@ -125,13 +120,21 @@ public class ResearchRecipe implements IResearchRecipe {
 
 	@Nullable
 	@Override
-	public ITextComponent getHint(int index, List<BlockSerializable> inspected) {
-		return hints[index].getHint(inspected);
+	public Hint getHint(int index) {
+		return hints[index];
 	}
 
 	@Override
 	public boolean hasHint(int index) {
 		return hints[index] != null;
+	}
+
+	@Override
+	public boolean inspect(BlockSerializable block, List<BlockSerializable> inspected) {
+		for (Hint hint : hints)
+			if (hint != null && hint.inspect(block, inspected))
+				return true;
+		return false;
 	}
 
 	@Override

@@ -21,18 +21,10 @@
         "ore": "dustRedstone"
       },
       [
-        {
-          "item": "minecraft:chest"
-        },
-        {
-          "item": "minecraft:minecart"
-        },
-        {
-          "item": "#boat"
-        },
-        {
-          "item": "minecraft:rail"
-        }
+        "minecraft:chest",
+        "minecraft:minecart",
+        "#boat",
+        "minecraft:rail"
       ]
     ]
   },
@@ -55,23 +47,17 @@
           "translate": "technology.hint.redstone"
         }
       },
-      "P": [
-        {
-          "item": "minecraft:wooden_pressure_plate",
-          "hint": {
-            "translate": "technology.hint.plate"
-          }
-        },
-        {
-          "item": "minecraft:stone_pressure_plate"
-        },
-        {
-          "item": "minecraft:light_weighted_pressure_plate"
-        },
-        {
-          "item": "minecraft:heavy_weighted_pressure_plate"
+      "P": {
+        "item": [
+          "minecraft:wooden_pressure_plate",
+          "minecraft:stone_pressure_plate",
+          "minecraft:light_weighted_pressure_plate",
+          "minecraft:heavy_weighted_pressure_plate"
+        ],
+        "hint": {
+          "translate": "technology.hint.plate"
         }
-      ],
+      },
       "T": {
         "item": "minecraft:rail",
         "hint": {

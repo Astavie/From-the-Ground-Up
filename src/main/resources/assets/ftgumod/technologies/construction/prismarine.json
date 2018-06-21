@@ -25,19 +25,11 @@
     "amount": 2,
     "ingredients": [
       [
-        {
-          "item": "minecraft:prismarine"
-        },
-        {
-          "item": "minecraft:sea_lantern"
-        }
+        "minecraft:prismarine",
+        "minecraft:sea_lantern"
       ],
-      {
-        "item": "minecraft:prismarine_shard"
-      },
-      {
-        "item": "minecraft:prismarine_crystals"
-      }
+      "minecraft:prismarine_shard",
+      "minecraft:prismarine_crystals"
     ]
   },
   "unlock": [

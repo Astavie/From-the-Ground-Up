@@ -50,17 +50,15 @@
       "S  "
     ],
     "key": {
-      "R": [
-        {
-          "item": "minecraft:string",
-          "hint": {
-            "translate": "technology.hint.rope"
-          }
-        },
-        {
-          "item": "minecraft:reeds"
+      "R": {
+        "item": [
+          "minecraft:string",
+          "minecraft:reeds"
+        ],
+        "hint": {
+          "translate": "technology.hint.rope"
         }
-      ],
+      },
       "C": {
         "item": "minecraft:cobblestone",
         "hint": {
@@ -68,8 +66,10 @@
         }
       },
       "S": {
-        "type": "forge:ore_dict",
-        "ore": "stickWood",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "stickWood"
+        },
         "hint": {
           "translate": "technology.hint.handle"
         }

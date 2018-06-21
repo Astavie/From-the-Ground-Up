@@ -17,16 +17,10 @@
     "amount": 2,
     "ingredients": [
       [
-        {
-          "item": "minecraft:clay"
-        },
-        {
-          "item": "minecraft:clay_ball"
-        }
+        "minecraft:clay",
+        "minecraft:clay_ball"
       ],
-      {
-        "item": "#heat"
-      }
+      "#heat"
     ]
   },
   "research": {

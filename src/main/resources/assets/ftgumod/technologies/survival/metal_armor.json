@@ -16,12 +16,8 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      {
-        "item": "#armor"
-      },
-      {
-        "item": "#metal"
-      }
+      "#armor",
+      "#metal"
     ]
   },
   "research": {
@@ -43,17 +39,15 @@
           "translate": "technology.hint.stand"
         }
       },
-      "L": [
-        {
-          "item": "#leggings",
-          "hint": {
-            "translate": "technology.hint.armor"
-          }
-        },
-        {
-          "item": "#boots"
+      "L": {
+        "item": [
+          "#leggings",
+          "#boots"
+        ],
+        "hint": {
+          "translate": "technology.hint.armor"
         }
-      ],
+      },
       "A": {
         "item": "#sword",
         "hint": {

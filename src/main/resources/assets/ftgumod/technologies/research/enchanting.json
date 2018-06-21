@@ -41,7 +41,9 @@
     ],
     "key": {
       "E": {
-        "type": "ftgumod:enchantment",
+        "item": {
+          "type": "ftgumod:enchantment"
+        },
         "hint": {
           "translate": "technology.hint.enchantment"
         }
@@ -53,8 +55,10 @@
         }
       },
       "A": {
-        "item": "minecraft:anvil",
-        "data": 0,
+        "item": {
+          "item": "minecraft:anvil",
+          "data": 0
+        },
         "hint": {
           "translate": "technology.hint.table"
         }

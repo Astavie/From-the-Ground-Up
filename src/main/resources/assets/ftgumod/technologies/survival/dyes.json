@@ -37,41 +37,53 @@
       " C "
     ],
     "key": {
-      "W": [
-        {
-          "item": "minecraft:wool",
-          "hint": {
-            "translate": "technology.hint.dyeable"
+      "W": {
+        "item": [
+          {
+            "item": "minecraft:wool"
+          },
+          {
+            "type": "forge:ore_dict",
+            "ore": "blockGlass"
+          },
+          {
+            "type": "forge:ore_dict",
+            "ore": "paneGlass"
+          },
+          {
+            "item": "minecraft:hardened_clay"
+          },
+          {
+            "item": "minecraft:stained_hardened_clay"
           }
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "blockGlass"
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "paneGlass"
-        },
-        {
-          "item": "minecraft:hardened_clay"
-        },
-        {
-          "item": "minecraft:stained_hardened_clay"
+        ],
+        "hint": {
+          "translate": "technology.hint.dyeable"
         }
-      ],
+      },
       "D": {
-        "type": "forge:ore_dict",
-        "ore": "dye",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "dye"
+        },
         "hint": {
           "translate": "technology.hint.dye"
         }
       },
-      "C": [
-        {
-          "item": "#flower",
-          "hint": {
-            "translate": "technology.hint.flower"
+      "C": {
+        "item": [
+          {
+            "item": "#flower"
           },
+          {
+            "type": "forge:ore_dict",
+            "ore": "blockCactus"
+          }
+        ],
+        "hint": {
+          "translate": "technology.hint.flower"
+        },
+        "decipher": {
           "decipher": [
             {
               "block": "minecraft:yellow_flower"
@@ -82,13 +94,10 @@
             {
               "block": "minecraft:cactus"
             }
-          ]
-        },
-        {
-          "type": "forge:ore_dict",
-          "ore": "blockCactus"
+          ],
+          "hint": "Flower"
         }
-      ]
+      }
     }
   },
   "unlock": [

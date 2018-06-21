@@ -33,8 +33,10 @@
     ],
     "key": {
       "I": {
-        "type": "forge:ore_dict",
-        "ore": "dustRedstone",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "dustRedstone"
+        },
         "hint": {
           "translate": "technology.hint.input"
         }
@@ -58,19 +60,21 @@
           "translate": "technology.hint.pulse"
         }
       },
-      "C": [
-        {
-          "item": "minecraft:stone",
-          "data": 0,
-          "hint": {
-            "translate": "technology.hint.circuit"
+      "C": {
+        "item": [
+          {
+            "item": "minecraft:stone",
+            "data": 0
+          },
+          {
+            "item": "minecraft:stone_slab",
+            "data": 0
           }
-        },
-        {
-          "item": "minecraft:stone_slab",
-          "data": 0
+        ],
+        "hint": {
+          "translate": "technology.hint.circuit"
         }
-      ]
+      }
     }
   },
   "unlock": [

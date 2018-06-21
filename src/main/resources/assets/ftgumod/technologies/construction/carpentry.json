@@ -49,24 +49,28 @@
         }
       },
       "W": {
-        "type": "forge:ore_dict",
-        "ore": "plankWood",
+        "item": {
+          "type": "forge:ore_dict",
+          "ore": "plankWood"
+        },
         "hint": {
           "translate": "technology.hint.material"
         }
       },
-      "S": [
-        {
-          "type": "forge:ore_dict",
-          "ore": "slabWood",
-          "hint": {
-            "translate": "technology.hint.table"
+      "S": {
+        "item": [
+          {
+            "type": "forge:ore_dict",
+            "ore": "slabWood"
+          },
+          {
+            "item": "#crafting"
           }
-        },
-        {
-          "item": "#crafting"
+        ],
+        "hint": {
+          "translate": "technology.hint.table"
         }
-      ]
+      }
     }
   },
   "unlock": [
