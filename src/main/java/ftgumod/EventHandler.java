@@ -10,6 +10,7 @@ import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
+import ftgumod.util.LootUtils;
 import ftgumod.util.StackUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -22,9 +23,11 @@ import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -69,14 +72,14 @@ public class EventHandler {
 		} else if (item == Content.i_parchmentIdea) {
 			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
-				String k = tech.canResearchIgnoreResearched(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
+				String k = tech.isResearched(evt.getEntityPlayer()) || tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
 				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getDisplayInfo().getTitle().getUnformattedText()));
 				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().getUnformattedText());
 			}
 		} else if (item == Content.i_parchmentResearch) {
 			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
-				boolean can = tech.canResearchIgnoreResearched(evt.getEntityPlayer());
+				boolean can = tech.isResearched(evt.getEntityPlayer()) || tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer());
 				String k = can ? "" : "" + TextFormatting.OBFUSCATED;
 
 				evt.getToolTip().add(TextFormatting.GOLD + tech.getDisplayInfo().getTitle().getUnformattedText());
@@ -190,6 +193,16 @@ public class EventHandler {
 				}
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onLootTableLoad(LootTableLoadEvent event) {
+		if (event.getName().toString().equals("minecraft:chests/village_blacksmith"))
+			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/blacksmith"));
+		if (event.getName().toString().equals("minecraft:chests/desert_pyramid"))
+			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/pyramid"));
+		if (event.getName().toString().equals("minecraft:chests/stronghold_library"))
+			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/library"));
 	}
 
 }

@@ -36,7 +36,7 @@ public class ItemParchmentResearch extends Item {
 					if (already)
 						player.sendMessage(new TextComponentTranslation("technology.complete.already", t.getDisplayText()));
 				} else {
-					if (t.canResearch(player)) {
+					if (t.canResearchIgnoreCustomUnlock(player)) {
 						t.setResearched(player, true);
 
 						PacketDispatcher.sendTo(new TechnologyMessage(player, true, t), (EntityPlayerMP) player);

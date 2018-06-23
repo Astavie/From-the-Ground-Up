@@ -30,7 +30,7 @@ compileJava {
 minecraft {
     version = "${mc_version}-${forge_version}"
     runDir = "run"
-    mappings = "snapshot_20171003"
+    mappings = "snapshot_${mcp_mappings}"
 }
 
 repositories {

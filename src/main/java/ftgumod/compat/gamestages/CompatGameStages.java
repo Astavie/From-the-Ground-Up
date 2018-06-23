@@ -3,7 +3,7 @@ package ftgumod.compat.gamestages;
 import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.event.GameStageEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -13,7 +13,7 @@ public class CompatGameStages implements ICompat {
 
 	@Override
 	public boolean run(Object... arg) {
-		return !PlayerDataHandler.getStageData((EntityPlayer) arg[0]).hasUnlockedStage((String) arg[1]);
+		return !GameStageHelper.hasStage((EntityPlayer) arg[0], (String) arg[1]);
 	}
 
 	@SubscribeEvent

@@ -3,9 +3,9 @@ package ftgumod.compat.gamestages;
 import com.google.gson.JsonObject;
 import ftgumod.FTGU;
 import ftgumod.api.technology.unlock.IUnlock;
+import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.capabilities.PlayerDataHandler;
-import net.darkhax.gamestages.packet.PacketStage;
+import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -14,6 +14,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.crafting.JsonContext;
+
+import java.util.Collections;
 
 public class UnlockGameStage implements IUnlock {
 
@@ -42,8 +44,8 @@ public class UnlockGameStage implements IUnlock {
 
 	@Override
 	public void unlock(EntityPlayerMP player) {
-		PlayerDataHandler.getStageData(player).unlockStage(stage);
-		GameStages.NETWORK.sendTo(new PacketStage(stage, true), player);
+		GameStageHelper.addStage(player, stage);
+		GameStages.NETWORK.sendTo(new PacketSyncClient(Collections.singleton(stage)), player);
 		player.sendMessage(message);
 	}
 

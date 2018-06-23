@@ -17,8 +17,8 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
-import ftgumod.util.EmptyNBTPredicate;
-import ftgumod.util.FluidPredicate;
+import ftgumod.util.predicate.EmptyNBTPredicate;
+import ftgumod.util.predicate.FluidPredicate;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -31,6 +31,7 @@ import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.advancements.critereon.ItemPredicates;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -118,6 +119,10 @@ public class FTGU {
 
 		MinecraftForge.EVENT_BUS.register(new CapabilityTechnology());
 		MinecraftForge.EVENT_BUS.register(new EventHandler());
+
+		LootTableList.register(new ResourceLocation(MODID, "inject/blacksmith"));
+		LootTableList.register(new ResourceLocation(MODID, "inject/pyramid"));
+		LootTableList.register(new ResourceLocation(MODID, "inject/library"));
 
 		PacketDispatcher.registerPackets();
 
