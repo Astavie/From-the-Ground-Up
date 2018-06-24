@@ -3,15 +3,12 @@ package ftgumod.util.predicate;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 
 public class FluidPredicate extends ItemPredicate {
 
@@ -36,18 +33,6 @@ public class FluidPredicate extends ItemPredicate {
 	public boolean test(ItemStack item) {
 		FluidStack stack = FluidUtil.getFluidContained(item);
 		return stack != null && stack.containsFluid(fluid);
-	}
-
-	public ItemStack drain(ItemStack item) {
-		IFluidHandlerItem handler = FluidUtil.getFluidHandler(item);
-		if (handler != null) {
-			if (handler instanceof FluidBucketWrapper && ((FluidBucketWrapper) handler).getFluid().isFluidEqual(fluid))
-				return new ItemStack(Items.BUCKET);
-
-			handler.drain(fluid, true);
-			return handler.getContainer();
-		}
-		return item;
 	}
 
 }

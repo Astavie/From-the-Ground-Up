@@ -27,7 +27,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -67,8 +66,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 
 	public Map<String, Pair<String, Map<ResourceLocation, String>>> cache;
 
-	private Map<JsonContext, Map<ResourceLocation, String>> loadBuiltin() {
-		Map<JsonContext, Map<ResourceLocation, String>> json = new HashMap<>();
+	private Map<JsonContextPublic, Map<ResourceLocation, String>> loadBuiltin() {
+		Map<JsonContextPublic, Map<ResourceLocation, String>> json = new HashMap<>();
 
 		Loader.instance().getActiveModList().forEach(mod -> {
 			JsonContextPublic context = new JsonContextPublic(mod.getModId());
@@ -120,7 +119,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		return cache;
 	}
 
-	public IUnlock getUnlock(JsonElement element, JsonContext context, ResourceLocation tech) {
+	public IUnlock getUnlock(JsonElement element, JsonContextPublic context, ResourceLocation tech) {
 		if (element.isJsonArray()) {
 			NonNullList<IUnlock> unlocks = NonNullList.create();
 			element.getAsJsonArray().forEach(json -> unlocks.add(getUnlock(json, context, tech)));
@@ -240,7 +239,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	}
 
 	public void load() {
-		Map<JsonContext, Map<ResourceLocation, String>> json = cache.entrySet().stream().collect(Collectors.toMap(entry -> {
+		Map<JsonContextPublic, Map<ResourceLocation, String>> json = cache.entrySet().stream().collect(Collectors.toMap(entry -> {
 			JsonContextPublic context = new JsonContextPublic(entry.getKey());
 			try {
 				JsonObject[] array = FTGU.GSON.fromJson(entry.getValue().getLeft(), JsonObject[].class);
@@ -259,10 +258,10 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 					map.forEach(json.get(context)::putIfAbsent);
 			});
 
-		Map<JsonContext, Map<ResourceLocation, Technology.Builder>> builders = new HashMap<>();
+		Map<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> builders = new HashMap<>();
 		Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
 
-		for (Map.Entry<JsonContext, Map<ResourceLocation, String>> domain : json.entrySet()) {
+		for (Map.Entry<JsonContextPublic, Map<ResourceLocation, String>> domain : json.entrySet()) {
 			Map<ResourceLocation, Technology.Builder> map = new HashMap<>();
 			for (Map.Entry<ResourceLocation, String> file : domain.getValue().entrySet()) {
 				try {
@@ -279,7 +278,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		while (!builders.isEmpty() && load) {
 			load = false;
 
-			for (Map.Entry<JsonContext, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet()) {
+			for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet()) {
 				Iterator<Map.Entry<ResourceLocation, Technology.Builder>> iterator = domain.getValue().entrySet().iterator();
 				while (iterator.hasNext()) {
 					Map.Entry<ResourceLocation, Technology.Builder> entry = iterator.next();
@@ -300,7 +299,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			}
 
 			if (!load)
-				for (Map.Entry<JsonContext, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet())
+				for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet())
 					for (Map.Entry<ResourceLocation, Technology.Builder> entry : domain.getValue().entrySet()) {
 						removeFromCache(entry.getKey());
 						Technology.getLogger().error("Couldn't load technology " + entry.getKey());

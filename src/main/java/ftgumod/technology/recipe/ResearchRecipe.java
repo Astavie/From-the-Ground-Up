@@ -9,34 +9,36 @@ import com.google.gson.JsonSyntaxException;
 import ftgumod.api.technology.recipe.Hint;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockSerializable;
+import ftgumod.util.JsonContextPublic;
 import ftgumod.util.StackUtils;
-import ftgumod.util.predicate.FluidPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class ResearchRecipe implements IResearchRecipe {
 
-	private final Set<ItemPredicate>[] ingredients;
+	private final ItemPredicate[] ingredients;
 	private final Hint[] hints;
 	private final Boolean[] consume;
 
-	public ResearchRecipe(Set<ItemPredicate>[] ingredients, Hint[] hints, Boolean[] consume) {
+	public ResearchRecipe(ItemPredicate[] ingredients, Hint[] hints, Boolean[] consume) {
 		this.ingredients = ingredients;
 		this.hints = hints;
 		this.consume = consume;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static ResearchRecipe deserialize(JsonObject object, JsonContext context) {
-		Map<Character, Set<ItemPredicate>> ingMap = Maps.newHashMap();
+	public static ResearchRecipe deserialize(JsonObject object, JsonContextPublic context) {
+		Map<Character, ItemPredicate> ingMap = Maps.newHashMap();
 		Map<Character, Hint> hintMap = Maps.newHashMap();
 		Map<Character, Boolean> useMap = Maps.newHashMap();
 
@@ -67,14 +69,14 @@ public class ResearchRecipe implements IResearchRecipe {
 			useMap.put(c, use);
 		}
 
-		ingMap.put(' ', Collections.singleton(new ItemPredicate() {
+		ingMap.put(' ', new ItemPredicate() {
 
 			@Override
 			public boolean test(ItemStack item) {
 				return item.isEmpty();
 			}
 
-		}));
+		});
 
 		JsonArray patternJ = JsonUtils.getJsonArray(object, "pattern");
 
@@ -89,7 +91,7 @@ public class ResearchRecipe implements IResearchRecipe {
 			pattern[x] = line;
 		}
 
-		Set<ItemPredicate>[] predicates = (Set<ItemPredicate>[]) new Set[9];
+		ItemPredicate[] predicates = new ItemPredicate[9];
 		Hint[] hints = new Hint[9];
 		Boolean[] consume = new Boolean[9];
 
@@ -101,7 +103,7 @@ public class ResearchRecipe implements IResearchRecipe {
 		int x = 0;
 		for (String line : pattern) {
 			for (char chr : line.toCharArray()) {
-				Set<ItemPredicate> ing = ingMap.get(chr);
+				ItemPredicate ing = ingMap.get(chr);
 				if (ing == null)
 					throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
 				predicates[x] = ing;
@@ -141,19 +143,16 @@ public class ResearchRecipe implements IResearchRecipe {
 	public NonNullList<ItemStack> test(InventoryCrafting inventory) {
 		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(inventory);
 
-		loop:
 		for (int i = 0; i < 9; i++) {
-			for (ItemPredicate predicate : ingredients[i])
-				if (predicate.test(inventory.getStackInSlot(i))) {
-					if (consume[i] != null) {
-						if (consume[i])
-							remaining.set(i, ItemStack.EMPTY);
-						else
-							remaining.set(i, inventory.getStackInSlot(i).copy());
-					} else if (predicate instanceof FluidPredicate)
-						remaining.set(i, ((FluidPredicate) predicate).drain(inventory.getStackInSlot(i).copy()));
-					continue loop;
+			if (ingredients[i].test(inventory.getStackInSlot(i))) {
+				if (consume[i] != null) {
+					if (consume[i])
+						remaining.set(i, ItemStack.EMPTY);
+					else
+						remaining.set(i, inventory.getStackInSlot(i).copy());
 				}
+				continue;
+			}
 			return null;
 		}
 

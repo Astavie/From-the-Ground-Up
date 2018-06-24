@@ -1,121 +1,61 @@
 [
   {
     "ingredient": [
-      {
-        "item": "minecraft:wooden_pickaxe"
-      },
-      {
-        "item": "minecraft:stone_pickaxe"
-      },
-      {
-        "item": "minecraft:iron_pickaxe"
-      },
-      {
-        "item": "minecraft:golden_pickaxe"
-      },
-      {
-        "item": "minecraft:diamond_pickaxe"
-      }
+      "minecraft:wooden_pickaxe",
+      "minecraft:stone_pickaxe",
+      "minecraft:iron_pickaxe",
+      "minecraft:golden_pickaxe",
+      "minecraft:diamond_pickaxe"
     ],
     "name": "pickaxe"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:wooden_axe"
-      },
-      {
-        "item": "minecraft:stone_axe"
-      },
-      {
-        "item": "minecraft:iron_axe"
-      },
-      {
-        "item": "minecraft:golden_axe"
-      },
-      {
-        "item": "minecraft:diamond_axe"
-      }
+      "minecraft:wooden_axe",
+      "minecraft:stone_axe",
+      "minecraft:iron_axe",
+      "minecraft:golden_axe",
+      "minecraft:diamond_axe"
     ],
     "name": "axe"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:wooden_sword"
-      },
-      {
-        "item": "minecraft:stone_sword"
-      },
-      {
-        "item": "minecraft:iron_sword"
-      },
-      {
-        "item": "minecraft:golden_sword"
-      },
-      {
-        "item": "minecraft:diamond_sword"
-      }
+      "minecraft:wooden_sword",
+      "minecraft:stone_sword",
+      "minecraft:iron_sword",
+      "minecraft:golden_sword",
+      "minecraft:diamond_sword"
     ],
     "name": "sword"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:wooden_shovel"
-      },
-      {
-        "item": "minecraft:stone_shovel"
-      },
-      {
-        "item": "minecraft:iron_shovel"
-      },
-      {
-        "item": "minecraft:golden_shovel"
-      },
-      {
-        "item": "minecraft:diamond_shovel"
-      }
+      "minecraft:wooden_shovel",
+      "minecraft:stone_shovel",
+      "minecraft:iron_shovel",
+      "minecraft:golden_shovel",
+      "minecraft:diamond_shovel"
     ],
     "name": "shovel"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:wooden_hoe"
-      },
-      {
-        "item": "minecraft:stone_hoe"
-      },
-      {
-        "item": "minecraft:iron_hoe"
-      },
-      {
-        "item": "minecraft:golden_hoe"
-      },
-      {
-        "item": "minecraft:diamond_hoe"
-      }
+      "minecraft:wooden_hoe",
+      "minecraft:stone_hoe",
+      "minecraft:iron_hoe",
+      "minecraft:golden_hoe",
+      "minecraft:diamond_hoe"
     ],
     "name": "hoe"
   },
   {
     "ingredient": [
-      {
-        "item": "#pickaxe"
-      },
-      {
-        "item": "#axe"
-      },
-      {
-        "item": "#sword"
-      },
-      {
-        "item": "#shovel"
-      },
-      {
-        "item": "#hoe"
-      }
+      "#pickaxe",
+      "#axe",
+      "#sword",
+      "#shovel",
+      "#hoe"
     ],
     "name": "tool"
   },
@@ -163,143 +103,70 @@
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:stone",
-        "data": 32767
-      },
-      {
-        "item": "minecraft:sandstone",
-        "data": 32767
-      }
+      "minecraft:stone",
+      "minecraft:sandstone"
     ],
     "name": "stone"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:wheat"
-      },
-      {
-        "item": "minecraft:wheat_seeds"
-      },
-      {
-        "item": "minecraft:carrot"
-      },
-      {
-        "item": "minecraft:potato"
-      },
-      {
-        "item": "minecraft:melon"
-      },
-      {
-        "item": "minecraft:melon_seeds"
-      },
-      {
-        "item": "minecraft:pumpkin"
-      },
-      {
-        "item": "minecraft:pumpkin_seeds"
-      },
-      {
-        "item": "minecraft:reeds"
-      }
+      "minecraft:wheat",
+      "minecraft:wheat_seeds",
+      "minecraft:carrot",
+      "minecraft:potato",
+      "minecraft:melon",
+      "minecraft:melon_seeds",
+      "minecraft:pumpkin",
+      "minecraft:pumpkin_seeds",
+      "minecraft:reeds"
     ],
     "name": "crop"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:wooden_door"
-      },
-      {
-        "item": "minecraft:spruce_door"
-      },
-      {
-        "item": "minecraft:birch_door"
-      },
-      {
-        "item": "minecraft:jungle_door"
-      },
-      {
-        "item": "minecraft:acacia_door"
-      },
-      {
-        "item": "minecraft:dark_oak_door"
-      }
+      "minecraft:wooden_door",
+      "minecraft:spruce_door",
+      "minecraft:birch_door",
+      "minecraft:jungle_door",
+      "minecraft:acacia_door",
+      "minecraft:dark_oak_door"
     ],
     "name": "door"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:fence"
-      },
-      {
-        "item": "minecraft:spruce_fence"
-      },
-      {
-        "item": "minecraft:birch_fence"
-      },
-      {
-        "item": "minecraft:jungle_fence"
-      },
-      {
-        "item": "minecraft:acacia_fence"
-      },
-      {
-        "item": "minecraft:dark_oak_fence"
-      }
+      "minecraft:fence",
+      "minecraft:spruce_fence",
+      "minecraft:birch_fence",
+      "minecraft:jungle_fence",
+      "minecraft:acacia_fence",
+      "minecraft:dark_oak_fence"
     ],
     "name": "fence"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:fence_gate"
-      },
-      {
-        "item": "minecraft:spruce_fence_gate"
-      },
-      {
-        "item": "minecraft:birch_fence_gate"
-      },
-      {
-        "item": "minecraft:jungle_fence_gate"
-      },
-      {
-        "item": "minecraft:acacia_fence_gate"
-      },
-      {
-        "item": "minecraft:dark_oak_fence_gate"
-      }
+      "minecraft:fence_gate",
+      "minecraft:spruce_fence_gate",
+      "minecraft:birch_fence_gate",
+      "minecraft:jungle_fence_gate",
+      "minecraft:acacia_fence_gate",
+      "minecraft:dark_oak_fence_gate"
     ],
     "name": "fence_gate"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:yellow_flower",
-        "data": 32767
-      },
-      {
-        "item": "minecraft:red_flower",
-        "data": 32767
-      }
+      "minecraft:yellow_flower",
+      "minecraft:red_flower"
     ],
     "name": "flower"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:furnace"
-      },
-      {
-        "item": "minecraft:coal",
-        "data": 32767
-      },
-      {
-        "item": "minecraft:fire_charge"
-      }
+      "minecraft:furnace",
+      "minecraft:coal",
+      "minecraft:fire_charge"
     ],
     "name": "heat"
   },
@@ -313,33 +180,18 @@
         "item": "minecraft:fish",
         "data": 3
       },
-      {
-        "item": "minecraft:porkchop"
-      },
-      {
-        "item": "minecraft:beef"
-      },
-      {
-        "item": "minecraft:mutton"
-      },
-      {
-        "item": "minecraft:chicken"
-      },
-      {
-        "item": "minecraft:rabbit"
-      }
+      "minecraft:porkchop",
+      "minecraft:beef",
+      "minecraft:mutton",
+      "minecraft:chicken",
+      "minecraft:rabbit"
     ],
     "name": "rawMeat"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:crafting_table"
-      },
-      {
-        "item": "minecraft:anvil",
-        "data": 32767
-      }
+      "minecraft:crafting_table",
+      "minecraft:anvil"
     ],
     "name": "crafting"
   },
@@ -358,120 +210,64 @@
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:leather_helmet"
-      },
-      {
-        "item": "minecraft:iron_helmet"
-      },
-      {
-        "item": "minecraft:golden_helmet"
-      },
-      {
-        "item": "minecraft:diamond_helmet"
-      }
+      "minecraft:leather_helmet",
+      "minecraft:iron_helmet",
+      "minecraft:golden_helmet",
+      "minecraft:diamond_helmet"
     ],
     "name": "helmet"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:leather_chestplate"
-      },
-      {
-        "item": "minecraft:iron_chestplate"
-      },
-      {
-        "item": "minecraft:golden_chestplate"
-      },
-      {
-        "item": "minecraft:diamond_chestplate"
-      }
+      "minecraft:leather_chestplate",
+      "minecraft:iron_chestplate",
+      "minecraft:golden_chestplate",
+      "minecraft:diamond_chestplate"
     ],
     "name": "chestplate"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:leather_leggings"
-      },
-      {
-        "item": "minecraft:iron_leggings"
-      },
-      {
-        "item": "minecraft:golden_leggings"
-      },
-      {
-        "item": "minecraft:diamond_leggings"
-      }
+      "minecraft:leather_leggings",
+      "minecraft:iron_leggings",
+      "minecraft:golden_leggings",
+      "minecraft:diamond_leggings"
     ],
     "name": "leggings"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:leather_boots"
-      },
-      {
-        "item": "minecraft:iron_boots"
-      },
-      {
-        "item": "minecraft:golden_boots"
-      },
-      {
-        "item": "minecraft:diamond_boots"
-      }
+      "minecraft:leather_boots",
+      "minecraft:iron_boots",
+      "minecraft:golden_boots",
+      "minecraft:diamond_boots"
     ],
     "name": "boots"
   },
   {
     "ingredient": [
-      {
-        "item": "#helmet"
-      },
-      {
-        "item": "#chestplate"
-      },
-      {
-        "item": "#leggings"
-      },
-      {
-        "item": "#boots"
-      }
+      "#helmet",
+      "#chestplate",
+      "#leggings",
+      "#boots"
     ],
     "name": "armor"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:flint_and_steel"
-      },
-      {
-        "item": "minecraft:fire_charge"
-      }
+      "minecraft:flint_and_steel",
+      "minecraft:fire_charge"
     ],
     "name": "fire"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:boat"
-      },
-      {
-        "item": "minecraft:spruce_boat"
-      },
-      {
-        "item": "minecraft:birch_boat"
-      },
-      {
-        "item": "minecraft:jungle_boat"
-      },
-      {
-        "item": "minecraft:acacia_boat"
-      },
-      {
-        "item": "minecraft:dark_oak_boat"
-      }
+      "minecraft:boat",
+      "minecraft:spruce_boat",
+      "minecraft:birch_boat",
+      "minecraft:jungle_boat",
+      "minecraft:acacia_boat",
+      "minecraft:dark_oak_boat"
     ],
     "name": "boat"
   },
@@ -498,94 +294,42 @@
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:stone_stairs"
-      },
-      {
-        "item": "minecraft:brick_stairs"
-      },
-      {
-        "item": "minecraft:stone_brick_stairs"
-      },
-      {
-        "item": "minecraft:nether_brick_stairs"
-      },
-      {
-        "item": "minecraft:sandstone_stairs"
-      },
-      {
-        "item": "minecraft:quartz_stairs"
-      },
-      {
-        "item": "minecraft:red_sandstone_stairs"
-      },
-      {
-        "item": "minecraft:purpur_stairs"
-      }
+      "minecraft:stone_stairs",
+      "minecraft:brick_stairs",
+      "minecraft:stone_brick_stairs",
+      "minecraft:nether_brick_stairs",
+      "minecraft:sandstone_stairs",
+      "minecraft:quartz_stairs",
+      "minecraft:red_sandstone_stairs",
+      "minecraft:purpur_stairs"
     ],
     "name": "stairsStone"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:white_shulker_box"
-      },
-      {
-        "item": "minecraft:orange_shulker_box"
-      },
-      {
-        "item": "minecraft:magenta_shulker_box"
-      },
-      {
-        "item": "minecraft:light_blue_shulker_box"
-      },
-      {
-        "item": "minecraft:yellow_shulker_box"
-      },
-      {
-        "item": "minecraft:lime_shulker_box"
-      },
-      {
-        "item": "minecraft:pink_shulker_box"
-      },
-      {
-        "item": "minecraft:gray_shulker_box"
-      },
-      {
-        "item": "minecraft:silver_shulker_box"
-      },
-      {
-        "item": "minecraft:cyan_shulker_box"
-      },
-      {
-        "item": "minecraft:purple_shulker_box"
-      },
-      {
-        "item": "minecraft:blue_shulker_box"
-      },
-      {
-        "item": "minecraft:brown_shulker_box"
-      },
-      {
-        "item": "minecraft:green_shulker_box"
-      },
-      {
-        "item": "minecraft:red_shulker_box"
-      },
-      {
-        "item": "minecraft:black_shulker_box"
-      }
+      "minecraft:white_shulker_box",
+      "minecraft:orange_shulker_box",
+      "minecraft:magenta_shulker_box",
+      "minecraft:light_blue_shulker_box",
+      "minecraft:yellow_shulker_box",
+      "minecraft:lime_shulker_box",
+      "minecraft:pink_shulker_box",
+      "minecraft:gray_shulker_box",
+      "minecraft:silver_shulker_box",
+      "minecraft:cyan_shulker_box",
+      "minecraft:purple_shulker_box",
+      "minecraft:blue_shulker_box",
+      "minecraft:brown_shulker_box",
+      "minecraft:green_shulker_box",
+      "minecraft:red_shulker_box",
+      "minecraft:black_shulker_box"
     ],
     "name": "shulker"
   },
   {
     "ingredient": [
-      {
-        "item": "minecraft:dragon_egg"
-      },
-      {
-        "item": "minecraft:dragon_breath"
-      },
+      "minecraft:dragon_egg",
+      "minecraft:dragon_breath",
       {
         "item": "minecraft:skull",
         "data": 5

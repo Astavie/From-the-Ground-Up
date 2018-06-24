@@ -13,15 +13,12 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.JsonContext;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -47,53 +44,47 @@ public class StackUtils implements IStackUtils {
 		return ingredient.getItem() == stack.getItem() && (ingredient.getMetadata() == OreDictionary.WILDCARD_VALUE || ingredient.getMetadata() == stack.getMetadata()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
 	}
 
-	public Set<ItemPredicate> getItemPredicate(JsonElement element, JsonContext context) {
+	public ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context) {
 		Set<ItemPredicate> predicates = new HashSet<>();
 
 		if (element.isJsonPrimitive()) {
 			String item = element.getAsString();
 			if (item.startsWith("#")) {
-				Ingredient constant = context.getConstant(item.substring(1));
+				ItemPredicate constant = context.getPredicate(item.substring(1));
 				if (constant == null)
 					throw new JsonSyntaxException("Predicate referenced invalid constant: " + item);
-				return Collections.singleton(new ItemPredicate() {
-
-					@Override
-					public boolean test(ItemStack item) {
-						return constant.test(item);
-					}
-
-				});
+				return constant;
 			}
 			JsonObject object = new JsonObject();
 			object.add("item", element);
-			return Collections.singleton(ItemPredicate.deserialize(object));
+			return ItemPredicate.deserialize(object);
 		}
 		if (element.isJsonArray())
 			for (JsonElement json : element.getAsJsonArray())
-				predicates.addAll(getItemPredicate(json, context));
+				predicates.add(getItemPredicate(json, context));
 		else if (element.isJsonObject()) {
 			JsonObject object = element.getAsJsonObject();
 			if (!object.has("type") && object.has("item")) {
 				String item = JsonUtils.getString(object, "item");
 				if (item.startsWith("#")) {
-					Ingredient constant = context.getConstant(item.substring(1));
+					ItemPredicate constant = context.getPredicate(item.substring(1));
 					if (constant == null)
 						throw new JsonSyntaxException("Predicate referenced invalid constant: " + item);
-					return Collections.singleton(new ItemPredicate() {
-
-						@Override
-						public boolean test(ItemStack item) {
-							return constant.test(item);
-						}
-
-					});
+					return constant;
 				}
 			}
-			return Collections.singleton(ItemPredicate.deserialize(object));
+			return ItemPredicate.deserialize(object);
 		} else throw new JsonSyntaxException("Expected predicate to be an object or an array of objects");
 
-		return predicates;
+		return new ItemPredicate() {
+
+
+			@Override
+			public boolean test(ItemStack item) {
+				return predicates.stream().anyMatch(p -> p.test(item));
+			}
+
+		};
 	}
 
 	@Override

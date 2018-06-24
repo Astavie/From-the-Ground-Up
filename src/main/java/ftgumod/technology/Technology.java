@@ -10,6 +10,7 @@ import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.technology.recipe.IdeaRecipe;
 import ftgumod.technology.recipe.ResearchRecipe;
+import ftgumod.util.JsonContextPublic;
 import ftgumod.util.ListenerTechnology;
 import net.minecraft.advancements.*;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +25,6 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.event.HoverEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.crafting.JsonContext;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -430,7 +430,7 @@ public class Technology implements ITechnology {
 			return parent != null;
 		}
 
-		public Technology build(ResourceLocation location, JsonContext context) {
+		public Technology build(ResourceLocation location, JsonContextPublic context) {
 			NonNullList<IUnlock> unlock = NonNullList.create();
 			if (this.unlock != null)
 				for (JsonElement element : this.unlock)
