@@ -3,13 +3,12 @@ package ftgumod.client.gui;
 import ftgumod.Content;
 import ftgumod.FTGU;
 import ftgumod.inventory.ContainerResearchTable;
-import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.server.RequestMessage;
-import ftgumod.tileentity.TileEntityInventory;
+import ftgumod.inventory.InventoryCraftingPersistent;
+import ftgumod.technology.recipe.PuzzleMatch;
+import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -20,12 +19,12 @@ public class GuiResearchTable extends GuiContainer {
 
 	private final ResourceLocation texture;
 	private final InventoryPlayer player;
-	private final IInventory tileentity;
+	private final TileEntityResearchTable tile;
 
-	public GuiResearchTable(InventoryPlayer player, TileEntityInventory tileentity) {
+	public GuiResearchTable(InventoryPlayer player, TileEntityResearchTable tileentity) {
 		super(tileentity.createContainer(player, player.player));
 		this.player = player;
-		this.tileentity = tileentity;
+		this.tile = tileentity;
 
 		texture = new ResourceLocation(FTGU.MODID + ":textures/gui/container/" + tileentity.getName() + ".png");
 	}
@@ -46,14 +45,17 @@ public class GuiResearchTable extends GuiContainer {
 		Slot slot = getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
 			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-			if (table.hints == null)
-				PacketDispatcher.sendToServer(new RequestMessage(1));
+			if (table.recipe != null && tile.puzzle != null) {
+				PuzzleMatch puzzle = (PuzzleMatch) tile.puzzle;
+				// if (puzzle.hints == null)
+				//     PacketDispatcher.sendToServer(new RequestMessage(1));
 
-			int index = slot.getSlotIndex() - table.combine;
-			if (slot.inventory == tileentity && table.recipe != null && index >= 0 && index < 9 && table.recipe.getResearchRecipe().hasHint(index)) {
-				ITextComponent hint = table.hints == null ? table.recipe.getResearchRecipe().getHint(index).getObfuscatedHint() : table.hints.get(index);
-				if (!hint.getUnformattedText().isEmpty())
-					drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
+				int index = slot.getSlotIndex();
+				if ((slot.inventory instanceof InventoryCraftingPersistent) && index >= 0 && index < 9 && puzzle.getRecipe().hasHint(index)) {
+					ITextComponent hint = puzzle.hints == null ? puzzle.getRecipe().getHint(index).getObfuscatedHint() : puzzle.hints.get(index);
+					if (!hint.getUnformattedText().isEmpty())
+						drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
+				}
 			}
 		}
 	}
@@ -67,8 +69,8 @@ public class GuiResearchTable extends GuiContainer {
 		ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
 		if (table.recipe != null)
 			for (int i = 0; i < 9; i++)
-				if (table.recipe.getResearchRecipe().hasHint(i)) {
-					Slot slot = inventorySlots.inventorySlots.get(i + table.combine);
+				if (inventorySlots.inventorySlots.size() > table.puzzle && ((PuzzleMatch) tile.puzzle).getRecipe().hasHint(i)) {
+					Slot slot = inventorySlots.inventorySlots.get(i + table.puzzle);
 					if (!slot.getHasStack())
 						this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
 				}

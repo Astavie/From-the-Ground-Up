@@ -9,7 +9,7 @@ import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.technology.recipe.IdeaRecipe;
-import ftgumod.technology.recipe.ResearchRecipe;
+import ftgumod.technology.recipe.ResearchMatch;
 import ftgumod.util.JsonContextPublic;
 import ftgumod.util.ListenerTechnology;
 import net.minecraft.advancements.*;
@@ -437,7 +437,7 @@ public class Technology implements ITechnology {
 					unlock.add(TechnologyManager.INSTANCE.getUnlock(element, context, location));
 
 			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
-			IResearchRecipe research = this.research == null ? null : ResearchRecipe.deserialize(this.research, context);
+			IResearchRecipe research = this.research == null ? null : ResearchMatch.deserialize(this.research, context);
 
 			return new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
 		}

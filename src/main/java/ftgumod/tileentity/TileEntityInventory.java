@@ -14,7 +14,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	private final String name;
 
 	public TileEntityInventory(int size, String name) {
-		stack = new ItemStack[size];
+		this.stack = new ItemStack[size];
 		this.name = name;
 		clear();
 	}
@@ -22,33 +22,31 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		NBTTagList nbttaglist = compound.getTagList("Items", 10);
 
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			NBTTagCompound nbtTagCompound = nbttaglist.getCompoundTagAt(i);
-			byte b0 = nbtTagCompound.getByte("Slot");
-
-			if (b0 >= 0 && b0 < stack.length) {
-				stack[b0] = new ItemStack(nbtTagCompound);
-			}
+		NBTTagList items = compound.getTagList("Items", 10);
+		for (int i = 0; i < items.tagCount(); ++i) {
+			NBTTagCompound tag = items.getCompoundTagAt(i);
+			byte slot = tag.getByte("Slot");
+			if (slot >= 0 && slot < stack.length)
+				stack[slot] = new ItemStack(tag);
 		}
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound = super.writeToNBT(compound);
-		NBTTagList nbttaglist = new NBTTagList();
 
+		NBTTagList items = new NBTTagList();
 		for (int i = 0; i < stack.length; ++i) {
 			if (stack[i] != null && !stack[i].isEmpty()) {
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
 				nbtTagCompound.setByte("Slot", (byte) i);
 				stack[i].writeToNBT(nbtTagCompound);
-				nbttaglist.appendTag(nbtTagCompound);
+				items.appendTag(nbtTagCompound);
 			}
 		}
+		compound.setTag("Items", items);
 
-		compound.setTag("Items", nbttaglist);
 		return compound;
 	}
 

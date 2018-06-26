@@ -115,10 +115,6 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		progress.remove(player.getUniqueID());
 	}
 
-	public Map<String, Pair<String, Map<ResourceLocation, String>>> getCache() {
-		return cache;
-	}
-
 	public IUnlock getUnlock(JsonElement element, JsonContextPublic context, ResourceLocation tech) {
 		if (element.isJsonArray()) {
 			NonNullList<IUnlock> unlocks = NonNullList.create();

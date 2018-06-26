@@ -14,6 +14,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.List;
+
 public class ContainerIdeaTable extends Container {
 
 	private final TileEntityInventory invInput;
@@ -48,6 +50,12 @@ public class ContainerIdeaTable extends Container {
 
 		craftMatrix = new InventoryCraftingPersistent(this, tileEntity, combine, 3, 1);
 		onCraftMatrixChanged(tileEntity);
+	}
+
+	@Override
+	public void setAll(List<ItemStack> stacks) {
+		super.setAll(stacks);
+		onCraftMatrixChanged(invInput);
 	}
 
 	private int addSlots(TileEntityInventory tileEntity) {

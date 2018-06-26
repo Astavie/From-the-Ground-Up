@@ -1,6 +1,7 @@
 package ftgumod.tileentity;
 
 import ftgumod.Content;
+import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.inventory.ContainerResearchTable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -8,8 +9,10 @@ import net.minecraft.inventory.Container;
 
 public class TileEntityResearchTable extends TileEntityInventory {
 
+	public IPuzzle puzzle;
+
 	public TileEntityResearchTable() {
-		super(12, Content.n_researchTable);
+		super(3, Content.n_researchTable);
 	}
 
 	@Override
