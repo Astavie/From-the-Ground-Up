@@ -1,6 +1,7 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
+import ftgumod.api.inventory.ContainerFTGU;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -16,7 +17,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
-public class ContainerIdeaTable extends Container {
+public class ContainerIdeaTable extends ContainerFTGU {
 
 	private final TileEntityInventory invInput;
 
@@ -159,6 +160,16 @@ public class ContainerIdeaTable extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return true;
+	}
+
+	@Override
+	public boolean isRemote() {
+		return invInput.getWorld().isRemote;
+	}
+
+	@Override
+	public InventoryPlayer getInventoryPlayer() {
+		return invPlayer;
 	}
 
 }

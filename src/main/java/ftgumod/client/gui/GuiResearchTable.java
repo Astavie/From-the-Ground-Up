@@ -2,18 +2,11 @@ package ftgumod.client.gui;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
-import ftgumod.inventory.ContainerResearchTable;
-import ftgumod.inventory.InventoryCraftingPersistent;
-import ftgumod.technology.recipe.PuzzleMatch;
 import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-
-import java.util.Arrays;
 
 public class GuiResearchTable extends GuiContainer {
 
@@ -42,22 +35,8 @@ public class GuiResearchTable extends GuiContainer {
 		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
 		fontRenderer.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 
-		Slot slot = getSlotUnderMouse();
-		if (slot != null && !slot.getHasStack()) {
-			ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-			if (table.recipe != null && tile.puzzle != null) {
-				PuzzleMatch puzzle = (PuzzleMatch) tile.puzzle;
-				// if (puzzle.hints == null)
-				//     PacketDispatcher.sendToServer(new RequestMessage(1));
-
-				int index = slot.getSlotIndex();
-				if ((slot.inventory instanceof InventoryCraftingPersistent) && index >= 0 && index < 9 && puzzle.getRecipe().hasHint(index)) {
-					ITextComponent hint = puzzle.hints == null ? puzzle.getRecipe().getHint(index).getObfuscatedHint() : puzzle.hints.get(index);
-					if (!hint.getUnformattedText().isEmpty())
-						drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - guiLeft, mouseY - guiTop, fontRenderer);
-				}
-			}
-		}
+		if (tile.puzzle != null)
+			tile.puzzle.drawForeground(this, mouseX, mouseY);
 	}
 
 	@Override
@@ -66,14 +45,8 @@ public class GuiResearchTable extends GuiContainer {
 		mc.getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		ContainerResearchTable table = (ContainerResearchTable) inventorySlots;
-		if (table.recipe != null)
-			for (int i = 0; i < 9; i++)
-				if (inventorySlots.inventorySlots.size() > table.puzzle && ((PuzzleMatch) tile.puzzle).getRecipe().hasHint(i)) {
-					Slot slot = inventorySlots.inventorySlots.get(i + table.puzzle);
-					if (!slot.getHasStack())
-						this.drawTexturedModalRect(slot.xPos + guiLeft, slot.yPos + guiTop, 176, 0, 16, 16);
-				}
+		if (tile.puzzle != null)
+			tile.puzzle.drawBackground(this, mouseX, mouseY);
 	}
 
 }

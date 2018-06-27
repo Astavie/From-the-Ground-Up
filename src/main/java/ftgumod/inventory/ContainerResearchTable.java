@@ -1,6 +1,7 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
+import ftgumod.api.inventory.ContainerFTGU;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.technology.Technology;
 import ftgumod.tileentity.TileEntityInventory;
@@ -8,14 +9,17 @@ import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
-public class ContainerResearchTable extends Container {
+public class ContainerResearchTable extends ContainerFTGU {
 
 	public final TileEntityResearchTable invInput;
 
@@ -93,8 +97,13 @@ public class ContainerResearchTable extends Container {
 				Technology tech = StackUtils.INSTANCE.getTechnology(inventorySlots.get(parchment).getStack());
 				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player))
 					recipe = tech;
-			} else
+			} else {
 				recipe = null;
+				if (invInput.puzzle != null) {
+					invInput.puzzle.onRemove(this);
+					invInput.puzzle = null;
+				}
+			}
 
 			if (recipe != null) {
 				if (invInput.puzzle == null || invInput.puzzle.getRecipe() != recipe.getResearchRecipe()) {
@@ -121,6 +130,8 @@ public class ContainerResearchTable extends Container {
 		if (index == output && inventorySlots.get(output).getHasStack()) {
 			inventorySlots.get(parchment).decrStackSize(1);
 			invInput.puzzle.onFinish(this);
+			invInput.puzzle.onRemove(this);
+			invInput.puzzle = null;
 		}
 
 		ItemStack clickItemStack = super.slotClick(index, mouse, mode, player);
@@ -170,15 +181,13 @@ public class ContainerResearchTable extends Container {
 	}
 
 	@Override
-	public Slot addSlotToContainer(Slot slot) {
-		return super.addSlotToContainer(slot);
+	public boolean isRemote() {
+		return invInput.getWorld().isRemote;
 	}
 
-	public void removeSlots(int size) {
-		for (int i = 0; i < size; i++) {
-			inventorySlots.remove(inventorySlots.size() - 1);
-			inventoryItemStacks.remove(inventoryItemStacks.size() - 1);
-		}
+	@Override
+	public InventoryPlayer getInventoryPlayer() {
+		return invPlayer;
 	}
 
 }
