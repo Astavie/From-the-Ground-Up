@@ -21,6 +21,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       " H ",
       "ASD",

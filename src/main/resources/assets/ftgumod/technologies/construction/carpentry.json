@@ -36,6 +36,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       " A ",
       "WWW",

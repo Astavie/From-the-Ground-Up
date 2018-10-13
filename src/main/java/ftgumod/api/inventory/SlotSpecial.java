@@ -1,6 +1,6 @@
-package ftgumod.inventory;
+package ftgumod.api.inventory;
 
-import ftgumod.util.StackUtils;
+import ftgumod.api.FTGUAPI;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -28,7 +28,7 @@ public class SlotSpecial extends Slot {
 			return true;
 
 		for (ItemStack s : special)
-			if (StackUtils.INSTANCE.isStackOf(s, stack))
+			if (FTGUAPI.stackUtils.isStackOf(s, stack))
 				return true;
 		return false;
 	}

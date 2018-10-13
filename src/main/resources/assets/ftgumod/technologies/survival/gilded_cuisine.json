@@ -39,6 +39,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "NNN",
       "NCN",

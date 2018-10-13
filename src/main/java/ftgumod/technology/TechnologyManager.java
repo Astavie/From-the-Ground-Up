@@ -8,13 +8,14 @@ import ftgumod.FTGU;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.ITechnologyManager;
+import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.technology.unlock.UnlockCompound;
 import ftgumod.api.technology.unlock.UnlockRecipe;
+import ftgumod.api.util.JsonContextPublic;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
-import ftgumod.util.JsonContextPublic;
 import ftgumod.util.SubCollection;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
@@ -59,6 +60,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	private final Collection<Technology> start = new SubCollection<>(technologies.values(), Technology::researchedAtStart);
 
 	private final Map<ResourceLocation, IUnlock.Factory<?>> unlocks = new HashMap<>();
+	private final Map<ResourceLocation, IResearchRecipe.Factory<?>> puzzles = new HashMap<>();
 
 	private final List<Predicate<? super ITechnology>> removeCallback = new LinkedList<>();
 	private final List<Consumer<? super ITechnology>> addCallback = new LinkedList<>();
@@ -129,6 +131,18 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			}
 			return new UnlockRecipe(CraftingHelper.getIngredient(element, context));
 		} else throw new JsonSyntaxException("Expected unlock to be an object or an array of objects");
+	}
+
+	public IResearchRecipe getPuzzle(JsonElement element, JsonContextPublic context, ResourceLocation technology) {
+		if (element.isJsonObject()) {
+			JsonObject object = element.getAsJsonObject();
+			if (object.has("type")) {
+				ResourceLocation type = new ResourceLocation(JsonUtils.getString(object, "type"));
+				if (puzzles.containsKey(type))
+					return puzzles.get(type).deserialize(object, context, technology);
+				throw new JsonSyntaxException("Unknown puzzle type " + type);
+			} else throw new JsonSyntaxException("IPuzzle missing required field 'type'");
+		} else throw new JsonSyntaxException("Expected puzzle to be an object");
 	}
 
 	public Collection<Technology> getRoots() {
@@ -385,6 +399,11 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	@Override
 	public void registerUnlock(ResourceLocation name, IUnlock.Factory<?> factory) {
 		unlocks.put(name, factory);
+	}
+
+	@Override
+	public void registerPuzzle(ResourceLocation name, IResearchRecipe.Factory<?> factory) {
+		puzzles.put(name, factory);
 	}
 
 	@Override

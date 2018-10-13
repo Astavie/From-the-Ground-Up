@@ -26,6 +26,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "   ",
       "ISR",

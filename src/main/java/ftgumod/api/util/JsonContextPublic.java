@@ -1,7 +1,8 @@
-package ftgumod.util;
+package ftgumod.api.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.api.FTGUAPI;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -47,7 +48,7 @@ public class JsonContextPublic extends JsonContext {
 				continue;
 			if (!json.has("ingredient"))
 				throw new JsonSyntaxException("Constant entry must contain 'ingredient' value");
-			constants.put(JsonUtils.getString(json, "name"), StackUtils.INSTANCE.getItemPredicate(json.get("ingredient"), this));
+			constants.put(JsonUtils.getString(json, "name"), FTGUAPI.stackUtils.getItemPredicate(json.get("ingredient"), this));
 		}
 
 	}

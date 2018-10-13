@@ -35,6 +35,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "SSS",
       "PRP",

@@ -2,6 +2,8 @@ package ftgumod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ftgumod.api.technology.puzzle.ResearchMatch;
+import ftgumod.api.technology.unlock.UnlockRecipe;
 import ftgumod.command.CommandTechnology;
 import ftgumod.compat.ICompat;
 import ftgumod.compat.gamestages.CompatGameStages;
@@ -36,6 +38,7 @@ import net.minecraftforge.advancements.critereon.ItemPredicates;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -114,6 +117,9 @@ public class FTGU {
 
 		});
 		ItemPredicates.register(new ResourceLocation(MODID, "empty_nbt"), EmptyNBTPredicate::factory);
+
+		TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("item"), (object, context, technology) -> new UnlockRecipe(CraftingHelper.getIngredient(object, context)));
+		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(FTGU.MODID, "match"), new ResearchMatch.Factory());
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 

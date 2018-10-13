@@ -44,6 +44,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       " RC",
       " SR",

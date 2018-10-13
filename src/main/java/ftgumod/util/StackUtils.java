@@ -8,6 +8,7 @@ import ftgumod.api.FTGUAPI;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.api.util.IStackUtils;
+import ftgumod.api.util.JsonContextPublic;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -40,10 +41,12 @@ public class StackUtils implements IStackUtils {
 		return nbt;
 	}
 
+	@Override
 	public boolean isStackOf(ItemStack ingredient, ItemStack stack) {
 		return ingredient.getItem() == stack.getItem() && (ingredient.getMetadata() == OreDictionary.WILDCARD_VALUE || ingredient.getMetadata() == stack.getMetadata()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
 	}
 
+	@Override
 	public ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context) {
 		Set<ItemPredicate> predicates = new HashSet<>();
 

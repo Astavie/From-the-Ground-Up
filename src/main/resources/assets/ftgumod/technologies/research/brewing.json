@@ -62,6 +62,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       " S ",
       " W ",

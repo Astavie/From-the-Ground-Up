@@ -1,10 +1,10 @@
 package ftgumod.packet.server;
 
+import ftgumod.api.technology.puzzle.PuzzleMatch;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.MessageHandler;
 import ftgumod.packet.client.HintMessage;
 import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.technology.recipe.PuzzleMatch;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

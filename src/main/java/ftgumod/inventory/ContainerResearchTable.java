@@ -2,18 +2,23 @@ package ftgumod.inventory;
 
 import ftgumod.Content;
 import ftgumod.api.inventory.ContainerFTGU;
+import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.util.IStackUtils;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.HintMessage;
 import ftgumod.technology.Technology;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -31,7 +36,6 @@ public class ContainerResearchTable extends ContainerFTGU {
 	public int puzzle;
 	public int output;
 	public int glass;
-	public Technology recipe;
 	private int feather;
 	private int parchment;
 
@@ -65,21 +69,20 @@ public class ContainerResearchTable extends ContainerFTGU {
 	public void setAll(List<ItemStack> stacks) {
 		for (int i = 0; i < inventorySlots.size(); ++i)
 			getSlot(i).putStack(stacks.get(i));
-		onCraftMatrixChanged(null);
 	}
 
 	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 8, 46, 1, OreDictionary.getOres("feather")));
+		addSlotToContainer(new SlotCrafting(this, tileEntity, c, 8, 46, 1, OreDictionary.getOres("feather")));
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 8, 24, 1, new ItemStack(Content.i_parchmentIdea)));
+		addSlotToContainer(new SlotCrafting(this, tileEntity, c, 8, 24, 1, new ItemStack(Content.i_parchmentIdea)));
 		parchment = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 150, 35, 1, new ItemStack(Content.i_magnifyingGlass)));
+		addSlotToContainer(new SlotCrafting(this, tileEntity, c, 150, 35, 1, new ItemStack(Content.i_magnifyingGlass)));
 		glass = c;
 		c++;
 
@@ -95,28 +98,23 @@ public class ContainerResearchTable extends ContainerFTGU {
 		if (inv != invPlayer) {
 			if (inventorySlots.get(parchment).getHasStack()) {
 				Technology tech = StackUtils.INSTANCE.getTechnology(inventorySlots.get(parchment).getStack());
-				if (tech != null && tech.hasResearchRecipe() && tech.canResearch(invPlayer.player))
-					recipe = tech;
-			} else {
-				recipe = null;
-				if (invInput.puzzle != null) {
-					invInput.puzzle.onRemove(this);
-					invInput.puzzle = null;
-				}
-			}
-
-			if (recipe != null) {
-				if (invInput.puzzle == null || invInput.puzzle.getRecipe() != recipe.getResearchRecipe()) {
+				if (tech != null && tech.hasResearchRecipe() && (invInput.puzzle == null || invInput.puzzle.getRecipe().getTechnology() != tech)) {
 					if (invInput.puzzle != null)
-						invInput.puzzle.onRemove(this);
-					invInput.puzzle = recipe.getResearchRecipe().createInstance();
+						invInput.puzzle.onRemove(invPlayer.player);
+					invInput.puzzle = tech.getResearchRecipe().createInstance();
 					invInput.puzzle.onStart(this);
 					invInput.puzzle.onInventoryChange(this);
 				}
-				if (inv != result && inv != invInput)
+			} else if (invInput.puzzle != null) {
+				invInput.puzzle.onRemove(invPlayer.player);
+				invInput.puzzle = null;
+			}
+
+			if (invInput.puzzle != null) {
+				if (inv != result)
 					invInput.puzzle.onInventoryChange(this);
-				if (inventorySlots.get(feather).getHasStack() && invInput.puzzle.test()) {
-					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(recipe, IStackUtils.Parchment.RESEARCH));
+				if (inventorySlots.get(feather).getHasStack() && invInput.puzzle.getRecipe().getTechnology().canResearch(invPlayer.player) && invInput.puzzle.test()) {
+					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(invInput.puzzle.getRecipe().getTechnology(), IStackUtils.Parchment.RESEARCH));
 					return;
 				}
 			}
@@ -127,17 +125,18 @@ public class ContainerResearchTable extends ContainerFTGU {
 
 	@Override
 	public ItemStack slotClick(int index, int mouse, ClickType mode, EntityPlayer player) {
-		if (index == output && inventorySlots.get(output).getHasStack()) {
+		if (mode != ClickType.CLONE && index == output && inventorySlots.get(output).getHasStack()) {
 			inventorySlots.get(parchment).decrStackSize(1);
-			invInput.puzzle.onFinish(this);
-			invInput.puzzle.onRemove(this);
+			invInput.puzzle.onFinish();
+			invInput.puzzle.onRemove(player);
 			invInput.puzzle = null;
 		}
+		return super.slotClick(index, mouse, mode, player);
+	}
 
-		ItemStack clickItemStack = super.slotClick(index, mouse, mode, player);
-		if (index >= 0)
-			onCraftMatrixChanged(inventorySlots.get(index).inventory);
-		return clickItemStack;
+	@Override
+	public void onContainerClosed(EntityPlayer player) {
+		super.onContainerClosed(player);
 	}
 
 	@Override
@@ -188,6 +187,11 @@ public class ContainerResearchTable extends ContainerFTGU {
 	@Override
 	public InventoryPlayer getInventoryPlayer() {
 		return invPlayer;
+	}
+
+	@Override
+	public void refreshHints(List<ITextComponent> hints) {
+		PacketDispatcher.sendTo(new HintMessage(hints), (EntityPlayerMP) invPlayer.player);
 	}
 
 }

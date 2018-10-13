@@ -3,6 +3,7 @@ package ftgumod.compat.gamestages;
 import com.google.gson.JsonObject;
 import ftgumod.FTGU;
 import ftgumod.api.technology.unlock.IUnlock;
+import ftgumod.api.util.JsonContextPublic;
 import net.darkhax.gamestages.GameStageHelper;
 import net.darkhax.gamestages.GameStages;
 import net.darkhax.gamestages.packet.PacketSyncClient;
@@ -13,7 +14,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraftforge.common.crafting.JsonContext;
 
 import java.util.Collections;
 
@@ -56,7 +56,7 @@ public class UnlockGameStage implements IUnlock {
 	public static class Factory implements IUnlock.Factory<UnlockGameStage> {
 
 		@Override
-		public UnlockGameStage deserialize(JsonObject object, JsonContext context, ResourceLocation technology) {
+		public UnlockGameStage deserialize(JsonObject object, JsonContextPublic context, ResourceLocation technology) {
 			String stage = JsonUtils.getString(object, "stage");
 			ITextComponent message;
 			if (object.has("message"))

@@ -25,6 +25,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "MHM",
       "MCM",

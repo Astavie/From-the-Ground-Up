@@ -1,12 +1,18 @@
 package ftgumod.api.util;
 
+import com.google.gson.JsonElement;
 import ftgumod.api.technology.ITechnology;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IStackUtils {
+
+	boolean isStackOf(ItemStack ingredient, ItemStack stack);
+
+	ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context);
 
 	/**
 	 * @param tech The {@code Technology}

@@ -27,6 +27,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "   ",
       "SCS",

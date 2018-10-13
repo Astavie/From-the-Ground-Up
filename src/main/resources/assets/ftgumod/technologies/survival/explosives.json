@@ -33,6 +33,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       " F ",
       "DGD",

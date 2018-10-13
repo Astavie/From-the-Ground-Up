@@ -51,6 +51,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "R  ",
       "SRR",

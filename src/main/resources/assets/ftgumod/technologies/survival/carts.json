@@ -32,6 +32,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "C C",
       "CCC",

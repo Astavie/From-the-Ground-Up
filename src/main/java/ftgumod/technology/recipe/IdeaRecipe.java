@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
-import ftgumod.util.JsonContextPublic;
+import ftgumod.api.util.JsonContextPublic;
 import ftgumod.util.StackUtils;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;

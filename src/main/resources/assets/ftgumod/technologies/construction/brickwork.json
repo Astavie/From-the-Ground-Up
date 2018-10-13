@@ -24,6 +24,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "CFC",
       " C ",

@@ -1,8 +1,8 @@
 package ftgumod.packet.client;
 
+import ftgumod.api.technology.puzzle.PuzzleMatch;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.MessageHandler;
-import ftgumod.technology.recipe.PuzzleMatch;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;

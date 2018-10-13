@@ -1,5 +1,6 @@
 package ftgumod.api.technology;
 
+import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -104,5 +105,7 @@ public interface ITechnologyManager {
 	void addRecipes(List<IRecipe> recipes, EntityPlayerMP player);
 
 	void registerUnlock(ResourceLocation name, IUnlock.Factory<?> factory);
+
+	void registerPuzzle(ResourceLocation name, IResearchRecipe.Factory<?> factory);
 
 }

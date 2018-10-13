@@ -2,6 +2,7 @@ package ftgumod.api.technology.recipe;
 
 import ftgumod.api.inventory.ContainerFTGU;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,13 +34,13 @@ public interface IPuzzle {
 	 * Fired when a player clicks on the output slot to finish a research.
 	 * Use this, for example, to remove items.
 	 */
-	void onFinish(ContainerFTGU container);
+	void onFinish();
 
 	/**
 	 * Fired when a player adds a new technology.
 	 * Use this, for example, to remove added slots.
 	 */
-	void onRemove(ContainerFTGU container);
+	void onRemove(EntityPlayer player);
 
 	@SideOnly(Side.CLIENT)
 	void drawForeground(GuiContainer gui, int mouseX, int mouseY);

@@ -1,7 +1,8 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
-import ftgumod.api.inventory.ContainerFTGU;
+import ftgumod.api.inventory.InventoryCraftingPersistent;
+import ftgumod.api.inventory.SlotSpecial;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -17,7 +18,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
-public class ContainerIdeaTable extends ContainerFTGU {
+public class ContainerIdeaTable extends Container {
 
 	private final TileEntityInventory invInput;
 
@@ -49,8 +50,8 @@ public class ContainerIdeaTable extends ContainerFTGU {
 			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
-		craftMatrix = new InventoryCraftingPersistent(this, tileEntity, combine, 3, 1);
-		onCraftMatrixChanged(tileEntity);
+		craftMatrix = new InventoryCraftingPersistent(tileEntity, combine, 3, 1);
+		onCraftMatrixChanged(invInput);
 	}
 
 	@Override
@@ -160,16 +161,6 @@ public class ContainerIdeaTable extends ContainerFTGU {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return true;
-	}
-
-	@Override
-	public boolean isRemote() {
-		return invInput.getWorld().isRemote;
-	}
-
-	@Override
-	public InventoryPlayer getInventoryPlayer() {
-		return invPlayer;
 	}
 
 }

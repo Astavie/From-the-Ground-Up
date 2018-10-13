@@ -29,6 +29,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       " C ",
       "RPR",

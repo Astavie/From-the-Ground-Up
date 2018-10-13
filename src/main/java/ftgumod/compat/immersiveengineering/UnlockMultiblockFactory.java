@@ -8,12 +8,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.technology.unlock.UnlockRecipe;
+import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.JsonContext;
 import org.apache.commons.lang3.EnumUtils;
 
 import java.util.Locale;
@@ -21,7 +21,7 @@ import java.util.Locale;
 public class UnlockMultiblockFactory implements IUnlock.Factory<UnlockRecipe> {
 
 	@Override
-	public UnlockRecipe deserialize(JsonObject object, JsonContext context, ResourceLocation technology) {
+	public UnlockRecipe deserialize(JsonObject object, JsonContextPublic context, ResourceLocation technology) {
 		String name = JsonUtils.getString(object, "multiblock");
 		MultiblockHandler.IMultiblock multiblock = null;
 

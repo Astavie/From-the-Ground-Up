@@ -1,11 +1,11 @@
 package ftgumod.api.technology.unlock;
 
 import com.google.gson.JsonObject;
+import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.crafting.JsonContext;
 
 import javax.annotation.Nullable;
 
@@ -36,7 +36,7 @@ public interface IUnlock {
 
 	interface Factory<T extends IUnlock> {
 
-		T deserialize(JsonObject object, JsonContext context, ResourceLocation technology);
+		T deserialize(JsonObject object, JsonContextPublic context, ResourceLocation technology);
 
 	}
 

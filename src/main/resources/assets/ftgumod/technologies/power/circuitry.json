@@ -42,6 +42,7 @@
     ]
   },
   "research": {
+    "type": "ftgumod:match",
     "pattern": [
       "   ",
       "RST",

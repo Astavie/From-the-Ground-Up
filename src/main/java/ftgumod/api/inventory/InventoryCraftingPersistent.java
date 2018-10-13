@@ -1,7 +1,6 @@
-package ftgumod.inventory;
+package ftgumod.api.inventory;
 
 import net.minecraft.client.util.RecipeItemHelper;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
@@ -14,8 +13,8 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
 	private final int offset;
 	private final int size;
 
-	public InventoryCraftingPersistent(Container container, IInventory parent, int offset, int width, int height) {
-		super(container, width, height);
+	public InventoryCraftingPersistent(IInventory parent, int offset, int width, int height) {
+		super(null, width, height);
 
 		this.parent = parent;
 		this.offset = offset;
