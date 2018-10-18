@@ -3,8 +3,14 @@ package ftgumod.api.technology.recipe;
 import ftgumod.api.inventory.ContainerFTGU;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public interface IPuzzle {
 
@@ -37,10 +43,12 @@ public interface IPuzzle {
 	void onFinish();
 
 	/**
-	 * Fired when a player adds a new technology.
+	 * Fired when this puzzle is removed.
 	 * Use this, for example, to remove added slots.
 	 */
-	void onRemove(EntityPlayer player);
+	void onRemove(@Nullable EntityPlayer player, World world, BlockPos pos);
+
+	void setHints(List<ITextComponent> hints);
 
 	@SideOnly(Side.CLIENT)
 	void drawForeground(GuiContainer gui, int mouseX, int mouseY);

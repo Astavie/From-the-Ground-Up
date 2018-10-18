@@ -26,51 +26,51 @@ public class BlockSerializable {
 	private final ItemStack display;
 
 	public BlockSerializable(World world, BlockPos pos, IBlockState state, @Nullable ItemStack display) {
-		this.dimension = world.provider.getDimensionType();
+		this.dimension = world.dimension.getType();
 		this.pos = pos;
 		this.block = state.getBlock();
 		this.properties = new HashMap<>();
 
-		for (IProperty<?> property : state.getPropertyKeys())
-			properties.put(property, state.getValue(property));
+		for (IProperty<?> property : state.func_177227_a())
+			properties.put(property, state.get(property));
 
 		if (display == null || display.isEmpty())
-			this.display = new ItemStack(block, 1, block.getMetaFromState(state));
+			this.display = new ItemStack(block, 1, block.func_176201_c(state));
 		else
 			this.display = display;
 	}
 
 	public BlockSerializable(NBTTagCompound compound) {
 		this.dimension = DimensionType.byName(compound.getString("dimension"));
-		this.pos = new BlockPos(compound.getInteger("x"), compound.getInteger("y"), compound.getInteger("z"));
-		this.block = Block.REGISTRY.getObject(new ResourceLocation(compound.getString("block")));
+		this.pos = new BlockPos(compound.getInt("x"), compound.getInt("y"), compound.getInt("z"));
+		this.block = Block.field_149771_c.getOrDefault(new ResourceLocation(compound.getString("block")));
 		this.properties = new HashMap<>();
 
-		NBTTagCompound state = compound.getCompoundTag("state");
-		BlockStateContainer container = block.getBlockState();
+		NBTTagCompound state = compound.getCompound("state");
+		BlockStateContainer container = block.getStateContainer();
 
-		for (String name : state.getKeySet()) {
+		for (String name : state.keySet()) {
 			IProperty<?> property = container.getProperty(name);
 			properties.put(property, property.parseValue(state.getString(name)).get());
 		}
 
-		display = new ItemStack(compound.getCompoundTag("display"));
+		display = new ItemStack(compound.getCompound("display"));
 	}
 
 	public NBTTagCompound serialize() {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setString("dimension", dimension.getName());
-		compound.setInteger("x", pos.getX());
-		compound.setInteger("y", pos.getY());
-		compound.setInteger("z", pos.getZ());
-		compound.setString("block", block.getRegistryName().toString());
+		compound.putString("dimension", dimension.name());
+		compound.putInt("x", pos.getX());
+		compound.putInt("y", pos.getY());
+		compound.putInt("z", pos.getZ());
+		compound.putString("block", block.getRegistryName().toString());
 
 		NBTTagCompound state = new NBTTagCompound();
 		for (Map.Entry<IProperty<?>, Object> entry : properties.entrySet())
-			state.setString(entry.getKey().getName(), getPropertyName(entry.getKey(), entry.getValue()));
+			state.putString(entry.getKey().getName(), getPropertyName(entry.getKey(), entry.getValue()));
 
-		compound.setTag("state", state);
-		compound.setTag("display", display.serializeNBT());
+		compound.put("state", state);
+		compound.put("display", display.serializeNBT());
 
 		return compound;
 	}
@@ -81,7 +81,7 @@ public class BlockSerializable {
 	}
 
 	public String getLocalizedName() {
-		return display.getDisplayName();
+		return display.func_82833_r();
 	}
 
 	public boolean test(BlockPredicate predicate) {

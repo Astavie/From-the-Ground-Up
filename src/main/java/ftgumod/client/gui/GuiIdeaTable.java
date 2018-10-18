@@ -21,22 +21,22 @@ public class GuiIdeaTable extends GuiContainer {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String s = Content.b_ideaTable.getLocalizedName();
-		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		fontRenderer.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
+		String s = Content.b_ideaTable.func_149732_F();
+		fontRenderer.drawStringWithShadow(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+		fontRenderer.drawStringWithShadow(player.getDisplayName().func_150260_c(), 8, ySize - 96 + 2, 4210752);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float arg0, int mouseX, int mouseY) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}

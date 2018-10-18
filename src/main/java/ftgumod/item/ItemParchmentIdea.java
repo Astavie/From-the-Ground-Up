@@ -5,8 +5,8 @@ import net.minecraft.item.Item;
 public class ItemParchmentIdea extends Item {
 
 	public ItemParchmentIdea(String name) {
-		setUnlocalizedName(name);
-		setMaxStackSize(1);
+		func_77655_b(name);
+		func_77625_d(1);
 	}
 
 }

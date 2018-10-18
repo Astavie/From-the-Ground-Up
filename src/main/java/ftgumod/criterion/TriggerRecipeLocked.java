@@ -26,7 +26,7 @@ public class TriggerRecipeLocked extends TriggerFTGU<TriggerRecipeLocked.Instanc
 		IRecipe recipe = null;
 		if (jsonObject.has("recipe")) {
 			ResourceLocation location = new ResourceLocation(JsonUtils.getString(jsonObject, "recipe"));
-			recipe = CraftingManager.getRecipe(location);
+			recipe = CraftingManager.func_193373_a(location);
 			if (recipe == null)
 				throw new JsonSyntaxException("Unknown recipe '" + location + "'");
 		}

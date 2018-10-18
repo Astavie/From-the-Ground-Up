@@ -6,8 +6,8 @@ import net.minecraft.item.Item;
 public class ItemParchmentEmpty extends Item {
 
 	public ItemParchmentEmpty(String name) {
-		setUnlocalizedName(name);
-		setCreativeTab(CreativeTabs.MISC);
+		func_77655_b(name);
+		func_77637_a(CreativeTabs.MISC);
 	}
 
 }

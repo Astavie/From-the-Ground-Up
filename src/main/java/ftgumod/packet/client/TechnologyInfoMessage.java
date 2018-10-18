@@ -64,7 +64,7 @@ public class TechnologyInfoMessage implements IMessage {
 			ByteBufUtils.writeUTF8String(buf, domain.getValue().getLeft());
 			buf.writeInt(domain.getValue().getRight().size());
 			for (Map.Entry<ResourceLocation, String> entry : domain.getValue().getRight().entrySet()) {
-				ByteBufUtils.writeUTF8String(buf, entry.getKey().getResourcePath());
+				ByteBufUtils.writeUTF8String(buf, entry.getKey().getPath());
 				ByteBufUtils.writeUTF8String(buf, entry.getValue());
 			}
 		}

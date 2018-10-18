@@ -25,6 +25,7 @@ chat.type.technology=%s has researched %s
 
 technology.complete.already=%s has already been researched
 technology.complete.understand=You do not understand this technology
+technology.complete.enough=You do not have enough knowledge to research this technology
 technology.complete.unlock=Unlocked the research for %s
 technology.complete.unlock.root=Unlocked the research tab %s
 
@@ -142,7 +143,7 @@ technology.hint.arm=Tone Arm
 technology.hint.arm=Stylus
 technology.hint.record=Music
 technology.hint.swiftness=Swiftness
-technology.hint.awkward=Awkward
+technology.hint.awkward=Awkwardness
 technology.hint.water=Liquid
 technology.hint.enchantment=Enchantment
 technology.hint.star=Soul of the Wither

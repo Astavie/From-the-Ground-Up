@@ -240,11 +240,11 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	}
 
 	public void removeFromCache(ResourceLocation tech) {
-		if (cache.containsKey(tech.getResourceDomain())) {
-			Map<ResourceLocation, String> map = cache.get(tech.getResourceDomain()).getRight();
+		if (cache.containsKey(tech.getNamespace())) {
+			Map<ResourceLocation, String> map = cache.get(tech.getNamespace()).getRight();
 			map.remove(tech);
 			if (map.isEmpty())
-				cache.remove(tech.getResourceDomain());
+				cache.remove(tech.getNamespace());
 		}
 	}
 
@@ -393,7 +393,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		if (book instanceof RecipeBookServerImpl)
 			((RecipeBookServerImpl) book).addRecipes(recipes, player);
 		else
-			book.add(recipes, player);
+			book.func_193835_a(recipes, player);
 	}
 
 	@Override

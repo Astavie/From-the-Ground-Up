@@ -56,8 +56,8 @@ public class GuiResearchBook extends GuiScreen {
 	private int y_min;
 	private int x_max;
 	private int y_max;
-	private int imageWidth;
-	private int imageHeight;
+	private final int imageWidth;
+	private final int imageHeight;
 	private double xScrollP;
 	private double yScrollP;
 	private double xScrollTarget;
@@ -90,7 +90,7 @@ public class GuiResearchBook extends GuiScreen {
 			state = true;
 		}
 
-		buttonList.clear();
+		buttons.clear();
 		if (state) {
 			Set<Technology> tree = new HashSet<>();
 			root.getChildren(tree, true);
@@ -119,16 +119,16 @@ public class GuiResearchBook extends GuiScreen {
 			xScrollP = xScrollTarget = xScrollO.get(root.getRegistryName());
 			yScrollP = yScrollTarget = yScrollO.get(root.getRegistryName());
 
-			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplayInfo().getTitle().getUnformattedText());
+			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplayInfo().getTitle().func_150260_c());
 			if (TechnologyManager.INSTANCE.getRoots().stream().filter(t -> t.canResearchIgnoreResearched(player)).count() < 2)
 				page.enabled = false;
 
-			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
-			buttonList.add(page);
+			buttons.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
+			buttons.add(page);
 
 			scroll = 1;
 		} else {
-			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
+			buttons.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
 			if (FTGU.copy && selected.canCopy()) {
 				GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
 				copy.enabled = false;
@@ -137,7 +137,7 @@ public class GuiResearchBook extends GuiScreen {
 						copy.enabled = true;
 						break;
 					}
-				buttonList.add(copy);
+				buttons.add(copy);
 			}
 
 			pages = (int) Math.max(Math.ceil(((double) selected.getUnlock().stream().filter(IUnlock::isDisplayed).count()) / num), 1);
@@ -145,11 +145,11 @@ public class GuiResearchBook extends GuiScreen {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton button) {
+	protected void func_146284_a(GuiButton button) {
 		if (button.id == 1) {
 			if (state) {
 				mc.displayGuiScreen(null);
-				mc.setIngameFocus();
+				mc.func_71381_h();
 			} else {
 				state = true;
 				initGui();
@@ -181,17 +181,17 @@ public class GuiResearchBook extends GuiScreen {
 	}
 
 	@Override
-	protected void keyTyped(char key, int id) throws IOException {
+	protected void func_73869_a(char key, int id) throws IOException {
 		if (mc.gameSettings.keyBindInventory.isActiveAndMatches(id)) {
 			mc.displayGuiScreen(null);
-			mc.setIngameFocus();
+			mc.func_71381_h();
 		} else {
-			super.keyTyped(key, id);
+			super.func_73869_a(key, id);
 		}
 	}
 
 	@Override
-	public void drawScreen(int x, int y, float z) {
+	public void render(int x, int y, float z) {
 		if (state) {
 			if (Mouse.isButtonDown(0)) {
 				int i = (width - imageWidth) / 2;
@@ -253,25 +253,25 @@ public class GuiResearchBook extends GuiScreen {
 		drawResearchScreen(x, y, z);
 
 		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 
 		drawTitle();
 
 		GlStateManager.enableLighting();
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 	}
 
 	@Override
-	public void mouseClicked(int x, int y, int b) throws IOException {
+	public void func_73864_a(int x, int y, int b) throws IOException {
 		if (b == 0 && selected != null && selected.isResearched(player)) {
 			state = false;
 			initGui();
 		}
-		super.mouseClicked(x, y, b);
+		super.func_73864_a(x, y, b);
 	}
 
 	@Override
-	public void updateScreen() {
+	public void tick() {
 		xScrollO.put(root.getRegistryName(), xScrollP);
 		yScrollO.put(root.getRegistryName(), yScrollP);
 		double d0 = xScrollTarget - xScrollP;
@@ -288,7 +288,7 @@ public class GuiResearchBook extends GuiScreen {
 	private void drawTitle() {
 		int i = (width - imageWidth) / 2;
 		int j = (height - imageHeight) / 2;
-		fontRenderer.drawString(I18n.format("item.research_book.name"), i + 15, j + 5, 0x404040);
+		fontRenderer.drawStringWithShadow(I18n.format("item.research_book.name"), i + 15, j + 5, 0x404040);
 	}
 
 	private void drawResearchScreen(int x, int y, float z) {
@@ -299,7 +299,7 @@ public class GuiResearchBook extends GuiScreen {
 
 		GlStateManager.depthFunc(518);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(i1, j1, -200F);
+		GlStateManager.translatef(i1, j1, -200F);
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableLighting();
 		GlStateManager.enableRescaleNormal();
@@ -316,10 +316,10 @@ public class GuiResearchBook extends GuiScreen {
 		}
 		mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		if (state) {
-			GlStateManager.scale(1.0F / zoom.get(root.getRegistryName()), 1.0F / zoom.get(root.getRegistryName()), 1.0F);
+			GlStateManager.scalef(1.0F / zoom.get(root.getRegistryName()), 1.0F / zoom.get(root.getRegistryName()), 1.0F);
 
 			int i = MathHelper.floor(xScrollO.get(root.getRegistryName()) + (xScrollP - xScrollO.get(root.getRegistryName())) * z);
 			int j = MathHelper.floor(yScrollO.get(root.getRegistryName()) + (yScrollP - yScrollO.get(root.getRegistryName())) * z);
@@ -396,9 +396,9 @@ public class GuiResearchBook extends GuiScreen {
 							continue;
 
 						if (t2.isResearched(player))
-							GlStateManager.color(0.75F, 0.75F, 0.75F, 1.0F);
+							GlStateManager.color4f(0.75F, 0.75F, 0.75F, 1.0F);
 						else
-							GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+							GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 						mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 						GlStateManager.enableBlend();
@@ -414,7 +414,7 @@ public class GuiResearchBook extends GuiScreen {
 						GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 						GlStateManager.disableLighting();
 
-						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+						GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 						if (f3 >= l6 && f3 <= l6 + 22 && f4 >= j7 && f4 <= j7 + 22 && t2.canResearchIgnoreResearched(player))
 							selected = t2;
 					}
@@ -445,11 +445,11 @@ public class GuiResearchBook extends GuiScreen {
 				int length = 0;
 
 				for (int q = 0; q < list.length; q++) {
-					if (list[q].getMetadata() == OreDictionary.WILDCARD_VALUE) {
+					if (list[q].getDamage() == OreDictionary.WILDCARD_VALUE) {
 						sub[q] = NonNullList.create();
 
 						//noinspection unchecked
-						list[q].getItem().getSubItems(list[q].getItem().getCreativeTab(), sub[q]);
+						list[q].getItem().fillItemGroup(list[q].getItem().getGroup(), sub[q]);
 					} else
 						sub[q] = NonNullList.from(null, list[q]);
 
@@ -463,7 +463,7 @@ public class GuiResearchBook extends GuiScreen {
 					for (ItemStack stack : (NonNullList<ItemStack>) nonNullList)
 						list[pp++] = stack;
 
-				long tick = mc.world.getWorldTime() / 30;
+				long tick = mc.world.getGameTime() / 30;
 				int index = (int) (tick % list.length);
 
 				ItemStack item = list[index];
@@ -479,7 +479,7 @@ public class GuiResearchBook extends GuiScreen {
 				GlStateManager.blendFunc(net.minecraft.client.renderer.GlStateManager.SourceFactor.SRC_ALPHA, net.minecraft.client.renderer.GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 				GlStateManager.disableLighting();
 
-				fontRenderer.drawStringWithShadow(item.getDisplayName(), 35, 45 + (pos * 28), 0xFFFFFF);
+				fontRenderer.drawStringWithShadow(item.func_82833_r(), 35, 45 + (pos * 28), 0xFFFFFF);
 
 				if (x >= i1 + 6 && x < i1 + 32 && y >= j1 + 37 + (pos * 28) && y < j1 + 63 + (pos * 28)) {
 					int r = 0;
@@ -515,9 +515,9 @@ public class GuiResearchBook extends GuiScreen {
 											GlStateManager.pushMatrix();
 											int i2 = (int) ((float) (xp + l1) / 0.42F - 3.0F);
 											int j2 = (int) ((float) (yp + kk) / 0.42F - 3.0F);
-											GlStateManager.scale(0.42F, 0.42F, 1.0F);
+											GlStateManager.scalef(0.42F, 0.42F, 1.0F);
 											GlStateManager.enableLighting();
-											mc.getRenderItem().renderItemAndEffectIntoGUI(stack[(int) (tick % stack.length)], i2, j2);
+											mc.getItemRenderer().renderItemAndEffectIntoGUI(stack[(int) (tick % stack.length)], i2, j2);
 											GlStateManager.disableLighting();
 											GlStateManager.popMatrix();
 										}
@@ -531,22 +531,22 @@ public class GuiResearchBook extends GuiScreen {
 			}
 		}
 
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.enableBlend();
 		GlStateManager.popMatrix();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(ACHIEVEMENT_BACKGROUND);
 		drawTexturedModalRect(k, l, 0, 0, imageWidth, imageHeight);
 		zLevel = 0.0F;
 		GlStateManager.depthFunc(515);
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.enableTexture2D();
 
-		super.drawScreen(x, y, z);
+		super.render(x, y, z);
 		if (selected != null) {
 			if (state) {
-				String s = selected.getDisplayInfo().getTitle().getUnformattedText();
-				String s1 = selected.getDisplayInfo().getDescription().getUnformattedText();
+				String s = selected.getDisplayInfo().getTitle().func_150260_c();
+				String s1 = selected.getDisplayInfo().getDescription().func_150260_c();
 
 				int children = 0;
 				for (ITechnology child : selected.getChildren())
@@ -569,11 +569,11 @@ public class GuiResearchBook extends GuiScreen {
 					fontRenderer.drawStringWithShadow(I18n.format(children == 1 ? "technology.tab" : "technology.tabs"), i7, k7 + i9 + 4, 0xffff5555);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getDisplayInfo().getTitle().getUnformattedText();
+				String s1 = selected.getDisplayInfo().getTitle().func_150260_c();
 				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
 				fontRenderer.drawStringWithShadow(s1, x1, l + 22, 0xffffff);
 
-				String s2 = selected.getDisplayInfo().getDescription().getUnformattedText();
+				String s2 = selected.getDisplayInfo().getDescription().func_150260_c();
 				int x2 = width / 2;
 				int y2 = l + 32;
 
@@ -589,7 +589,7 @@ public class GuiResearchBook extends GuiScreen {
 			}
 		}
 
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 		GlStateManager.enableLighting();
 		RenderHelper.disableStandardItemLighting();
 	}

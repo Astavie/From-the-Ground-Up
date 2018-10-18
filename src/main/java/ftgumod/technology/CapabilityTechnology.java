@@ -96,9 +96,9 @@ public class CapabilityTechnology {
 			NBTTagCompound compound = new NBTTagCompound();
 			NBTTagList list = new NBTTagList();
 			for (String s : instance.getResearched())
-				list.appendTag(new NBTTagString(s));
-			compound.setBoolean("new", instance.isNew());
-			compound.setTag("researched", list);
+				list.func_74742_a(new NBTTagString(s));
+			compound.putBoolean("new", instance.isNew());
+			compound.put("researched", list);
 			return compound;
 		}
 
@@ -107,9 +107,9 @@ public class CapabilityTechnology {
 			NBTTagCompound compound = (NBTTagCompound) nbt;
 			if (!compound.getBoolean("new"))
 				instance.setOld();
-			NBTTagList list = compound.getTagList("researched", Constants.NBT.TAG_STRING);
-			for (int i = 0; i < list.tagCount(); i++)
-				instance.setResearched(list.getStringTagAt(i));
+			NBTTagList list = compound.getList("researched", Constants.NBT.TAG_STRING);
+			for (int i = 0; i < list.func_74745_c(); i++)
+				instance.setResearched(list.getString(i));
 		}
 
 	}

@@ -90,9 +90,9 @@ public class Technology implements ITechnology {
 	void updateDisplayText() {
 		this.displayText = new TextComponentString("[");
 		this.displayText.getStyle().setColor(display.getFrame().getFormat());
-		ITextComponent itextcomponent = display.getTitle().createCopy();
+		ITextComponent itextcomponent = display.getTitle().shallowCopy();
 		ITextComponent itextcomponent1 = new TextComponentString("");
-		ITextComponent itextcomponent2 = itextcomponent.createCopy();
+		ITextComponent itextcomponent2 = itextcomponent.shallowCopy();
 		itextcomponent2.getStyle().setColor(display.getFrame().getFormat());
 		itextcomponent1.appendSibling(itextcomponent2);
 		itextcomponent1.appendText("\n");
@@ -148,7 +148,7 @@ public class Technology implements ITechnology {
 
 	@Override
 	public boolean isRoot() {
-		return !hasParent() || !getRegistryName().getResourcePath().substring(0, getRegistryName().getResourcePath().indexOf('/')).equals(parent.getRegistryName().getResourcePath().substring(0, parent.getRegistryName().getResourcePath().indexOf('/')));
+		return !hasParent() || !getRegistryName().getPath().substring(0, getRegistryName().getPath().indexOf('/')).equals(parent.getRegistryName().getPath().substring(0, parent.getRegistryName().getPath().indexOf('/')));
 	}
 
 	@Override

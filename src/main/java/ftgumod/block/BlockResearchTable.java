@@ -1,8 +1,8 @@
 package ftgumod.block;
 
 import ftgumod.FTGU;
+import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.technology.TechnologyManager.GUI;
-import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -28,64 +28,62 @@ public class BlockResearchTable extends Block implements ITileEntityProvider {
 
 	public BlockResearchTable(String name) {
 		super(Material.ROCK);
-		setHardness(3.5F);
-		setSoundType(SoundType.STONE);
-		setUnlocalizedName(name);
-		setCreativeTab(CreativeTabs.DECORATIONS);
-		hasTileEntity = true;
+		func_149711_c(3.5F);
+		func_149672_a(SoundType.STONE);
+		func_149663_c(name);
+		func_149647_a(CreativeTabs.DECORATIONS);
+		field_149758_A = true;
 	}
 
 	@Override
-	public boolean onBlockActivated(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand hand, EnumFacing parSide, float hitX, float hitY, float hitZ) {
-		if (!parWorld.isRemote) {
+	public boolean func_180639_a(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, EntityPlayer parPlayer, EnumHand hand, EnumFacing parSide, float hitX, float hitY, float hitZ) {
+		if (!parWorld.isRemote)
 			parPlayer.openGui(FTGU.INSTANCE, GUI.RESEARCHTABLE.ordinal(), parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
-		}
 		return true;
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos blockPos, IBlockState blockState, EntityLivingBase player, ItemStack stack) {
-		if (!world.isRemote) {
-			world.setBlockState(blockPos, blockState.withProperty(FACING, player.getHorizontalFacing().getOpposite()), 2);
-		}
+		world.setBlockState(blockPos, blockState.func_177226_a(FACING, player.getHorizontalFacing().getOpposite()), 2);
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void func_180663_b(World world, BlockPos pos, IBlockState state) {
 		TileEntity tileentity = world.getTileEntity(pos);
 
-		if (tileentity instanceof TileEntityInventory) {
-			InventoryHelper.dropInventoryItems(world, pos, (TileEntityInventory) tileentity);
+		if (tileentity instanceof TileEntityResearchTable) {
+			InventoryHelper.dropInventoryItems(world, pos, (TileEntityResearchTable) tileentity);
+			IPuzzle puzzle = ((TileEntityResearchTable) tileentity).puzzle;
+			if (puzzle != null)
+				puzzle.onRemove(null, world, pos);
+
 			world.updateComparatorOutputLevel(pos, this);
 		}
 
-		super.breakBlock(world, pos, state);
+		super.func_180663_b(world, pos, state);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int meta) {
+	public TileEntity func_149915_a(World world, int meta) {
 		return new TileEntityResearchTable();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
-
-		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+	public IBlockState func_176203_a(int meta) {
+		EnumFacing enumfacing = EnumFacing.byHorizontalIndex(meta);
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y)
 			enumfacing = EnumFacing.NORTH;
-		}
 
-		return getDefaultState().withProperty(FACING, enumfacing);
+		return getDefaultState().func_177226_a(FACING, enumfacing);
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
+	public int func_176201_c(IBlockState state) {
+		return state.get(FACING).getIndex();
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState() {
+	protected BlockStateContainer func_180661_e() {
 		return new BlockStateContainer(this, FACING);
 	}
 

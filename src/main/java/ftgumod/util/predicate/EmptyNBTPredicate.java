@@ -21,7 +21,7 @@ public class EmptyNBTPredicate extends ItemPredicate {
 
 		@Override
 		public boolean test(@Nullable NBTBase nbt) {
-			return nbt == null || nbt.hasNoTags();
+			return nbt == null || nbt.func_82582_d();
 		}
 
 	};
@@ -33,14 +33,14 @@ public class EmptyNBTPredicate extends ItemPredicate {
 	public static ItemPredicate factory(@Nullable JsonElement element) {
 		if (element != null && !element.isJsonNull()) {
 			JsonObject jsonobject = JsonUtils.getJsonObject(element, "item");
-			MinMaxBounds minmaxbounds = MinMaxBounds.deserialize(jsonobject.get("count"));
-			MinMaxBounds minmaxbounds1 = MinMaxBounds.deserialize(jsonobject.get("durability"));
+			MinMaxBounds minmaxbounds = MinMaxBounds.func_192515_a(jsonobject.get("count"));
+			MinMaxBounds minmaxbounds1 = MinMaxBounds.func_192515_a(jsonobject.get("durability"));
 			Integer integer = jsonobject.has("data") ? JsonUtils.getInt(jsonobject, "data") : null;
 			Item item = null;
 
 			if (jsonobject.has("item")) {
 				ResourceLocation resourcelocation = new ResourceLocation(JsonUtils.getString(jsonobject, "item"));
-				item = Item.REGISTRY.getObject(resourcelocation);
+				item = Item.field_150901_e.getOrDefault(resourcelocation);
 
 				if (item == null) {
 					throw new JsonSyntaxException("Unknown item id '" + resourcelocation + "'");
@@ -52,10 +52,10 @@ public class EmptyNBTPredicate extends ItemPredicate {
 
 			if (jsonobject.has("potion")) {
 				ResourceLocation resourcelocation1 = new ResourceLocation(JsonUtils.getString(jsonobject, "potion"));
-				if (!PotionType.REGISTRY.containsKey(resourcelocation1)) {
+				if (!PotionType.field_185176_a.func_148741_d(resourcelocation1)) {
 					throw new JsonSyntaxException("Unknown potion '" + resourcelocation1 + "'");
 				}
-				potiontype = PotionType.REGISTRY.getObject(resourcelocation1);
+				potiontype = PotionType.field_185176_a.getOrDefault(resourcelocation1);
 			}
 
 			return new EmptyNBTPredicate(item, integer, minmaxbounds, minmaxbounds1, aenchantmentpredicate, potiontype);

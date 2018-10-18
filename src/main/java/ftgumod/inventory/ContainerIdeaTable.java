@@ -17,6 +17,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 public class ContainerIdeaTable extends Container {
 
@@ -42,12 +43,12 @@ public class ContainerIdeaTable extends Container {
 
 		for (int slotx = 0; slotx < 3; slotx++) {
 			for (int sloty = 0; sloty < 9; sloty++) {
-				addSlotToContainer(new Slot(invPlayer, sloty + slotx * 9 + 9, 8 + sloty * 18, 84 + slotx * 18));
+				addSlot(new Slot(invPlayer, sloty + slotx * 9 + 9, 8 + sloty * 18, 84 + slotx * 18));
 			}
 		}
 
 		for (int slot = 0; slot < 9; slot++) {
-			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
+			addSlot(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
 		craftMatrix = new InventoryCraftingPersistent(tileEntity, combine, 3, 1);
@@ -63,21 +64,21 @@ public class ContainerIdeaTable extends Container {
 	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, OreDictionary.getOres("feather")));
+		addSlot(new SlotSpecial(tileEntity, c, 37, 23, 1, OreDictionary.getOres("feather")));
 		feather = c;
 		c++;
 
-		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(Content.i_parchmentEmpty)));
+		addSlot(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(Content.i_parchmentEmpty)));
 		parchment = c;
 		c++;
 
 		combine = c;
 		for (int slot = 0; slot < 3; slot++) {
-			addSlotToContainer(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1, (Iterable<ItemStack>) null));
+			addSlot(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1, (Predicate<ItemStack>) null));
 			c++;
 		}
 
-		addSlotToContainer(new Slot(new InventoryCraftResult(), c, 124, 35));
+		addSlot(new Slot(new InventoryCraftResult(), c, 124, 35));
 		output = c;
 		c++;
 

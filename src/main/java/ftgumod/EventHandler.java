@@ -48,7 +48,7 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load evt) {
-		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0)
+		if (!evt.getWorld().isRemote && evt.getWorld().dimension.getDimension() == 0)
 			TechnologyManager.INSTANCE.reload(evt.getWorld());
 	}
 
@@ -64,7 +64,7 @@ public class EventHandler {
 				if (blocks.size() > 0)
 					evt.getToolTip().add("");
 			} else if (blocks.size() > 0) {
-				evt.getToolTip().add(I18n.format(Content.i_magnifyingGlass.getUnlocalizedName() + ".shift"));
+				evt.getToolTip().add(I18n.format(Content.i_magnifyingGlass.getTranslationKey() + ".shift"));
 				evt.getToolTip().add("");
 			}
 
@@ -73,8 +73,8 @@ public class EventHandler {
 			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
 				String k = tech.isResearched(evt.getEntityPlayer()) || tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getDisplayInfo().getTitle().getUnformattedText()));
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().getUnformattedText());
+				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getDisplayInfo().getTitle().func_150260_c()));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().func_150260_c());
 			}
 		} else if (item == Content.i_parchmentResearch) {
 			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
@@ -82,8 +82,8 @@ public class EventHandler {
 				boolean can = tech.isResearched(evt.getEntityPlayer()) || tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer());
 				String k = can ? "" : "" + TextFormatting.OBFUSCATED;
 
-				evt.getToolTip().add(TextFormatting.GOLD + tech.getDisplayInfo().getTitle().getUnformattedText());
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().getUnformattedText());
+				evt.getToolTip().add(TextFormatting.GOLD + tech.getDisplayInfo().getTitle().func_150260_c());
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().func_150260_c());
 
 				if (can && !tech.isResearched(evt.getEntityPlayer())) {
 					evt.getToolTip().add("");
@@ -182,7 +182,7 @@ public class EventHandler {
 					if (stack.isEmpty())
 						this.stack = stack;
 					else if (stack != this.stack) {
-						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack, ((InventoryCraftResult) s.inventory).getRecipeUsed());
+						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getInstance().player, stack, ((InventoryCraftResult) s.inventory).getRecipeUsed());
 						MinecraftForge.EVENT_BUS.post(event);
 
 						if (!event.isCanceled())

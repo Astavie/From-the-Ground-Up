@@ -26,24 +26,24 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 	}
 
 	@Override
-	public void add(List<IRecipe> recipes, EntityPlayerMP player) {
+	public void func_193835_a(List<IRecipe> recipes, EntityPlayerMP player) {
 		recipes = new LinkedList<>(recipes);
 		recipes.removeIf(recipe -> TechnologyManager.INSTANCE.getLocked(recipe.getRecipeOutput()) != null);
 		if (!recipes.isEmpty())
-			super.add(recipes, player);
+			super.func_193835_a(recipes, player);
 	}
 
 	@Override
 	public void read(NBTTagCompound tag) {
 		this.isGuiOpen = tag.getBoolean("isGuiOpen");
 		this.isFilteringCraftable = tag.getBoolean("isFilteringCraftable");
-		NBTTagList nbttaglist = tag.getTagList("recipes", 8);
+		NBTTagList nbttaglist = tag.getList("recipes", 8);
 
 		List<IRecipe> list = new ArrayList<>();
 
-		for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-			ResourceLocation resourcelocation = new ResourceLocation(nbttaglist.getStringTagAt(i));
-			IRecipe irecipe = CraftingManager.getRecipe(resourcelocation);
+		for (int i = 0; i < nbttaglist.func_74745_c(); ++i) {
+			ResourceLocation resourcelocation = new ResourceLocation(nbttaglist.getString(i));
+			IRecipe irecipe = CraftingManager.func_193373_a(resourcelocation);
 
 			if (irecipe == null)
 				LOGGER.info("Tried to load unrecognized recipe: {} removed now.", resourcelocation);
@@ -55,11 +55,11 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 			}
 		}
 
-		NBTTagList nbttaglist1 = tag.getTagList("toBeDisplayed", 8);
+		NBTTagList nbttaglist1 = tag.getList("toBeDisplayed", 8);
 
-		for (int j = 0; j < nbttaglist1.tagCount(); ++j) {
-			ResourceLocation resourcelocation1 = new ResourceLocation(nbttaglist1.getStringTagAt(j));
-			IRecipe irecipe1 = CraftingManager.getRecipe(resourcelocation1);
+		for (int j = 0; j < nbttaglist1.func_74745_c(); ++j) {
+			ResourceLocation resourcelocation1 = new ResourceLocation(nbttaglist1.getString(j));
+			IRecipe irecipe1 = CraftingManager.func_193373_a(resourcelocation1);
 
 			if (irecipe1 == null)
 				LOGGER.info("Tried to load unrecognized recipe: {} removed now.", resourcelocation1);
@@ -68,11 +68,11 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 		}
 
 		if (!list.isEmpty())
-			remove(list, player); // Invoke remove method so the client also gets updated
+			func_193834_b(list, player); // Invoke remove method so the client also gets updated
 	}
 
 	public void addRecipes(List<IRecipe> recipes, EntityPlayerMP player) {
-		super.add(recipes, player);
+		super.func_193835_a(recipes, player);
 	}
 
 }

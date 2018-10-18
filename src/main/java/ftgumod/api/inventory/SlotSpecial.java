@@ -5,32 +5,35 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-import java.util.Collections;
+import java.util.function.Predicate;
 
 public class SlotSpecial extends Slot {
 
-	private final Iterable<ItemStack> special;
+	private final Predicate<ItemStack> special;
 	private final int limit;
 
-	public SlotSpecial(IInventory inventory, int index, int x, int y, int limit, Iterable<ItemStack> special) {
+	public SlotSpecial(IInventory inventory, int index, int x, int y, int limit, Predicate<ItemStack> special) {
 		super(inventory, index, x, y);
 		this.special = special;
 		this.limit = limit;
 	}
 
+	public SlotSpecial(IInventory inventory, int index, int x, int y, int limit, Iterable<ItemStack> special) {
+		this(inventory, index, x, y, limit, item -> {
+			for (ItemStack s : special)
+				if (FTGUAPI.stackUtils.isStackOf(s, item))
+					return true;
+			return false;
+		});
+	}
+
 	public SlotSpecial(IInventory inventory, int index, int x, int y, int limit, ItemStack special) {
-		this(inventory, index, x, y, limit, Collections.singleton(special));
+		this(inventory, index, x, y, limit, item -> FTGUAPI.stackUtils.isStackOf(special, item));
 	}
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		if (special == null)
-			return true;
-
-		for (ItemStack s : special)
-			if (FTGUAPI.stackUtils.isStackOf(s, stack))
-				return true;
-		return false;
+		return special == null || special.test(stack);
 	}
 
 	@Override

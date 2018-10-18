@@ -48,7 +48,7 @@ public class UnlockRecipe implements IUnlock {
 
 	@Override
 	public void lock(EntityPlayerMP player) {
-		player.getRecipeBook().remove(getRecipeList(), player);
+		player.getRecipeBook().func_193834_b(getRecipeList(), player);
 	}
 
 }

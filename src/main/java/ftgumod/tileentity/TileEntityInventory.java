@@ -20,12 +20,12 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
+	public void read(NBTTagCompound compound) {
+		super.read(compound);
 
-		NBTTagList items = compound.getTagList("Items", 10);
-		for (int i = 0; i < items.tagCount(); ++i) {
-			NBTTagCompound tag = items.getCompoundTagAt(i);
+		NBTTagList items = compound.getList("Items", 10);
+		for (int i = 0; i < items.func_74745_c(); ++i) {
+			NBTTagCompound tag = items.getCompound(i);
 			byte slot = tag.getByte("Slot");
 			if (slot >= 0 && slot < stack.length)
 				stack[slot] = new ItemStack(tag);
@@ -33,19 +33,19 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound = super.writeToNBT(compound);
+	public NBTTagCompound write(NBTTagCompound compound) {
+		compound = super.write(compound);
 
 		NBTTagList items = new NBTTagList();
 		for (int i = 0; i < stack.length; ++i) {
 			if (stack[i] != null && !stack[i].isEmpty()) {
 				NBTTagCompound nbtTagCompound = new NBTTagCompound();
-				nbtTagCompound.setByte("Slot", (byte) i);
-				stack[i].writeToNBT(nbtTagCompound);
-				items.appendTag(nbtTagCompound);
+				nbtTagCompound.putByte("Slot", (byte) i);
+				stack[i].write(nbtTagCompound);
+				items.func_74742_a(nbtTagCompound);
 			}
 		}
-		compound.setTag("Items", items);
+		compound.put("Items", items);
 
 		return compound;
 	}
@@ -71,7 +71,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 				stack[arg0] = ItemStack.EMPTY;
 				return itemstack;
 			} else {
-				itemstack = stack[arg0].splitStack(arg1);
+				itemstack = stack[arg0].split(arg1);
 
 				if (stack[arg0].getCount() == 0) {
 					stack[arg0] = ItemStack.EMPTY;
@@ -146,7 +146,7 @@ public abstract class TileEntityInventory extends TileEntityLockable implements 
 	}
 
 	@Override
-	public String getName() {
+	public String func_70005_c_() {
 		return name;
 	}
 

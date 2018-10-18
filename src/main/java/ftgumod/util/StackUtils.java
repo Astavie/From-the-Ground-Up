@@ -33,17 +33,17 @@ public class StackUtils implements IStackUtils {
 	}
 
 	public NBTTagCompound getItemData(ItemStack stack) {
-		NBTTagCompound nbt = stack.getTagCompound();
+		NBTTagCompound nbt = stack.getTag();
 		if (nbt == null) {
 			nbt = new NBTTagCompound();
-			stack.setTagCompound(nbt);
+			stack.setTag(nbt);
 		}
 		return nbt;
 	}
 
 	@Override
 	public boolean isStackOf(ItemStack ingredient, ItemStack stack) {
-		return ingredient.getItem() == stack.getItem() && (ingredient.getMetadata() == OreDictionary.WILDCARD_VALUE || ingredient.getMetadata() == stack.getMetadata()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
+		return ingredient.getItem() == stack.getItem() && (ingredient.getDamage() == OreDictionary.WILDCARD_VALUE || ingredient.getDamage() == stack.getDamage()) && (!ingredient.hasTag() || ItemStack.areItemStackTagsEqual(ingredient, stack));
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class StackUtils implements IStackUtils {
 	@Override
 	public ItemStack getParchment(ITechnology tech, Parchment type) {
 		ItemStack stack = new ItemStack(type == Parchment.IDEA ? Content.i_parchmentIdea : Content.i_parchmentResearch);
-		getItemData(stack).setString("FTGU", tech.getRegistryName().toString());
+		getItemData(stack).putString("FTGU", tech.getRegistryName().toString());
 		return stack;
 	}
 

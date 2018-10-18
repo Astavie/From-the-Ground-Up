@@ -7,14 +7,14 @@ import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.api.util.BlockSerializable;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.inventory.InventoryCrafting;
-import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import java.util.*;
@@ -51,7 +51,7 @@ public class PuzzleMatch implements IPuzzle {
 		InventoryCrafting crafting = new InventoryCraftingPersistent(inventory, 0, 3, 3);
 		for (int sloty = 0; sloty < 3; sloty++)
 			for (int slotx = 0; slotx < 3; slotx++)
-				container.addSlotToContainer(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Iterable<ItemStack>) null));
+				container.addSlot(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Iterable<ItemStack>) null));
 	}
 
 	@Override
@@ -85,15 +85,23 @@ public class PuzzleMatch implements IPuzzle {
 	}
 
 	@Override
-	public void onRemove(EntityPlayer player) {
-		for (int i = 0; i < 9; i++) {
-			ItemStack stack = inventory.getStackInSlot(i);
-			if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
-				player.dropItem(stack, false);
-		}
+	public void onRemove(EntityPlayer player, World world, BlockPos pos) {
+		if (player != null) {
+			for (int i = 0; i < 9; i++) {
+				ItemStack stack = inventory.getStackInSlot(i);
+				if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
+					player.dropItem(stack, false);
+			}
+		} else InventoryHelper.dropInventoryItems(world, pos, inventory);
+
 		for (ContainerFTGU container : registry)
 			container.removeSlots(9);
 		registry.clear();
+	}
+
+	@Override
+	public void setHints(List<ITextComponent> hints) {
+		this.hints = hints;
 	}
 
 	@Override
@@ -104,11 +112,11 @@ public class PuzzleMatch implements IPuzzle {
 			int index = slot.getSlotIndex();
 			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && (b || research.hasHint(index))) {
 				ITextComponent hint = hints == null ? research.getHint(index).getObfuscatedHint() : hints.get(index);
-				if (!hint.getUnformattedText().isEmpty())
+				if (!hint.func_150260_c().isEmpty())
 					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 			}
 		} else if (b && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50)
-			gui.drawHoveringText("No can do", mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
+			gui.drawHoveringText(I18n.format("technology.complete.enough"), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 	}
 
 	@Override

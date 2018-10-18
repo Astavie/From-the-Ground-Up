@@ -61,11 +61,11 @@ public class Hint {
 	}
 
 	public ITextComponent getHint(List<BlockSerializable> inspected) {
-		ITextComponent text = this.hint.createCopy();
+		ITextComponent text = this.hint.shallowCopy();
 		for (Pair<BlockPredicate, ITextComponent> hint : hints) {
 			for (BlockSerializable block : inspected) {
 				if (block.test(hint.getLeft())) {
-					ITextComponent sibling = hint.getRight().createCopy();
+					ITextComponent sibling = hint.getRight().shallowCopy();
 					sibling.getStyle().setColor(TextFormatting.GOLD);
 					text.appendText("\n - ");
 					text.appendSibling(sibling);
@@ -76,7 +76,7 @@ public class Hint {
 	}
 
 	public ITextComponent getObfuscatedHint() {
-		ITextComponent hint = this.hint.createCopy();
+		ITextComponent hint = this.hint.shallowCopy();
 		hint.getStyle().setObfuscated(true);
 		return hint;
 	}

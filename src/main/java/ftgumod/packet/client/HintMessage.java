@@ -1,6 +1,5 @@
 package ftgumod.packet.client;
 
-import ftgumod.api.technology.puzzle.PuzzleMatch;
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.MessageHandler;
 import io.netty.buffer.ByteBuf;
@@ -54,7 +53,7 @@ public class HintMessage implements IMessage {
 		@Override
 		public IMessage handleMessage(EntityPlayer player, HintMessage message) {
 			if (player.openContainer instanceof ContainerResearchTable)
-				((PuzzleMatch) ((ContainerResearchTable) player.openContainer).invInput.puzzle).hints = message.hints;
+				((ContainerResearchTable) player.openContainer).invInput.puzzle.setHints(message.hints);
 			return null;
 		}
 
