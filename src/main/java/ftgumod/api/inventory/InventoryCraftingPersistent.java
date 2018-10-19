@@ -29,7 +29,7 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		return getStackInSlot(index + offset).split(count);
+		return getStackInSlot(index + offset).splitStack(count);
 	}
 
 	@Override

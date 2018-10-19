@@ -51,7 +51,7 @@ public class PuzzleMatch implements IPuzzle {
 		InventoryCrafting crafting = new InventoryCraftingPersistent(inventory, 0, 3, 3);
 		for (int sloty = 0; sloty < 3; sloty++)
 			for (int slotx = 0; slotx < 3; slotx++)
-				container.addSlot(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Iterable<ItemStack>) null));
+				container.addSlotToContainer(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Iterable<ItemStack>) null));
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class PuzzleMatch implements IPuzzle {
 			int index = slot.getSlotIndex();
 			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && (b || research.hasHint(index))) {
 				ITextComponent hint = hints == null ? research.getHint(index).getObfuscatedHint() : hints.get(index);
-				if (!hint.func_150260_c().isEmpty())
+				if (!hint.getUnformattedText().isEmpty())
 					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 			}
 		} else if (b && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50)

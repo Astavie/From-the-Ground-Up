@@ -26,12 +26,12 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void displayToastTechnology(ITechnology technology) {
 		if (technology.getDisplayInfo().shouldShowToast())
-			Minecraft.getInstance().getToastGui().add(new ToastTechnology(technology));
+			Minecraft.getMinecraft().getToastGui().add(new ToastTechnology(technology));
 	}
 
 	@Override
 	public void clearToasts() {
-		Minecraft.getInstance().getToastGui().clear();
+		Minecraft.getMinecraft().getToastGui().clear();
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public EntityPlayer getPlayerEntity(MessageContext ctx) {
-		return ctx.side.isClient() ? Minecraft.getInstance().player : super.getPlayerEntity(ctx);
+		return ctx.side.isClient() ? Minecraft.getMinecraft().player : super.getPlayerEntity(ctx);
 	}
 
 	@Override
@@ -49,23 +49,23 @@ public class ProxyClient extends ProxyCommon {
 		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
 			super.autoResearch(tech);
 		} else {
-			CapabilityTechnology.ITechnology cap = Minecraft.getInstance().player.getCapability(CapabilityTechnology.TECH_CAP, null);
+			CapabilityTechnology.ITechnology cap = Minecraft.getMinecraft().player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			cap.setResearched(tech.getRegistryName().toString());
 		}
 	}
 
 	@Override
 	public void init(FMLInitializationEvent event) {
-		RenderItem renderItem = Minecraft.getInstance().getItemRenderer();
+		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-		renderItem.getItemModelMesher().func_178086_a(Item.getItemFromBlock(Content.b_ideaTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_ideaTable, "inventory"));
-		renderItem.getItemModelMesher().func_178086_a(Item.getItemFromBlock(Content.b_researchTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchTable, "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Content.b_ideaTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_ideaTable, "inventory"));
+		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Content.b_researchTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchTable, "inventory"));
 
-		renderItem.getItemModelMesher().func_178086_a(Content.i_parchmentEmpty, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentEmpty, "inventory"));
-		renderItem.getItemModelMesher().func_178086_a(Content.i_parchmentIdea, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentIdea, "inventory"));
-		renderItem.getItemModelMesher().func_178086_a(Content.i_parchmentResearch, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentResearch, "inventory"));
-		renderItem.getItemModelMesher().func_178086_a(Content.i_researchBook, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchBook, "inventory"));
-		renderItem.getItemModelMesher().func_178086_a(Content.i_magnifyingGlass, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_magnifyingGlass, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_parchmentEmpty, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentEmpty, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_parchmentIdea, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentIdea, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_parchmentResearch, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentResearch, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_researchBook, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchBook, "inventory"));
+		renderItem.getItemModelMesher().register(Content.i_magnifyingGlass, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_magnifyingGlass, "inventory"));
 	}
 
 }

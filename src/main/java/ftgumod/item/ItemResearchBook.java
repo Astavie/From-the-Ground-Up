@@ -17,16 +17,16 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemResearchBook extends Item {
 
 	public ItemResearchBook(String name) {
-		func_77655_b(name);
-		func_77637_a(CreativeTabs.MISC);
-		func_77625_d(1);
+		setTranslationKey(name);
+		setCreativeTab(CreativeTabs.MISC);
+		setMaxStackSize(1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (world.isRemote && TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(player)))
-			Minecraft.getInstance().displayGuiScreen(new GuiResearchBook(player));
+			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 

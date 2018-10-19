@@ -90,9 +90,9 @@ public class Technology implements ITechnology {
 	void updateDisplayText() {
 		this.displayText = new TextComponentString("[");
 		this.displayText.getStyle().setColor(display.getFrame().getFormat());
-		ITextComponent itextcomponent = display.getTitle().shallowCopy();
+		ITextComponent itextcomponent = display.getTitle().createCopy();
 		ITextComponent itextcomponent1 = new TextComponentString("");
-		ITextComponent itextcomponent2 = itextcomponent.shallowCopy();
+		ITextComponent itextcomponent2 = itextcomponent.createCopy();
 		itextcomponent2.getStyle().setColor(display.getFrame().getFormat());
 		itextcomponent1.appendSibling(itextcomponent2);
 		itextcomponent1.appendText("\n");

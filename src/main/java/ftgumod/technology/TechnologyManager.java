@@ -393,7 +393,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		if (book instanceof RecipeBookServerImpl)
 			((RecipeBookServerImpl) book).addRecipes(recipes, player);
 		else
-			book.func_193835_a(recipes, player);
+			book.add(recipes, player);
 	}
 
 	@Override

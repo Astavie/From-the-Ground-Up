@@ -10,8 +10,8 @@ import java.util.List;
 public abstract class ContainerFTGU extends Container {
 
 	@Override
-	public Slot addSlot(Slot slotIn) {
-		return super.addSlot(slotIn);
+	public Slot addSlotToContainer(Slot slotIn) {
+		return super.addSlotToContainer(slotIn);
 	}
 
 	public void removeSlots(int size) {

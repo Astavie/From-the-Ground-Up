@@ -39,10 +39,10 @@ public class BlockPredicate {
 		Block block = null;
 		if (object.has("block")) {
 			ResourceLocation location = new ResourceLocation(JsonUtils.getString(object, "block"));
-			if (!Block.field_149771_c.func_148741_d(location))
+			if (!Block.REGISTRY.containsKey(location))
 				throw new JsonSyntaxException("Unknown block type '" + location + "'");
 
-			block = Block.field_149771_c.getOrDefault(location);
+			block = Block.REGISTRY.getObject(location);
 		}
 
 		Map<IProperty<?>, Object> properties = null;
@@ -50,7 +50,7 @@ public class BlockPredicate {
 			if (block == null)
 				throw new JsonSyntaxException("Can't define block state without a specific block type");
 
-			BlockStateContainer blockState = block.getStateContainer();
+			BlockStateContainer blockState = block.getBlockState();
 			IProperty property;
 
 			//noinspection Guava
@@ -59,12 +59,12 @@ public class BlockPredicate {
 				Map.Entry<String, JsonElement> entry = var6.next();
 				property = blockState.getProperty(entry.getKey());
 				if (property == null)
-					throw new JsonSyntaxException("Unknown block state property '" + entry.getKey() + "' for block '" + Block.field_149771_c.getKey(block) + "'");
+					throw new JsonSyntaxException("Unknown block state property '" + entry.getKey() + "' for block '" + Block.REGISTRY.getNameForObject(block) + "'");
 
 				String name = JsonUtils.getString(entry.getValue(), entry.getKey());
 				optional = property.parseValue(name);
 				if (!optional.isPresent())
-					throw new JsonSyntaxException("Invalid block state value '" + name + "' for property '" + entry.getKey() + "' on block '" + Block.field_149771_c.getKey(block) + "'");
+					throw new JsonSyntaxException("Invalid block state value '" + name + "' for property '" + entry.getKey() + "' on block '" + Block.REGISTRY.getNameForObject(block) + "'");
 
 				if (properties == null)
 					properties = Maps.newHashMap();
@@ -82,7 +82,7 @@ public class BlockPredicate {
 			return false;
 		if (this.properties != null)
 			for (Map.Entry<IProperty<?>, Object> entry : this.properties.entrySet())
-				if (state.get(entry.getKey()) != entry.getValue())
+				if (state.getValue(entry.getKey()) != entry.getValue())
 					return false;
 		return location.test(world, pos.getX(), pos.getY(), pos.getZ());
 	}

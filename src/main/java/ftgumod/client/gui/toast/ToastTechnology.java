@@ -24,11 +24,11 @@ public class ToastTechnology implements IToast {
 	@Override
 	public Visibility draw(GuiToast gui, long delta) {
 		gui.getMinecraft().getTextureManager().bindTexture(TEXTURE_TOASTS);
-		GlStateManager.color3f(1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F);
 		gui.drawTexturedModalRect(0, 0, 0, 0, 160, 32);
 
 		String display = I18n.format("technology.toast");
-		String title = tech.getDisplayInfo().getTitle().func_150260_c();
+		String title = tech.getDisplayInfo().getTitle().getUnformattedText();
 
 		List<String> list = gui.getMinecraft().fontRenderer.listFormattedStringToWidth(title, 125);
 
@@ -51,7 +51,7 @@ public class ToastTechnology implements IToast {
 		}
 
 		RenderHelper.enableGUIStandardItemLighting();
-		gui.getMinecraft().getItemRenderer().renderItemAndEffectIntoGUI(null, tech.getDisplayInfo().getIcon(), 8, 8);
+		gui.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(null, tech.getDisplayInfo().getIcon(), 8, 8);
 
 		return delta >= 5000L ? IToast.Visibility.HIDE : IToast.Visibility.SHOW;
 	}

@@ -34,21 +34,21 @@ import java.util.List;
 public class ItemMagnifyingGlass extends Item {
 
 	public ItemMagnifyingGlass(String name) {
-		func_77655_b(name);
-		func_77637_a(CreativeTabs.TOOLS);
-		func_77625_d(1);
+		setTranslationKey(name);
+		setCreativeTab(CreativeTabs.TOOLS);
+		setMaxStackSize(1);
 	}
 
 	public static List<BlockSerializable> getInspected(ItemStack item) {
 		List<BlockSerializable> list = new LinkedList<>();
-		NBTTagList blocks = StackUtils.INSTANCE.getItemData(item).getList("FTGU", NBT.TAG_COMPOUND);
-		for (int i = 0; i < blocks.func_74745_c(); i++)
-			list.add(new BlockSerializable(blocks.getCompound(i)));
+		NBTTagList blocks = StackUtils.INSTANCE.getItemData(item).getTagList("FTGU", NBT.TAG_COMPOUND);
+		for (int i = 0; i < blocks.tagCount(); i++)
+			list.add(new BlockSerializable(blocks.getCompoundTagAt(i)));
 		return list;
 	}
 
 	@Override
-	public EnumActionResult func_180614_a(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
 		if (player.isSneaking()) {
 			if (!world.isRemote) {
 				ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
@@ -80,9 +80,9 @@ public class ItemMagnifyingGlass extends Item {
 					world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.75F, 1.0F);
 
 					NBTTagCompound tag = StackUtils.INSTANCE.getItemData(item);
-					NBTTagList nbt = tag.getList("FTGU", NBT.TAG_COMPOUND);
-					nbt.func_74742_a(block.serialize());
-					tag.put("FTGU", nbt);
+					NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);
+					nbt.appendTag(block.serialize());
+					tag.setTag("FTGU", nbt);
 				}
 			}
 			return EnumActionResult.SUCCESS;

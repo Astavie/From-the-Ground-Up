@@ -48,12 +48,12 @@ public class ContainerResearchTable extends ContainerFTGU {
 
 		for (int sloty = 0; sloty < 3; sloty++) {
 			for (int slotx = 0; slotx < 9; slotx++) {
-				addSlot(new Slot(invPlayer, slotx + sloty * 9 + 9, 8 + slotx * 18, 84 + sloty * 18));
+				addSlotToContainer(new Slot(invPlayer, slotx + sloty * 9 + 9, 8 + slotx * 18, 84 + sloty * 18));
 			}
 		}
 
 		for (int slot = 0; slot < 9; slot++) {
-			addSlot(new Slot(invPlayer, slot, 8 + slot * 18, 142));
+			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
 		puzzle = sizeInventory + 36;
@@ -74,19 +74,19 @@ public class ContainerResearchTable extends ContainerFTGU {
 	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlot(new SlotCrafting(this, tileEntity, c, 8, 46, 1, OreDictionary.getOres("feather")));
+		addSlotToContainer(new SlotCrafting(this, tileEntity, c, 8, 46, 1, OreDictionary.getOres("feather")));
 		feather = c;
 		c++;
 
-		addSlot(new SlotCrafting(this, tileEntity, c, 8, 24, 1, new ItemStack(Content.i_parchmentIdea)));
+		addSlotToContainer(new SlotCrafting(this, tileEntity, c, 8, 24, 1, new ItemStack(Content.i_parchmentIdea)));
 		parchment = c;
 		c++;
 
-		addSlot(new SlotCrafting(this, tileEntity, c, 150, 35, 1, new ItemStack(Content.i_magnifyingGlass)));
+		addSlotToContainer(new SlotCrafting(this, tileEntity, c, 150, 35, 1, new ItemStack(Content.i_magnifyingGlass)));
 		glass = c;
 		c++;
 
-		addSlot(new Slot(result, c, 124, 35));
+		addSlotToContainer(new Slot(result, c, 124, 35));
 		output = c;
 		c++;
 

@@ -1,12 +1,14 @@
 package ftgumod.item;
 
+import ftgumod.Content;
 import net.minecraft.item.Item;
 
 public class ItemParchmentIdea extends Item {
 
 	public ItemParchmentIdea(String name) {
-		func_77655_b(name);
-		func_77625_d(1);
+		setTranslationKey(name);
+		setMaxStackSize(1);
+		setContainerItem(Content.i_parchmentEmpty);
 	}
 
 }

@@ -18,9 +18,9 @@ import net.minecraft.world.World;
 public class ItemParchmentResearch extends Item {
 
 	public ItemParchmentResearch(String name) {
-		func_77655_b(name);
-		func_77625_d(1);
-		func_77642_a(Content.i_parchmentEmpty);
+		setTranslationKey(name);
+		setMaxStackSize(1);
+		setContainerItem(Content.i_parchmentEmpty);
 	}
 
 	@Override

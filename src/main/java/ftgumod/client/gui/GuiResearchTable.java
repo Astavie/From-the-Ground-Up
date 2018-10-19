@@ -23,24 +23,24 @@ public class GuiResearchTable extends GuiContainer {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		String s = Content.b_researchTable.func_149732_F();
+		String s = Content.b_researchTable.getLocalizedName();
 		fontRenderer.drawStringWithShadow(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		fontRenderer.drawStringWithShadow(player.getDisplayName().func_150260_c(), 8, ySize - 96 + 2, 4210752);
+		fontRenderer.drawStringWithShadow(player.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
 		if (tile.puzzle != null)
 			tile.puzzle.drawForeground(this, mouseX, mouseY);
 	}
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float arg0, int mouseX, int mouseY) {
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 

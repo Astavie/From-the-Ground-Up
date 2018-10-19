@@ -43,12 +43,12 @@ public class ContainerIdeaTable extends Container {
 
 		for (int slotx = 0; slotx < 3; slotx++) {
 			for (int sloty = 0; sloty < 9; sloty++) {
-				addSlot(new Slot(invPlayer, sloty + slotx * 9 + 9, 8 + sloty * 18, 84 + slotx * 18));
+				addSlotToContainer(new Slot(invPlayer, sloty + slotx * 9 + 9, 8 + sloty * 18, 84 + slotx * 18));
 			}
 		}
 
 		for (int slot = 0; slot < 9; slot++) {
-			addSlot(new Slot(invPlayer, slot, 8 + slot * 18, 142));
+			addSlotToContainer(new Slot(invPlayer, slot, 8 + slot * 18, 142));
 		}
 
 		craftMatrix = new InventoryCraftingPersistent(tileEntity, combine, 3, 1);
@@ -64,21 +64,21 @@ public class ContainerIdeaTable extends Container {
 	private int addSlots(TileEntityInventory tileEntity) {
 		int c = 0;
 
-		addSlot(new SlotSpecial(tileEntity, c, 37, 23, 1, OreDictionary.getOres("feather")));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 37, 23, 1, OreDictionary.getOres("feather")));
 		feather = c;
 		c++;
 
-		addSlot(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(Content.i_parchmentEmpty)));
+		addSlotToContainer(new SlotSpecial(tileEntity, c, 59, 23, 64, new ItemStack(Content.i_parchmentEmpty)));
 		parchment = c;
 		c++;
 
 		combine = c;
 		for (int slot = 0; slot < 3; slot++) {
-			addSlot(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1, (Predicate<ItemStack>) null));
+			addSlotToContainer(new SlotSpecial(tileEntity, c, 30 + slot * 18, 45, 1, (Predicate<ItemStack>) null));
 			c++;
 		}
 
-		addSlot(new Slot(new InventoryCraftResult(), c, 124, 35));
+		addSlotToContainer(new Slot(new InventoryCraftResult(), c, 124, 35));
 		output = c;
 		c++;
 

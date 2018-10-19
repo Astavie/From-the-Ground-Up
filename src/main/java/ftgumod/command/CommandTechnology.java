@@ -27,30 +27,30 @@ public class CommandTechnology extends CommandBase {
 	}
 
 	@Override
-	public String func_71517_b() {
+	public String getName() {
 		return "technology";
 	}
 
 	@Override
-	public int func_82362_a() {
+	public int getRequiredPermissionLevel() {
 		return 2;
 	}
 
 	@Override
-	public String func_71518_a(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "commands.technology.usage";
 	}
 
 	@Override
-	public void func_184881_a(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length == 0)
-			throw new WrongUsageException(func_71518_a(sender));
+			throw new WrongUsageException(getUsage(sender));
 		else {
 			if (args[0].equals("reload")) {
 				if (args.length == 1) {
 					TechnologyManager.INSTANCE.reload(sender.getServer().worlds[0]);
 					PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
-					func_152373_a(sender, this, "commands.technology.reload.success");
+					notifyCommandListener(sender, this, "commands.technology.reload.success");
 				} else
 					throw new WrongUsageException("commands.technology.reload.usage");
 			} else {
@@ -59,7 +59,7 @@ public class CommandTechnology extends CommandBase {
 					if (args.length < 3)
 						throw type.wrongUsage();
 
-					EntityPlayerMP player = func_184888_a(server, sender, args[1]);
+					EntityPlayerMP player = getPlayer(server, sender, args[1]);
 					Mode mode = Mode.byName(args[2]);
 
 					if (mode == null)
@@ -67,11 +67,11 @@ public class CommandTechnology extends CommandBase {
 
 					PacketDispatcher.sendTo(new TechnologyMessage(player, true, perform(sender, args, player, type, mode)), player);
 				} else if (!args[0].equals("test"))
-					throw new WrongUsageException(func_71518_a(sender));
+					throw new WrongUsageException(getUsage(sender));
 				else if (args.length == 3)
-					testTechnology(sender, func_184888_a(server, sender, args[1]), findTechnology(args[2]));
+					testTechnology(sender, getPlayer(server, sender, args[1]), findTechnology(args[2]));
 				else if (args.length == 4)
-					testCriterion(sender, func_184888_a(server, sender, args[1]), findTechnology(args[2]), args[3]);
+					testCriterion(sender, getPlayer(server, sender, args[1]), findTechnology(args[2]), args[3]);
 				else
 					throw new WrongUsageException("commands.technology.test.usage");
 			}
@@ -102,7 +102,7 @@ public class CommandTechnology extends CommandBase {
 				if (!type.performCriterion(player, tech, args[4]))
 					throw new CommandException(type.translation + ".criterion.failed", tech.getRegistryName(), player.getDisplayName(), args[4]);
 
-				func_152373_a(sender, this, type.translation + ".criterion.success", tech.getRegistryName(), player.getDisplayName(), args[4]);
+				notifyCommandListener(sender, this, type.translation + ".criterion.success", tech.getRegistryName(), player.getDisplayName(), args[4]);
 			} else {
 				if (args.length != 4)
 					throw mode.usage(type);
@@ -129,48 +129,48 @@ public class CommandTechnology extends CommandBase {
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 		if (!progress.isObtained())
 			throw new CommandException("commands.technology.test.criterion.notDone", player.getDisplayName(), tech.getRegistryName(), criterion);
-		func_152373_a(sender, this, "commands.technology.test.criterion.success", player.getDisplayName(), tech.getRegistryName(), criterion);
+		notifyCommandListener(sender, this, "commands.technology.test.criterion.success", player.getDisplayName(), tech.getRegistryName(), criterion);
 	}
 
 	private void testTechnology(ICommandSender sender, EntityPlayer player, Technology tech) throws CommandException {
 		if (!tech.isResearched(player))
 			throw new CommandException("commands.technology.test.technology.notDone", player.getDisplayName(), tech.getRegistryName());
-		func_152373_a(sender, this, "commands.technology.test.technology.success", player.getDisplayName(), tech.getRegistryName());
+		notifyCommandListener(sender, this, "commands.technology.test.technology.success", player.getDisplayName(), tech.getRegistryName());
 	}
 
 	@Override
-	public List<String> func_184883_a(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		if (args.length == 1)
-			return func_71530_a(args, "grant", "revoke", "test", "reload");
+			return getListOfStringsMatchingLastWord(args, "grant", "revoke", "test", "reload");
 		else {
 			ActionType type = ActionType.byName(args[0]);
 			if (type != null) {
 				if (args.length == 2)
-					return func_71530_a(args, server.getOnlinePlayerNames());
+					return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 				if (args.length == 3)
-					return func_71530_a(args, "only", "through", "from", "until", "everything");
+					return getListOfStringsMatchingLastWord(args, "only", "through", "from", "until", "everything");
 
 				Mode mode = Mode.byName(args[2]);
 				if (mode != null && mode != Mode.EVERYTHING) {
 					if (args.length == 4)
-						return func_175762_a(args, TechnologyManager.INSTANCE.getRegistryNames());
+						return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.getRegistryNames());
 					if (args.length == 5 && mode == Mode.ONLY) {
 						Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(args[3]));
 						if (tech != null)
-							return func_175762_a(args, tech.getCriteria().keySet());
+							return getListOfStringsMatchingLastWord(args, tech.getCriteria().keySet());
 					}
 				}
 			}
 
 			if (args[0].equals("test")) {
 				if (args.length == 2)
-					return func_71530_a(args, server.getOnlinePlayerNames());
+					return getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames());
 				if (args.length == 3)
-					return func_175762_a(args, TechnologyManager.INSTANCE.getRegistryNames());
+					return getListOfStringsMatchingLastWord(args, TechnologyManager.INSTANCE.getRegistryNames());
 				if (args.length == 4) {
 					Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(args[2]));
 					if (tech != null)
-						return func_175762_a(args, tech.getCriteria().keySet());
+						return getListOfStringsMatchingLastWord(args, tech.getCriteria().keySet());
 				}
 			}
 
@@ -193,7 +193,7 @@ public class CommandTechnology extends CommandBase {
 	}
 
 	@Override
-	public boolean func_82358_a(String[] args, int index) {
+	public boolean isUsernameIndex(String[] args, int index) {
 		return args.length > 1 && ("grant".equals(args[0]) || "revoke".equals(args[0]) || "test".equals(args[0])) && index == 1;
 	}
 
@@ -293,7 +293,7 @@ public class CommandTechnology extends CommandBase {
 		}
 
 		private void success(ICommandSender sender, ICommand command, ActionType type, Object... args) {
-			func_152373_a(sender, command, type.translation + "." + this.name + ".success", args);
+			notifyCommandListener(sender, command, type.translation + "." + this.name + ".success", args);
 		}
 
 	}
