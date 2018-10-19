@@ -463,7 +463,7 @@ public class GuiResearchBook extends GuiScreen {
 					for (ItemStack stack : (NonNullList<ItemStack>) nonNullList)
 						list[pp++] = stack;
 
-				long tick = mc.world.getTotalWorldTime() / 30;
+				long tick = mc.world.getWorldTime() / 30;
 				int index = (int) (tick % list.length);
 
 				ItemStack item = list[index];
@@ -545,8 +545,8 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			if (state) {
-				String s = selected.getDisplayInfo().getTitle().getFormattedText();
-				String s1 = selected.getDisplayInfo().getDescription().getFormattedText();
+				String s = selected.getDisplayInfo().getTitle().getUnformattedText();
+				String s1 = selected.getDisplayInfo().getDescription().getUnformattedText();
 
 				int children = 0;
 				for (ITechnology child : selected.getChildren())
@@ -569,11 +569,11 @@ public class GuiResearchBook extends GuiScreen {
 					fontRenderer.drawStringWithShadow(I18n.format(children == 1 ? "technology.tab" : "technology.tabs"), i7, k7 + i9 + 4, 0xffff5555);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getDisplayInfo().getTitle().getFormattedText();
+				String s1 = selected.getDisplayInfo().getTitle().getUnformattedText();
 				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
 				fontRenderer.drawStringWithShadow(s1, x1, l + 22, 0xffffff);
 
-				String s2 = selected.getDisplayInfo().getDescription().getFormattedText();
+				String s2 = selected.getDisplayInfo().getDescription().getUnformattedText();
 				int x2 = width / 2;
 				int y2 = l + 32;
 

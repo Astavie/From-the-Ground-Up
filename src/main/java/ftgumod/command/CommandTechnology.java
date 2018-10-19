@@ -85,8 +85,8 @@ public class CommandTechnology extends CommandBase {
 				Set<Technology> set = new LinkedHashSet(TechnologyManager.INSTANCE.getTechnologies());
 				type.perform(player, set);
 				if (set.isEmpty())
-					throw mode.fail(type, player.getDisplayName());
-				mode.success(sender, this, type, player.getDisplayName(), set.size());
+					throw mode.fail(type, player.getName());
+				mode.success(sender, this, type, player.getName(), set.size());
 
 				if (type == ActionType.GRANT)
 					return set.toArray(new Technology[set.size()]);
@@ -100,9 +100,9 @@ public class CommandTechnology extends CommandBase {
 				if (!tech.getCriteria().keySet().contains(args[4]))
 					throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), args[4]);
 				if (!type.performCriterion(player, tech, args[4]))
-					throw new CommandException(type.translation + ".criterion.failed", tech.getRegistryName(), player.getDisplayName(), args[4]);
+					throw new CommandException(type.translation + ".criterion.failed", tech.getRegistryName(), player.getName(), args[4]);
 
-				notifyCommandListener(sender, this, type.translation + ".criterion.success", tech.getRegistryName(), player.getDisplayName(), args[4]);
+				notifyCommandListener(sender, this, type.translation + ".criterion.success", tech.getRegistryName(), player.getName(), args[4]);
 			} else {
 				if (args.length != 4)
 					throw mode.usage(type);
@@ -110,8 +110,8 @@ public class CommandTechnology extends CommandBase {
 				Set<Technology> set = getTechnologies(tech, mode);
 				type.perform(player, set);
 				if (set.isEmpty())
-					throw mode.fail(type, tech.getRegistryName(), player.getDisplayName());
-				mode.success(sender, this, type, tech.getRegistryName(), player.getDisplayName(), set.size());
+					throw mode.fail(type, tech.getRegistryName(), player.getName());
+				mode.success(sender, this, type, tech.getRegistryName(), player.getName(), set.size());
 
 				if (type == ActionType.GRANT)
 					return set.toArray(new Technology[set.size()]);
@@ -128,14 +128,14 @@ public class CommandTechnology extends CommandBase {
 		if (progress == null)
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 		if (!progress.isObtained())
-			throw new CommandException("commands.technology.test.criterion.notDone", player.getDisplayName(), tech.getRegistryName(), criterion);
-		notifyCommandListener(sender, this, "commands.technology.test.criterion.success", player.getDisplayName(), tech.getRegistryName(), criterion);
+			throw new CommandException("commands.technology.test.criterion.notDone", player.getName(), tech.getRegistryName(), criterion);
+		notifyCommandListener(sender, this, "commands.technology.test.criterion.success", player.getName(), tech.getRegistryName(), criterion);
 	}
 
 	private void testTechnology(ICommandSender sender, EntityPlayer player, Technology tech) throws CommandException {
 		if (!tech.isResearched(player))
-			throw new CommandException("commands.technology.test.technology.notDone", player.getDisplayName(), tech.getRegistryName());
-		notifyCommandListener(sender, this, "commands.technology.test.technology.success", player.getDisplayName(), tech.getRegistryName());
+			throw new CommandException("commands.technology.test.technology.notDone", player.getName(), tech.getRegistryName());
+		notifyCommandListener(sender, this, "commands.technology.test.technology.success", player.getName(), tech.getRegistryName());
 	}
 
 	@Override

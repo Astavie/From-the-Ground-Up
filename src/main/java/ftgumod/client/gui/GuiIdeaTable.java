@@ -31,7 +31,7 @@ public class GuiIdeaTable extends GuiContainer {
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String s = Content.b_ideaTable.getLocalizedName();
 		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		fontRenderer.drawString(player.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
+		fontRenderer.drawString(player.getDisplayName().getUnformattedText(), 8, ySize - 96 + 2, 4210752);
 	}
 
 	@Override

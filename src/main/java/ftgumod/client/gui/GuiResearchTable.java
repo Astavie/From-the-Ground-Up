@@ -32,8 +32,8 @@ public class GuiResearchTable extends GuiContainer {
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		String s = Content.b_researchTable.getLocalizedName();
-		fontRenderer.drawStringWithShadow(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-		fontRenderer.drawStringWithShadow(player.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
+		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+		fontRenderer.drawString(player.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
 		if (tile.puzzle != null)
 			tile.puzzle.drawForeground(this, mouseX, mouseY);
 	}

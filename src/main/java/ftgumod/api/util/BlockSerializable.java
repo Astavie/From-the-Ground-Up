@@ -59,7 +59,7 @@ public class BlockSerializable {
 
 	public NBTTagCompound serialize() {
 		NBTTagCompound compound = new NBTTagCompound();
-		compound.setString("dimension", dimension.name());
+		compound.setString("dimension", dimension.getName());
 		compound.setInteger("x", pos.getX());
 		compound.setInteger("y", pos.getY());
 		compound.setInteger("z", pos.getZ());

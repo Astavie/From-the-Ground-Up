@@ -33,18 +33,18 @@ public class ToastTechnology implements IToast {
 		List<String> list = gui.getMinecraft().fontRenderer.listFormattedStringToWidth(title, 125);
 
 		if (list.size() == 1) {
-			gui.getMinecraft().fontRenderer.drawStringWithShadow(display, 30, 7, 0xFFFF00);
-			gui.getMinecraft().fontRenderer.drawStringWithShadow(title, 30, 18, -1);
+			gui.getMinecraft().fontRenderer.drawString(display, 30, 7, 0xFFFF00);
+			gui.getMinecraft().fontRenderer.drawString(title, 30, 18, -1);
 		} else {
 			if (delta < 1500L) {
 				int k = MathHelper.floor(MathHelper.clamp((float) (1500L - delta) / 300.0F, 0.0F, 1.0F) * 255.0F) << 24 | 0x400000;
-				gui.getMinecraft().fontRenderer.drawStringWithShadow(display, 30, 11, 0xFFFF00 | k);
+				gui.getMinecraft().fontRenderer.drawString(display, 30, 11, 0xFFFF00 | k);
 			} else {
 				int i1 = MathHelper.floor(MathHelper.clamp((float) (delta - 1500L) / 300.0F, 0.0F, 1.0F) * 252.0F) << 24 | 0x400000;
 				int l = 16 - list.size() * gui.getMinecraft().fontRenderer.FONT_HEIGHT / 2;
 
 				for (String s : list) {
-					gui.getMinecraft().fontRenderer.drawStringWithShadow(s, 30, l, 0xFFFFFF | i1);
+					gui.getMinecraft().fontRenderer.drawString(s, 30, l, 0xFFFFFF | i1);
 					l += gui.getMinecraft().fontRenderer.FONT_HEIGHT;
 				}
 			}
