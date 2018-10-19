@@ -1,7 +1,7 @@
 package ftgumod.inventory;
 
 import ftgumod.Content;
-import ftgumod.api.inventory.ContainerFTGU;
+import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.packet.PacketDispatcher;
@@ -24,7 +24,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
 
-public class ContainerResearchTable extends ContainerFTGU {
+public class ContainerResearchTable extends ContainerResearch {
 
 	public final TileEntityResearchTable invInput;
 
@@ -175,13 +175,13 @@ public class ContainerResearchTable extends ContainerFTGU {
 	}
 
 	@Override
-	public boolean isRemote() {
+	public boolean isClient() {
 		return invInput.getWorld().isRemote;
 	}
 
 	@Override
-	public InventoryPlayer getInventoryPlayer() {
-		return invPlayer;
+	public EntityPlayer getPlayer() {
+		return invPlayer.player;
 	}
 
 	@Override

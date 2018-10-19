@@ -12,6 +12,8 @@ public interface IStackUtils {
 
 	boolean isStackOf(ItemStack ingredient, ItemStack stack);
 
+	boolean isEqual(ItemStack s1, ItemStack s2);
+
 	ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context);
 
 	/**

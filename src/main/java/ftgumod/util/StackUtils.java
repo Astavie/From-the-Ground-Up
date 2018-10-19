@@ -47,6 +47,11 @@ public class StackUtils implements IStackUtils {
 	}
 
 	@Override
+	public boolean isEqual(ItemStack s1, ItemStack s2) {
+		return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage() && ItemStack.areItemStackTagsEqual(s1, s2);
+	}
+
+	@Override
 	public ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context) {
 		Set<ItemPredicate> predicates = new HashSet<>();
 

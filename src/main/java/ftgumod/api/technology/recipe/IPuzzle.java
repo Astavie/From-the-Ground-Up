@@ -1,6 +1,6 @@
 package ftgumod.api.technology.recipe;
 
-import ftgumod.api.inventory.ContainerFTGU;
+import ftgumod.api.inventory.ContainerResearch;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -28,13 +28,13 @@ public interface IPuzzle {
 	 * Fired when this technology is placed in its slot.
 	 * Use this, for example, to add slots.
 	 */
-	void onStart(ContainerFTGU container);
+	void onStart(ContainerResearch container);
 
 	/**
 	 * Fired when the internal inventory of the container changes.
 	 * Use this, for example, to send data to the client.
 	 */
-	void onInventoryChange(ContainerFTGU container);
+	void onInventoryChange(ContainerResearch container);
 
 	/**
 	 * Fired when a player clicks on the output slot to finish a research.

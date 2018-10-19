@@ -1,7 +1,7 @@
 package ftgumod.api.technology.puzzle;
 
 import ftgumod.api.FTGUAPI;
-import ftgumod.api.inventory.ContainerFTGU;
+import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.technology.recipe.IPuzzle;
@@ -17,14 +17,16 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
+import javax.annotation.Nullable;
 import java.util.*;
+import java.util.function.Predicate;
 
 public class PuzzleMatch implements IPuzzle {
 
-	public final IInventory inventory = new InventoryBasic(null, false, 9);
-	private final List<ContainerFTGU> registry = new LinkedList<>();
+	private final IInventory inventory = new InventoryBasic(null, false, 9);
+	private final List<ContainerResearch> registry = new LinkedList<>();
 	private final ResearchMatch research;
-	public List<ITextComponent> hints;
+	private List<ITextComponent> hints;
 
 	public PuzzleMatch(ResearchMatch research) {
 		this.research = research;
@@ -46,17 +48,17 @@ public class PuzzleMatch implements IPuzzle {
 	}
 
 	@Override
-	public void onStart(ContainerFTGU container) {
+	public void onStart(ContainerResearch container) {
 		registry.add(container);
 		InventoryCrafting crafting = new InventoryCraftingPersistent(inventory, 0, 3, 3);
 		for (int sloty = 0; sloty < 3; sloty++)
 			for (int slotx = 0; slotx < 3; slotx++)
-				container.addSlotToContainer(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Iterable<ItemStack>) null));
+				container.addSlotToContainer(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Predicate<ItemStack>) null));
 	}
 
 	@Override
-	public void onInventoryChange(ContainerFTGU container) {
-		if (!container.isRemote() && research.getTechnology().canResearch(container.getInventoryPlayer().player)) {
+	public void onInventoryChange(ContainerResearch container) {
+		if (!container.isClient() && research.getTechnology().canResearch(container.getPlayer())) {
 			hints = new ArrayList<>();
 			List<BlockSerializable> inspected = Collections.emptyList();
 			if (container.inventorySlots.get(2).getHasStack())
@@ -85,7 +87,7 @@ public class PuzzleMatch implements IPuzzle {
 	}
 
 	@Override
-	public void onRemove(EntityPlayer player, World world, BlockPos pos) {
+	public void onRemove(@Nullable EntityPlayer player, World world, BlockPos pos) {
 		if (player != null) {
 			for (int i = 0; i < 9; i++) {
 				ItemStack stack = inventory.getStackInSlot(i);
@@ -94,7 +96,7 @@ public class PuzzleMatch implements IPuzzle {
 			}
 		} else InventoryHelper.dropInventoryItems(world, pos, inventory);
 
-		for (ContainerFTGU container : registry)
+		for (ContainerResearch container : registry)
 			container.removeSlots(9);
 		registry.clear();
 	}
@@ -107,15 +109,14 @@ public class PuzzleMatch implements IPuzzle {
 	@Override
 	public void drawForeground(GuiContainer gui, int mouseX, int mouseY) {
 		Slot slot = gui.getSlotUnderMouse();
-		boolean b = !research.getTechnology().canResearch(gui.mc.player);
 		if (slot != null && !slot.getHasStack()) {
 			int index = slot.getSlotIndex();
-			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && (b || research.hasHint(index))) {
+			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && research.hasHint(index)) {
 				ITextComponent hint = hints == null ? research.getHint(index).getObfuscatedHint() : hints.get(index);
 				if (!hint.getUnformattedText().isEmpty())
 					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 			}
-		} else if (b && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50)
+		} else if (!research.getTechnology().canResearch(gui.mc.player) && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50)
 			gui.drawHoveringText(I18n.format("technology.complete.enough"), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
 	}
 
@@ -125,8 +126,7 @@ public class PuzzleMatch implements IPuzzle {
 		gui.drawTexturedModalRect(29 + gui.getGuiLeft(), 16 + gui.getGuiTop(), 0, 166, 54, 54);
 
 		// Arrow
-		boolean b = research.getTechnology().canResearch(gui.mc.player);
-		if (b)
+		if (research.getTechnology().canResearch(gui.mc.player))
 			gui.drawTexturedModalRect(90 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 54, 166, 22, 15);
 		else
 			gui.drawTexturedModalRect(90 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 54, 181, 22, 15);
@@ -134,7 +134,7 @@ public class PuzzleMatch implements IPuzzle {
 		// Hints
 		for (int y = 0; y < 3; y++)
 			for (int x = 0; x < 3; x++)
-				if ((!b || research.hasHint(x + y * 3)) && inventory.getStackInSlot(x + y * 3).isEmpty())
+				if (research.hasHint(x + y * 3) && inventory.getStackInSlot(x + y * 3).isEmpty())
 					gui.drawTexturedModalRect(30 + x * 18 + gui.getGuiLeft(), 17 + y * 18 + gui.getGuiTop(), 176, 0, 16, 16);
 	}
 

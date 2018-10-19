@@ -1,13 +1,13 @@
 package ftgumod.api.inventory;
 
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
 
-public abstract class ContainerFTGU extends Container {
+public abstract class ContainerResearch extends Container {
 
 	@Override
 	public Slot addSlotToContainer(Slot slotIn) {
@@ -21,9 +21,9 @@ public abstract class ContainerFTGU extends Container {
 		}
 	}
 
-	public abstract boolean isRemote();
+	public abstract boolean isClient();
 
-	public abstract InventoryPlayer getInventoryPlayer();
+	public abstract EntityPlayer getPlayer();
 
 	public abstract void refreshHints(List<ITextComponent> hints);
 
