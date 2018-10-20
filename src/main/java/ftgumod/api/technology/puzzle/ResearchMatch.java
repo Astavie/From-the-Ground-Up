@@ -13,8 +13,8 @@ import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.api.util.Hint;
 import ftgumod.api.util.JsonContextPublic;
-import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.item.ItemStack;
+import ftgumod.api.util.predicate.ItemLambda;
+import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -104,14 +104,7 @@ public class ResearchMatch implements IResearchRecipe {
 				useMap.put(c, use);
 			}
 
-			ingMap.put(' ', new ItemPredicate() {
-
-				@Override
-				public boolean test(ItemStack item) {
-					return item.isEmpty();
-				}
-
-			});
+			ingMap.put(' ', ItemLambda.EMPTY);
 
 			JsonArray patternJ = JsonUtils.getJsonArray(object, "pattern");
 

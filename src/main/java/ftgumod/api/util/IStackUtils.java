@@ -2,8 +2,9 @@ package ftgumod.api.util;
 
 import com.google.gson.JsonElement;
 import ftgumod.api.technology.ITechnology;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -15,6 +16,8 @@ public interface IStackUtils {
 	boolean isEqual(ItemStack s1, ItemStack s2);
 
 	ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context);
+
+	void registerItemPredicate(ResourceLocation location, ItemPredicate.Factory<?> factory);
 
 	/**
 	 * @param tech The {@code Technology}

@@ -20,7 +20,7 @@ public class UnlockRecipe implements IUnlock {
 
 	@Override
 	public boolean isDisplayed() {
-		return true;
+		return recipe.getMatchingStacks().length > 0;
 	}
 
 	@Override

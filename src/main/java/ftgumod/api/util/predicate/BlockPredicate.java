@@ -1,4 +1,4 @@
-package ftgumod.api.util;
+package ftgumod.api.util.predicate;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;

@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.util.JsonContextPublic;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;

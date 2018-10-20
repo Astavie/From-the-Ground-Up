@@ -1,4 +1,4 @@
-package ftgumod.api.util;
+package ftgumod.api.util.predicate;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;

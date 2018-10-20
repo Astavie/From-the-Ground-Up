@@ -5,7 +5,9 @@ import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.technology.recipe.IPuzzle;
+import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
@@ -40,8 +42,20 @@ public class PuzzleConnect implements IPuzzle {
 		return research;
 	}
 
-	@Override
-	public boolean test() {
+	private static boolean connects(ItemPredicate predicate, ItemStack stack) {
+		if (predicate.getMatchingStacks().length == 0)
+			return true;
+		for (IRecipe recipe : CraftingManager.REGISTRY) {
+			if (predicate.test(recipe.getRecipeOutput())) {
+				for (Ingredient ingredient : recipe.getIngredients())
+					if (ingredient.test(stack))
+						return true;
+			} else if (FTGUAPI.stackUtils.isEqual(recipe.getRecipeOutput(), stack))
+				for (Ingredient ingredient : recipe.getIngredients())
+					for (ItemStack s : predicate.getMatchingStacks())
+						if (ingredient.test(s))
+							return true;
+		}
 		return false;
 	}
 
@@ -55,26 +69,18 @@ public class PuzzleConnect implements IPuzzle {
 		}
 	}
 
-	private boolean fits(ItemStack stack, int index) {
-		ItemStack left = index > 0 ? inventory.getStackInSlot(index - 1) : research.left;
-		ItemStack right = index < 2 ? inventory.getStackInSlot(index + 1) : research.right;
-		return connects(left, stack) || connects(stack, right);
+	@Override
+	public boolean test() {
+		for (int i = 0; i < 3; i++)
+			if (inventory.getStackInSlot(i).isEmpty())
+				return false;
+		return true;
 	}
 
-	private boolean connects(ItemStack s1, ItemStack s2) {
-		if (s1.isEmpty() || s2.isEmpty())
-			return false;
-		for (IRecipe recipe : CraftingManager.REGISTRY) {
-			if (FTGUAPI.stackUtils.isEqual(recipe.getRecipeOutput(), s1)) {
-				for (Ingredient ingredient : recipe.getIngredients())
-					if (ingredient.apply(s2))
-						return true;
-			} else if (FTGUAPI.stackUtils.isEqual(recipe.getRecipeOutput(), s2))
-				for (Ingredient ingredient : recipe.getIngredients())
-					if (ingredient.apply(s1))
-						return true;
-		}
-		return false;
+	private boolean fits(ItemStack stack, int index) {
+		ItemPredicate left = index > 0 ? new ItemPredicate(inventory.getStackInSlot(index - 1)) : research.left;
+		ItemPredicate right = index < 2 ? new ItemPredicate(inventory.getStackInSlot(index + 1)) : research.right;
+		return connects(left, stack) && connects(right, stack);
 	}
 
 	@Override
@@ -114,9 +120,20 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void drawBackground(GuiContainer gui, int mouseX, int mouseY) {
-		gui.drawTexturedModalRect(44 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 0, 166, 18, 18);
-		gui.drawTexturedModalRect(62 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 0, 166, 18, 18);
-		gui.drawTexturedModalRect(80 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 0, 166, 18, 18);
+		// Grid
+		gui.drawTexturedModalRect(44 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 0, 166, 54, 18);
+
+		// Items
+		gui.mc.getRenderItem().zLevel = 100.0F;
+
+		GlStateManager.enableDepth();
+		gui.mc.getRenderItem().renderItemAndEffectIntoGUI(gui.mc.player, research.left.getDisplayStack(), 26 + gui.getGuiLeft(), 35 + gui.getGuiTop());
+		gui.mc.getRenderItem().renderItemOverlayIntoGUI(gui.mc.fontRenderer, research.left.getDisplayStack(), 26 + gui.getGuiLeft(), 35 + gui.getGuiTop(), null);
+
+		gui.mc.getRenderItem().renderItemAndEffectIntoGUI(gui.mc.player, research.right.getDisplayStack(), 98 + gui.getGuiLeft(), 35 + gui.getGuiTop());
+		gui.mc.getRenderItem().renderItemOverlayIntoGUI(gui.mc.fontRenderer, research.right.getDisplayStack(), 98 + gui.getGuiLeft(), 35 + gui.getGuiTop(), null);
+
+		gui.mc.getRenderItem().zLevel = 0.0F;
 	}
 
 }

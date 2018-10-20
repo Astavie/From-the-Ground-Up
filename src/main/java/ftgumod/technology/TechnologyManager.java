@@ -16,6 +16,7 @@ import ftgumod.api.util.JsonContextPublic;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
+import ftgumod.util.StackUtils;
 import ftgumod.util.SubCollection;
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
@@ -125,11 +126,11 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		} else if (element.isJsonObject()) {
 			JsonObject object = element.getAsJsonObject();
 			if (object.has("type")) {
-				ResourceLocation type = new ResourceLocation(JsonUtils.getString(object, "type"));
+				ResourceLocation type = new ResourceLocation(context.appendModId(JsonUtils.getString(object, "type")));
 				if (unlocks.containsKey(type))
 					return unlocks.get(type).deserialize(object, context, tech);
 			}
-			return new UnlockRecipe(CraftingHelper.getIngredient(element, context));
+			return new UnlockRecipe(StackUtils.INSTANCE.getItemPredicate(element, context));
 		} else throw new JsonSyntaxException("Expected unlock to be an object or an array of objects");
 	}
 
@@ -137,7 +138,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		if (element.isJsonObject()) {
 			JsonObject object = element.getAsJsonObject();
 			if (object.has("type")) {
-				ResourceLocation type = new ResourceLocation(JsonUtils.getString(object, "type"));
+				ResourceLocation type = new ResourceLocation(context.appendModId(JsonUtils.getString(object, "type")));
 				if (puzzles.containsKey(type))
 					return puzzles.get(type).deserialize(object, context, technology);
 				throw new JsonSyntaxException("Unknown puzzle type " + type);

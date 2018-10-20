@@ -9,24 +9,27 @@ import ftgumod.api.technology.ITechnology;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.api.util.JsonContextPublic;
+import ftgumod.api.util.predicate.ItemCompound;
+import ftgumod.api.util.predicate.ItemIngredient;
+import ftgumod.api.util.predicate.ItemPredicate;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class StackUtils implements IStackUtils {
 
 	public static final StackUtils INSTANCE = new StackUtils();
+
+	private static final Map<ResourceLocation, ItemPredicate.Factory<?>> REGISTRY = new HashMap<>();
 
 	static {
 		FTGUAPI.stackUtils = INSTANCE;
@@ -65,7 +68,8 @@ public class StackUtils implements IStackUtils {
 			}
 			JsonObject object = new JsonObject();
 			object.add("item", element);
-			return ItemPredicate.deserialize(object);
+			object.addProperty("data", OreDictionary.WILDCARD_VALUE);
+			return new ItemIngredient(CraftingHelper.getIngredient(object, context));
 		}
 		if (element.isJsonArray())
 			for (JsonElement json : element.getAsJsonArray())
@@ -81,18 +85,20 @@ public class StackUtils implements IStackUtils {
 					return constant;
 				}
 			}
-			return ItemPredicate.deserialize(object);
+			if (object.has("type")) {
+				ResourceLocation type = new ResourceLocation(context.appendModId(JsonUtils.getString(object, "type")));
+				if (REGISTRY.containsKey(type))
+					return REGISTRY.get(type).deserialize(object, context);
+			}
+			return new ItemIngredient(CraftingHelper.getIngredient(object, context));
 		} else throw new JsonSyntaxException("Expected predicate to be an object or an array of objects");
 
-		return new ItemPredicate() {
+		return new ItemCompound(predicates);
+	}
 
-
-			@Override
-			public boolean test(ItemStack item) {
-				return predicates.stream().anyMatch(p -> p.test(item));
-			}
-
-		};
+	@Override
+	public void registerItemPredicate(ResourceLocation location, ItemPredicate.Factory<?> factory) {
+		REGISTRY.put(location, factory);
 	}
 
 	@Override

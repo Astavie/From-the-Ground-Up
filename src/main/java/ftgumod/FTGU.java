@@ -2,8 +2,10 @@ package ftgumod;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import ftgumod.api.technology.puzzle.ResearchConnect;
 import ftgumod.api.technology.puzzle.ResearchMatch;
-import ftgumod.api.technology.unlock.UnlockRecipe;
+import ftgumod.api.util.predicate.ItemFluid;
+import ftgumod.api.util.predicate.ItemLambda;
 import ftgumod.command.CommandTechnology;
 import ftgumod.compat.ICompat;
 import ftgumod.compat.gamestages.CompatGameStages;
@@ -19,26 +21,22 @@ import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityIdeaTable;
 import ftgumod.tileentity.TileEntityResearchTable;
-import ftgumod.util.predicate.EmptyNBTPredicate;
-import ftgumod.util.predicate.FluidPredicate;
+import ftgumod.util.StackUtils;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.advancements.critereon.ItemPredicates;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -49,7 +47,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -90,8 +87,8 @@ public class FTGU {
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		GameRegistry.registerTileEntity(TileEntityIdeaTable.class, Content.n_ideaTable);
-		GameRegistry.registerTileEntity(TileEntityResearchTable.class, Content.n_researchTable);
+		TileEntity.register(MODID + ":" + Content.n_ideaTable, TileEntityIdeaTable.class);
+		TileEntity.register(MODID + ":" + Content.n_researchTable, TileEntityResearchTable.class);
 
 		registerBlock(Content.b_ideaTable, Content.i_ideaTable, Content.n_ideaTable);
 		registerBlock(Content.b_researchTable, Content.i_researchTable, Content.n_researchTable);
@@ -107,19 +104,11 @@ public class FTGU {
 		CriteriaTriggers.register(Content.c_itemLocked);
 		CriteriaTriggers.register(Content.c_inspect);
 
-		ItemPredicates.register(new ResourceLocation(MODID, "fluid"), FluidPredicate::new);
-		ItemPredicates.register(new ResourceLocation(MODID, "enchantment"), object -> new ItemPredicate() {
+		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "fluid"), new ItemFluid.Factory());
+		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"), new ItemLambda(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
 
-			@Override
-			public boolean test(ItemStack item) {
-				return EnchantmentHelper.getEnchantments(item).size() > 0;
-			}
-
-		});
-		ItemPredicates.register(new ResourceLocation(MODID, "empty_nbt"), EmptyNBTPredicate::factory);
-
-		TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("item"), (object, context, technology) -> new UnlockRecipe(CraftingHelper.getIngredient(object, context)));
-		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(FTGU.MODID, "match"), new ResearchMatch.Factory());
+		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "match"), new ResearchMatch.Factory());
+		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"), new ResearchConnect.Factory());
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 

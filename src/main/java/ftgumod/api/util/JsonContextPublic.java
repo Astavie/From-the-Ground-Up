@@ -3,7 +3,7 @@ package ftgumod.api.util;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.api.FTGUAPI;
-import net.minecraft.advancements.critereon.ItemPredicate;
+import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;

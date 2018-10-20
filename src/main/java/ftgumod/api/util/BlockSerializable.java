@@ -1,5 +1,6 @@
 package ftgumod.api.util;
 
+import ftgumod.api.util.predicate.BlockPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;

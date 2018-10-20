@@ -4,6 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
+import ftgumod.api.util.predicate.BlockPredicate;
+import ftgumod.api.util.predicate.BlockPredicateCompound;
 import net.minecraft.util.EnumTypeAdapterFactory;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;

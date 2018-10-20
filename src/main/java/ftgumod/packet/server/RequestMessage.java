@@ -1,9 +1,6 @@
 package ftgumod.packet.server;
 
-import ftgumod.api.technology.puzzle.PuzzleMatch;
-import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.MessageHandler;
-import ftgumod.packet.client.HintMessage;
 import ftgumod.packet.client.TechnologyMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,8 +33,6 @@ public class RequestMessage implements IMessage {
 		public IMessage handleMessage(EntityPlayer player, RequestMessage message) {
 			if (message.id == 0)
 				return new TechnologyMessage(player, false);
-			if (message.id == 1 && player.openContainer instanceof ContainerResearchTable)
-				return new HintMessage(((PuzzleMatch) ((ContainerResearchTable) player.openContainer).invInput.puzzle).hints);
 			return null;
 		}
 
