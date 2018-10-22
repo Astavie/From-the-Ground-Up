@@ -154,15 +154,22 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		return start;
 	}
 
-	@Nullable
 	@Override
-	public Technology getLocked(ItemStack item) {
-		if (!item.isEmpty())
-			for (Technology t : technologies.values())
-				for (IUnlock unlock : t.getUnlock())
-					if (unlock.unlocks(item))
-						return t;
-		return null;
+	public boolean isLocked(ItemStack stack, @Nullable EntityPlayer player) {
+		boolean tech = false;
+		if (!stack.isEmpty()) {
+			for (Technology t : technologies.values()) {
+				for (IUnlock unlock : t.getUnlock()) {
+					if (unlock.unlocks(stack)) {
+						if (player == null || t.isResearched(player))
+							return true;
+						tech = true;
+						break;
+					}
+				}
+			}
+		}
+		return tech;
 	}
 
 	@Override
@@ -204,21 +211,26 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	public void reload(World world) {
 		clear();
 
-		File dir = new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies");
-
 		cache = new HashMap<>();
+		load(new File(FTGU.folder, "technologies"));
+		load(new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies"));
 
+		load();
+	}
+
+	private void load(File dir) {
 		if (dir.exists() && dir.isDirectory()) {
 			for (File child : dir.listFiles(File::isDirectory)) {
 				File constants = new File(child, "_constants.json");
 
-				String context = "[]";
-				if (constants.exists() && constants.isFile())
+				String context = null;
+				if (constants.exists() && constants.isFile()) {
 					try {
 						context = new String(Files.readAllBytes(constants.toPath()));
 					} catch (IOException e) {
 						Technology.getLogger().error("Couldn't read _constants.json from {}", child.getName(), e);
 					}
+				}
 
 				Map<ResourceLocation, String> techs = new HashMap<>();
 				for (File file : FileUtils.listFiles(child, new String[] {"json"}, true)) {
@@ -232,12 +244,16 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 						Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
 					}
 				}
-				cache.put(child.getName(), Pair.of(context, techs));
+
+				if (cache.containsKey(child.getName())) {
+					cache.get(child.getName()).getRight().forEach(techs::putIfAbsent);
+					if (context == null)
+						context = cache.get(child.getName()).getLeft();
+				}
+				cache.put(child.getName(), Pair.of(context == null ? "[]" : context, techs));
 			}
 		} else
 			dir.mkdirs();
-
-		load();
 	}
 
 	public void removeFromCache(ResourceLocation tech) {
@@ -261,13 +277,14 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			return context;
 		}, entry -> entry.getValue().getRight()));
 
-		if (!FTGU.custom)
+		if (!FTGU.custom) {
 			loadBuiltin().forEach((context, map) -> {
 				if (!json.containsKey(context))
 					json.put(context, map);
 				else
 					map.forEach(json.get(context)::putIfAbsent);
 			});
+		}
 
 		Map<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> builders = new HashMap<>();
 		Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
@@ -309,18 +326,19 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 				}
 			}
 
-			if (!load)
-				for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet())
+			if (!load) {
+				for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet()) {
 					for (Map.Entry<ResourceLocation, Technology.Builder> entry : domain.getValue().entrySet()) {
 						removeFromCache(entry.getKey());
 						Technology.getLogger().error("Couldn't load technology " + entry.getKey());
 					}
+				}
+			}
 		}
 
-		int size = this.technologies.size();
 		registerAll(technologies.values().toArray(new Technology[technologies.size()]));
 
-		size = this.technologies.size() - size;
+		int size = this.technologies.size();
 		Technology.getLogger().info("Loaded " + size + " technolog" + (size != 1 ? "ies" : "y"));
 	}
 
@@ -359,6 +377,11 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	@Override
 	public boolean contains(ResourceLocation key) {
 		return technologies.containsKey(key);
+	}
+
+	@Override
+	public boolean contains(ITechnology value) {
+		return technologies.containsValue(value);
 	}
 
 	@Nullable

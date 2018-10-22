@@ -23,6 +23,9 @@ technology.toast=Research Complete!
 
 chat.type.technology=%s has researched %s
 
+key.ftgumod.open=Research Book
+key.categories.ftgumod=From the Ground Up!
+
 technology.complete.already=%s has already been researched
 technology.complete.understand=You do not understand this technology
 technology.complete.enough=You do not have enough knowledge to research this technology

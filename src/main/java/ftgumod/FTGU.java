@@ -48,15 +48,18 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod(modid = FTGU.MODID)
+@Mod(modid = FTGU.MODID, name = "From the Ground Up!")
 public class FTGU {
 
 	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(Technology.Builder.class, new Technology.Deserializer()).registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer()).registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer()).registerTypeHierarchyAdapter(Style.class, new Style.Serializer()).registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
 
 	public static final String MODID = "ftgumod";
+
+	public static File folder;
 
 	public static boolean copy = true;
 	public static boolean custom = false;
@@ -121,11 +124,13 @@ public class FTGU {
 
 		PacketDispatcher.registerPackets();
 
-		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		folder = new File(event.getModConfigurationDirectory(), MODID);
+
+		Configuration config = new Configuration(new File(folder, MODID + ".cfg"));
 		config.load();
 
-		copy = config.get(Configuration.CATEGORY_GENERAL, "Copy", true, "Enables technology copying").getBoolean();
-		custom = config.get(Configuration.CATEGORY_GENERAL, "Custom", false, "Disables loading of built-in technologies").getBoolean();
+		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "Copy", true, "Enables technology copying");
+		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "Custom", false, "Disables loading of built-in technologies");
 
 		config.save();
 	}

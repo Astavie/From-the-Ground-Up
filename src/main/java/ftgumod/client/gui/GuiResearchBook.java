@@ -7,6 +7,7 @@ import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
 import ftgumod.packet.server.RequestMessage;
+import ftgumod.proxy.ProxyClient;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.util.StackUtils;
@@ -184,7 +185,7 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	protected void keyTyped(char key, int id) throws IOException {
-		if (mc.gameSettings.keyBindInventory.isActiveAndMatches(id)) {
+		if (mc.gameSettings.keyBindInventory.isActiveAndMatches(id) || ProxyClient.key.isActiveAndMatches(id)) {
 			mc.displayGuiScreen(null);
 			mc.setIngameFocus();
 		} else {

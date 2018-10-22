@@ -10,18 +10,24 @@ import ftgumod.technology.Technology;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 @SuppressWarnings("MethodCallSideOnly")
 @SideOnly(Side.CLIENT)
 public class ProxyClient extends ProxyCommon {
+
+	public static final KeyBinding key = new KeyBinding("key." + FTGU.MODID + ".open", Keyboard.KEY_B, "key.categories." + FTGU.MODID);
 
 	@Override
 	public void displayToastTechnology(ITechnology technology) {
@@ -56,6 +62,9 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void init(FMLInitializationEvent event) {
+		key.setKeyConflictContext(KeyConflictContext.UNIVERSAL);
+		ClientRegistry.registerKeyBinding(key);
+
 		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 		renderItem.getItemModelMesher().register(Item.getItemFromBlock(Content.b_ideaTable), 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_ideaTable, "inventory"));

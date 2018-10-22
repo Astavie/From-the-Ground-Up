@@ -17,14 +17,7 @@ import java.util.function.Predicate;
 
 public interface ITechnologyManager {
 
-	/**
-	 * Looks through all registered {@code Technologies}' unlocks and returns the one unlocking the specified {@code ItemStack}.
-	 *
-	 * @param stack The {@code ItemStack} to check
-	 * @return The {@code Technology} that unlocks the specified {@code ItemStack}, or {@code null} if there isn't one
-	 */
-	@Nullable
-	ITechnology getLocked(ItemStack stack);
+	boolean isLocked(ItemStack stack, @Nullable EntityPlayer player);
 
 	/**
 	 * When a new {@code Technology} is about to be added, the specified {@code Predicate} will be tested.
@@ -70,9 +63,7 @@ public interface ITechnologyManager {
 
 	boolean contains(ResourceLocation key);
 
-	default boolean contains(ITechnology value) {
-		return contains(value.getRegistryName());
-	}
+	boolean contains(ITechnology value);
 
 	ITechnology getTechnology(ResourceLocation key);
 

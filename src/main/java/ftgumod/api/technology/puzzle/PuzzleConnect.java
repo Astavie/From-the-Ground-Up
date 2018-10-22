@@ -136,7 +136,12 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void drawForeground(GuiContainer gui, int mouseX, int mouseY) {
-
+		mouseX -= gui.getGuiLeft();
+		mouseY -= gui.getGuiTop();
+		if (mouseX >= 25 && mouseX < 43 && mouseY >= 34 && mouseY < 52)
+			gui.drawHoveringText(gui.getItemToolTip(research.left.getDisplayStack()), mouseX, mouseY);
+		if (mouseX >= 97 && mouseX < 115 && mouseY >= 34 && mouseY < 52)
+			gui.drawHoveringText(gui.getItemToolTip(research.right.getDisplayStack()), mouseX, mouseY);
 	}
 
 	@Override

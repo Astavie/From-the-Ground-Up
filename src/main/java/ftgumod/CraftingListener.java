@@ -1,6 +1,7 @@
 package ftgumod;
 
 import ftgumod.event.PlayerLockEvent;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
@@ -10,9 +11,9 @@ import net.minecraftforge.common.MinecraftForge;
 
 public class CraftingListener implements IContainerListener {
 
-	private final EntityPlayerMP player;
+	private final EntityPlayer player;
 
-	CraftingListener(EntityPlayerMP player) {
+	CraftingListener(EntityPlayer player) {
 		this.player = player;
 	}
 
@@ -30,7 +31,8 @@ public class CraftingListener implements IContainerListener {
 
 			if (!event.isCanceled()) {
 				slot.inventory.setInventorySlotContents(0, ItemStack.EMPTY);
-				Content.c_itemLocked.trigger(player, recipe, stack);
+				if (player instanceof EntityPlayerMP)
+					Content.c_itemLocked.trigger((EntityPlayerMP) player, recipe, stack);
 			}
 		}
 	}

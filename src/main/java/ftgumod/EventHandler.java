@@ -1,11 +1,13 @@
 package ftgumod;
 
 import ftgumod.api.util.BlockSerializable;
+import ftgumod.client.gui.GuiResearchBook;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyInfoMessage;
+import ftgumod.proxy.ProxyClient;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
@@ -33,6 +35,7 @@ import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
@@ -94,6 +97,13 @@ public class EventHandler {
 	}
 
 	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onKey(InputEvent.KeyInputEvent event) {
+		if (ProxyClient.key.isPressed() && TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(Minecraft.getMinecraft().player)))
+			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(Minecraft.getMinecraft().player));
+	}
+
+	@SubscribeEvent
 	public void onItemCraft(ItemCraftedEvent evt) {
 		if (evt.crafting.getItem() == Content.i_researchBook)
 			for (int i = 0; i < evt.craftMatrix.getSizeInventory(); i++) {
@@ -114,8 +124,8 @@ public class EventHandler {
 		if (!evt.player.world.isRemote) {
 			replaceRecipeBook((EntityPlayerMP) evt.player);
 
-			ContainerPlayer inv = (ContainerPlayer) evt.player.openContainer;
-			inv.addListener(new CraftingListener((EntityPlayerMP) evt.player));
+			Container inv = evt.player.openContainer;
+			inv.addListener(new CraftingListener(evt.player));
 
 			CapabilityTechnology.ITechnology cap = evt.player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			if (cap != null) {
@@ -150,7 +160,7 @@ public class EventHandler {
 			replaceRecipeBook((EntityPlayerMP) evt.getEntityPlayer());
 
 			ContainerPlayer inv = (ContainerPlayer) evt.getEntityPlayer().openContainer;
-			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
+			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 		}
 	}
 
@@ -158,7 +168,7 @@ public class EventHandler {
 	public void onPlayerOpenContainer(PlayerContainerEvent.Open evt) {
 		if (!evt.getEntity().world.isRemote) {
 			Container inv = evt.getEntityPlayer().openContainer;
-			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
+			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 		}
 	}
 
@@ -166,7 +176,7 @@ public class EventHandler {
 	public void onPlayerCloseContainer(PlayerContainerEvent.Close evt) {
 		if (!evt.getEntity().world.isRemote) {
 			Container inv = evt.getEntityPlayer().openContainer;
-			inv.addListener(new CraftingListener((EntityPlayerMP) evt.getEntityPlayer()));
+			inv.addListener(new CraftingListener(evt.getEntityPlayer()));
 		}
 	}
 
