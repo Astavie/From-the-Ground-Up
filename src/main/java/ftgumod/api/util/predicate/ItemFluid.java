@@ -2,7 +2,6 @@ package ftgumod.api.util.predicate;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.fluids.Fluid;
@@ -25,15 +24,15 @@ public class ItemFluid extends ItemPredicate {
 		return stack != null && stack.containsFluid(fluid);
 	}
 
-	public static class Factory implements ItemPredicate.Factory<ItemFluid> {
+	public static class Factory implements ItemPredicate.Factory {
 
 		@Override
-		public ItemFluid deserialize(JsonObject object, JsonContextPublic context) {
-			String name = JsonUtils.getString(object, "fluid");
+		public ItemPredicate apply(JsonObject json) {
+			String name = JsonUtils.getString(json, "fluid");
 			Fluid fluid = FluidRegistry.getFluid(name);
 			if (fluid == null)
 				throw new JsonSyntaxException("Unknown fluid " + name);
-			return new ItemFluid(new FluidStack(fluid, JsonUtils.getInt(object, "count", Fluid.BUCKET_VOLUME)));
+			return new ItemFluid(new FluidStack(fluid, JsonUtils.getInt(json, "count", Fluid.BUCKET_VOLUME)));
 		}
 
 	}

@@ -99,11 +99,7 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:noteblock"
-    },
-    {
-      "item": "minecraft:jukebox"
-    }
+    "minecraft:noteblock",
+    "minecraft:jukebox"
   ]
 }

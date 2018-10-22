@@ -130,8 +130,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 				if (unlocks.containsKey(type))
 					return unlocks.get(type).deserialize(object, context, tech);
 			}
-			return new UnlockRecipe(StackUtils.INSTANCE.getItemPredicate(element, context));
-		} else throw new JsonSyntaxException("Expected unlock to be an object or an array of objects");
+		}
+		return new UnlockRecipe(StackUtils.INSTANCE.getItemPredicate(element, context));
 	}
 
 	public IResearchRecipe getPuzzle(JsonElement element, JsonContextPublic context, ResourceLocation technology) {

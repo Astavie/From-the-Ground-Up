@@ -67,8 +67,6 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:enchanting_table"
-    }
+    "minecraft:enchanting_table"
   ]
 }

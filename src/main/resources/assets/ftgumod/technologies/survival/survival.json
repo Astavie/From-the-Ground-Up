@@ -31,26 +31,12 @@
       "type": "forge:ore_dict",
       "ore": "stickWood"
     },
-    {
-      "item": "minecraft:wooden_sword"
-    },
-    {
-      "item": "minecraft:wooden_shovel"
-    },
-    {
-      "item": "minecraft:wooden_pickaxe"
-    },
-    {
-      "item": "minecraft:wooden_axe"
-    },
-    {
-      "item": "minecraft:crafting_table"
-    },
-    {
-      "item": "minecraft:torch"
-    },
-    {
-      "item": "minecraft:bowl"
-    }
+    "minecraft:wooden_sword",
+    "minecraft:wooden_shovel",
+    "minecraft:wooden_pickaxe",
+    "minecraft:wooden_axe",
+    "minecraft:crafting_table",
+    "minecraft:torch",
+    "minecraft:bowl"
   ]
 }

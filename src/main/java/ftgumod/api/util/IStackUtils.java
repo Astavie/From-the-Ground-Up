@@ -17,7 +17,7 @@ public interface IStackUtils {
 
 	ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context);
 
-	void registerItemPredicate(ResourceLocation location, ItemPredicate.Factory<?> factory);
+	void registerItemPredicate(ResourceLocation location, ItemPredicate.Factory factory);
 
 	/**
 	 * @param tech The {@code Technology}

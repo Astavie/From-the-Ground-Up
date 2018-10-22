@@ -40,9 +40,9 @@
     "key": {
       "W": {
         "item": [
-          {
-            "item": "minecraft:wool"
-          },
+          "minecraft:wool",
+          "minecraft:hardened_clay",
+          "minecraft:stained_hardened_clay",
           {
             "type": "forge:ore_dict",
             "ore": "blockGlass"
@@ -50,12 +50,6 @@
           {
             "type": "forge:ore_dict",
             "ore": "paneGlass"
-          },
-          {
-            "item": "minecraft:hardened_clay"
-          },
-          {
-            "item": "minecraft:stained_hardened_clay"
           }
         ],
         "hint": {
@@ -73,9 +67,7 @@
       },
       "C": {
         "item": [
-          {
-            "item": "#flower"
-          },
+          "#flower",
           {
             "type": "forge:ore_dict",
             "ore": "blockCactus"

@@ -46,9 +46,7 @@
     "amount": 2,
     "ingredients": [
       [
-        {
-          "potion": "minecraft:water"
-        },
+        "minecraft:potion",
         {
           "type": "ftgumod:fluid",
           "fluid": "water",
@@ -83,9 +81,7 @@
       },
       "F": {
         "item": [
-          {
-            "potion": "minecraft:water"
-          },
+          "minecraft:potion",
           {
             "type": "ftgumod:fluid",
             "fluid": "water",
@@ -108,20 +104,10 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:brewing_stand"
-    },
-    {
-      "item": "minecraft:cauldron"
-    },
-    {
-      "item": "minecraft:blaze_powder"
-    },
-    {
-      "item": "minecraft:magma_cream"
-    },
-    {
-      "item": "minecraft:fermented_spider_eye"
-    }
+    "minecraft:brewing_stand",
+    "minecraft:cauldron",
+    "minecraft:blaze_powder",
+    "minecraft:magma_cream",
+    "minecraft:fermented_spider_eye"
   ]
 }

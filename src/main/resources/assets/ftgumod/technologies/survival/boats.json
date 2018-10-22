@@ -21,8 +21,6 @@
     ]
   },
   "unlock": [
-    {
-      "item": "#boat"
-    }
+    "#boat"
   ]
 }

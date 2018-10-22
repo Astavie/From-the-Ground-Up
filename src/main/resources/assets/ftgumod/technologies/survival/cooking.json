@@ -75,35 +75,15 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:sugar"
-    },
-    {
-      "item": "minecraft:mushroom_stew"
-    },
-    {
-      "item": "minecraft:rabbit_stew"
-    },
-    {
-      "item": "minecraft:beetroot_soup"
-    },
-    {
-      "item": "minecraft:bread"
-    },
-    {
-      "item": "minecraft:cookie"
-    },
-    {
-      "item": "minecraft:cake"
-    },
-    {
-      "item": "minecraft:pumpkin_pie"
-    },
-    {
-      "item": "minecraft:fishing_rod"
-    },
-    {
-      "item": "minecraft:carrot_on_a_stick"
-    }
+    "minecraft:sugar",
+    "minecraft:mushroom_stew",
+    "minecraft:rabbit_stew",
+    "minecraft:beetroot_soup",
+    "minecraft:bread",
+    "minecraft:cookie",
+    "minecraft:cake",
+    "minecraft:pumpkin_pie",
+    "minecraft:fishing_rod",
+    "minecraft:carrot_on_a_stick"
   ]
 }

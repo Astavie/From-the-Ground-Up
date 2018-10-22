@@ -66,9 +66,7 @@
       "type": "forge:ore_dict",
       "ore": "blockIron"
     },
-    {
-      "item": "minecraft:flint_and_steel"
-    },
+    "minecraft:flint_and_steel",
     {
       "type": "forge:ore_dict",
       "ore": "ingotGold"
@@ -121,18 +119,12 @@
       "type": "forge:ore_dict",
       "ore": "blockRedstone"
     },
-    {
-      "item": "minecraft:slime_ball"
-    },
-    {
-      "item": "minecraft:slime"
-    },
+    "minecraft:slime_ball",
+    "minecraft:slime",
     {
       "item": "minecraft:dye",
       "data": 15
     },
-    {
-      "item": "minecraft:bone_block"
-    }
+    "minecraft:bone_block"
   ]
 }

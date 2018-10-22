@@ -18,6 +18,7 @@
   "idea": {
     "amount": 2,
     "ingredients": [
+      "minecraft:wool",
       {
         "type": "forge:ore_dict",
         "ore": "plankWood"
@@ -29,9 +30,6 @@
       {
         "type": "forge:ore_dict",
         "ore": "stairWood"
-      },
-      {
-        "item": "minecraft:wool"
       }
     ]
   },
@@ -64,9 +62,7 @@
             "type": "forge:ore_dict",
             "ore": "slabWood"
           },
-          {
-            "item": "#crafting"
-          }
+          "#crafting"
         ],
         "hint": {
           "translate": "technology.hint.table"
@@ -75,45 +71,17 @@
     }
   },
   "unlock": [
-    {
-      "item": "#door"
-    },
-    {
-      "item": "minecraft:trapdoor"
-    },
-    {
-      "item": "#fence"
-    },
-    {
-      "item": "#fence_gate"
-    },
-    {
-      "item": "minecraft:chest"
-    },
-    {
-      "item": "minecraft:sign"
-    },
-    {
-      "item": "minecraft:ladder"
-    },
-    {
-      "item": "minecraft:painting"
-    },
-    {
-      "item": "minecraft:wool",
-      "data": 32767
-    },
-    {
-      "item": "minecraft:bed",
-      "data": 32767
-    },
-    {
-      "item": "minecraft:carpet",
-      "data": 32767
-    },
-    {
-      "item": "minecraft:banner",
-      "data": 32767
-    }
+    "#door",
+    "minecraft:trapdoor",
+    "#fence",
+    "#fence_gate",
+    "minecraft:chest",
+    "minecraft:sign",
+    "minecraft:ladder",
+    "minecraft:painting",
+    "minecraft:wool",
+    "minecraft:bed",
+    "minecraft:carpet",
+    "minecraft:banner"
   ]
 }

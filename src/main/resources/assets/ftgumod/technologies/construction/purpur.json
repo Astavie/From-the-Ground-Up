@@ -84,27 +84,14 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:purpur_block"
-    },
-    {
-      "item": "minecraft:purpur_pillar"
-    },
+    "minecraft:purpur_block",
+    "minecraft:purpur_pillar",
     {
       "item": "minecraft:purpur_slab",
       "data": 0
     },
-    {
-      "item": "minecraft:purpur_stairs"
-    },
-    {
-      "item": "minecraft:end_rod"
-    },
-    {
-      "item": "minecraft:purple_shulker_box"
-    },
-    {
-      "item": "#shulker"
-    }
+    "minecraft:purpur_stairs",
+    "minecraft:end_rod",
+    "#shulker"
   ]
 }

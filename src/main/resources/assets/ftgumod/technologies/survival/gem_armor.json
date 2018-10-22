@@ -16,12 +16,8 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      {
-        "item": "#armor"
-      },
-      {
-        "item": "#gem"
-      }
+      "#armor",
+      "#gem"
     ]
   },
   "research": {
@@ -62,17 +58,9 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:diamond_helmet"
-    },
-    {
-      "item": "minecraft:diamond_chestplate"
-    },
-    {
-      "item": "minecraft:diamond_leggings"
-    },
-    {
-      "item": "minecraft:diamond_boots"
-    }
+    "minecraft:diamond_helmet",
+    "minecraft:diamond_chestplate",
+    "minecraft:diamond_leggings",
+    "minecraft:diamond_boots"
   ]
 }

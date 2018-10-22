@@ -79,14 +79,8 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:end_crystal"
-    },
-    {
-      "item": "minecraft:ender_chest"
-    },
-    {
-      "item": "minecraft:beacon"
-    }
+    "minecraft:end_crystal",
+    "minecraft:ender_chest",
+    "minecraft:beacon"
   ]
 }

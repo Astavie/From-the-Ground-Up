@@ -17,18 +17,12 @@
   "idea": {
     "amount": 3,
     "ingredients": [
-      {
-        "item": "minecraft:gunpowder"
-      },
-      {
-        "item": "minecraft:sand"
-      },
+      "minecraft:gunpowder",
+      "minecraft:sand",
+      "minecraft:flint_and_steel",
       {
         "type": "forge:ore_dict",
         "ore": "dye"
-      },
-      {
-        "item": "minecraft:flint_and_steel"
       }
     ]
   },
@@ -70,20 +64,10 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:tnt"
-    },
-    {
-      "item": "minecraft:tnt_minecart"
-    },
-    {
-      "item": "minecraft:firework_charge"
-    },
-    {
-      "item": "minecraft:fireworks"
-    },
-    {
-      "item": "minecraft:fire_charge"
-    }
+    "minecraft:tnt",
+    "minecraft:tnt_minecart",
+    "minecraft:firework_charge",
+    "minecraft:fireworks",
+    "minecraft:fire_charge"
   ]
 }

@@ -25,9 +25,7 @@
           "type": "forge:ore_dict",
           "ore": "stickWood"
         },
-        {
-          "item": "#boat"
-        }
+        "#boat"
       ]
     ]
   },
@@ -81,14 +79,8 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:minecart"
-    },
-    {
-      "item": "minecraft:furnace_minecart"
-    },
-    {
-      "item": "minecraft:rail"
-    }
+    "minecraft:minecart",
+    "minecraft:furnace_minecart",
+    "minecraft:rail"
   ]
 }

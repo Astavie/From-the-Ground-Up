@@ -32,26 +32,12 @@
     ]
   },
   "unlock": [
-    {
-      "item": "minecraft:wooden_button"
-    },
-    {
-      "item": "minecraft:wooden_pressure_plate"
-    },
-    {
-      "item": "minecraft:stone_button"
-    },
-    {
-      "item": "minecraft:stone_pressure_plate"
-    },
-    {
-      "item": "minecraft:light_weighted_pressure_plate"
-    },
-    {
-      "item": "minecraft:heavy_weighted_pressure_plate"
-    },
-    {
-      "item": "minecraft:lever"
-    }
+    "minecraft:wooden_button",
+    "minecraft:wooden_pressure_plate",
+    "minecraft:stone_button",
+    "minecraft:stone_pressure_plate",
+    "minecraft:light_weighted_pressure_plate",
+    "minecraft:heavy_weighted_pressure_plate",
+    "minecraft:lever"
   ]
 }

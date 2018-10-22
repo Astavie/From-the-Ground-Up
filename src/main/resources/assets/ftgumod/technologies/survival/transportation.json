@@ -68,23 +68,11 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:hopper"
-    },
-    {
-      "item": "minecraft:golden_rail"
-    },
-    {
-      "item": "minecraft:detector_rail"
-    },
-    {
-      "item": "minecraft:activator_rail"
-    },
-    {
-      "item": "minecraft:chest_minecart"
-    },
-    {
-      "item": "minecraft:hopper_minecart"
-    }
+    "minecraft:hopper",
+    "minecraft:golden_rail",
+    "minecraft:detector_rail",
+    "minecraft:activator_rail",
+    "minecraft:chest_minecart",
+    "minecraft:hopper_minecart"
   ]
 }

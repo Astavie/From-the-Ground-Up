@@ -72,20 +72,10 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:diamond_sword"
-    },
-    {
-      "item": "minecraft:diamond_shovel"
-    },
-    {
-      "item": "minecraft:diamond_pickaxe"
-    },
-    {
-      "item": "minecraft:diamond_axe"
-    },
-    {
-      "item": "minecraft:diamond_hoe"
-    }
+    "minecraft:diamond_sword",
+    "minecraft:diamond_shovel",
+    "minecraft:diamond_pickaxe",
+    "minecraft:diamond_axe",
+    "minecraft:diamond_hoe"
   ]
 }

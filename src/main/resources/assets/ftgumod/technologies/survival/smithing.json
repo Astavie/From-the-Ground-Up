@@ -59,50 +59,20 @@
       "item": "minecraft:anvil",
       "data": 0
     },
-    {
-      "item": "minecraft:bucket"
-    },
-    {
-      "item": "minecraft:iron_bars"
-    },
-    {
-      "item": "minecraft:iron_door"
-    },
-    {
-      "item": "minecraft:iron_trapdoor"
-    },
-    {
-      "item": "minecraft:iron_sword"
-    },
-    {
-      "item": "minecraft:iron_shovel"
-    },
-    {
-      "item": "minecraft:iron_pickaxe"
-    },
-    {
-      "item": "minecraft:iron_axe"
-    },
-    {
-      "item": "minecraft:iron_hoe"
-    },
-    {
-      "item": "minecraft:shears"
-    },
-    {
-      "item": "minecraft:golden_sword"
-    },
-    {
-      "item": "minecraft:golden_shovel"
-    },
-    {
-      "item": "minecraft:golden_pickaxe"
-    },
-    {
-      "item": "minecraft:golden_axe"
-    },
-    {
-      "item": "minecraft:golden_hoe"
-    }
+    "minecraft:bucket",
+    "minecraft:iron_bars",
+    "minecraft:iron_door",
+    "minecraft:iron_trapdoor",
+    "minecraft:iron_sword",
+    "minecraft:iron_shovel",
+    "minecraft:iron_pickaxe",
+    "minecraft:iron_axe",
+    "minecraft:iron_hoe",
+    "minecraft:shears",
+    "minecraft:golden_sword",
+    "minecraft:golden_shovel",
+    "minecraft:golden_pickaxe",
+    "minecraft:golden_axe",
+    "minecraft:golden_hoe"
   ]
 }

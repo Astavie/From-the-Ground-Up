@@ -15,10 +15,12 @@ import ftgumod.api.util.predicate.ItemPredicate;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.advancements.critereon.ItemPredicates;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -29,7 +31,7 @@ public class StackUtils implements IStackUtils {
 
 	public static final StackUtils INSTANCE = new StackUtils();
 
-	private static final Map<ResourceLocation, ItemPredicate.Factory<?>> REGISTRY = new HashMap<>();
+	private static final Map<ResourceLocation, ItemPredicate.Factory> REGISTRY = new HashMap<>();
 
 	static {
 		FTGUAPI.stackUtils = INSTANCE;
@@ -61,14 +63,18 @@ public class StackUtils implements IStackUtils {
 		if (element.isJsonPrimitive()) {
 			String item = element.getAsString();
 			if (item.startsWith("#")) {
-				ItemPredicate constant = context.getPredicate(item.substring(1));
+				ItemPredicate constant = context.getConstant(item.substring(1));
 				if (constant == null)
 					throw new JsonSyntaxException("Predicate referenced invalid constant: " + item);
 				return constant;
 			}
 			JsonObject object = new JsonObject();
 			object.add("item", element);
-			object.addProperty("data", OreDictionary.WILDCARD_VALUE);
+
+			Item i = Item.REGISTRY.getObject(new ResourceLocation(context.appendModId(item)));
+			if (i != null && i.getHasSubtypes())
+				object.addProperty("data", OreDictionary.WILDCARD_VALUE);
+
 			return new ItemIngredient(CraftingHelper.getIngredient(object, context));
 		}
 		if (element.isJsonArray())
@@ -79,7 +85,7 @@ public class StackUtils implements IStackUtils {
 			if (!object.has("type") && object.has("item")) {
 				String item = JsonUtils.getString(object, "item");
 				if (item.startsWith("#")) {
-					ItemPredicate constant = context.getPredicate(item.substring(1));
+					ItemPredicate constant = context.getConstant(item.substring(1));
 					if (constant == null)
 						throw new JsonSyntaxException("Predicate referenced invalid constant: " + item);
 					return constant;
@@ -88,7 +94,7 @@ public class StackUtils implements IStackUtils {
 			if (object.has("type")) {
 				ResourceLocation type = new ResourceLocation(context.appendModId(JsonUtils.getString(object, "type")));
 				if (REGISTRY.containsKey(type))
-					return REGISTRY.get(type).deserialize(object, context);
+					return REGISTRY.get(type).apply(object);
 			}
 			return new ItemIngredient(CraftingHelper.getIngredient(object, context));
 		} else throw new JsonSyntaxException("Expected predicate to be an object or an array of objects");
@@ -97,8 +103,10 @@ public class StackUtils implements IStackUtils {
 	}
 
 	@Override
-	public void registerItemPredicate(ResourceLocation location, ItemPredicate.Factory<?> factory) {
+	public void registerItemPredicate(ResourceLocation location, ItemPredicate.Factory factory) {
 		REGISTRY.put(location, factory);
+		CraftingHelper.register(location, factory);
+		ItemPredicates.register(location, factory.andThen());
 	}
 
 	@Override

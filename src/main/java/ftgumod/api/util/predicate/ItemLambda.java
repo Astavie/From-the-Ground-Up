@@ -1,12 +1,11 @@
 package ftgumod.api.util.predicate;
 
 import com.google.gson.JsonObject;
-import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.item.ItemStack;
 
 import java.util.function.Predicate;
 
-public class ItemLambda extends ItemPredicate implements ItemPredicate.Factory<ItemLambda> {
+public class ItemLambda extends ItemPredicate {
 
 	public static final ItemPredicate EMPTY = new ItemLambda(ItemStack::isEmpty);
 
@@ -21,9 +20,19 @@ public class ItemLambda extends ItemPredicate implements ItemPredicate.Factory<I
 		return predicate.test(stack);
 	}
 
-	@Override
-	public ItemLambda deserialize(JsonObject object, JsonContextPublic context) {
-		return this;
+	public static class Factory implements ItemPredicate.Factory {
+
+		private final ItemPredicate predicate;
+
+		public Factory(Predicate<ItemStack> predicate) {
+			this.predicate = new ItemLambda(predicate);
+		}
+
+		@Override
+		public ItemPredicate apply(JsonObject jsonObject) {
+			return predicate;
+		}
+
 	}
 
 }

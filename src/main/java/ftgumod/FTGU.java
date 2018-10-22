@@ -105,7 +105,7 @@ public class FTGU {
 		CriteriaTriggers.register(Content.c_inspect);
 
 		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "fluid"), new ItemFluid.Factory());
-		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"), new ItemLambda(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
+		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"), new ItemLambda.Factory(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
 
 		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "match"), new ResearchMatch.Factory());
 		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"), new ResearchConnect.Factory());

@@ -4,8 +4,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.util.predicate.ItemPredicate;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
@@ -22,24 +20,10 @@ public class JsonContextPublic extends JsonContext {
 		super(modId);
 	}
 
-	public ItemPredicate getPredicate(String name) {
-		return constants.get(name);
-	}
-
 	@Nullable
 	@Override
-	public Ingredient getConstant(String name) {
-		ItemPredicate predicate = getPredicate(name);
-		if (predicate == null)
-			return null;
-		return new Ingredient() {
-
-			@Override
-			public boolean apply(@Nullable ItemStack stack) {
-				return predicate.test(stack);
-			}
-
-		};
+	public ItemPredicate getConstant(String name) {
+		return constants.get(name);
 	}
 
 	public void loadConstants(JsonObject[] jsons) {

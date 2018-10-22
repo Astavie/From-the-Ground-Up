@@ -27,14 +27,8 @@
     ]
   },
   "unlock": [
-    {
-      "item": "minecraft:book"
-    },
-    {
-      "item": "minecraft:writable_book"
-    },
-    {
-      "item": "minecraft:bookshelf"
-    }
+    "minecraft:book",
+    "minecraft:writable_book",
+    "minecraft:bookshelf"
   ]
 }

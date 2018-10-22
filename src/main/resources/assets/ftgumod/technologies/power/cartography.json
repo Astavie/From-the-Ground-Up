@@ -37,14 +37,8 @@
     ]
   },
   "unlock": [
-    {
-      "item": "minecraft:compass"
-    },
-    {
-      "item": "minecraft:clock"
-    },
-    {
-      "item": "minecraft:map"
-    }
+    "minecraft:compass",
+    "minecraft:clock",
+    "minecraft:map"
   ]
 }

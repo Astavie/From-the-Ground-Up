@@ -34,8 +34,6 @@
     ]
   },
   "unlock": [
-    {
-      "item": "minecraft:ender_eye"
-    }
+    "minecraft:ender_eye"
   ]
 }

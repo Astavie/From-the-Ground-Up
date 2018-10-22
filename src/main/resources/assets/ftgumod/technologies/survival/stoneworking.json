@@ -22,21 +22,11 @@
           "type": "forge:ore_dict",
           "ore": "stickWood"
         },
-        {
-          "item": "minecraft:wooden_sword"
-        },
-        {
-          "item": "minecraft:wooden_shovel"
-        },
-        {
-          "item": "minecraft:wooden_pickaxe"
-        },
-        {
-          "item": "minecraft:wooden_axe"
-        },
-        {
-          "item": "minecraft:wooden_hoe"
-        }
+        "minecraft:wooden_sword",
+        "minecraft:wooden_shovel",
+        "minecraft:wooden_pickaxe",
+        "minecraft:wooden_axe",
+        "minecraft:wooden_hoe"
       ],
       {
         "item": "minecraft:cobblestone"
@@ -78,17 +68,9 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:stone_sword"
-    },
-    {
-      "item": "minecraft:stone_shovel"
-    },
-    {
-      "item": "minecraft:stone_pickaxe"
-    },
-    {
-      "item": "minecraft:stone_axe"
-    }
+    "minecraft:stone_sword",
+    "minecraft:stone_shovel",
+    "minecraft:stone_pickaxe",
+    "minecraft:stone_axe"
   ]
 }

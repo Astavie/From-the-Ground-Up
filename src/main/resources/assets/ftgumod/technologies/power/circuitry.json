@@ -21,9 +21,7 @@
           "type": "forge:ore_dict",
           "ore": "dustRedstone"
         },
-        {
-          "item": "minecraft:redstone_torch"
-        }
+        "minecraft:redstone_torch"
       ],
       [
         {
@@ -91,17 +89,9 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:repeater"
-    },
-    {
-      "item": "minecraft:comparator"
-    },
-    {
-      "item": "minecraft:piston"
-    },
-    {
-      "item": "minecraft:sticky_piston"
-    }
+    "minecraft:repeater",
+    "minecraft:comparator",
+    "minecraft:piston",
+    "minecraft:sticky_piston"
   ]
 }

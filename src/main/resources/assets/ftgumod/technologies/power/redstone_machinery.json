@@ -16,9 +16,7 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      {
-        "item": "minecraft:bow"
-      },
+      "minecraft:bow",
       {
         "type": "forge:ore_dict",
         "ore": "dustRedstone"
@@ -43,8 +41,10 @@
         }
       },
       "S": {
-        "item": "minecraft:stone",
-        "data": 0,
+        "item": {
+          "item": "minecraft:stone",
+          "data": 0
+        },
         "hint": {
           "translate": "technology.hint.pulse"
         }
@@ -79,17 +79,9 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:dispenser"
-    },
-    {
-      "item": "minecraft:dropper"
-    },
-    {
-      "item": "minecraft:observer"
-    },
-    {
-      "item": "minecraft:daylight_detector"
-    }
+    "minecraft:dispenser",
+    "minecraft:dropper",
+    "minecraft:observer",
+    "minecraft:daylight_detector"
   ]
 }

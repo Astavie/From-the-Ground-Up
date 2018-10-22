@@ -60,17 +60,9 @@
       "item": "minecraft:stone_slab",
       "data": 1
     },
-    {
-      "item": "minecraft:sandstone_stairs"
-    },
-    {
-      "item": "minecraft:snow"
-    },
-    {
-      "item": "minecraft:nether_wart_block"
-    },
-    {
-      "item": "minecraft:item_frame"
-    }
+    "minecraft:sandstone_stairs",
+    "minecraft:snow",
+    "minecraft:nether_wart_block",
+    "minecraft:item_frame"
   ]
 }

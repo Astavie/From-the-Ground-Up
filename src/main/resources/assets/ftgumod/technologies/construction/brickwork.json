@@ -52,44 +52,23 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:brick_block"
-    },
+    "minecraft:brick_block",
     {
       "item": "minecraft:stone_slab",
       "data": 4
     },
-    {
-      "item": "minecraft:brick_stairs"
-    },
-    {
-      "item": "minecraft:flower_pot"
-    },
-    {
-      "item": "minecraft:nether_brick"
-    },
+    "minecraft:brick_stairs",
+    "minecraft:flower_pot",
+    "minecraft:nether_brick",
     {
       "item": "minecraft:stone_slab",
       "data": 6
     },
-    {
-      "item": "minecraft:nether_brick_stairs"
-    },
-    {
-      "item": "minecraft:nether_brick_fence"
-    },
-    {
-      "item": "minecraft:red_nether_brick"
-    },
-    {
-      "item": "minecraft:end_bricks"
-    },
-    {
-      "item": "minecraft:clay"
-    },
-    {
-      "item": "minecraft:stained_hardened_clay",
-      "data": 32767
-    }
+    "minecraft:nether_brick_stairs",
+    "minecraft:nether_brick_fence",
+    "minecraft:red_nether_brick",
+    "minecraft:end_bricks",
+    "minecraft:clay",
+    "minecraft:stained_hardened_clay"
   ]
 }

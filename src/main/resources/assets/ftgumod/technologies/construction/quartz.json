@@ -26,12 +26,8 @@
           "type": "forge:ore_dict",
           "ore": "dustGlowstone"
         },
-        {
-          "item": "minecraft:magma"
-        },
-        {
-          "item": "minecraft:magma_cream"
-        }
+        "minecraft:magma",
+        "minecraft:magma_cream"
       ]
     ]
   },
@@ -52,14 +48,8 @@
       "item": "minecraft:stone_slab",
       "data": 7
     },
-    {
-      "item": "minecraft:quartz_stairs"
-    },
-    {
-      "item": "minecraft:glowstone"
-    },
-    {
-      "item": "minecraft:magma"
-    }
+    "minecraft:quartz_stairs",
+    "minecraft:glowstone",
+    "minecraft:magma"
   ]
 }

@@ -17,26 +17,16 @@
   "idea": {
     "amount": 1,
     "ingredients": [
+      "minecraft:sand",
       {
         "type": "forge:ore_dict",
         "ore": "blockGlass"
-      },
-      {
-        "item": "minecraft:sand"
       }
     ]
   },
   "unlock": [
-    {
-      "item": "minecraft:stained_glass",
-      "data": 32767
-    },
-    {
-      "item": "minecraft:stained_glass_pane",
-      "data": 32767
-    },
-    {
-      "item": "minecraft:glass_bottle"
-    }
+    "minecraft:stained_glass",
+    "minecraft:stained_glass_pane",
+    "minecraft:glass_bottle"
   ]
 }

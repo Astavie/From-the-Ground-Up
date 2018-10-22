@@ -20,17 +20,9 @@
       "type": "forge:ore_dict",
       "ore": "paper"
     },
-    {
-      "item": "ftgumod:parchment_empty"
-    },
-    {
-      "item": "ftgumod:idea_table"
-    },
-    {
-      "item": "ftgumod:research_table"
-    },
-    {
-      "item": "ftgumod:magnifying_glass"
-    }
+    "ftgumod:parchment_empty",
+    "ftgumod:idea_table",
+    "ftgumod:research_table",
+    "ftgumod:magnifying_glass"
   ]
 }

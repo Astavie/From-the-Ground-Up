@@ -17,9 +17,7 @@
   "idea": {
     "amount": 2,
     "ingredients": [
-      {
-        "item": "#crop"
-      },
+      "#crop",
       {
         "item": "minecraft:dirt",
         "data": 0
@@ -61,36 +59,18 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:wooden_hoe"
-    },
-    {
-      "item": "minecraft:stone_hoe"
-    },
-    {
-      "item": "minecraft:wheat"
-    },
-    {
-      "item": "minecraft:hay_block"
-    },
-    {
-      "item": "minecraft:melon_seeds"
-    },
-    {
-      "item": "minecraft:pumpkin_seeds"
-    },
-    {
-      "item": "minecraft:lead"
-    },
+    "minecraft:wooden_hoe",
+    "minecraft:stone_hoe",
+    "minecraft:wheat",
+    "minecraft:hay_block",
+    "minecraft:melon_seeds",
+    "minecraft:pumpkin_seeds",
+    "minecraft:lead",
     {
       "item": "minecraft:dirt",
       "data": 1
     },
-    {
-      "item": "minecraft:lit_pumpkin"
-    },
-    {
-      "item": "minecraft:leather"
-    }
+    "minecraft:lit_pumpkin",
+    "minecraft:leather"
   ]
 }

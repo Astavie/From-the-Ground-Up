@@ -72,11 +72,7 @@
       "item": "minecraft:golden_apple",
       "data": 0
     },
-    {
-      "item": "minecraft:golden_carrot"
-    },
-    {
-      "item": "minecraft:speckled_melon"
-    }
+    "minecraft:golden_carrot",
+    "minecraft:speckled_melon"
   ]
 }

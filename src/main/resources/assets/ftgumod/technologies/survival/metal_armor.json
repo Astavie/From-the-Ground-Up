@@ -64,29 +64,13 @@
     }
   },
   "unlock": [
-    {
-      "item": "minecraft:iron_helmet"
-    },
-    {
-      "item": "minecraft:iron_chestplate"
-    },
-    {
-      "item": "minecraft:iron_leggings"
-    },
-    {
-      "item": "minecraft:iron_boots"
-    },
-    {
-      "item": "minecraft:golden_helmet"
-    },
-    {
-      "item": "minecraft:golden_chestplate"
-    },
-    {
-      "item": "minecraft:golden_leggings"
-    },
-    {
-      "item": "minecraft:golden_boots"
-    }
+    "minecraft:iron_helmet",
+    "minecraft:iron_chestplate",
+    "minecraft:iron_leggings",
+    "minecraft:iron_boots",
+    "minecraft:golden_helmet",
+    "minecraft:golden_chestplate",
+    "minecraft:golden_leggings",
+    "minecraft:golden_boots"
   ]
 }
