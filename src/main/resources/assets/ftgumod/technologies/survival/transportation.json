@@ -21,50 +21,19 @@
         "ore": "dustRedstone"
       },
       [
-        "minecraft:chest",
         "minecraft:minecart",
         "#boat",
         "minecraft:rail"
-      ]
+      ],
+      "minecraft:chest"
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " C ",
-      "RPR",
-      "TTT"
-    ],
-    "key": {
-      "C": {
-        "item": "minecraft:chest",
-        "hint": {
-          "translate": "technology.hint.chest"
-        }
-      },
-      "R": {
-        "item": "minecraft:redstone",
-        "hint": {
-          "translate": "technology.hint.redstone"
-        }
-      },
-      "P": {
-        "item": [
-          "minecraft:wooden_pressure_plate",
-          "minecraft:stone_pressure_plate",
-          "minecraft:light_weighted_pressure_plate",
-          "minecraft:heavy_weighted_pressure_plate"
-        ],
-        "hint": {
-          "translate": "technology.hint.plate"
-        }
-      },
-      "T": {
-        "item": "minecraft:rail",
-        "hint": {
-          "translate": "technology.hint.rail"
-        }
-      }
+    "type": "ftgumod:connect",
+    "left": "minecraft:rail",
+    "right": {
+      "type": "forge:ore_dict",
+      "ore": "dustRedstone"
     }
   },
   "unlock": [

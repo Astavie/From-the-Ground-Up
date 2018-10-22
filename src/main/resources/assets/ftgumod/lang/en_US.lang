@@ -84,7 +84,7 @@ commands.technology.test.technology.notDone=Player %1$s has not completed techno
 commands.technology.reload.usage=/technology reload
 commands.technology.reload.success=Successfully reloaded technologies
 
-technology.hint.stick=Leaned on
+technology.hint.stick=Leaning
 technology.hint.crop=Crop
 technology.hint.soil=Soil
 technology.hint.axe=Wood Chopper

@@ -28,8 +28,8 @@
   "research": {
     "type": "ftgumod:match",
     "pattern": [
+      "   ",
       "VMF",
-      "WWW",
       " B "
     ],
     "key": {
@@ -58,12 +58,6 @@
         ],
         "hint": {
           "translate": "technology.hint.fruit"
-        }
-      },
-      "W": {
-        "item": "minecraft:wheat",
-        "hint": {
-          "translate": "technology.hint.wheat"
         }
       },
       "B": {

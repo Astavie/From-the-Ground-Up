@@ -28,8 +28,17 @@
         "minecraft:trapdoor",
         "minecraft:iron_door",
         "minecraft:iron_trapdoor"
-      ]
+      ],
+      {
+        "type": "forge:ore_dict",
+        "ore": "dustRedstone"
+      }
     ]
+  },
+  "research": {
+    "type": "ftgumod:connect",
+    "left": "minecraft:iron_door",
+    "right": "minecraft:lever"
   },
   "unlock": [
     "minecraft:wooden_button",

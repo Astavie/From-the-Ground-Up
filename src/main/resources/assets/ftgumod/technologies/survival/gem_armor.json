@@ -21,40 +21,14 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      "MHM",
-      "MCM",
-      "MLM"
-    ],
-    "key": {
-      "M": {
-        "item": "#gem",
-        "hint": {
-          "translate": "technology.hint.material"
-        }
-      },
-      "H": {
-        "item": "#helmet",
-        "hint": {
-          "translate": "technology.hint.armor"
-        }
-      },
-      "C": {
-        "item": "#chestplate",
-        "hint": {
-          "translate": "technology.hint.armor"
-        }
-      },
-      "L": {
-        "item": [
-          "#leggings",
-          "#boots"
-        ],
-        "hint": {
-          "translate": "technology.hint.armor"
-        }
-      }
+    "type": "ftgumod:connect",
+    "left": {
+      "type": "forge:ore_dict",
+      "ore": "leather"
+    },
+    "right": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     }
   },
   "unlock": [

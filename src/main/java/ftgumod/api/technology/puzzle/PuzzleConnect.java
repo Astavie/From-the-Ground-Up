@@ -8,6 +8,7 @@ import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
@@ -15,6 +16,7 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
@@ -26,6 +28,7 @@ import net.minecraftforge.common.ForgeHooks;
 import javax.annotation.Nullable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class PuzzleConnect implements IPuzzle {
 
@@ -45,6 +48,8 @@ public class PuzzleConnect implements IPuzzle {
 	private static boolean connects(ItemPredicate predicate, ItemStack stack) {
 		if (predicate.getMatchingStacks().length == 0)
 			return true;
+
+		// Crafting Recipes
 		for (IRecipe recipe : CraftingManager.REGISTRY) {
 			if (predicate.test(recipe.getRecipeOutput())) {
 				for (Ingredient ingredient : recipe.getIngredients())
@@ -55,6 +60,16 @@ public class PuzzleConnect implements IPuzzle {
 					for (ItemStack s : predicate.getMatchingStacks())
 						if (ingredient.test(s))
 							return true;
+		}
+
+		// Furnace Recipes
+		for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
+			if (predicate.test(entry.getValue()) && FTGUAPI.stackUtils.isStackOf(entry.getKey(), stack))
+				return true;
+			if (FTGUAPI.stackUtils.isEqual(entry.getValue(), stack))
+				for (ItemStack s : predicate.getMatchingStacks())
+					if (FTGUAPI.stackUtils.isStackOf(entry.getKey(), s))
+						return true;
 		}
 		return false;
 	}
@@ -78,6 +93,12 @@ public class PuzzleConnect implements IPuzzle {
 	}
 
 	private boolean fits(ItemStack stack, int index) {
+		if (research.left.test(stack) || research.right.test(stack))
+			return false;
+		for (int i = 0; i < 3; i++)
+			if (FTGUAPI.stackUtils.isEqual(stack, inventory.getStackInSlot(i)))
+				return false;
+
 		ItemPredicate left = index > 0 ? new ItemPredicate(inventory.getStackInSlot(index - 1)) : research.left;
 		ItemPredicate right = index < 2 ? new ItemPredicate(inventory.getStackInSlot(index + 1)) : research.right;
 		return connects(left, stack) && connects(right, stack);
@@ -121,9 +142,10 @@ public class PuzzleConnect implements IPuzzle {
 	@Override
 	public void drawBackground(GuiContainer gui, int mouseX, int mouseY) {
 		// Grid
-		gui.drawTexturedModalRect(44 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 0, 166, 54, 18);
+		gui.drawTexturedModalRect(43 + gui.getGuiLeft(), 34 + gui.getGuiTop(), 0, 166, 54, 18);
 
 		// Items
+		RenderHelper.enableGUIStandardItemLighting();
 		gui.mc.getRenderItem().zLevel = 100.0F;
 
 		GlStateManager.enableDepth();

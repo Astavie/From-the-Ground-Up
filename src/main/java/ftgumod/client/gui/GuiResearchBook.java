@@ -40,18 +40,18 @@ public class GuiResearchBook extends GuiScreen {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final ResourceLocation ACHIEVEMENT_BACKGROUND = new ResourceLocation(FTGU.MODID, "textures/gui/achievement/achievement_background.png");
-	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("minecraft", "textures/blocks/hardened_clay_stained_cyan.png");
+	private static final ResourceLocation STAINED_CLAY = new ResourceLocation("textures/blocks/hardened_clay_stained_cyan.png");
 	private static final ResourceLocation RECIPE_BOOK = new ResourceLocation("textures/gui/recipe_book.png");
 	public static Map<ResourceLocation, Float> zoom;
 	public static Map<ResourceLocation, Double> xScrollO;
 	public static Map<ResourceLocation, Double> yScrollO;
 	private static boolean state = true;
+	private static Technology root;
 	private static Technology selected;
 	private static int scroll = 1;
 	private final EntityPlayer player;
 	private final int num = 4;
 
-	private Technology root;
 	private int x_min;
 	private int y_min;
 	private int x_max;
@@ -73,10 +73,12 @@ public class GuiResearchBook extends GuiScreen {
 		imageWidth = 256;
 		imageHeight = 202;
 
-		for (Technology technology : TechnologyManager.INSTANCE.getRoots()) {
-			if (technology.canResearchIgnoreResearched(player)) {
-				root = technology;
-				break;
+		if (root == null || !TechnologyManager.INSTANCE.contains(root) || !root.canResearchIgnoreResearched(player)) {
+			for (Technology technology : TechnologyManager.INSTANCE.getRoots()) {
+				if (technology.canResearchIgnoreResearched(player)) {
+					root = technology;
+					break;
+				}
 			}
 		}
 
@@ -85,10 +87,13 @@ public class GuiResearchBook extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		if (selected != null && !TechnologyManager.INSTANCE.contains(selected)) {
+		if (selected == null || !TechnologyManager.INSTANCE.contains(selected) || !selected.isResearched(player)) {
 			selected = null;
 			state = true;
 		}
+
+		xScrollP = xScrollTarget = xScrollO.get(root.getRegistryName());
+		yScrollP = yScrollTarget = yScrollO.get(root.getRegistryName());
 
 		buttonList.clear();
 		if (state) {
@@ -115,9 +120,6 @@ public class GuiResearchBook extends GuiScreen {
 			y_min = y_min * 24 - 112;
 			x_max = x_max * 24 - 77;
 			y_max = y_max * 24 - 77;
-
-			xScrollP = xScrollTarget = xScrollO.get(root.getRegistryName());
-			yScrollP = yScrollTarget = yScrollO.get(root.getRegistryName());
 
 			GuiButton page = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, root.getDisplayInfo().getTitle().getFormattedText());
 			if (TechnologyManager.INSTANCE.getRoots().stream().filter(t -> t.canResearchIgnoreResearched(player)).count() < 2)
@@ -463,7 +465,7 @@ public class GuiResearchBook extends GuiScreen {
 					for (ItemStack stack : (NonNullList<ItemStack>) nonNullList)
 						list[pp++] = stack;
 
-				long tick = mc.world.getWorldTime() / 30;
+				long tick = mc.world.getTotalWorldTime() / 30;
 				int index = (int) (tick % list.length);
 
 				ItemStack item = list[index];

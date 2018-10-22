@@ -34,37 +34,9 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " E ",
-      " T ",
-      " A "
-    ],
-    "key": {
-      "E": {
-        "item": {
-          "type": "ftgumod:enchantment"
-        },
-        "hint": {
-          "translate": "technology.hint.enchantment"
-        }
-      },
-      "T": {
-        "item": "#tool",
-        "hint": {
-          "translate": "technology.hint.tool"
-        }
-      },
-      "A": {
-        "item": {
-          "item": "minecraft:anvil",
-          "data": 0
-        },
-        "hint": {
-          "translate": "technology.hint.table"
-        }
-      }
-    }
+    "type": "ftgumod:connect",
+    "left": "minecraft:book",
+    "right": "minecraft:iron_sword"
   },
   "unlock": [
     "minecraft:enchanting_table"

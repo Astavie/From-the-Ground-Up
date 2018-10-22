@@ -24,32 +24,9 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      "CFC",
-      " C ",
-      " H "
-    ],
-    "key": {
-      "C": {
-        "item": "minecraft:clay",
-        "hint": {
-          "translate": "technology.hint.clay"
-        }
-      },
-      "F": {
-        "item": "#flower",
-        "hint": {
-          "translate": "technology.hint.flower"
-        }
-      },
-      "H": {
-        "item": "#heat",
-        "hint": {
-          "translate": "technology.hint.heat"
-        }
-      }
-    }
+    "type": "ftgumod:connect",
+    "left": "minecraft:hardened_clay",
+    "right": "minecraft:brick_block"
   },
   "unlock": [
     "minecraft:brick_block",

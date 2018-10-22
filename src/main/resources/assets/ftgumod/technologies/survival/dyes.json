@@ -17,9 +17,7 @@
   "idea": {
     "amount": 1,
     "ingredients": [
-      {
-        "item": "#flower"
-      },
+      "#flower",
       {
         "type": "forge:ore_dict",
         "ore": "dye"
@@ -31,66 +29,11 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " W ",
-      " D ",
-      " C "
-    ],
-    "key": {
-      "W": {
-        "item": [
-          "minecraft:wool",
-          "minecraft:hardened_clay",
-          "minecraft:stained_hardened_clay",
-          {
-            "type": "forge:ore_dict",
-            "ore": "blockGlass"
-          },
-          {
-            "type": "forge:ore_dict",
-            "ore": "paneGlass"
-          }
-        ],
-        "hint": {
-          "translate": "technology.hint.dyeable"
-        }
-      },
-      "D": {
-        "item": {
-          "type": "forge:ore_dict",
-          "ore": "dye"
-        },
-        "hint": {
-          "translate": "technology.hint.dye"
-        }
-      },
-      "C": {
-        "item": [
-          "#flower",
-          {
-            "type": "forge:ore_dict",
-            "ore": "blockCactus"
-          }
-        ],
-        "hint": {
-          "translate": "technology.hint.flower"
-        },
-        "decipher": {
-          "decipher": [
-            {
-              "block": "minecraft:yellow_flower"
-            },
-            {
-              "block": "minecraft:red_flower"
-            },
-            {
-              "block": "minecraft:cactus"
-            }
-          ],
-          "hint": "Flower"
-        }
-      }
+    "type": "ftgumod:connect",
+    "left": "minecraft:flint",
+    "right": {
+      "item": "minecraft:dye",
+      "data": 0
     }
   },
   "unlock": [

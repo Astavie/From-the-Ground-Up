@@ -34,41 +34,12 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " A ",
-      "WWW",
-      "SSS"
-    ],
-    "key": {
-      "A": {
-        "item": "#axe",
-        "hint": {
-          "translate": "technology.hint.axe"
-        }
-      },
-      "W": {
-        "item": {
-          "type": "forge:ore_dict",
-          "ore": "plankWood"
-        },
-        "hint": {
-          "translate": "technology.hint.material"
-        }
-      },
-      "S": {
-        "item": [
-          {
-            "type": "forge:ore_dict",
-            "ore": "slabWood"
-          },
-          "#crafting"
-        ],
-        "hint": {
-          "translate": "technology.hint.table"
-        }
-      }
-    }
+    "type": "ftgumod:connect",
+    "left": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "right": "minecraft:wool"
   },
   "unlock": [
     "#door",

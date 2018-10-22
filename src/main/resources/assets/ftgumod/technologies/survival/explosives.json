@@ -26,43 +26,6 @@
       }
     ]
   },
-  "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " F ",
-      "DGD",
-      "SSS"
-    ],
-    "key": {
-      "F": {
-        "item": "#fire",
-        "hint": {
-          "translate": "technology.hint.fire"
-        }
-      },
-      "D": {
-        "item": {
-          "type": "forge:ore_dict",
-          "ore": "dye"
-        },
-        "hint": {
-          "translate": "technology.hint.dye"
-        }
-      },
-      "G": {
-        "item": "minecraft:gunpowder",
-        "hint": {
-          "translate": "technology.hint.gunpowder"
-        }
-      },
-      "S": {
-        "item": "minecraft:sand",
-        "hint": {
-          "translate": "technology.hint.sand"
-        }
-      }
-    }
-  },
   "unlock": [
     "minecraft:tnt",
     "minecraft:tnt_minecart",

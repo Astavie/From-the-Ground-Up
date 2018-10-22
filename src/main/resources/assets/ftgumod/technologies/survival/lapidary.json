@@ -27,48 +27,14 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " P ",
-      " D ",
-      " C "
-    ],
-    "key": {
-      "P": {
-        "item": "#pickaxe",
-        "hint": {
-          "translate": "technology.hint.tool"
-        }
-      },
-      "D": {
-        "item": "#gem",
-        "hint": {
-          "translate": "technology.hint.gem"
-        },
-        "decipher": {
-          "decipher": [
-            {
-              "block": "minecraft:diamond_ore"
-            },
-            {
-              "block": "minecraft:diamond_block"
-            },
-            {
-              "block": "minecraft:emerald_ore"
-            },
-            {
-              "block": "minecraft:emerald_block"
-            }
-          ],
-          "hint": "Gem"
-        }
-      },
-      "C": {
-        "item": "#crafting",
-        "hint": {
-          "translate": "technology.hint.table"
-        }
-      }
+    "type": "ftgumod:connect",
+    "left": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "right": {
+      "type": "forge:ore_dict",
+      "ore": "gemDiamond"
     }
   },
   "unlock": [

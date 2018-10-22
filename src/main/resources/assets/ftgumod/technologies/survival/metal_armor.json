@@ -21,46 +21,11 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      " H ",
-      "ASD",
-      " L "
-    ],
-    "key": {
-      "H": {
-        "item": "#helmet",
-        "hint": {
-          "translate": "technology.hint.armor"
-        }
-      },
-      "S": {
-        "item": "minecraft:armor_stand",
-        "hint": {
-          "translate": "technology.hint.stand"
-        }
-      },
-      "L": {
-        "item": [
-          "#leggings",
-          "#boots"
-        ],
-        "hint": {
-          "translate": "technology.hint.armor"
-        }
-      },
-      "A": {
-        "item": "#sword",
-        "hint": {
-          "translate": "technology.hint.attack"
-        }
-      },
-      "D": {
-        "item": "minecraft:shield",
-        "hint": {
-          "translate": "technology.hint.defense"
-        }
-      }
+    "type": "ftgumod:connect",
+    "left": "minecraft:armor_stand",
+    "right": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
     }
   },
   "unlock": [

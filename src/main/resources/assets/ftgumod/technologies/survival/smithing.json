@@ -21,37 +21,14 @@
     ]
   },
   "research": {
-    "type": "ftgumod:match",
-    "pattern": [
-      "   ",
-      " I ",
-      "FCU"
-    ],
-    "key": {
-      "I": {
-        "item": "#metal",
-        "hint": {
-          "translate": "technology.hint.material"
-        }
-      },
-      "F": {
-        "item": "#fire",
-        "hint": {
-          "translate": "technology.hint.fire"
-        }
-      },
-      "C": {
-        "item": "#crafting",
-        "hint": {
-          "translate": "technology.hint.table"
-        }
-      },
-      "U": {
-        "item": "minecraft:furnace",
-        "hint": {
-          "translate": "technology.hint.furnace"
-        }
-      }
+    "type": "ftgumod:connect",
+    "left": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "right": {
+      "item": "minecraft:anvil",
+      "data": 0
     }
   },
   "unlock": [
