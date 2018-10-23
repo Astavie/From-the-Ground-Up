@@ -18,6 +18,9 @@ public class ProxyCommon {
 	public void clearToasts() {
 	}
 
+	public void openResearchBook(EntityPlayer player) {
+	}
+
 	public IGuiHandler getGuiHandler() {
 		return new GuiHandler();
 	}

@@ -1,7 +1,6 @@
 package ftgumod;
 
 import ftgumod.api.util.BlockSerializable;
-import ftgumod.client.gui.GuiResearchBook;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.item.ItemParchmentResearch;
@@ -95,8 +94,7 @@ public class EventHandler {
 	@SideOnly(Side.CLIENT)
 	public void onKey(InputEvent.KeyInputEvent event) {
 		if (ProxyClient.key.isPressed()) {
-			if (TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(Minecraft.getMinecraft().player)))
-				Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(Minecraft.getMinecraft().player));
+			FTGU.PROXY.openResearchBook(Minecraft.getMinecraft().player);
 			PacketDispatcher.sendToServer(new RequestMessage());
 		}
 	}

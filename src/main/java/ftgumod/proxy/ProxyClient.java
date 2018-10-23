@@ -4,9 +4,11 @@ import ftgumod.Content;
 import ftgumod.FTGU;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.client.GuiHandlerClient;
+import ftgumod.client.gui.GuiResearchBook;
 import ftgumod.client.gui.toast.ToastTechnology;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
+import ftgumod.technology.TechnologyManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -38,6 +40,12 @@ public class ProxyClient extends ProxyCommon {
 	@Override
 	public void clearToasts() {
 		Minecraft.getMinecraft().getToastGui().clear();
+	}
+
+	@Override
+	public void openResearchBook(EntityPlayer player) {
+		if (TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(player)))
+			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
 	}
 
 	@Override

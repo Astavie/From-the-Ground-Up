@@ -1,10 +1,8 @@
 package ftgumod.item;
 
-import ftgumod.client.gui.GuiResearchBook;
+import ftgumod.FTGU;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.technology.TechnologyManager;
-import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,10 +23,10 @@ public class ItemResearchBook extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (world.isRemote) {
-			if (TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(player)))
-				Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(player));
-		} else PacketDispatcher.sendTo(new TechnologyMessage(player, false), (EntityPlayerMP) player);
+		if (world.isRemote)
+			FTGU.PROXY.openResearchBook(player);
+		else
+			PacketDispatcher.sendTo(new TechnologyMessage(player, false), (EntityPlayerMP) player);
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 
