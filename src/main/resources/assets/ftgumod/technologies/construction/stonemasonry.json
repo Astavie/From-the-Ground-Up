@@ -80,9 +80,6 @@
       "item": "minecraft:cobblestone_wall",
       "data": 1
     },
-    {
-      "item": "minecraft:concrete_powder",
-      "data": 32767
-    }
+    "minecraft:concrete_powder"
   ]
 }

@@ -15,7 +15,6 @@ import ftgumod.api.util.predicate.ItemPredicate;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.JsonUtils;
@@ -73,11 +72,7 @@ public class StackUtils implements IStackUtils {
 			}
 			JsonObject object = new JsonObject();
 			object.add("item", element);
-
-			Item i = Item.REGISTRY.getObject(new ResourceLocation(context.appendModId(item)));
-			if (i != null && i.getHasSubtypes())
-				object.addProperty("data", OreDictionary.WILDCARD_VALUE);
-
+			object.addProperty("data", OreDictionary.WILDCARD_VALUE);
 			return new ItemIngredient(CraftingHelper.getIngredient(object, context));
 		}
 		if (element.isJsonArray())

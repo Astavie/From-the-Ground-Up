@@ -6,8 +6,8 @@ import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.crafting.CompoundIngredient;
 
+import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class UnlockCompound implements IUnlock {
 
@@ -17,10 +17,10 @@ public class UnlockCompound implements IUnlock {
 
 	public UnlockCompound(NonNullList<IUnlock> list) {
 		this.list = list;
-		Stream<IUnlock> stream = list.stream().filter(IUnlock::isDisplayed);
-		display = stream.count() > 0;
+		List<IUnlock> stream = list.stream().filter(IUnlock::isDisplayed).collect(Collectors.toList());
+		display = stream.size() > 0;
 		if (display)
-			icon = new CompoundIngredient(stream.map(IUnlock::getIcon).collect(Collectors.toList())) {
+			icon = new CompoundIngredient(stream.stream().map(IUnlock::getIcon).collect(Collectors.toList())) {
 			};
 		else
 			icon = null;

@@ -26,6 +26,7 @@
   },
   "unlock": [
     "minecraft:stained_glass",
+    "minecraft:glass_pane",
     "minecraft:stained_glass_pane",
     "minecraft:glass_bottle"
   ]

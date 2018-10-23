@@ -39,6 +39,7 @@
     "right": "minecraft:iron_sword"
   },
   "unlock": [
-    "minecraft:enchanting_table"
+    "minecraft:enchanting_table",
+    "minecraft:spectral_arrow"
   ]
 }
