@@ -68,7 +68,7 @@ public class PuzzleConnect implements IPuzzle {
 			NBTTagCompound compound = items.getCompoundTagAt(i);
 			byte slot = compound.getByte("Slot");
 			if (slot >= 0 && slot < inventory.getSizeInventory())
-				inventory.setInventorySlotContents(i, new ItemStack(compound));
+				inventory.setInventorySlotContents(slot, new ItemStack(compound));
 		}
 	}
 
@@ -151,14 +151,15 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void onRemove(@Nullable EntityPlayer player, World world, BlockPos pos) {
-		if (player != null) {
-			for (int i = 0; i < 3; i++) {
-				ItemStack stack = inventory.getStackInSlot(i);
-				if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
-					player.dropItem(stack, false);
-			}
-		} else InventoryHelper.dropInventoryItems(world, pos, inventory);
-
+		if (!world.isRemote) {
+			if (player != null) {
+				for (int i = 0; i < 3; i++) {
+					ItemStack stack = inventory.getStackInSlot(i);
+					if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
+						player.dropItem(stack, false);
+				}
+			} else InventoryHelper.dropInventoryItems(world, pos, inventory);
+		}
 		for (ContainerResearch container : registry)
 			container.removeSlots(3);
 		registry.clear();

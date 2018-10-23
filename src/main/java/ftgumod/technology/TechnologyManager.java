@@ -161,7 +161,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 				for (IUnlock unlock : t.getUnlock()) {
 					if (unlock.unlocks(stack)) {
 						if (player == null || t.isResearched(player))
-							return true;
+							return false;
 						tech = true;
 						break;
 					}
