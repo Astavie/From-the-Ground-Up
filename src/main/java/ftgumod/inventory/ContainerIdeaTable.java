@@ -4,11 +4,14 @@ import ftgumod.Content;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotSpecial;
 import ftgumod.api.util.IStackUtils;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
@@ -38,6 +41,8 @@ public class ContainerIdeaTable extends Container {
 	public ContainerIdeaTable(TileEntityInventory tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
 		this.invPlayer = invPlayer;
+		if (!invPlayer.player.world.isRemote)
+			PacketDispatcher.sendTo(new TechnologyMessage(invPlayer.player, false), (EntityPlayerMP) invPlayer.player);
 
 		sizeInventory = addSlots(tileEntity);
 

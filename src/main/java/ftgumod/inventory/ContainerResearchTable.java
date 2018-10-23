@@ -5,11 +5,13 @@ import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.packet.PacketDispatcher;
-import ftgumod.packet.client.HintMessage;
+import ftgumod.packet.client.TechnologyMessage;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.Technology;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.tileentity.TileEntityResearchTable;
 import ftgumod.util.StackUtils;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -18,7 +20,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -42,6 +43,8 @@ public class ContainerResearchTable extends ContainerResearch {
 	public ContainerResearchTable(TileEntityResearchTable tileEntity, InventoryPlayer invPlayer) {
 		this.invInput = tileEntity;
 		this.invPlayer = invPlayer;
+		if (!invPlayer.player.world.isRemote)
+			PacketDispatcher.sendTo(new TechnologyMessage(invPlayer.player, false), (EntityPlayerMP) invPlayer.player);
 
 		result = new InventoryCraftResult();
 		sizeInventory = addSlots(tileEntity);
@@ -186,13 +189,16 @@ public class ContainerResearchTable extends ContainerResearch {
 	}
 
 	@Override
-	public void refreshHints(List<ITextComponent> hints) {
-		PacketDispatcher.sendTo(new HintMessage(hints), (EntityPlayerMP) invPlayer.player);
+	public void refreshHints() {
+		PacketDispatcher.sendToServer(new RequestMessage(true));
 	}
 
 	@Override
 	public void markDirty() {
 		invInput.markDirty();
+
+		IBlockState state = invInput.getWorld().getBlockState(invInput.getPos());
+		invInput.getWorld().notifyBlockUpdate(invInput.getPos(), state, state, 2);
 	}
 
 }

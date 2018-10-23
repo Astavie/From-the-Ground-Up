@@ -6,7 +6,6 @@ import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.server.CopyTechMessage;
-import ftgumod.packet.server.RequestMessage;
 import ftgumod.proxy.ProxyClient;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -82,8 +81,6 @@ public class GuiResearchBook extends GuiScreen {
 				}
 			}
 		}
-
-		PacketDispatcher.sendToServer(new RequestMessage());
 	}
 
 	@Override

@@ -3,9 +3,6 @@ package ftgumod.api.inventory;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraft.util.text.ITextComponent;
-
-import java.util.List;
 
 public abstract class ContainerResearch extends Container {
 
@@ -25,7 +22,7 @@ public abstract class ContainerResearch extends Container {
 
 	public abstract EntityPlayer getPlayer();
 
-	public abstract void refreshHints(List<ITextComponent> hints);
+	public abstract void refreshHints();
 
 	public abstract void markDirty();
 

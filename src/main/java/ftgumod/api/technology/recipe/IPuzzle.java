@@ -55,6 +55,8 @@ public interface IPuzzle {
 
 	void setHints(List<ITextComponent> hints);
 
+	List<ITextComponent> getHints();
+
 	@SideOnly(Side.CLIENT)
 	void drawForeground(GuiContainer gui, int mouseX, int mouseY);
 

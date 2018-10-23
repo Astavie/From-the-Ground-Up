@@ -138,7 +138,8 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void onInventoryChange(ContainerResearch container) {
-		container.markDirty();
+		if (!container.isClient())
+			container.markDirty();
 	}
 
 	@Override
@@ -165,6 +166,11 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void setHints(List<ITextComponent> hints) {
+	}
+
+	@Override
+	public List<ITextComponent> getHints() {
+		return Collections.emptyList();
 	}
 
 	@Override

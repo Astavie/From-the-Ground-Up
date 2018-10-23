@@ -52,7 +52,7 @@ public class HintMessage implements IMessage {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, HintMessage message) {
-			if (player.openContainer instanceof ContainerResearchTable)
+			if (player.openContainer instanceof ContainerResearchTable && ((ContainerResearchTable) player.openContainer).invInput.puzzle != null)
 				((ContainerResearchTable) player.openContainer).invInput.puzzle.setHints(message.hints);
 			return null;
 		}

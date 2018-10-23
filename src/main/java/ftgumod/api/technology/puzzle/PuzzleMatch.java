@@ -98,9 +98,8 @@ public class PuzzleMatch implements IPuzzle {
 					hints.add(research.getHint(i).getHint(inspected));
 				else
 					hints.add(null);
-			container.refreshHints(hints);
 			container.markDirty();
-		}
+		} else container.refreshHints();
 	}
 
 	@Override
@@ -138,6 +137,11 @@ public class PuzzleMatch implements IPuzzle {
 	}
 
 	@Override
+	public List<ITextComponent> getHints() {
+		return hints;
+	}
+
+	@Override
 	public void drawForeground(GuiContainer gui, int mouseX, int mouseY) {
 		mouseX -= gui.getGuiLeft();
 		mouseY -= gui.getGuiTop();
@@ -149,7 +153,7 @@ public class PuzzleMatch implements IPuzzle {
 			int index = slot.getSlotIndex();
 			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && research.hasHint(index)) {
 				ITextComponent hint = (hints == null || b) ? research.getHint(index).getObfuscatedHint() : hints.get(index);
-				if (!hint.getUnformattedText().isEmpty())
+				if (hint != null && !hint.getUnformattedText().isEmpty())
 					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX, mouseY);
 			}
 		} else if (b && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50) {
