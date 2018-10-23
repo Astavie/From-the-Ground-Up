@@ -60,9 +60,9 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void autoResearch(Technology tech) {
-		if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
 			super.autoResearch(tech);
-		} else {
+		} else if (Minecraft.getMinecraft().player != null) {
 			CapabilityTechnology.ITechnology cap = Minecraft.getMinecraft().player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			cap.setResearched(tech.getRegistryName().toString());
 		}
