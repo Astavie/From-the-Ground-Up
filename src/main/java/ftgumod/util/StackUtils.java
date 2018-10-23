@@ -25,7 +25,10 @@ import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 public class StackUtils implements IStackUtils {
 
@@ -58,7 +61,7 @@ public class StackUtils implements IStackUtils {
 
 	@Override
 	public ItemPredicate getItemPredicate(JsonElement element, JsonContextPublic context) {
-		Set<ItemPredicate> predicates = new HashSet<>();
+		List<ItemPredicate> predicates = new LinkedList<>();
 
 		if (element.isJsonPrimitive()) {
 			String item = element.getAsString();

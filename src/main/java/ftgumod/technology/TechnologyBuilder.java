@@ -101,7 +101,7 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 
 	@Override
 	public ITechnologyBuilder addUnlock(IUnlock... ingredients) {
-		unlock.addAll(Arrays.asList(ingredients));
+		this.unlock.addAll(Arrays.asList(ingredients));
 		return this;
 	}
 

@@ -28,7 +28,6 @@ key.categories.ftgumod=From the Ground Up!
 
 technology.complete.already=%s has already been researched
 technology.complete.understand=You do not understand this technology
-technology.complete.enough=You do not have enough knowledge to research this technology
 technology.complete.unlock=Unlocked the research for %s
 technology.complete.unlock.root=Unlocked the research tab %s
 

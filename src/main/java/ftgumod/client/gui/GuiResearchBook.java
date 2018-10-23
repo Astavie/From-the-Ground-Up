@@ -548,8 +548,8 @@ public class GuiResearchBook extends GuiScreen {
 		super.drawScreen(x, y, z);
 		if (selected != null) {
 			if (state) {
-				String s = selected.getDisplayInfo().getTitle().getUnformattedText();
-				String s1 = selected.getDisplayInfo().getDescription().getUnformattedText();
+				String s = selected.getDisplayInfo().getTitle().getFormattedText();
+				String s1 = selected.getDisplayInfo().getDescription().getFormattedText();
 
 				int children = 0;
 				for (ITechnology child : selected.getChildren())
@@ -572,11 +572,11 @@ public class GuiResearchBook extends GuiScreen {
 					fontRenderer.drawStringWithShadow(I18n.format(children == 1 ? "technology.tab" : "technology.tabs"), i7, k7 + i9 + 4, 0xffff5555);
 				fontRenderer.drawStringWithShadow(s, i7, k7, -1);
 			} else {
-				String s1 = selected.getDisplayInfo().getTitle().getUnformattedText();
+				String s1 = selected.getDisplayInfo().getTitle().getFormattedText();
 				int x1 = (width - fontRenderer.getStringWidth(s1)) / 2;
 				fontRenderer.drawStringWithShadow(s1, x1, l + 22, 0xffffff);
 
-				String s2 = selected.getDisplayInfo().getDescription().getUnformattedText();
+				String s2 = selected.getDisplayInfo().getDescription().getFormattedText();
 				int x2 = width / 2;
 				int y2 = l + 32;
 

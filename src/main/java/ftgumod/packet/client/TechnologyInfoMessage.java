@@ -2,11 +2,11 @@ package ftgumod.packet.client;
 
 import ftgumod.FTGU;
 import ftgumod.client.gui.GuiResearchBook;
-import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -74,13 +74,15 @@ public class TechnologyInfoMessage implements IMessage {
 
 		@Override
 		public IMessage onMessage(TechnologyInfoMessage message, MessageContext ctx) {
-			FTGU.copy = message.copy;
-			FTGU.custom = message.custom;
+			if (FMLClientHandler.instance().getServer() == null) {
+				FTGU.copy = message.copy;
+				FTGU.custom = message.custom;
 
-			TechnologyManager.INSTANCE.clear();
+				TechnologyManager.INSTANCE.clear();
 
-			TechnologyManager.INSTANCE.cache = message.json;
-			TechnologyManager.INSTANCE.load();
+				TechnologyManager.INSTANCE.cache = message.json;
+				TechnologyManager.INSTANCE.load();
+			}
 
 			Supplier<Stream<Technology>> stream = TechnologyManager.INSTANCE.getRoots()::stream;
 			GuiResearchBook.zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
@@ -88,7 +90,7 @@ public class TechnologyInfoMessage implements IMessage {
 			GuiResearchBook.yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 			FTGU.PROXY.clearToasts(); // Removes unnecessary recipe toasts
-			return new RequestMessage();
+			return null;
 		}
 
 	}

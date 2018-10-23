@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
+import java.io.File;
 import java.util.*;
 
 public class CommandTechnology extends CommandBase {
@@ -48,7 +49,7 @@ public class CommandTechnology extends CommandBase {
 		else {
 			if (args[0].equals("reload")) {
 				if (args.length == 1) {
-					TechnologyManager.INSTANCE.reload(sender.getServer().worlds[0]);
+					TechnologyManager.INSTANCE.reload(new File(sender.getServer().worlds[0].getSaveHandler().getWorldDirectory(), "data"));
 					PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
 					notifyCommandListener(sender, this, "commands.technology.reload.success");
 				} else

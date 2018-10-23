@@ -41,10 +41,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -154,6 +151,11 @@ public class FTGU {
 
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
 		}
+	}
+
+	@Mod.EventHandler
+	public void serverAboutToStart(FMLServerAboutToStartEvent event) {
+		TechnologyManager.INSTANCE.reload(event.getServer().getActiveAnvilConverter().getFile(event.getServer().getFolderName(), "data"));
 	}
 
 	@Mod.EventHandler

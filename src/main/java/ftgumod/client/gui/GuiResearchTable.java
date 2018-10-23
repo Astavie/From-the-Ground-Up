@@ -2,6 +2,8 @@ package ftgumod.client.gui;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
+import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,6 +22,7 @@ public class GuiResearchTable extends GuiContainer {
 		this.tile = tileentity;
 
 		texture = new ResourceLocation(FTGU.MODID + ":textures/gui/container/" + tileentity.getName() + ".png");
+		PacketDispatcher.sendToServer(new RequestMessage());
 	}
 
 	@Override

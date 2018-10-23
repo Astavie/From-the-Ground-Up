@@ -6,16 +6,21 @@ import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.api.util.BlockSerializable;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -30,6 +35,31 @@ public class PuzzleMatch implements IPuzzle {
 
 	public PuzzleMatch(ResearchMatch research) {
 		this.research = research;
+	}
+
+	@Override
+	public NBTBase write() {
+		NBTTagList items = new NBTTagList();
+		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setByte("Slot", (byte) i);
+				inventory.getStackInSlot(i).writeToNBT(compound);
+				items.appendTag(compound);
+			}
+		}
+		return items;
+	}
+
+	@Override
+	public void read(NBTBase tag) {
+		NBTTagList items = (NBTTagList) tag;
+		for (int i = 0; i < items.tagCount(); ++i) {
+			NBTTagCompound compound = items.getCompoundTagAt(i);
+			byte slot = compound.getByte("Slot");
+			if (slot >= 0 && slot < inventory.getSizeInventory())
+				inventory.setInventorySlotContents(slot, new ItemStack(compound));
+		}
 	}
 
 	@Override
@@ -58,7 +88,7 @@ public class PuzzleMatch implements IPuzzle {
 
 	@Override
 	public void onInventoryChange(ContainerResearch container) {
-		if (!container.isClient() && research.getTechnology().canResearch(container.getPlayer())) {
+		if (!container.isClient()) {
 			hints = new ArrayList<>();
 			List<BlockSerializable> inspected = Collections.emptyList();
 			if (container.inventorySlots.get(2).getHasStack())
@@ -69,6 +99,7 @@ public class PuzzleMatch implements IPuzzle {
 				else
 					hints.add(null);
 			container.refreshHints(hints);
+			container.markDirty();
 		}
 	}
 
@@ -108,16 +139,23 @@ public class PuzzleMatch implements IPuzzle {
 
 	@Override
 	public void drawForeground(GuiContainer gui, int mouseX, int mouseY) {
+		mouseX -= gui.getGuiLeft();
+		mouseY -= gui.getGuiTop();
+
+		boolean b = !research.getTechnology().canResearch(gui.mc.player);
+
 		Slot slot = gui.getSlotUnderMouse();
 		if (slot != null && !slot.getHasStack()) {
 			int index = slot.getSlotIndex();
 			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && research.hasHint(index)) {
-				ITextComponent hint = hints == null ? research.getHint(index).getObfuscatedHint() : hints.get(index);
+				ITextComponent hint = (hints == null || b) ? research.getHint(index).getObfuscatedHint() : hints.get(index);
 				if (!hint.getUnformattedText().isEmpty())
-					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
+					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX, mouseY);
 			}
-		} else if (!research.getTechnology().canResearch(gui.mc.player) && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50)
-			gui.drawHoveringText(I18n.format("technology.complete.enough"), mouseX - gui.getGuiLeft(), mouseY - gui.getGuiTop());
+		} else if (b && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50) {
+			List<String> text = Collections.singletonList(I18n.format(research.getTechnology().isResearched(gui.mc.player) ? "technology.complete.already" : "technology.complete.understand", research.getTechnology().getDisplayInfo().getTitle().getFormattedText()));
+			GuiUtils.drawHoveringText(text, mouseX, mouseY, gui.width, gui.height, gui.width - mouseX - gui.getGuiLeft() - 16, Minecraft.getMinecraft().fontRenderer);
+		}
 	}
 
 	@Override

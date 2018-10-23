@@ -60,6 +60,7 @@ public class ContainerResearchTable extends ContainerResearch {
 		if (invInput.puzzle != null) {
 			invInput.puzzle.onStart(this);
 			invInput.puzzle.onInventoryChange(this);
+			// invInput.sync();
 		}
 
 		onCraftMatrixChanged(null);
@@ -187,6 +188,11 @@ public class ContainerResearchTable extends ContainerResearch {
 	@Override
 	public void refreshHints(List<ITextComponent> hints) {
 		PacketDispatcher.sendTo(new HintMessage(hints), (EntityPlayerMP) invPlayer.player);
+	}
+
+	@Override
+	public void markDirty() {
+		invInput.markDirty();
 	}
 
 }

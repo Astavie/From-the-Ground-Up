@@ -36,7 +36,6 @@ public class Technology implements ITechnology {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	private final Set<Technology> children = new HashSet<>();
-
 	private final ResourceLocation id;
 	private final int level; // TODO: Use this variable for something
 

@@ -6,9 +6,11 @@ import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.api.util.predicate.ItemPredicate;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
@@ -19,13 +21,18 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.fml.client.config.GuiUtils;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +45,31 @@ public class PuzzleConnect implements IPuzzle {
 
 	public PuzzleConnect(ResearchConnect research) {
 		this.research = research;
+	}
+
+	@Override
+	public NBTBase write() {
+		NBTTagList items = new NBTTagList();
+		for (int i = 0; i < inventory.getSizeInventory(); ++i) {
+			if (!inventory.getStackInSlot(i).isEmpty()) {
+				NBTTagCompound compound = new NBTTagCompound();
+				compound.setByte("Slot", (byte) i);
+				inventory.getStackInSlot(i).writeToNBT(compound);
+				items.appendTag(compound);
+			}
+		}
+		return items;
+	}
+
+	@Override
+	public void read(NBTBase tag) {
+		NBTTagList items = (NBTTagList) tag;
+		for (int i = 0; i < items.tagCount(); ++i) {
+			NBTTagCompound compound = items.getCompoundTagAt(i);
+			byte slot = compound.getByte("Slot");
+			if (slot >= 0 && slot < inventory.getSizeInventory())
+				inventory.setInventorySlotContents(i, new ItemStack(compound));
+		}
 	}
 
 	@Override
@@ -106,6 +138,7 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void onInventoryChange(ContainerResearch container) {
+		container.markDirty();
 	}
 
 	@Override
@@ -138,10 +171,15 @@ public class PuzzleConnect implements IPuzzle {
 	public void drawForeground(GuiContainer gui, int mouseX, int mouseY) {
 		mouseX -= gui.getGuiLeft();
 		mouseY -= gui.getGuiTop();
-		if (mouseX >= 25 && mouseX < 43 && mouseY >= 34 && mouseY < 52)
-			gui.drawHoveringText(gui.getItemToolTip(research.left.getDisplayStack()), mouseX, mouseY);
-		if (mouseX >= 97 && mouseX < 115 && mouseY >= 34 && mouseY < 52)
-			gui.drawHoveringText(gui.getItemToolTip(research.right.getDisplayStack()), mouseX, mouseY);
+		if (research.getTechnology().canResearch(gui.mc.player)) {
+			if (mouseX >= 25 && mouseX < 43 && mouseY >= 34 && mouseY < 52)
+				gui.drawHoveringText(gui.getItemToolTip(research.left.getDisplayStack()), mouseX, mouseY);
+			if (mouseX >= 97 && mouseX < 115 && mouseY >= 34 && mouseY < 52)
+				gui.drawHoveringText(gui.getItemToolTip(research.right.getDisplayStack()), mouseX, mouseY);
+		} else if (mouseX >= 97 && mouseX < 119 && mouseY >= 35 && mouseY < 50) {
+			List<String> text = Collections.singletonList(I18n.format(research.getTechnology().isResearched(gui.mc.player) ? "technology.complete.already" : "technology.complete.understand", research.getTechnology().getDisplayInfo().getTitle().getFormattedText()));
+			GuiUtils.drawHoveringText(text, mouseX, mouseY, gui.width, gui.height, gui.width - mouseX - gui.getGuiLeft() - 16, Minecraft.getMinecraft().fontRenderer);
+		}
 	}
 
 	@Override
@@ -150,17 +188,20 @@ public class PuzzleConnect implements IPuzzle {
 		gui.drawTexturedModalRect(43 + gui.getGuiLeft(), 34 + gui.getGuiTop(), 0, 166, 54, 18);
 
 		// Items
-		RenderHelper.enableGUIStandardItemLighting();
-		gui.mc.getRenderItem().zLevel = 100.0F;
+		if (research.getTechnology().canResearch(gui.mc.player)) {
+			RenderHelper.enableGUIStandardItemLighting();
+			gui.mc.getRenderItem().zLevel = 100.0F;
 
-		GlStateManager.enableDepth();
-		gui.mc.getRenderItem().renderItemAndEffectIntoGUI(gui.mc.player, research.left.getDisplayStack(), 26 + gui.getGuiLeft(), 35 + gui.getGuiTop());
-		gui.mc.getRenderItem().renderItemOverlayIntoGUI(gui.mc.fontRenderer, research.left.getDisplayStack(), 26 + gui.getGuiLeft(), 35 + gui.getGuiTop(), null);
+			GlStateManager.enableDepth();
+			gui.mc.getRenderItem().renderItemAndEffectIntoGUI(gui.mc.player, research.left.getDisplayStack(), 26 + gui.getGuiLeft(), 35 + gui.getGuiTop());
+			gui.mc.getRenderItem().renderItemOverlayIntoGUI(gui.mc.fontRenderer, research.left.getDisplayStack(), 26 + gui.getGuiLeft(), 35 + gui.getGuiTop(), null);
 
-		gui.mc.getRenderItem().renderItemAndEffectIntoGUI(gui.mc.player, research.right.getDisplayStack(), 98 + gui.getGuiLeft(), 35 + gui.getGuiTop());
-		gui.mc.getRenderItem().renderItemOverlayIntoGUI(gui.mc.fontRenderer, research.right.getDisplayStack(), 98 + gui.getGuiLeft(), 35 + gui.getGuiTop(), null);
+			gui.mc.getRenderItem().renderItemAndEffectIntoGUI(gui.mc.player, research.right.getDisplayStack(), 98 + gui.getGuiLeft(), 35 + gui.getGuiTop());
+			gui.mc.getRenderItem().renderItemOverlayIntoGUI(gui.mc.fontRenderer, research.right.getDisplayStack(), 98 + gui.getGuiLeft(), 35 + gui.getGuiTop(), null);
 
-		gui.mc.getRenderItem().zLevel = 0.0F;
+			gui.mc.getRenderItem().zLevel = 0.0F;
+		} else
+			gui.drawTexturedModalRect(97 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 54, 181, 22, 15);
 	}
 
 }

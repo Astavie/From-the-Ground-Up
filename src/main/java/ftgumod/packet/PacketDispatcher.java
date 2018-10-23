@@ -20,7 +20,7 @@ public final class PacketDispatcher {
 
 	private static byte packetId = 0;
 
-	private static SimpleNetworkWrapper dispatcher;
+	public static SimpleNetworkWrapper dispatcher;
 
 	public static void registerPackets() {
 		dispatcher = NetworkRegistry.INSTANCE.newSimpleChannel("ftgu");

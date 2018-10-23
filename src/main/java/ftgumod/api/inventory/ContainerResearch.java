@@ -27,4 +27,6 @@ public abstract class ContainerResearch extends Container {
 
 	public abstract void refreshHints(List<ITextComponent> hints);
 
+	public abstract void markDirty();
+
 }

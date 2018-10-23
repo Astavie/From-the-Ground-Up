@@ -27,7 +27,6 @@ import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.io.FileUtils;
@@ -208,12 +207,12 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		createCallback.forEach(Runnable::run);
 	}
 
-	public void reload(World world) {
+	public void reload(File data) {
 		clear();
 
 		cache = new HashMap<>();
 		load(new File(FTGU.folder, "technologies"));
-		load(new File(new File(world.getSaveHandler().getWorldDirectory(), "data"), "technologies"));
+		load(new File(data, "technologies"));
 
 		load();
 	}

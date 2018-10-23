@@ -3,6 +3,7 @@ package ftgumod.api.technology.recipe;
 import ftgumod.api.inventory.ContainerResearch;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -13,6 +14,10 @@ import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IPuzzle {
+
+	NBTBase write();
+
+	void read(NBTBase tag);
 
 	/**
 	 * @return This puzzle's research

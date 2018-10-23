@@ -33,12 +33,12 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -48,12 +48,6 @@ import java.util.List;
 public class EventHandler {
 
 	private ItemStack stack = ItemStack.EMPTY;
-
-	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load evt) {
-		if (!evt.getWorld().isRemote && evt.getWorld().provider.getDimension() == 0)
-			TechnologyManager.INSTANCE.reload(evt.getWorld());
-	}
 
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
@@ -144,9 +138,12 @@ public class EventHandler {
 			for (Technology tech : TechnologyManager.INSTANCE)
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
-
-			PacketDispatcher.sendTo(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache), (EntityPlayerMP) evt.player);
 		}
+	}
+
+	@SubscribeEvent
+	public void onConnection(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+		event.getManager().sendPacket(PacketDispatcher.dispatcher.getPacketFrom(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache)));
 	}
 
 	@SubscribeEvent
