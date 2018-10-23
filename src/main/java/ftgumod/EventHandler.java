@@ -7,6 +7,7 @@ import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.item.ItemParchmentResearch;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyInfoMessage;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.proxy.ProxyClient;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.technology.CapabilityTechnology;
@@ -93,8 +94,11 @@ public class EventHandler {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onKey(InputEvent.KeyInputEvent event) {
-		if (ProxyClient.key.isPressed() && TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(Minecraft.getMinecraft().player)))
-			Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(Minecraft.getMinecraft().player));
+		if (ProxyClient.key.isPressed()) {
+			if (TechnologyManager.INSTANCE.getRoots().stream().anyMatch(tech -> tech.canResearchIgnoreResearched(Minecraft.getMinecraft().player)))
+				Minecraft.getMinecraft().displayGuiScreen(new GuiResearchBook(Minecraft.getMinecraft().player));
+			PacketDispatcher.sendToServer(new RequestMessage());
+		}
 	}
 
 	@SubscribeEvent

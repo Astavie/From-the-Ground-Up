@@ -153,7 +153,7 @@ technology.hint.man=Soul of the Man
 technology.hint.dragon=Soul of the Dragon
 
 technology.survival.name=Survival
-technology.survival.desc=You should know this, if you want to survive
+technology.survival.desc=You should know this if you want to survive
 
 technology.research.name=Research
 technology.research.desc=What's your favorite idea?
@@ -165,10 +165,10 @@ technology.carpentry.name=Carpentry
 technology.carpentry.desc=Wood and wool, they sound alike too
 
 technology.stoneworking.name=Stoneworking
-technology.stoneworking.desc=It's time to craft some actual tools
+technology.stoneworking.desc=Can you hand me that rock over there?
 
 technology.construction.name=Construction
-technology.construction.desc=Because wood is such a boring material
+technology.construction.desc=Taking a detour from wood
 
 technology.refinement.name=Refinement
 technology.refinement.desc=From the Stone Age to the Iron Age
@@ -189,7 +189,7 @@ technology.dyes.name=Dyes
 technology.dyes.desc=Extracting color from plants
 
 technology.smithing.name=Smithing
-technology.smithing.desc=Pressing metal into the correct shape
+technology.smithing.desc=Punching metal into the correct shape
 
 technology.metal_armor.name=Metal Armor
 technology.metal_armor.desc=Medieval knights approve
@@ -225,7 +225,7 @@ technology.glassworking.name=Glassworking
 technology.glassworking.desc=Very fragile
 
 technology.purpur.name=Purpur
-technology.purpur.desc=Fabulously colored blocks
+technology.purpur.desc=Fabulous!
 
 technology.quartz.name=Quartz
 technology.quartz.desc=As white as the depths of hell
@@ -243,7 +243,7 @@ technology.redstone_machinery.name=Redstone Machinery
 technology.redstone_machinery.desc=Never breaks down
 
 technology.cartography.name=Cartography
-technology.cartography.desc=Maps, and lots of 'em!
+technology.cartography.desc=Let's sail the ocean blue
 
 technology.music.name=Music
 technology.music.desc=Me and my records all alone feels right
