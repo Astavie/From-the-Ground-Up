@@ -103,10 +103,12 @@ public class CompatJEI implements ICompat, IModPlugin {
 					collection.add(object);
 			}
 
-			if (FTGU.hide == 2 && !Config.isCheatItemsEnabled())
-				ingredient.removeIngredientsAtRuntime(type, collection);
-			else
-				ingredient.addIngredientsAtRuntime(type, collection);
+			if (!collection.isEmpty()) {
+				if (FTGU.hide == 2 && !Config.isCheatItemsEnabled())
+					ingredient.removeIngredientsAtRuntime(type, collection);
+				else
+					ingredient.addIngredientsAtRuntime(type, collection);
+			}
 		}
 
 		List<IRecipeCategory> categories = new LinkedList<>(CompatJEI.categories);
