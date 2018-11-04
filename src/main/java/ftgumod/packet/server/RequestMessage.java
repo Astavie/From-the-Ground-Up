@@ -33,12 +33,15 @@ public class RequestMessage implements IMessage {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, RequestMessage message) {
-			if (message.b) {
-				if (player.openContainer instanceof ContainerResearchTable && ((ContainerResearchTable) player.openContainer).invInput.puzzle != null)
-					return new HintMessage(((ContainerResearchTable) player.openContainer).invInput.puzzle.getHints());
-				return null;
+			if (player != null) {
+				if (message.b) {
+					if (player.openContainer instanceof ContainerResearchTable && ((ContainerResearchTable) player.openContainer).invInput.puzzle != null)
+						return new HintMessage(((ContainerResearchTable) player.openContainer).invInput.puzzle.getHints());
+					return null;
+				}
+				return new TechnologyMessage(player, false);
 			}
-			return new TechnologyMessage(player, false);
+			return null;
 		}
 
 	}

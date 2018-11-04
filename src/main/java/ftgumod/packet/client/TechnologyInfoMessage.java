@@ -2,6 +2,7 @@ package ftgumod.packet.client;
 
 import ftgumod.FTGU;
 import ftgumod.client.gui.GuiResearchBook;
+import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
@@ -23,14 +24,16 @@ public class TechnologyInfoMessage implements IMessage {
 
 	private boolean copy;
 	private boolean custom;
+	private byte hide;
 	private Map<String, Pair<String, Map<ResourceLocation, String>>> json;
 
 	public TechnologyInfoMessage() {
 	}
 
-	public TechnologyInfoMessage(boolean copy, boolean custom, Map<String, Pair<String, Map<ResourceLocation, String>>> json) {
-		this.copy = copy;
-		this.custom = custom;
+	public TechnologyInfoMessage(Map<String, Pair<String, Map<ResourceLocation, String>>> json) {
+		this.copy = FTGU.copy;
+		this.custom = FTGU.custom;
+		this.hide = FTGU.hide;
 		this.json = json;
 	}
 
@@ -38,6 +41,7 @@ public class TechnologyInfoMessage implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		copy = buf.readBoolean();
 		custom = buf.readBoolean();
+		hide = buf.readByte();
 
 		json = new HashMap<>();
 		int size = buf.readInt();
@@ -57,6 +61,7 @@ public class TechnologyInfoMessage implements IMessage {
 	public void toBytes(ByteBuf buf) {
 		buf.writeBoolean(copy);
 		buf.writeBoolean(custom);
+		buf.writeByte(hide);
 
 		buf.writeInt(json.size());
 		for (Map.Entry<String, Pair<String, Map<ResourceLocation, String>>> domain : json.entrySet()) {
@@ -77,6 +82,8 @@ public class TechnologyInfoMessage implements IMessage {
 			if (FMLClientHandler.instance().getServer() == null) {
 				FTGU.copy = message.copy;
 				FTGU.custom = message.custom;
+				if (message.hide > FTGU.hide)
+					FTGU.hide = message.hide;
 
 				TechnologyManager.INSTANCE.clear();
 
@@ -90,7 +97,7 @@ public class TechnologyInfoMessage implements IMessage {
 			GuiResearchBook.yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 			FTGU.PROXY.clearToasts(); // Removes unnecessary recipe toasts
-			return null;
+			return new RequestMessage();
 		}
 
 	}

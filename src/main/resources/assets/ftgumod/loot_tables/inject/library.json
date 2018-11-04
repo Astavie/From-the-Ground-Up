@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "bibliography",
+      "name": "ftgumod:bibliography",
       "rolls": 1,
       "entries": [
         {
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "name": "enchanting",
+      "name": "ftgumod:enchanting",
       "rolls": 1,
       "entries": [
         {

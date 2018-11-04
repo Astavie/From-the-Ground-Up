@@ -104,7 +104,7 @@ public class TechnologyMessage implements IMessage {
 					for (ITechnology toast : message.toasts)
 						FTGU.PROXY.displayToastTechnology(toast);
 
-					FTGU.INSTANCE.runCompat("jei", message.tech); // TODO: Do something with JEI
+					FTGU.INSTANCE.runCompat("jei");
 				}
 			} catch (ConcurrentModificationException ignore) {
 				return new RequestMessage(); // A different thread changed the researched technologies, data might be lost

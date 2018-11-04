@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "construction",
+      "name": "ftgumod:construction",
       "rolls": 1,
       "entries": [
         {
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "name": "stonemasonry",
+      "name": "ftgumod:stonemasonry",
       "rolls": 1,
       "entries": [
         {

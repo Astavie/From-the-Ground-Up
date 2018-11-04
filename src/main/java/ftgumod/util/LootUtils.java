@@ -13,12 +13,12 @@ public class LootUtils {
 
 	private static final Field field = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c");
 
+	@SuppressWarnings("unchecked")
 	public static void addLootPools(LootTableManager manager, LootTable table, ResourceLocation pools) {
 		LootTable extra = manager.getLootTableFromLocation(pools);
 		try {
-			//noinspection unchecked
 			for (LootPool pool : (List<LootPool>) field.get(extra))
-				table.addPool(pool);
+				((List<LootPool>) field.get(table)).add(pool);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}

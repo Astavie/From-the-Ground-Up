@@ -12,6 +12,7 @@ import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.compat.gamestages.UnlockGameStage;
 import ftgumod.compat.immersiveengineering.CompatIE;
 import ftgumod.compat.immersiveengineering.UnlockMultiblockFactory;
+import ftgumod.compat.jei.CompatJEI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
@@ -60,6 +61,8 @@ public class FTGU {
 
 	public static boolean copy = true;
 	public static boolean custom = false;
+
+	public static byte hide = 2;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -126,8 +129,10 @@ public class FTGU {
 		Configuration config = new Configuration(new File(folder, MODID + ".cfg"));
 		config.load();
 
-		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "Copy", true, "Enables technology copying");
-		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "Custom", false, "Disables loading of built-in technologies");
+		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "copy", true, "If enabled, technologies can be copied");
+		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "custom", false, "If enabled, only config and world technologies will be loaded");
+
+		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 2, 0, 2, "0: No items are hidden from JEI\n1: Only locked items are hidden from JEI\n2: Locked items and items without recipes are hidden from JEI");
 
 		config.save();
 	}
@@ -150,6 +155,9 @@ public class FTGU {
 			MinecraftForge.EVENT_BUS.register(compat);
 
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
+		}
+		if (Loader.isModLoaded("jei")) {
+			this.compat.put("jei", new CompatJEI());
 		}
 	}
 

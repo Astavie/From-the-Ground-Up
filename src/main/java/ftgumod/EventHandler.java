@@ -30,6 +30,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.LootTableLoadEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -38,6 +39,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -145,7 +147,7 @@ public class EventHandler {
 
 	@SubscribeEvent
 	public void onConnection(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
-		event.getManager().sendPacket(PacketDispatcher.dispatcher.getPacketFrom(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache)));
+		event.getManager().sendPacket(PacketDispatcher.dispatcher.getPacketFrom(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache)));
 	}
 
 	@SubscribeEvent
@@ -212,6 +214,20 @@ public class EventHandler {
 			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/pyramid"));
 		if (event.getName().toString().equals("minecraft:chests/stronghold_library"))
 			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/library"));
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onEntityJoinWorld(EntityJoinWorldEvent event) {
+		if (event.getWorld().isRemote && event.getEntity() == Minecraft.getMinecraft().player)
+			PacketDispatcher.sendToServer(new RequestMessage());
+	}
+
+	@SubscribeEvent
+	@SideOnly(Side.CLIENT)
+	public void onTick(TickEvent.ClientTickEvent event) {
+		if (event.phase == TickEvent.Phase.START)
+			FTGU.INSTANCE.runCompat("jei", true);
 	}
 
 }

@@ -20,7 +20,7 @@ public class CompatGameStages implements ICompat {
 	public void onGameStage(GameStageEvent.Added event) {
 		if (!event.getEntityPlayer().world.isRemote)
 			for (Technology tech : TechnologyManager.INSTANCE)
-				if (event.getStageName().equals(tech.getGameStage()) && tech.canResearch(event.getEntityPlayer()))
+				if (event.getStageName().equals(tech.getGameStage()) && tech.isUnlockedIgnoreStage(event.getEntityPlayer()))
 					tech.unlock((EntityPlayerMP) event.getEntityPlayer());
 	}
 

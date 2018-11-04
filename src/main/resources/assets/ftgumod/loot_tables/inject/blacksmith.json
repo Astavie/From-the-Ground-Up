@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "name": "refinement",
+      "name": "ftgumod:refinement",
       "rolls": 1,
       "entries": [
         {
@@ -22,7 +22,7 @@
       ]
     },
     {
-      "name": "smithing",
+      "name": "ftgumod:smithing",
       "rolls": 1,
       "entries": [
         {
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "name": "metal_armor",
+      "name": "ftgumod:metal_armor",
       "rolls": 1,
       "entries": [
         {
@@ -64,7 +64,7 @@
       ]
     },
     {
-      "name": "lapidary",
+      "name": "ftgumod:lapidary",
       "rolls": 1,
       "entries": [
         {

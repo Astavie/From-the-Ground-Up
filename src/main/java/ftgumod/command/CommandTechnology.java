@@ -1,6 +1,5 @@
 package ftgumod.command;
 
-import ftgumod.FTGU;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyMessage;
@@ -50,7 +49,7 @@ public class CommandTechnology extends CommandBase {
 			if (args[0].equals("reload")) {
 				if (args.length == 1) {
 					TechnologyManager.INSTANCE.reload(new File(sender.getServer().worlds[0].getSaveHandler().getWorldDirectory(), "data"));
-					PacketDispatcher.sendToAll(new TechnologyInfoMessage(FTGU.copy, FTGU.custom, TechnologyManager.INSTANCE.cache));
+					PacketDispatcher.sendToAll(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache));
 					notifyCommandListener(sender, this, "commands.technology.reload.success");
 				} else
 					throw new WrongUsageException("commands.technology.reload.usage");
