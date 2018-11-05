@@ -31,6 +31,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 	private static final Table<IIngredientType, String, Object> original = Table.hashBasedTable();
 	private static List<IRecipeCategory> categories;
 
+	private static IIngredientBlacklist blacklist;
 	private static IRecipeRegistry recipe;
 	private static IIngredientRegistry ingredient;
 	private static IIngredientHelper<ItemStack> helper;
@@ -39,7 +40,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	@Override
 	public void register(IModRegistry registry) {
-		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
+		blacklist = registry.getJeiHelpers().getIngredientBlacklist();
 		blacklist.addIngredientToBlacklist(new ItemStack(Content.i_parchmentIdea));
 		blacklist.addIngredientToBlacklist(new ItemStack(Content.i_parchmentResearch));
 
@@ -56,7 +57,8 @@ public class CompatJEI implements ICompat, IModPlugin {
 		for (IIngredientType type : ingredient.getRegisteredIngredientTypes()) {
 			IIngredientHelper helper = ingredient.getIngredientHelper(type);
 			for (Object object : ingredient.getAllIngredients(type))
-				original.put(type, helper.getUniqueId(object), object);
+				if (!blacklist.isIngredientBlacklisted(object))
+					original.put(type, helper.getUniqueId(object), object);
 		}
 	}
 
@@ -121,6 +123,9 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 				for (Map.Entry<IIngredientType, List> entry : ingredients.getOutputIngredients().entrySet()) {
 					for (Object object : entry.getValue()) {
+						if (object == null)
+							continue;
+
 						String id = ingredient.getIngredientHelper(object).getUniqueId(object);
 						if (add.get(entry.getKey(), id) != null)
 							continue;
@@ -155,6 +160,9 @@ public class CompatJEI implements ICompat, IModPlugin {
 							for (Map.Entry<IIngredientType, List> entry : ingredients.getOutputIngredients().entrySet()) {
 								a:
 								for (Object object : entry.getValue()) {
+									if (object == null)
+										continue;
+
 									String id = ingredient.getIngredientHelper(object).getUniqueId(object);
 									if (remove.get(entry.getKey(), id) != null)
 										continue;

@@ -3,6 +3,7 @@ package ftgumod.inventory;
 import ftgumod.Content;
 import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.SlotCrafting;
+import ftgumod.api.inventory.SlotSpecial;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyMessage;
@@ -90,7 +91,7 @@ public class ContainerResearchTable extends ContainerResearch {
 		glass = c;
 		c++;
 
-		addSlotToContainer(new Slot(result, c, 124, 35));
+		addSlotToContainer(new SlotSpecial(result, c, 124, 35, 1, i -> false));
 		output = c;
 		c++;
 
