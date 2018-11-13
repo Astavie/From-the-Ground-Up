@@ -38,6 +38,8 @@ import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -47,9 +49,23 @@ import java.util.stream.Collectors;
 
 public class TechnologyManager implements ITechnologyManager, Iterable<Technology> {
 
+	// Method added by SpongeForge
+	private static final Method setAdvancement;
+
 	public static final TechnologyManager INSTANCE = new TechnologyManager();
 
 	static {
+		Method m = null;
+		try {
+			//noinspection JavaReflectionMemberAccess
+			m = AdvancementProgress.class.getMethod("setAdvancement", String.class);
+
+			// NoSuchMethodException was not thrown, so the server must be running SpongeForge
+			Technology.getLogger().info("SpongeForge detected");
+		} catch (NoSuchMethodException ignore) {
+		}
+		setAdvancement = m;
+
 		FTGUAPI.technologyManager = INSTANCE;
 	}
 
@@ -189,6 +205,17 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	public AdvancementProgress getProgress(EntityPlayer player, Technology technology) {
 		return progress.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>()).computeIfAbsent(technology, tech -> {
 			AdvancementProgress progress = new AdvancementProgress();
+
+			// Fix crash with SpongeForge
+			if (setAdvancement != null) {
+				Technology.getLogger().info("Avoiding crash: invoking SpongeForge method 'setAdvancement' in class AdvancementProgress");
+				try {
+					setAdvancement.invoke(progress, tech.getRegistryName().toString());
+				} catch (IllegalAccessException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+
 			progress.update(tech.getCriteria(), tech.getRequirements());
 
 			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);

@@ -12,7 +12,6 @@ import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.compat.gamestages.UnlockGameStage;
 import ftgumod.compat.immersiveengineering.CompatIE;
 import ftgumod.compat.immersiveengineering.UnlockMultiblockFactory;
-import ftgumod.compat.jei.CompatJEI;
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.proxy.ProxyCommon;
 import ftgumod.technology.CapabilityTechnology;
@@ -156,9 +155,7 @@ public class FTGU {
 
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
 		}
-		if (Loader.isModLoaded("jei")) {
-			this.compat.put("jei", new CompatJEI());
-		}
+		PROXY.postInit(event);
 	}
 
 	@Mod.EventHandler
