@@ -4,13 +4,14 @@ import ftgumod.api.FTGUAPI;
 import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotCrafting;
+import ftgumod.api.technology.puzzle.gui.PuzzleGuiMatch;
 import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.api.util.BlockSerializable;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,10 +21,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.client.config.GuiUtils;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public class PuzzleMatch implements IPuzzle {
@@ -142,42 +145,8 @@ public class PuzzleMatch implements IPuzzle {
 	}
 
 	@Override
-	public void drawForeground(GuiContainer gui, int mouseX, int mouseY) {
-		mouseX -= gui.getGuiLeft();
-		mouseY -= gui.getGuiTop();
-
-		boolean b = !research.getTechnology().canResearch(gui.mc.player);
-
-		Slot slot = gui.getSlotUnderMouse();
-		if (slot != null && !slot.getHasStack()) {
-			int index = slot.getSlotIndex();
-			if (slot.inventory instanceof InventoryCraftingPersistent && index >= 0 && index < 9 && research.hasHint(index)) {
-				ITextComponent hint = (hints == null || b) ? research.getHint(index).getObfuscatedHint() : hints.get(index);
-				if (hint != null && !hint.getUnformattedText().isEmpty())
-					gui.drawHoveringText(Arrays.asList(hint.getFormattedText().split("\n")), mouseX, mouseY);
-			}
-		} else if (b && mouseX >= 90 && mouseX < 112 && mouseY >= 35 && mouseY < 50) {
-			List<String> text = Collections.singletonList(I18n.format(research.getTechnology().isResearched(gui.mc.player) ? "technology.complete.already" : "technology.complete.understand", research.getTechnology().getDisplayInfo().getTitle().getFormattedText()));
-			GuiUtils.drawHoveringText(text, mouseX, mouseY, gui.width, gui.height, gui.width - mouseX - gui.getGuiLeft() - 16, Minecraft.getMinecraft().fontRenderer);
-		}
-	}
-
-	@Override
-	public void drawBackground(GuiContainer gui, int mouseX, int mouseY) {
-		// Grid
-		gui.drawTexturedModalRect(29 + gui.getGuiLeft(), 16 + gui.getGuiTop(), 0, 166, 54, 54);
-
-		// Arrow
-		if (research.getTechnology().canResearch(gui.mc.player))
-			gui.drawTexturedModalRect(90 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 54, 166, 22, 15);
-		else
-			gui.drawTexturedModalRect(90 + gui.getGuiLeft(), 35 + gui.getGuiTop(), 54, 181, 22, 15);
-
-		// Hints
-		for (int y = 0; y < 3; y++)
-			for (int x = 0; x < 3; x++)
-				if (research.hasHint(x + y * 3) && inventory.getStackInSlot(x + y * 3).isEmpty())
-					gui.drawTexturedModalRect(30 + x * 18 + gui.getGuiLeft(), 17 + y * 18 + gui.getGuiTop(), 176, 0, 16, 16);
+	public Object getGui() {
+		return new PuzzleGuiMatch(this, inventory);
 	}
 
 }

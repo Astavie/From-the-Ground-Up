@@ -176,7 +176,9 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			for (Technology t : technologies.values()) {
 				for (IUnlock unlock : t.getUnlock()) {
 					if (unlock.unlocks(stack)) {
-						if (player == null || t.isResearched(player))
+						if (player == null)
+							return true;
+						if (t.isResearched(player))
 							return false;
 						tech = true;
 						break;
@@ -208,7 +210,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 
 			// Fix crash with SpongeForge
 			if (setAdvancement != null) {
-				Technology.getLogger().info("Avoiding crash: invoking SpongeForge method 'setAdvancement' in class AdvancementProgress");
+				Technology.getLogger().debug("Avoiding crash: invoking SpongeForge method 'setAdvancement' in class AdvancementProgress");
 				try {
 					setAdvancement.invoke(progress, tech.getRegistryName().toString());
 				} catch (IllegalAccessException | InvocationTargetException e) {
@@ -374,7 +376,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		if (value instanceof Technology) {
 			if (_register((Technology) value))
 				addCallback.forEach(action -> action.accept(value));
-		} else throw new IllegalArgumentException("Technology instance is of unexpected class!");
+		} else throw new IllegalArgumentException("Technology instance is of unexpected class");
 	}
 
 	private boolean _register(Technology value) {

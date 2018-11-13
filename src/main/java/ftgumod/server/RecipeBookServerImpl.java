@@ -27,7 +27,7 @@ public class RecipeBookServerImpl extends RecipeBookServer {
 	@Override
 	public void add(List<IRecipe> recipes, EntityPlayerMP player) {
 		recipes = new LinkedList<>(recipes);
-		recipes.removeIf(recipe -> TechnologyManager.INSTANCE.isLocked(recipe.getRecipeOutput(), null));
+		recipes.removeIf(recipe -> TechnologyManager.INSTANCE.isLocked(recipe.getRecipeOutput(), player));
 		if (!recipes.isEmpty())
 			super.add(recipes, player);
 	}

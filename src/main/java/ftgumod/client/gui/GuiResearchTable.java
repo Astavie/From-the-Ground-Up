@@ -2,6 +2,7 @@ package ftgumod.client.gui;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
+import ftgumod.api.technology.puzzle.gui.IPuzzleGui;
 import ftgumod.tileentity.TileEntityResearchTable;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -35,7 +36,7 @@ public class GuiResearchTable extends GuiContainer {
 		fontRenderer.drawString(s, xSize / 2 - fontRenderer.getStringWidth(s) / 2, 6, 4210752);
 		fontRenderer.drawString(player.getDisplayName().getFormattedText(), 8, ySize - 96 + 2, 4210752);
 		if (tile.puzzle != null)
-			tile.puzzle.drawForeground(this, mouseX, mouseY);
+			((IPuzzleGui) tile.puzzle.getGui()).drawForeground(this, mouseX, mouseY);
 	}
 
 	@Override
@@ -45,7 +46,7 @@ public class GuiResearchTable extends GuiContainer {
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
 		if (tile.puzzle != null)
-			tile.puzzle.drawBackground(this, mouseX, mouseY);
+			((IPuzzleGui) tile.puzzle.getGui()).drawBackground(this, mouseX, mouseY);
 	}
 
 }

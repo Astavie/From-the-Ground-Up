@@ -40,7 +40,6 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -142,12 +141,9 @@ public class EventHandler {
 			for (Technology tech : TechnologyManager.INSTANCE)
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
-		}
-	}
 
-	@SubscribeEvent
-	public void onConnection(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
-		event.getManager().sendPacket(PacketDispatcher.dispatcher.getPacketFrom(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache)));
+			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache), (EntityPlayerMP) evt.player);
+		}
 	}
 
 	@SubscribeEvent

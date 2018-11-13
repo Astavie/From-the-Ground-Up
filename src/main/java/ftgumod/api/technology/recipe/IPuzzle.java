@@ -1,14 +1,11 @@
 package ftgumod.api.technology.recipe;
 
 import ftgumod.api.inventory.ContainerResearch;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -57,10 +54,6 @@ public interface IPuzzle {
 
 	List<ITextComponent> getHints();
 
-	@SideOnly(Side.CLIENT)
-	void drawForeground(GuiContainer gui, int mouseX, int mouseY);
-
-	@SideOnly(Side.CLIENT)
-	void drawBackground(GuiContainer gui, int mouseX, int mouseY);
+	Object getGui();
 
 }

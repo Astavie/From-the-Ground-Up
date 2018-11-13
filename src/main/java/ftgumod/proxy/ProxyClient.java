@@ -7,7 +7,6 @@ import ftgumod.client.GuiHandlerClient;
 import ftgumod.client.gui.GuiResearchBook;
 import ftgumod.client.gui.toast.ToastTechnology;
 import ftgumod.compat.jei.CompatJEI;
-import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import net.minecraft.client.Minecraft;
@@ -63,12 +62,8 @@ public class ProxyClient extends ProxyCommon {
 
 	@Override
 	public void autoResearch(Technology tech) {
-		if (FMLCommonHandler.instance().getSide() == Side.SERVER) {
+		if (FMLCommonHandler.instance().getSide() == Side.SERVER)
 			super.autoResearch(tech);
-		} else if (Minecraft.getMinecraft().player != null) {
-			CapabilityTechnology.ITechnology cap = Minecraft.getMinecraft().player.getCapability(CapabilityTechnology.TECH_CAP, null);
-			cap.setResearched(tech.getRegistryName().toString());
-		}
 	}
 
 	@Override

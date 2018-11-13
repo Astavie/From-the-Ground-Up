@@ -70,15 +70,15 @@ public class CompatJEI implements ICompat, IModPlugin {
 			return true;
 		}
 
+		if (Minecraft.getMinecraft().player == null)
+			return true;
+
 		if (arg.length > 0 && (boolean) arg[0]) {
 			if (config != Config.isCheatItemsEnabled())
 				config = Config.isCheatItemsEnabled();
 			else
 				return true;
 		}
-
-		if (Minecraft.getMinecraft().player == null)
-			return true;
 
 		IngredientSet<ItemStack> itemWhitelist = IngredientSet.create(VanillaTypes.ITEM, helper);
 		IngredientSet<ItemStack> itemBlacklist = IngredientSet.create(VanillaTypes.ITEM, helper);

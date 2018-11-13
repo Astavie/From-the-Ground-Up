@@ -121,12 +121,7 @@ public class CapabilityTechnology {
 
 		@Override
 		public boolean isResearched(String tech) {
-			for (String s : this.tech) {
-				if (s.equalsIgnoreCase(tech)) {
-					return true;
-				}
-			}
-			return false;
+			return this.tech.contains(tech);
 		}
 
 		@Override

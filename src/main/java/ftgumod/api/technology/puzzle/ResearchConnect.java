@@ -17,8 +17,8 @@ import java.util.List;
 
 public class ResearchConnect implements IResearchRecipe {
 
-	final ItemPredicate left;
-	final ItemPredicate right;
+	public final ItemPredicate left;
+	public final ItemPredicate right;
 	private ITechnology technology;
 
 	public ResearchConnect(ItemPredicate left, ItemPredicate right) {
