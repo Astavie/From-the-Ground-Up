@@ -220,10 +220,14 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 
 			progress.update(tech.getCriteria(), tech.getRequirements());
 
+			Technology.bypassEvent(true);
+
 			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			for (String criterion : progress.getRemaningCriteria())
 				if (cap.isResearched(tech.getRegistryName().toString() + "#" + criterion))
 					progress.grantCriterion(criterion);
+
+			Technology.bypassEvent(false);
 
 			return progress;
 		});

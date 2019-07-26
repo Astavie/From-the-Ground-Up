@@ -29,11 +29,23 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class Technology implements ITechnology {
 
+	// Field added by SpongeForge
+	private static final Field BYPASS_EVENT;
 	private static final Logger LOGGER = LogManager.getLogger();
+
+	static {
+		Field f = null;
+		try {
+			f = Class.forName("org.spongepowered.common.advancement.SpongeScoreCriterion").getField("BYPASS_EVENT");
+		} catch (ClassNotFoundException | NoSuchFieldException ignore) {
+		}
+		BYPASS_EVENT = f;
+	}
 
 	private final Set<Technology> children = new HashSet<>();
 	private final ResourceLocation id;
@@ -84,6 +96,19 @@ public class Technology implements ITechnology {
 
 	public static Logger getLogger() {
 		return LOGGER;
+	}
+
+	static void bypassEvent(boolean set) {
+		if (BYPASS_EVENT != null) {
+			if (set)
+				LOGGER.debug("Avoiding crash: bypassing SpongeForge criteria events");
+
+			try {
+				BYPASS_EVENT.set(null, set);
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	void updateDisplayText() {
@@ -229,17 +254,17 @@ public class Technology implements ITechnology {
 			}
 			if (hasCustomUnlock()) {
 				AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
-				boolean done = progress.isDone();
+
+				bypassEvent(true);
 
 				for (String criterion : progress.getCompletedCriteria())
 					if (progress.revokeCriterion(criterion))
 						cap.removeResearched(getRegistryName() + "#" + criterion);
 
-				if (player instanceof EntityPlayerMP) {
+				bypassEvent(false);
+
+				if (player instanceof EntityPlayerMP)
 					registerListeners((EntityPlayerMP) player);
-					if (done)
-						MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
-				}
 			}
 		}
 	}
@@ -259,6 +284,8 @@ public class Technology implements ITechnology {
 		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		boolean done = progress.isDone();
 
+		bypassEvent(true);
+
 		if (progress.grantCriterion(name)) {
 			player.getCapability(CapabilityTechnology.TECH_CAP, null).setResearched(getRegistryName() + "#" + name);
 			if (player instanceof EntityPlayerMP) {
@@ -268,8 +295,12 @@ public class Technology implements ITechnology {
 				if (!done && progress.isDone() && unlockedStage(player))
 					unlock(playerMP);
 			}
+
+			bypassEvent(false);
 			return true;
 		}
+
+		bypassEvent(false);
 		return false;
 	}
 
@@ -287,6 +318,8 @@ public class Technology implements ITechnology {
 		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		boolean done = progress.isDone();
 
+		bypassEvent(true);
+
 		if (progress.revokeCriterion(name)) {
 			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(getRegistryName() + "#" + name);
 			if (player instanceof EntityPlayerMP) {
@@ -294,14 +327,18 @@ public class Technology implements ITechnology {
 				if (done && !progress.isDone())
 					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
 			}
+
+			bypassEvent(false);
 			return true;
 		}
+
+		bypassEvent(false);
 		return false;
 	}
 
 	public void registerListeners(EntityPlayerMP player) {
 		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
-		if (!progress.isDone())
+		if (!progress.isDone()) {
 			for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
 				CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
 				if (criterionProgress != null && !criterionProgress.isObtained()) {
@@ -313,6 +350,7 @@ public class Technology implements ITechnology {
 					}
 				}
 			}
+		}
 	}
 
 	public void unregisterListeners(EntityPlayerMP player) {
