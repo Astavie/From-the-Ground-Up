@@ -1,6 +1,7 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
+import ftgumod.api.event.FTGUClientSyncEvent;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.packet.MessageHandler;
 import ftgumod.packet.server.RequestMessage;
@@ -10,6 +11,7 @@ import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
@@ -107,7 +109,7 @@ public class TechnologyMessage implements IMessage {
 					FTGU.PROXY.displayToastTechnology(toast);
 
 				FTGU.INSTANCE.runCompat("jei");
-				}
+				MinecraftForge.EVENT_BUS.post(new FTGUClientSyncEvent.Post());
 			}
 
 			return null;
