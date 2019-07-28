@@ -1,6 +1,7 @@
 package ftgumod.packet.client;
 
 import ftgumod.FTGU;
+import ftgumod.api.event.FTGUClientSyncEvent;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.packet.MessageHandler;
 import ftgumod.packet.server.RequestMessage;
@@ -10,9 +11,11 @@ import ftgumod.technology.TechnologyManager;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.HashSet;
@@ -73,41 +76,40 @@ public class TechnologyMessage implements IMessage {
 			if (player == null)
 				return null;
 
-			try {
-				CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-				if (cap != null) {
-					if (!message.force && cap.getResearched().size() == message.tech.size())
-						return null;
+			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+			if (cap != null) {
+				if (!message.force && cap.getResearched().size() == message.tech.size())
+					return null;
 
-					for (String name : cap.getResearched())
-						if (!message.tech.contains(name)) {
-							cap.removeResearched(name);
+				// Defensive copy to prevent concurrent modification exception
+				Collection<String> researched = new ArrayList<>(cap.getResearched());
+				for (String name : researched)
+					if (!message.tech.contains(name)) {
+						cap.removeResearched(name);
 
-							String[] split = name.split("#");
-							if (split.length == 2) {
-								Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
-								TechnologyManager.INSTANCE.getProgress(player, tech).revokeCriterion(split[1]);
-							}
+						String[] split = name.split("#");
+						if (split.length == 2) {
+							Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
+							TechnologyManager.INSTANCE.getProgress(player, tech).revokeCriterion(split[1]);
 						}
+					}
 
-					for (String name : message.tech)
-						if (!cap.isResearched(name)) {
-							cap.setResearched(name);
+				for (String name : message.tech)
+					if (!cap.isResearched(name)) {
+						cap.setResearched(name);
 
-							String[] split = name.split("#");
-							if (split.length == 2) {
-								Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
-								TechnologyManager.INSTANCE.getProgress(player, tech).grantCriterion(split[1]);
-							}
+						String[] split = name.split("#");
+						if (split.length == 2) {
+							Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
+							TechnologyManager.INSTANCE.getProgress(player, tech).grantCriterion(split[1]);
 						}
+					}
 
-					for (ITechnology toast : message.toasts)
-						FTGU.PROXY.displayToastTechnology(toast);
+				for (ITechnology toast : message.toasts)
+					FTGU.PROXY.displayToastTechnology(toast);
 
-					FTGU.INSTANCE.runCompat("jei");
-				}
-			} catch (ConcurrentModificationException ignore) {
-				return new RequestMessage(); // A different thread changed the researched technologies, data might be lost
+				FTGU.INSTANCE.runCompat("jei");
+				MinecraftForge.EVENT_BUS.post(new FTGUClientSyncEvent.Post());
 			}
 
 			return null;
