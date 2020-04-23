@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -37,6 +38,19 @@ public class TechnologyInfoMessage implements IMessage {
 		this.json = json;
 	}
 
+	private String readLongString(ByteBuf buf) {
+		int size = buf.readInt();
+		String str = buf.toString(buf.readerIndex(), size, StandardCharsets.UTF_8);
+		buf.readerIndex(buf.readerIndex() + size);
+		return str;
+	}
+
+	private void writeLongString(ByteBuf buf, String string) {
+		byte[] utf8Bytes = string.getBytes(StandardCharsets.UTF_8);
+		buf.writeInt(utf8Bytes.length);
+		buf.writeBytes(utf8Bytes);
+	}
+
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		copy = buf.readBoolean();
@@ -47,12 +61,12 @@ public class TechnologyInfoMessage implements IMessage {
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
 			String domain = ByteBufUtils.readUTF8String(buf);
-			String context = ByteBufUtils.readUTF8String(buf);
+			String context = readLongString(buf);
 			int length = buf.readInt();
 
 			Map<ResourceLocation, String> map = new HashMap<>();
 			for (int j = 0; j < length; j++)
-				map.put(new ResourceLocation(domain, ByteBufUtils.readUTF8String(buf)), ByteBufUtils.readUTF8String(buf));
+				map.put(new ResourceLocation(domain, ByteBufUtils.readUTF8String(buf)), readLongString(buf));
 			json.put(domain, Pair.of(context, map));
 		}
 	}
@@ -66,11 +80,11 @@ public class TechnologyInfoMessage implements IMessage {
 		buf.writeInt(json.size());
 		for (Map.Entry<String, Pair<String, Map<ResourceLocation, String>>> domain : json.entrySet()) {
 			ByteBufUtils.writeUTF8String(buf, domain.getKey());
-			ByteBufUtils.writeUTF8String(buf, domain.getValue().getLeft());
+			writeLongString(buf, domain.getValue().getLeft());
 			buf.writeInt(domain.getValue().getRight().size());
 			for (Map.Entry<ResourceLocation, String> entry : domain.getValue().getRight().entrySet()) {
 				ByteBufUtils.writeUTF8String(buf, entry.getKey().getPath());
-				ByteBufUtils.writeUTF8String(buf, entry.getValue());
+				writeLongString(buf, entry.getValue());
 			}
 		}
 	}

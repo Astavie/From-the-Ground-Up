@@ -29,23 +29,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 import java.util.*;
 
 public class Technology implements ITechnology {
 
-	// Field added by SpongeForge
-	private static final Field BYPASS_EVENT;
 	private static final Logger LOGGER = LogManager.getLogger();
-
-	static {
-		Field f = null;
-		try {
-			f = Class.forName("org.spongepowered.common.advancement.SpongeScoreCriterion").getField("BYPASS_EVENT");
-		} catch (ClassNotFoundException | NoSuchFieldException ignore) {
-		}
-		BYPASS_EVENT = f;
-	}
 
 	private final Set<Technology> children = new HashSet<>();
 	private final ResourceLocation id;
@@ -96,19 +84,6 @@ public class Technology implements ITechnology {
 
 	public static Logger getLogger() {
 		return LOGGER;
-	}
-
-	static void bypassEvent(boolean set) {
-		if (BYPASS_EVENT != null) {
-			if (set)
-				LOGGER.debug("Avoiding crash: bypassing SpongeForge criteria events");
-
-			try {
-				BYPASS_EVENT.set(null, set);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 
 	void updateDisplayText() {
@@ -253,15 +228,11 @@ public class Technology implements ITechnology {
 				}
 			}
 			if (hasCustomUnlock()) {
-				AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
-
-				bypassEvent(true);
+				TechnologyProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 
 				for (String criterion : progress.getCompletedCriteria())
 					if (progress.revokeCriterion(criterion))
 						cap.removeResearched(getRegistryName() + "#" + criterion);
-
-				bypassEvent(false);
 
 				if (player instanceof EntityPlayerMP)
 					registerListeners((EntityPlayerMP) player);
@@ -281,10 +252,8 @@ public class Technology implements ITechnology {
 
 	@Override
 	public boolean grantCriterion(EntityPlayer player, String name) {
-		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
+		TechnologyProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		boolean done = progress.isDone();
-
-		bypassEvent(true);
 
 		if (progress.grantCriterion(name)) {
 			player.getCapability(CapabilityTechnology.TECH_CAP, null).setResearched(getRegistryName() + "#" + name);
@@ -296,11 +265,9 @@ public class Technology implements ITechnology {
 					unlock(playerMP);
 			}
 
-			bypassEvent(false);
 			return true;
 		}
 
-		bypassEvent(false);
 		return false;
 	}
 
@@ -315,10 +282,8 @@ public class Technology implements ITechnology {
 
 	@Override
 	public boolean revokeCriterion(EntityPlayer player, String name) {
-		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
+		TechnologyProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		boolean done = progress.isDone();
-
-		bypassEvent(true);
 
 		if (progress.revokeCriterion(name)) {
 			player.getCapability(CapabilityTechnology.TECH_CAP, null).removeResearched(getRegistryName() + "#" + name);
@@ -328,20 +293,18 @@ public class Technology implements ITechnology {
 					MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Revoke(player, this));
 			}
 
-			bypassEvent(false);
 			return true;
 		}
 
-		bypassEvent(false);
 		return false;
 	}
 
 	public void registerListeners(EntityPlayerMP player) {
-		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
+		TechnologyProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 		if (!progress.isDone()) {
 			for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
-				CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
-				if (criterionProgress != null && !criterionProgress.isObtained()) {
+				Boolean criterionProgress = progress.getCriterionProgress(entry.getKey());
+				if (criterionProgress != null && !criterionProgress) {
 					ICriterionInstance instance = entry.getValue().getCriterionInstance();
 					if (instance != null) {
 						ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());
@@ -355,11 +318,11 @@ public class Technology implements ITechnology {
 
 	public void unregisterListeners(EntityPlayerMP player) {
 		boolean parent = this.parent != null && !this.parent.isResearched(player);
-		AdvancementProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
+		TechnologyProgress progress = TechnologyManager.INSTANCE.getProgress(player, this);
 
 		for (Map.Entry<String, Criterion> entry : criteria.entrySet()) {
-			CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
-			if (criterionProgress != null && (parent || criterionProgress.isObtained() || progress.isDone())) {
+			Boolean criterionProgress = progress.getCriterionProgress(entry.getKey());
+			if (criterionProgress != null && (parent || criterionProgress || progress.isDone())) {
 				ICriterionInstance instance = entry.getValue().getCriterionInstance();
 				if (instance != null) {
 					ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());

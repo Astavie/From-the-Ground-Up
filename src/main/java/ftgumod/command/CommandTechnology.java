@@ -5,7 +5,6 @@ import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
-import net.minecraft.advancements.CriterionProgress;
 import net.minecraft.command.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -124,10 +123,10 @@ public class CommandTechnology extends CommandBase {
 		if (!tech.hasCustomUnlock())
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 
-		CriterionProgress progress = TechnologyManager.INSTANCE.getProgress(player, tech).getCriterionProgress(criterion);
+		Boolean progress = TechnologyManager.INSTANCE.getProgress(player, tech).getCriterionProgress(criterion);
 		if (progress == null)
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
-		if (!progress.isObtained())
+		if (!progress)
 			throw new CommandException("commands.technology.test.criterion.notDone", player.getName(), tech.getRegistryName(), criterion);
 		notifyCommandListener(sender, this, "commands.technology.test.criterion.success", player.getName(), tech.getRegistryName(), criterion);
 	}

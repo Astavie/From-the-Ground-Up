@@ -133,7 +133,9 @@ public class EventHandler {
 					}
 				}
 				if (cap.isNew()) {
-					evt.player.inventory.addItemStackToInventory(new ItemStack(Content.i_researchBook));
+					if (FTGU.journal) {
+						evt.player.inventory.addItemStackToInventory(new ItemStack(Content.i_researchBook));
+					}
 					cap.setOld();
 				}
 			}

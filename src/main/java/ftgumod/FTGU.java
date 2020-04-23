@@ -60,8 +60,8 @@ public class FTGU {
 
 	public static boolean copy = true;
 	public static boolean custom = false;
-
-	public static byte hide = 2;
+	public static byte hide = 1;
+	public static boolean journal = true;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -130,8 +130,9 @@ public class FTGU {
 
 		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "copy", true, "If enabled, technologies can be copied");
 		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "custom", false, "If enabled, only config and world technologies will be loaded");
+		journal = config.getBoolean(Configuration.CATEGORY_GENERAL, "journal", true, "If enabled, every player will get a research book when they join a new world or server");
 
-		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 2, 0, 2, "0: No items are hidden from JEI\n1: Only locked items are hidden from JEI\n2: Locked items and items without recipes are hidden from JEI");
+		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 1, 0, 2, "0: No items or recipes are hidden from JEI\n1: Only locked recipes are hidden from JEI\n2: Locked items and recipes are hidden from JEI");
 
 		config.save();
 	}

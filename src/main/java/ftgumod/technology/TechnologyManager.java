@@ -18,7 +18,6 @@ import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.util.StackUtils;
 import ftgumod.util.SubCollection;
-import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -38,8 +37,6 @@ import javax.annotation.Nullable;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -49,27 +46,13 @@ import java.util.stream.Collectors;
 
 public class TechnologyManager implements ITechnologyManager, Iterable<Technology> {
 
-	// Method added by SpongeForge
-	private static final Method setAdvancement;
-
 	public static final TechnologyManager INSTANCE = new TechnologyManager();
 
 	static {
-		Method m = null;
-		try {
-			//noinspection JavaReflectionMemberAccess
-			m = AdvancementProgress.class.getMethod("setAdvancement", String.class);
-
-			// NoSuchMethodException was not thrown, so the server must be running SpongeForge
-			Technology.getLogger().info("SpongeForge detected");
-		} catch (NoSuchMethodException ignore) {
-		}
-		setAdvancement = m;
-
 		FTGUAPI.technologyManager = INSTANCE;
 	}
 
-	private final Map<UUID, Map<Technology, AdvancementProgress>> progress = new HashMap<>();
+	private final Map<UUID, Map<Technology, TechnologyProgress>> progress = new HashMap<>();
 
 	private final Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
 	private final Collection<Technology> roots = new SubCollection<>(technologies.values(), Technology::isRoot);
@@ -204,30 +187,16 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		createCallback.add(action);
 	}
 
-	public AdvancementProgress getProgress(EntityPlayer player, Technology technology) {
+	public TechnologyProgress getProgress(EntityPlayer player, Technology technology) {
 		return progress.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>()).computeIfAbsent(technology, tech -> {
-			AdvancementProgress progress = new AdvancementProgress();
-
-			// Fix crash with SpongeForge
-			if (setAdvancement != null) {
-				Technology.getLogger().debug("Avoiding crash: invoking SpongeForge method 'setAdvancement' in class AdvancementProgress");
-				try {
-					setAdvancement.invoke(progress, tech.getRegistryName().toString());
-				} catch (IllegalAccessException | InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
+			TechnologyProgress progress = new TechnologyProgress();
 
 			progress.update(tech.getCriteria(), tech.getRequirements());
-
-			Technology.bypassEvent(true);
 
 			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
 			for (String criterion : progress.getRemaningCriteria())
 				if (cap.isResearched(tech.getRegistryName().toString() + "#" + criterion))
 					progress.grantCriterion(criterion);
-
-			Technology.bypassEvent(false);
 
 			return progress;
 		});
