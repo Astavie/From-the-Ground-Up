@@ -33,7 +33,8 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 	private static boolean config = Config.isCheatItemsEnabled();
 
-	List<ItemStack> lockedLast = new LinkedList<>();
+	private List<ItemStack> lockedLast = new LinkedList<>();
+	private static List<IRecipeWrapper> wrappers;
 
 	@Override
 	public void register(IModRegistry registry) {
@@ -48,6 +49,7 @@ public class CompatJEI implements ICompat, IModPlugin {
 	@SuppressWarnings("unchecked")
 	public void onRuntimeAvailable(IJeiRuntime runtime) {
 		recipe = runtime.getRecipeRegistry();
+		wrappers = recipe.getRecipeWrappers(recipe.getRecipeCategory(VanillaRecipeCategoryUid.CRAFTING));
 	}
 
 	@Override
@@ -88,12 +90,11 @@ public class CompatJEI implements ICompat, IModPlugin {
 		// Lock every recipe with those outputs
 		Ingredient locked = new ItemPredicate(stacks.toArray(new ItemStack[0]));
 
-		List<IRecipeWrapper> wrappers = recipe.getRecipeWrappers(recipe.getRecipeCategory(VanillaRecipeCategoryUid.CRAFTING));
 		for (IRecipeWrapper wrapper : wrappers) {
 			IIngredients ingredients = ((RecipeRegistry) recipe).getIngredients(wrapper);
 			List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
-			if (locked.apply(outputs.get(0).get(0))) {
+			if (FTGU.hide > 0 && outputs.size() > 0 && outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
 				recipe.hideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
 			} else {
 				recipe.unhideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);

@@ -32,7 +32,8 @@ public class JsonContextPublic extends JsonContext {
 				continue;
 			if (!json.has("ingredient"))
 				throw new JsonSyntaxException("Constant entry must contain 'ingredient' value");
-			constants.put(JsonUtils.getString(json, "name"), FTGUAPI.stackUtils.getItemPredicate(json.get("ingredient"), this));
+			constants.put(JsonUtils.getString(json, "name"),
+					FTGUAPI.stackUtils.getItemPredicate(json.get("ingredient"), this));
 		}
 
 	}
