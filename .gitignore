@@ -10,3 +10,7 @@ build
 # other
 run
 .project
+.settings
+.vscode
+.classpath
+bin

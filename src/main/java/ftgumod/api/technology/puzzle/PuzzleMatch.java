@@ -86,7 +86,8 @@ public class PuzzleMatch implements IPuzzle {
 		InventoryCrafting crafting = new InventoryCraftingPersistent(inventory, 0, 3, 3);
 		for (int sloty = 0; sloty < 3; sloty++)
 			for (int slotx = 0; slotx < 3; slotx++)
-				container.addSlotToContainer(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18, 17 + sloty * 18, 1, (Predicate<ItemStack>) null));
+				container.addSlotToContainer(new SlotCrafting(container, crafting, slotx + sloty * 3, 30 + slotx * 18,
+						17 + sloty * 18, 1, (Predicate<ItemStack>) null));
 	}
 
 	@Override
@@ -101,13 +102,15 @@ public class PuzzleMatch implements IPuzzle {
 					hints.add(research.getHint(i).getHint(inspected));
 				else
 					hints.add(null);
-			container.markDirty();
-		} else container.refreshHints();
+
+			container.refreshHints(hints);
+		}
 	}
 
 	@Override
 	public void onFinish() {
-		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(new InventoryCraftingPersistent(inventory, 0, 3, 3));
+		NonNullList<ItemStack> remaining = ForgeHooks
+				.defaultRecipeGetRemainingItems(new InventoryCraftingPersistent(inventory, 0, 3, 3));
 		for (int i = 0; i < 9; i++) {
 			if (research.consume[i] != null)
 				if (research.consume[i])
@@ -127,7 +130,8 @@ public class PuzzleMatch implements IPuzzle {
 				if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
 					player.dropItem(stack, false);
 			}
-		} else InventoryHelper.dropInventoryItems(world, pos, inventory);
+		} else
+			InventoryHelper.dropInventoryItems(world, pos, inventory);
 
 		for (ContainerResearch container : registry)
 			container.removeSlots(9);

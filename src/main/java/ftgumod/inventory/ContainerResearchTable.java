@@ -6,8 +6,8 @@ import ftgumod.api.inventory.SlotCrafting;
 import ftgumod.api.inventory.SlotSpecial;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.packet.PacketDispatcher;
+import ftgumod.packet.client.HintMessage;
 import ftgumod.packet.client.TechnologyMessage;
-import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.Technology;
 import ftgumod.tileentity.TileEntityInventory;
 import ftgumod.tileentity.TileEntityResearchTable;
@@ -17,10 +17,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCraftResult;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -103,7 +105,8 @@ public class ContainerResearchTable extends ContainerResearch {
 		if (inv != invPlayer) {
 			if (inventorySlots.get(parchment).getHasStack()) {
 				Technology tech = StackUtils.INSTANCE.getTechnology(inventorySlots.get(parchment).getStack());
-				if (tech != null && tech.hasResearchRecipe() && (invInput.puzzle == null || invInput.puzzle.getRecipe().getTechnology() != tech)) {
+				if (tech != null && tech.hasResearchRecipe()
+						&& (invInput.puzzle == null || invInput.puzzle.getRecipe().getTechnology() != tech)) {
 					if (invInput.puzzle != null)
 						invInput.puzzle.onRemove(invPlayer.player, invInput.getWorld(), invInput.getPos());
 					invInput.puzzle = tech.getResearchRecipe().createInstance();
@@ -118,8 +121,11 @@ public class ContainerResearchTable extends ContainerResearch {
 			if (invInput.puzzle != null) {
 				if (inv != result)
 					invInput.puzzle.onInventoryChange(this);
-				if (inventorySlots.get(feather).getHasStack() && invInput.puzzle.getRecipe().getTechnology().canResearch(invPlayer.player) && invInput.puzzle.test()) {
-					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(invInput.puzzle.getRecipe().getTechnology(), IStackUtils.Parchment.RESEARCH));
+				if (inventorySlots.get(feather).getHasStack()
+						&& invInput.puzzle.getRecipe().getTechnology().canResearch(invPlayer.player)
+						&& invInput.puzzle.test()) {
+					inventorySlots.get(output).putStack(StackUtils.INSTANCE
+							.getParchment(invInput.puzzle.getRecipe().getTechnology(), IStackUtils.Parchment.RESEARCH));
 					return;
 				}
 			}
@@ -190,8 +196,10 @@ public class ContainerResearchTable extends ContainerResearch {
 	}
 
 	@Override
-	public void refreshHints() {
-		PacketDispatcher.sendToServer(new RequestMessage(true));
+	public void refreshHints(List<ITextComponent> hints) {
+		for (IContainerListener listener : listeners)
+			if (listener instanceof EntityPlayerMP)
+				PacketDispatcher.sendTo(new HintMessage(hints), (EntityPlayerMP) listener);
 	}
 
 	@Override

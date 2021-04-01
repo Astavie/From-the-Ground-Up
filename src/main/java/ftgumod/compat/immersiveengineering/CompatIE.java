@@ -14,7 +14,7 @@ public class CompatIE {
 	static final Map<MultiblockHandler.IMultiblock, ResourceLocation> UNLOCK = new HashMap<>();
 
 	@SubscribeEvent
-	public void onMultiblockForm(MultiblockHandler.MultiblockFormEvent evt) {
+	public void onMultiblockForm(MultiblockHandler.MultiblockFormEvent.Pre evt) {
 		if (UNLOCK.containsKey(evt.getMultiblock())) {
 			Technology technology = TechnologyManager.INSTANCE.getTechnology(UNLOCK.get(evt.getMultiblock()));
 			if (technology != null && !technology.isResearched(evt.getEntityPlayer()))
