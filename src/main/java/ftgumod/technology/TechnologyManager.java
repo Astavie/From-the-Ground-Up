@@ -18,6 +18,7 @@ import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.server.RecipeBookServerImpl;
 import ftgumod.util.StackUtils;
 import ftgumod.util.SubCollection;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,9 @@ import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.fml.common.Loader;
 import org.apache.commons.io.FileUtils;
@@ -48,6 +52,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 
 	public static final TechnologyManager INSTANCE = new TechnologyManager();
 
+	public static ICommandSender player;
+
 	static {
 		FTGUAPI.technologyManager = INSTANCE;
 	}
@@ -56,7 +62,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 
 	private final Map<ResourceLocation, Technology> technologies = new LinkedHashMap<>();
 	private final Collection<Technology> roots = new SubCollection<>(technologies.values(), Technology::isRoot);
-	private final Collection<Technology> start = new SubCollection<>(technologies.values(), Technology::researchedAtStart);
+	private final Collection<Technology> start = new SubCollection<>(technologies.values(),
+			Technology::researchedAtStart);
 
 	private final Map<ResourceLocation, IUnlock.Factory<?>> unlocks = new HashMap<>();
 	private final Map<ResourceLocation, IResearchRecipe.Factory<?>> puzzles = new HashMap<>();
@@ -83,7 +90,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 						JsonObject[] array = JsonUtils.fromJson(FTGU.GSON, reader, JsonObject[].class);
 						context.loadConstants(array);
 					} catch (IOException | JsonParseException e) {
-						Technology.getLogger().error("Couldn't read _constants.json from {}", mod.getModId(), e);
+						error("Couldn't read _constants.json from {}", mod.getModId(), e);
 						return false;
 					} finally {
 						IOUtils.closeQuietly(reader);
@@ -92,7 +99,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 				return true;
 			}, (root, file) -> {
 				String relative = root.relativize(file).toString();
-				if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_") || !relative.contains("/"))
+				if (!"json".equals(FilenameUtils.getExtension(file.toString())) || relative.startsWith("_")
+						|| !relative.contains("/"))
 					return true;
 
 				String name = FilenameUtils.removeExtension(relative);
@@ -101,7 +109,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 				try {
 					map.put(id, new String(Files.readAllBytes(file)));
 				} catch (IOException | JsonParseException e) {
-					Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
+					error("Couldn't read technology {} from {}", id, file, e);
 					return false;
 				}
 
@@ -140,8 +148,10 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 				if (puzzles.containsKey(type))
 					return puzzles.get(type).deserialize(object, context, technology);
 				throw new JsonSyntaxException("Unknown puzzle type " + type);
-			} else throw new JsonSyntaxException("IPuzzle missing required field 'type'");
-		} else throw new JsonSyntaxException("Expected puzzle to be an object");
+			} else
+				throw new JsonSyntaxException("IPuzzle missing required field 'type'");
+		} else
+			throw new JsonSyntaxException("Expected puzzle to be an object");
 	}
 
 	public Collection<Technology> getRoots() {
@@ -188,18 +198,19 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	}
 
 	public TechnologyProgress getProgress(EntityPlayer player, Technology technology) {
-		return progress.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>()).computeIfAbsent(technology, tech -> {
-			TechnologyProgress progress = new TechnologyProgress();
+		return progress.computeIfAbsent(player.getUniqueID(), uuid -> new HashMap<>()).computeIfAbsent(technology,
+				tech -> {
+					TechnologyProgress progress = new TechnologyProgress();
 
-			progress.update(tech.getCriteria(), tech.getRequirements());
+					progress.update(tech.getCriteria(), tech.getRequirements());
 
-			CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
-			for (String criterion : progress.getRemaningCriteria())
-				if (cap.isResearched(tech.getRegistryName().toString() + "#" + criterion))
-					progress.grantCriterion(criterion);
+					CapabilityTechnology.ITechnology cap = player.getCapability(CapabilityTechnology.TECH_CAP, null);
+					for (String criterion : progress.getRemaningCriteria())
+						if (cap.isResearched(tech.getRegistryName().toString() + "#" + criterion))
+							progress.grantCriterion(criterion);
 
-			return progress;
-		});
+					return progress;
+				});
 	}
 
 	public void clear() {
@@ -229,20 +240,21 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 					try {
 						context = new String(Files.readAllBytes(constants.toPath()));
 					} catch (IOException e) {
-						Technology.getLogger().error("Couldn't read _constants.json from {}", child.getName(), e);
+						error("Couldn't read _constants.json from {}", child.getName(), e);
 					}
 				}
 
 				Map<ResourceLocation, String> techs = new HashMap<>();
-				for (File file : FileUtils.listFiles(child, new String[] {"json"}, true)) {
+				for (File file : FileUtils.listFiles(child, new String[] { "json" }, true)) {
 					if (file.getParentFile().equals(child))
 						continue;
-					ResourceLocation id = new ResourceLocation(child.getName(), FilenameUtils.removeExtension(child.toPath().relativize(file.toPath()).toString().replace('\\', '/')));
+					ResourceLocation id = new ResourceLocation(child.getName(), FilenameUtils
+							.removeExtension(child.toPath().relativize(file.toPath()).toString().replace('\\', '/')));
 
 					try {
 						techs.put(id, new String(Files.readAllBytes(file.toPath())));
 					} catch (IOException e) {
-						Technology.getLogger().error("Couldn't read technology {} from {}", id, file, e);
+						error("Couldn't read technology {} from {}", id, file, e);
 					}
 				}
 
@@ -267,16 +279,17 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 	}
 
 	public void load() {
-		Map<JsonContextPublic, Map<ResourceLocation, String>> json = cache.entrySet().stream().collect(Collectors.toMap(entry -> {
-			JsonContextPublic context = new JsonContextPublic(entry.getKey());
-			try {
-				JsonObject[] array = FTGU.GSON.fromJson(entry.getValue().getLeft(), JsonObject[].class);
-				context.loadConstants(array);
-			} catch (JsonParseException e) {
-				Technology.getLogger().error("Couldn't read _constants.json from {}", context.getModId(), e);
-			}
-			return context;
-		}, entry -> entry.getValue().getRight()));
+		Map<JsonContextPublic, Map<ResourceLocation, String>> json = cache.entrySet().stream()
+				.collect(Collectors.toMap(entry -> {
+					JsonContextPublic context = new JsonContextPublic(entry.getKey());
+					try {
+						JsonObject[] array = FTGU.GSON.fromJson(entry.getValue().getLeft(), JsonObject[].class);
+						context.loadConstants(array);
+					} catch (JsonParseException e) {
+						error("Couldn't read _constants.json from {}", context.getModId(), e);
+					}
+					return context;
+				}, entry -> entry.getValue().getRight()));
 
 		if (!FTGU.custom) {
 			loadBuiltin().forEach((context, map) -> {
@@ -297,7 +310,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 					map.put(file.getKey(), FTGU.GSON.fromJson(file.getValue(), Technology.Builder.class));
 				} catch (JsonParseException e) {
 					removeFromCache(file.getKey());
-					Technology.getLogger().error("Couldn't load technology " + file.getKey(), e);
+					error("Couldn't load technology " + file.getKey(), e);
 				}
 			}
 			builders.put(domain.getKey(), map);
@@ -308,7 +321,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			load = false;
 
 			for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet()) {
-				Iterator<Map.Entry<ResourceLocation, Technology.Builder>> iterator = domain.getValue().entrySet().iterator();
+				Iterator<Map.Entry<ResourceLocation, Technology.Builder>> iterator = domain.getValue().entrySet()
+						.iterator();
 				while (iterator.hasNext()) {
 					Map.Entry<ResourceLocation, Technology.Builder> entry = iterator.next();
 
@@ -319,7 +333,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 							load = true;
 						} catch (JsonParseException e) {
 							removeFromCache(entry.getKey());
-							Technology.getLogger().error("Couldn't load technology " + entry.getKey(), e);
+							error("Couldn't load technology " + entry.getKey(), e);
 						}
 
 						iterator.remove();
@@ -328,10 +342,11 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 			}
 
 			if (!load) {
-				for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders.entrySet()) {
+				for (Map.Entry<JsonContextPublic, Map<ResourceLocation, Technology.Builder>> domain : builders
+						.entrySet()) {
 					for (Map.Entry<ResourceLocation, Technology.Builder> entry : domain.getValue().entrySet()) {
 						removeFromCache(entry.getKey());
-						Technology.getLogger().error("Couldn't load technology " + entry.getKey());
+						error("Couldn't load technology " + entry.getKey());
 					}
 				}
 			}
@@ -340,16 +355,48 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		registerAll(technologies.values().toArray(new Technology[technologies.size()]));
 
 		int size = this.technologies.size();
-		Technology.getLogger().info("Loaded " + size + " technolog" + (size != 1 ? "ies" : "y"));
+		info("Loaded " + size + " technolog" + (size != 1 ? "ies" : "y"));
 	}
 
+	private static void printToPlayer(String string) {
+		if (player != null) {
+			player.sendMessage(new TextComponentString(string)
+					.setStyle(new Style().setColor(TextFormatting.GRAY).setItalic(true)));
+		}
+	}
+
+	private static void error(String string, Object p1, Object p2, Exception e) {
+		Technology.getLogger().error(string, p1, p2, e);
+		printToPlayer(String.format(string, p1, p2) + "\n " + e.getClass().getSimpleName() + ": " + e.getMessage());
+	}
+
+	private static void error(String string, Object p1, Exception e) {
+		Technology.getLogger().error(string, p1, e);
+		printToPlayer(String.format(string, p1) + "\n " + e.getClass().getSimpleName() + ": " + e.getMessage());
+	}
+
+	private static void error(String string, Exception e) {
+		Technology.getLogger().error(string, e);
+		printToPlayer(string + "\n " + e.getClass().getSimpleName() + ": " + e.getMessage());
+	}
+
+	private static void error(String string) {
+		Technology.getLogger().error(string);
+		printToPlayer(string);
+	}
+
+	private static void info(String string) {
+		Technology.getLogger().info(string);
+		printToPlayer(string);
+	}
 
 	@Override
 	public void register(ITechnology value) {
 		if (value instanceof Technology) {
 			if (_register((Technology) value))
 				addCallback.forEach(action -> action.accept(value));
-		} else throw new IllegalArgumentException("Technology instance is of unexpected class");
+		} else
+			throw new IllegalArgumentException("Technology instance is of unexpected class");
 	}
 
 	private boolean _register(Technology value) {

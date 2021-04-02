@@ -47,9 +47,12 @@ public class CommandTechnology extends CommandBase {
 		else {
 			if (args[0].equals("reload")) {
 				if (args.length == 1) {
-					TechnologyManager.INSTANCE.reload(new File(sender.getServer().worlds[0].getSaveHandler().getWorldDirectory(), "data"));
+					TechnologyManager.player = sender;
+					TechnologyManager.INSTANCE.reload(
+							new File(sender.getServer().worlds[0].getSaveHandler().getWorldDirectory(), "data"));
 					PacketDispatcher.sendToAll(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache));
 					notifyCommandListener(sender, this, "commands.technology.reload.success");
+					TechnologyManager.player = null;
 				} else
 					throw new WrongUsageException("commands.technology.reload.usage");
 			} else {
@@ -64,7 +67,8 @@ public class CommandTechnology extends CommandBase {
 					if (mode == null)
 						throw type.wrongUsage();
 
-					PacketDispatcher.sendTo(new TechnologyMessage(player, true, perform(sender, args, player, type, mode)), player);
+					PacketDispatcher.sendTo(
+							new TechnologyMessage(player, true, perform(sender, args, player, type, mode)), player);
 				} else if (!args[0].equals("test"))
 					throw new WrongUsageException(getUsage(sender));
 				else if (args.length == 3)
@@ -77,10 +81,11 @@ public class CommandTechnology extends CommandBase {
 		}
 	}
 
-	private Technology[] perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode) throws CommandException {
+	private Technology[] perform(ICommandSender sender, String[] args, EntityPlayer player, ActionType type, Mode mode)
+			throws CommandException {
 		if (mode == Mode.EVERYTHING)
 			if (args.length == 3) {
-				//noinspection unchecked
+				// noinspection unchecked
 				Set<Technology> set = new LinkedHashSet(TechnologyManager.INSTANCE.getTechnologies());
 				type.perform(player, set);
 				if (set.isEmpty())
@@ -89,7 +94,8 @@ public class CommandTechnology extends CommandBase {
 
 				if (type == ActionType.GRANT)
 					return set.toArray(new Technology[set.size()]);
-			} else throw mode.usage(type);
+			} else
+				throw mode.usage(type);
 		else if (args.length < 4)
 			throw mode.usage(type);
 		else {
@@ -97,11 +103,14 @@ public class CommandTechnology extends CommandBase {
 
 			if (mode == Mode.ONLY && args.length == 5) {
 				if (!tech.getCriteria().keySet().contains(args[4]))
-					throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), args[4]);
+					throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(),
+							args[4]);
 				if (!type.performCriterion(player, tech, args[4]))
-					throw new CommandException(type.translation + ".criterion.failed", tech.getRegistryName(), player.getName(), args[4]);
+					throw new CommandException(type.translation + ".criterion.failed", tech.getRegistryName(),
+							player.getName(), args[4]);
 
-				notifyCommandListener(sender, this, type.translation + ".criterion.success", tech.getRegistryName(), player.getName(), args[4]);
+				notifyCommandListener(sender, this, type.translation + ".criterion.success", tech.getRegistryName(),
+						player.getName(), args[4]);
 			} else {
 				if (args.length != 4)
 					throw mode.usage(type);
@@ -119,7 +128,8 @@ public class CommandTechnology extends CommandBase {
 		return new Technology[0];
 	}
 
-	private void testCriterion(ICommandSender sender, EntityPlayer player, Technology tech, String criterion) throws CommandException {
+	private void testCriterion(ICommandSender sender, EntityPlayer player, Technology tech, String criterion)
+			throws CommandException {
 		if (!tech.hasCustomUnlock())
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 
@@ -127,18 +137,23 @@ public class CommandTechnology extends CommandBase {
 		if (progress == null)
 			throw new CommandException("commands.technology.criterionNotFound", tech.getRegistryName(), criterion);
 		if (!progress)
-			throw new CommandException("commands.technology.test.criterion.notDone", player.getName(), tech.getRegistryName(), criterion);
-		notifyCommandListener(sender, this, "commands.technology.test.criterion.success", player.getName(), tech.getRegistryName(), criterion);
+			throw new CommandException("commands.technology.test.criterion.notDone", player.getName(),
+					tech.getRegistryName(), criterion);
+		notifyCommandListener(sender, this, "commands.technology.test.criterion.success", player.getName(),
+				tech.getRegistryName(), criterion);
 	}
 
 	private void testTechnology(ICommandSender sender, EntityPlayer player, Technology tech) throws CommandException {
 		if (!tech.isResearched(player))
-			throw new CommandException("commands.technology.test.technology.notDone", player.getName(), tech.getRegistryName());
-		notifyCommandListener(sender, this, "commands.technology.test.technology.success", player.getName(), tech.getRegistryName());
+			throw new CommandException("commands.technology.test.technology.notDone", player.getName(),
+					tech.getRegistryName());
+		notifyCommandListener(sender, this, "commands.technology.test.technology.success", player.getName(),
+				tech.getRegistryName());
 	}
 
 	@Override
-	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+			@Nullable BlockPos targetPos) {
 		if (args.length == 1)
 			return getListOfStringsMatchingLastWord(args, "grant", "revoke", "test", "reload");
 		else {
@@ -193,7 +208,8 @@ public class CommandTechnology extends CommandBase {
 
 	@Override
 	public boolean isUsernameIndex(String[] args, int index) {
-		return args.length > 1 && ("grant".equals(args[0]) || "revoke".equals(args[0]) || "test".equals(args[0])) && index == 1;
+		return args.length > 1 && ("grant".equals(args[0]) || "revoke".equals(args[0]) || "test".equals(args[0]))
+				&& index == 1;
 	}
 
 	private enum ActionType {
@@ -260,11 +276,8 @@ public class CommandTechnology extends CommandBase {
 	}
 
 	private enum Mode {
-		ONLY("only", false, false),
-		THROUGH("through", true, true),
-		FROM("from", false, true),
-		UNTIL("until", true, false),
-		EVERYTHING("everything", true, true);
+		ONLY("only", false, false), THROUGH("through", true, true), FROM("from", false, true),
+		UNTIL("until", true, false), EVERYTHING("everything", true, true);
 
 		private final String name;
 		private final boolean parents;
