@@ -4,7 +4,6 @@ import ftgumod.FTGU;
 import ftgumod.api.event.FTGUClientSyncEvent;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.packet.MessageHandler;
-import ftgumod.packet.server.RequestMessage;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
@@ -17,7 +16,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 
 public class TechnologyMessage implements IMessage {
@@ -50,7 +48,8 @@ public class TechnologyMessage implements IMessage {
 
 		toasts = new ITechnology[buffer.readInt()];
 		for (int i = 0; i < toasts.length; i++)
-			toasts[i] = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
+			toasts[i] = TechnologyManager.INSTANCE
+					.getTechnology(new ResourceLocation(ByteBufUtils.readUTF8String(buffer)));
 	}
 
 	@Override
@@ -90,7 +89,9 @@ public class TechnologyMessage implements IMessage {
 						String[] split = name.split("#");
 						if (split.length == 2) {
 							Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
-							TechnologyManager.INSTANCE.getProgress(player, tech).revokeCriterion(split[1]);
+							if (tech != null) {
+								TechnologyManager.INSTANCE.getProgress(player, tech).revokeCriterion(split[1]);
+							}
 						}
 					}
 
@@ -101,7 +102,9 @@ public class TechnologyMessage implements IMessage {
 						String[] split = name.split("#");
 						if (split.length == 2) {
 							Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(split[0]));
-							TechnologyManager.INSTANCE.getProgress(player, tech).grantCriterion(split[1]);
+							if (tech != null) {
+								TechnologyManager.INSTANCE.getProgress(player, tech).grantCriterion(split[1]);
+							}
 						}
 					}
 

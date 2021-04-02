@@ -108,7 +108,8 @@ public class ContainerIdeaTable extends Container {
 				Technology tech = hasRecipe();
 
 				if (tech != null) {
-					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(tech, tech.hasResearchRecipe() ? IStackUtils.Parchment.IDEA : IStackUtils.Parchment.RESEARCH));
+					inventorySlots.get(output).putStack(StackUtils.INSTANCE.getParchment(tech,
+							tech.hasResearchRecipe() ? IStackUtils.Parchment.IDEA : IStackUtils.Parchment.RESEARCH));
 					return;
 				}
 			}
@@ -145,10 +146,14 @@ public class ContainerIdeaTable extends Container {
 				if (itemStack2.getItem() == Content.i_parchmentEmpty) {
 					if (!mergeItemStack(itemStack2, parchment, parchment + 1, false))
 						return ItemStack.EMPTY;
-				} else if (ArrayUtils.contains(OreDictionary.getOreIDs(itemStack2), OreDictionary.getOreID("feather")))
+				} else if (ArrayUtils.contains(OreDictionary.getOreIDs(itemStack2),
+						OreDictionary.getOreID("feather"))) {
 					if (!mergeItemStack(itemStack2, feather, feather + 1, false))
 						return ItemStack.EMPTY;
-				return ItemStack.EMPTY;
+
+				} else if (!mergeItemStack(itemStack2, combine, combine + 3, false)) {
+					return ItemStack.EMPTY;
+				}
 			} else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false))
 				return ItemStack.EMPTY;
 
