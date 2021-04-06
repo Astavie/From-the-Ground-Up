@@ -134,7 +134,7 @@ public class EventHandler {
 					}
 				}
 				if (cap.isNew()) {
-					if (FTGU.journal) {
+					if (FTGUConfig.giveResearchBook) {
 						evt.player.inventory.addItemStackToInventory(new ItemStack(Content.i_researchBook));
 					}
 					cap.setOld();

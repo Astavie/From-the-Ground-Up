@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ftgumod.Content;
-import ftgumod.FTGU;
+import ftgumod.FTGUConfig;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.util.predicate.ItemPredicate;
 import ftgumod.technology.Technology;
@@ -84,7 +84,7 @@ public class CompatJEI implements IModPlugin {
 		if (!lockedLast.isEmpty()) {
 			ingredientRegistry.addIngredientsAtRuntime(VanillaTypes.ITEM, lockedLast);
 		}
-		if (!cheatItemsEnabled && !stacks.isEmpty() && FTGU.hide == 2) {
+		if (!cheatItemsEnabled && !stacks.isEmpty() && FTGUConfig.jeiHide == FTGUConfig.HideJeiItems.LOCKED_RECIPES_AND_ITEMS) {
 			ingredientRegistry.removeIngredientsAtRuntime(VanillaTypes.ITEM, stacks);
 		}
 
@@ -95,7 +95,7 @@ public class CompatJEI implements IModPlugin {
 			IIngredients ingredients = ((RecipeRegistry) recipeRegistry).getIngredients(wrapper);
 			List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
-			if (FTGU.hide > 0 && outputs.size() > 0 && outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
+			if (FTGUConfig.jeiHide != FTGUConfig.HideJeiItems.NOTHING && outputs.size() > 0 && outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
 				recipeRegistry.hideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
 			} else {
 				recipeRegistry.unhideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);

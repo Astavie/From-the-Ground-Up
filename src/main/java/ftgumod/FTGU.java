@@ -37,7 +37,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -57,12 +56,7 @@ public class FTGU {
 
 	public static final String MODID = "ftgumod";
 
-	public static File folder;
-
-	public static boolean copy = true;
-	public static boolean custom = false;
-	public static byte hide = 1;
-	public static boolean journal = true;
+	public static File configFolder;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
@@ -120,18 +114,7 @@ public class FTGU {
 
 		PacketDispatcher.registerPackets();
 
-		folder = new File(event.getModConfigurationDirectory(), MODID);
-
-		Configuration config = new Configuration(new File(folder, MODID + ".cfg"));
-		config.load();
-
-		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "copy", true, "If enabled, technologies can be copied");
-		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "custom", false, "If enabled, only config and world technologies will be loaded");
-		journal = config.getBoolean(Configuration.CATEGORY_GENERAL, "journal", true, "If enabled, every player will get a research book when they join a new world or server");
-
-		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 1, 0, 2, "0: No items or recipes are hidden from JEI\n1: Only locked recipes are hidden from JEI\n2: Locked items and recipes are hidden from JEI");
-
-		config.save();
+		configFolder = new File(event.getModConfigurationDirectory(), MODID);
 	}
 
 	@Mod.EventHandler

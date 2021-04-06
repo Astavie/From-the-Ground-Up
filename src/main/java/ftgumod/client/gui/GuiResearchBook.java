@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 
 import ftgumod.Content;
 import ftgumod.FTGU;
+import ftgumod.FTGUConfig;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.packet.PacketDispatcher;
@@ -134,7 +135,7 @@ public class GuiResearchBook extends GuiScreen {
 			scroll = 1;
 		} else {
 			buttonList.add(new GuiButton(1, width / 2 + 24, height / 2 + 74, 80, 20, I18n.format("gui.done")));
-			if (FTGU.copy && selected.canCopy()) {
+			if (FTGUConfig.allowResearchCopy && selected.canCopy()) {
 				GuiButton copy = new GuiButton(2, (width - imageWidth) / 2 + 24, height / 2 + 74, 125, 20, I18n.format("gui.copy"));
 				copy.enabled = false;
 				for (int i = 0; i < player.inventory.getSizeInventory(); i++)
