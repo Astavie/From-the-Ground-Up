@@ -80,7 +80,8 @@ public class ResearchMatch implements IResearchRecipe {
 
 			for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(object, "key").entrySet()) {
 				if (entry.getKey().length() != 1)
-					throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
+					throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey()
+							+ "' is an invalid symbol (must be 1 character only).");
 				if (" ".equals(entry.getKey()))
 					throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
 
@@ -134,7 +135,8 @@ public class ResearchMatch implements IResearchRecipe {
 				for (char chr : line.toCharArray()) {
 					ItemPredicate ing = ingMap.get(chr);
 					if (ing == null)
-						throw new JsonSyntaxException("Pattern references symbol '" + chr + "' but it's not defined in the key");
+						throw new JsonSyntaxException(
+								"Pattern references symbol '" + chr + "' but it's not defined in the key");
 					predicates[x] = ing;
 					hints[x] = hintMap.get(chr);
 					consume[x] = useMap.get(chr);

@@ -52,7 +52,12 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 @Mod(modid = FTGU.MODID, name = "From the Ground Up!")
 public class FTGU {
 
-	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(Technology.Builder.class, new Technology.Deserializer()).registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer()).registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer()).registerTypeHierarchyAdapter(Style.class, new Style.Serializer()).registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
+	public static final Gson GSON = new GsonBuilder()
+			.registerTypeAdapter(Technology.Builder.class, new Technology.Deserializer())
+			.registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer())
+			.registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer())
+			.registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
+			.registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
 
 	public static final String MODID = "ftgumod";
 
@@ -98,10 +103,12 @@ public class FTGU {
 		CriteriaTriggers.register(Content.c_inspect);
 
 		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "fluid"), new ItemFluid.Factory());
-		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"), new ItemLambda.Factory(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
+		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"),
+				new ItemLambda.Factory(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
 
 		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "match"), new ResearchMatch.Factory());
-		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"), new ResearchConnect.Factory());
+		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"),
+				new ResearchConnect.Factory());
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 
@@ -127,18 +134,21 @@ public class FTGU {
 	public void postInit(FMLPostInitializationEvent event) {
 		if (Loader.isModLoaded("immersiveengineering")) {
 			MinecraftForge.EVENT_BUS.register(CompatIE.class);
-			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"), new UnlockMultiblockFactory());
+			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"),
+					new UnlockMultiblockFactory());
 		}
 		if (GAME_STAGES_LOADED) {
 			MinecraftForge.EVENT_BUS.register(CompatGameStages.class);
-			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
+			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"),
+					new UnlockGameStage.Factory());
 		}
 		PROXY.postInit(event);
 	}
 
 	@Mod.EventHandler
 	public void serverAboutToStart(FMLServerAboutToStartEvent event) {
-		TechnologyManager.INSTANCE.reload(event.getServer().getActiveAnvilConverter().getFile(event.getServer().getFolderName(), "data"));
+		TechnologyManager.INSTANCE
+				.reload(event.getServer().getActiveAnvilConverter().getFile(event.getServer().getFolderName(), "data"));
 	}
 
 	@Mod.EventHandler

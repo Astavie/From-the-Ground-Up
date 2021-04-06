@@ -159,7 +159,8 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		if (this.parent != null && parent == null)
 			throw new NullPointerException("Unknown technology '" + this.parent + "'");
 
-		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
+		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea,
+				research, stage);
 		return original;
 	}
 

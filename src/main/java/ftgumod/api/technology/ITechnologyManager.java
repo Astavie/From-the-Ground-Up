@@ -21,8 +21,9 @@ public interface ITechnologyManager {
 	boolean isLocked(ItemStack stack, @Nullable EntityPlayer player);
 
 	/**
-	 * When a new {@code Technology} is about to be added, the specified {@code Predicate} will be tested.
-	 * If this returns {@code true}, then the {@code Technology} will be discarded.
+	 * When a new {@code Technology} is about to be added, the specified
+	 * {@code Predicate} will be tested. If this returns {@code true}, then the
+	 * {@code Technology} will be discarded.
 	 *
 	 * @param predicate The {@code Predicate} to check
 	 * @see #addCallback(Consumer)
@@ -31,18 +32,21 @@ public interface ITechnologyManager {
 	void removeCallback(Predicate<? super ITechnology> predicate);
 
 	/**
-	 * When a new {@code Technology} has just been added, the specified {@code Consumer} will look at it.
-	 * This can be used to edit {@code Technologies}.
+	 * When a new {@code Technology} has just been added, the specified
+	 * {@code Consumer} will look at it. This can be used to edit
+	 * {@code Technologies}.
 	 *
-	 * @param action The {@code Consumer} which will accept all new {@code Technologies}
+	 * @param action The {@code Consumer} which will accept all new
+	 *               {@code Technologies}
 	 * @see #removeCallback(Predicate)
 	 * @see #createCallback(Runnable)
 	 */
 	void addCallback(Consumer<? super ITechnology> action);
 
 	/**
-	 * Before {@code Technologies} are (re)loaded, the specified {@code Runnable} will run.
-	 * This can be used to register {@code Technologies} that do not depend on others.
+	 * Before {@code Technologies} are (re)loaded, the specified {@code Runnable}
+	 * will run. This can be used to register {@code Technologies} that do not
+	 * depend on others.
 	 *
 	 * @param action The {@code Runnable} to run
 	 * @see #removeCallback(Predicate)
@@ -51,12 +55,16 @@ public interface ITechnologyManager {
 	void createCallback(Runnable action);
 
 	/**
-	 * Registers a new {@code Technology}.
-	 * Before this happens, callbacks registered through {@link #removeCallback(Predicate)} and {@link #addCallback(Consumer)} get called.
+	 * Registers a new {@code Technology}. Before this happens, callbacks registered
+	 * through {@link #removeCallback(Predicate)} and {@link #addCallback(Consumer)}
+	 * get called.
 	 *
 	 * @param value The {@code Technology} to be registered
-	 * @throws IllegalArgumentException If the specified {@code Technology} is of an unexpected class
-	 * @throws NullPointerException     If the specified {@code Technology} is {@code null} or has a {@code null} registry name
+	 * @throws IllegalArgumentException If the specified {@code Technology} is of an
+	 *                                  unexpected class
+	 * @throws NullPointerException     If the specified {@code Technology} is
+	 *                                  {@code null} or has a {@code null} registry
+	 *                                  name
 	 */
 	void register(ITechnology value);
 
@@ -74,7 +82,8 @@ public interface ITechnologyManager {
 
 	/**
 	 * Used to create {@code Technologies} at runtime.
-	 * <p><strong>Only call this method if using JSON files is impossible!</strong>
+	 * <p>
+	 * <strong>Only call this method if using JSON files is impossible!</strong>
 	 *
 	 * @param id The registry name of the new {@code Technology}
 	 * @return A new {@code TechnologyBuilder}
@@ -84,7 +93,10 @@ public interface ITechnologyManager {
 
 	/**
 	 * Sends a message to the client to sync the researched {@code Technologies}.
-	 * <p><strong>Should always be invoked after calling {@link ITechnology#setResearched(EntityPlayer, boolean)}!</strong></p>
+	 * <p>
+	 * <strong>Should always be invoked after calling
+	 * {@link ITechnology#setResearched(EntityPlayer, boolean)}!</strong>
+	 * </p>
 	 *
 	 * @param player The {@code EntityPlayer} to synchronize
 	 * @param toasts The {@code Technologies} to show toasts of
@@ -92,7 +104,8 @@ public interface ITechnologyManager {
 	void sync(EntityPlayerMP player, ITechnology... toasts);
 
 	/**
-	 * Bypasses FTGU's regulation of recipe unlocking and adds all specified recipes to the Recipe Book
+	 * Bypasses FTGU's regulation of recipe unlocking and adds all specified recipes
+	 * to the Recipe Book
 	 */
 	void addRecipes(List<IRecipe> recipes, EntityPlayerMP player);
 

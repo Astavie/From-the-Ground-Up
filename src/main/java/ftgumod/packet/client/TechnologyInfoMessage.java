@@ -108,8 +108,10 @@ public class TechnologyInfoMessage implements IMessage {
 
 			Supplier<Stream<Technology>> stream = TechnologyManager.INSTANCE.getRoots()::stream;
 			GuiResearchBook.zoom = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> 1.0F));
-			GuiResearchBook.xScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
-			GuiResearchBook.yScrollO = stream.get().collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+			GuiResearchBook.xScrollO = stream.get()
+					.collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
+			GuiResearchBook.yScrollO = stream.get()
+					.collect(Collectors.toMap(Technology::getRegistryName, tech -> -82.0));
 
 			FTGU.PROXY.clearToasts(); // Removes unnecessary recipe toasts
 			return new RequestMessage();

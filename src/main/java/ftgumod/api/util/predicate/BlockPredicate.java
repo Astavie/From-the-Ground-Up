@@ -53,18 +53,21 @@ public class BlockPredicate {
 			BlockStateContainer blockState = block.getBlockState();
 			IProperty property;
 
-			//noinspection Guava
+			// noinspection Guava
 			Optional optional;
-			for (Iterator<Map.Entry<String, JsonElement>> var6 = JsonUtils.getJsonObject(object, "state").entrySet().iterator(); var6.hasNext(); properties.put(property, optional.get())) {
+			for (Iterator<Map.Entry<String, JsonElement>> var6 = JsonUtils.getJsonObject(object, "state").entrySet()
+					.iterator(); var6.hasNext(); properties.put(property, optional.get())) {
 				Map.Entry<String, JsonElement> entry = var6.next();
 				property = blockState.getProperty(entry.getKey());
 				if (property == null)
-					throw new JsonSyntaxException("Unknown block state property '" + entry.getKey() + "' for block '" + Block.REGISTRY.getNameForObject(block) + "'");
+					throw new JsonSyntaxException("Unknown block state property '" + entry.getKey() + "' for block '"
+							+ Block.REGISTRY.getNameForObject(block) + "'");
 
 				String name = JsonUtils.getString(entry.getValue(), entry.getKey());
 				optional = property.parseValue(name);
 				if (!optional.isPresent())
-					throw new JsonSyntaxException("Invalid block state value '" + name + "' for property '" + entry.getKey() + "' on block '" + Block.REGISTRY.getNameForObject(block) + "'");
+					throw new JsonSyntaxException("Invalid block state value '" + name + "' for property '"
+							+ entry.getKey() + "' on block '" + Block.REGISTRY.getNameForObject(block) + "'");
 
 				if (properties == null)
 					properties = Maps.newHashMap();

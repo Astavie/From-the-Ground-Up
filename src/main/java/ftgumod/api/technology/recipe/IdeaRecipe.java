@@ -37,7 +37,10 @@ public class IdeaRecipe implements IIdeaRecipe {
 			JsonElement first = element;
 			while (first.isJsonArray())
 				first = first.getAsJsonArray().get(0); // TODO: Make consume not be first
-			recipe.add(Pair.of(predicate, first.isJsonObject() && first.getAsJsonObject().has("consume") ? JsonUtils.getBoolean(first.getAsJsonObject(), "consume") : null));
+			recipe.add(Pair.of(predicate,
+					first.isJsonObject() && first.getAsJsonObject().has("consume")
+							? JsonUtils.getBoolean(first.getAsJsonObject(), "consume")
+							: null));
 		}
 
 		return new IdeaRecipe(recipe, amount);
@@ -49,8 +52,7 @@ public class IdeaRecipe implements IIdeaRecipe {
 
 		Set<Pair<ItemPredicate, Boolean>> copy = new HashSet<>(recipe);
 
-		loop:
-		for (int i = 0; i < inventory.getSizeInventory(); i++) {
+		loop: for (int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if (stack.isEmpty())
 				continue;

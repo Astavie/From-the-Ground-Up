@@ -23,7 +23,8 @@ public interface IStackUtils {
 	/**
 	 * @param tech The {@code Technology}
 	 * @param type The type of the parchment
-	 * @return A parchment of the specified type containing the specified {@code Technology}
+	 * @return A parchment of the specified type containing the specified
+	 *         {@code Technology}
 	 * @see #getTechnology(ItemStack)
 	 */
 	ItemStack getParchment(ITechnology tech, Parchment type);

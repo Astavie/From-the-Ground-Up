@@ -10,17 +10,20 @@ public class SlotCrafting extends SlotSpecial {
 
 	private final Container eventHandler;
 
-	public SlotCrafting(Container eventHandler, IInventory inventory, int index, int x, int y, int limit, Predicate<ItemStack> special) {
+	public SlotCrafting(Container eventHandler, IInventory inventory, int index, int x, int y, int limit,
+			Predicate<ItemStack> special) {
 		super(inventory, index, x, y, limit, special);
 		this.eventHandler = eventHandler;
 	}
 
-	public SlotCrafting(Container eventHandler, IInventory inventory, int index, int x, int y, int limit, Iterable<ItemStack> special) {
+	public SlotCrafting(Container eventHandler, IInventory inventory, int index, int x, int y, int limit,
+			Iterable<ItemStack> special) {
 		super(inventory, index, x, y, limit, special);
 		this.eventHandler = eventHandler;
 	}
 
-	public SlotCrafting(Container eventHandler, IInventory inventory, int index, int x, int y, int limit, ItemStack special) {
+	public SlotCrafting(Container eventHandler, IInventory inventory, int index, int x, int y, int limit,
+			ItemStack special) {
 		super(inventory, index, x, y, limit, special);
 		this.eventHandler = eventHandler;
 	}

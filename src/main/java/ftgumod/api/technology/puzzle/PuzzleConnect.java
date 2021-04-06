@@ -108,7 +108,8 @@ public class PuzzleConnect implements IPuzzle {
 		InventoryCrafting crafting = new InventoryCraftingPersistent(inventory, 0, 3, 1);
 		for (int i = 0; i < 3; i++) {
 			final int j = i;
-			container.addSlotToContainer(new SlotCrafting(container, crafting, i, 44 + i * 18, 35, 1, stack -> fits(stack, j)));
+			container.addSlotToContainer(
+					new SlotCrafting(container, crafting, i, 44 + i * 18, 35, 1, stack -> fits(stack, j)));
 		}
 	}
 
@@ -140,7 +141,8 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void onFinish() {
-		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(new InventoryCraftingPersistent(inventory, 0, 3, 1));
+		NonNullList<ItemStack> remaining = ForgeHooks
+				.defaultRecipeGetRemainingItems(new InventoryCraftingPersistent(inventory, 0, 3, 1));
 		for (int i = 0; i < 3; i++)
 			inventory.setInventorySlotContents(i, remaining.get(i));
 	}
@@ -154,7 +156,8 @@ public class PuzzleConnect implements IPuzzle {
 					if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
 						player.dropItem(stack, false);
 				}
-			} else InventoryHelper.dropInventoryItems(world, pos, inventory);
+			} else
+				InventoryHelper.dropInventoryItems(world, pos, inventory);
 		}
 		for (ContainerResearch container : registry)
 			container.removeSlots(3);

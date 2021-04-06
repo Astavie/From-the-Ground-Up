@@ -87,7 +87,8 @@ public class BlockSerializable {
 	}
 
 	public boolean test(BlockPredicate predicate) {
-		return predicate.test(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimension.getId()), pos, block, properties);
+		return predicate.test(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimension.getId()), pos,
+				block, properties);
 	}
 
 }

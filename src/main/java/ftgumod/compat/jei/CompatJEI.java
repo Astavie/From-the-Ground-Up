@@ -95,7 +95,8 @@ public class CompatJEI implements IModPlugin {
 			IIngredients ingredients = ((RecipeRegistry) recipeRegistry).getIngredients(wrapper);
 			List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
-			if (FTGUConfig.jeiHide != FTGUConfig.HideJeiItems.NOTHING && outputs.size() > 0 && outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
+			if (FTGUConfig.jeiHide != FTGUConfig.HideJeiItems.NOTHING && outputs.size() > 0
+					&& outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
 				recipeRegistry.hideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
 			} else {
 				recipeRegistry.unhideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);

@@ -36,7 +36,8 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		if (index >= 0 && index < size)
 			parent.setInventorySlotContents(index + offset, stack);
-		else throw new ArrayIndexOutOfBoundsException();
+		else
+			throw new ArrayIndexOutOfBoundsException();
 	}
 
 	@Override

@@ -35,16 +35,17 @@ public interface ITechnologyBuilder {
 	ITechnologyBuilder setGameStage(String stage);
 
 	/**
-	 * If this {@code TechnologyBuilder} was built from an existing {@code Technology}, that {@code Technology} will be modified.
+	 * If this {@code TechnologyBuilder} was built from an existing
+	 * {@code Technology}, that {@code Technology} will be modified.
 	 *
-	 * @throws NullPointerException If this {@code TechnologyBuilder} is not a copy or if the parent does not exist
+	 * @throws NullPointerException If this {@code TechnologyBuilder} is not a copy
+	 *                              or if the parent does not exist
 	 * @see #build()
 	 */
 	void save();
 
 	/**
-	 * Builds a new {@code Technology}.
-	 * All saves afterwards will then change it.
+	 * Builds a new {@code Technology}. All saves afterwards will then change it.
 	 *
 	 * @return A new {@code Technology}
 	 * @throws NullPointerException If the parent does not exist

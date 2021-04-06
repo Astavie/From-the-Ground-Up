@@ -30,7 +30,8 @@ public class UnlockMultiblockFactory implements IUnlock.Factory<UnlockRecipe> {
 				multiblock = m;
 				break;
 			}
-		if (multiblock == null) throw new JsonSyntaxException("Unknown multiblock " + name);
+		if (multiblock == null)
+			throw new JsonSyntaxException("Unknown multiblock " + name);
 
 		CompatIE.UNLOCK.put(multiblock, technology);
 
@@ -45,8 +46,10 @@ public class UnlockMultiblockFactory implements IUnlock.Factory<UnlockRecipe> {
 			if (EnumUtils.isValidEnum(BlockTypes_StoneDevices.class, block))
 				icon = new ItemStack(IEContent.blockStoneDevice, BlockTypes_StoneDevices.valueOf(block).getMeta());
 			else if (EnumUtils.isValidEnum(BlockTypes_MetalMultiblock.class, block))
-				icon = new ItemStack(IEContent.blockMetalMultiblock, BlockTypes_MetalMultiblock.valueOf(block).getMeta());
-			else throw new JsonSyntaxException("IE multiblock has no icon and no icon was specified!");
+				icon = new ItemStack(IEContent.blockMetalMultiblock,
+						BlockTypes_MetalMultiblock.valueOf(block).getMeta());
+			else
+				throw new JsonSyntaxException("IE multiblock has no icon and no icon was specified!");
 
 			return new UnlockRecipe(Ingredient.fromStacks(icon));
 		}

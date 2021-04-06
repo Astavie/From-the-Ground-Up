@@ -48,14 +48,17 @@ public class ItemMagnifyingGlass extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float f1, float f2, float f3) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face,
+			float f1, float f2, float f3) {
 		if (player.isSneaking()) {
 			if (!world.isRemote) {
-				ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand() : player.getHeldItemOffhand();
+				ItemStack item = hand == EnumHand.MAIN_HAND ? player.getHeldItemMainhand()
+						: player.getHeldItemOffhand();
 				List<BlockSerializable> list = getInspected(item);
 
 				IBlockState state = world.getBlockState(pos);
-				ItemStack pick = state.getBlock().getPickBlock(state, new RayTraceResult(new Vec3d(f1, f2, f3), face, pos), world, pos, player);
+				ItemStack pick = state.getBlock().getPickBlock(state,
+						new RayTraceResult(new Vec3d(f1, f2, f3), face, pos), world, pos, player);
 				BlockSerializable block = new BlockSerializable(world, pos, state, pick);
 
 				PlayerInspectEvent event = new PlayerInspectEvent(player, hand, pos, state, face);
@@ -74,10 +77,12 @@ public class ItemMagnifyingGlass extends Item {
 				if (event.isCanceled()) {
 					player.sendMessage(new TextComponentTranslation("technology.decipher.understand"));
 					SoundType sound = state.getBlock().getSoundType(state, world, pos, player);
-					world.playSound(null, pos, sound.getHitSound(), SoundCategory.NEUTRAL, (sound.getVolume() + 1.0F) / 4.0F, sound.getPitch() * 0.5F);
+					world.playSound(null, pos, sound.getHitSound(), SoundCategory.NEUTRAL,
+							(sound.getVolume() + 1.0F) / 4.0F, sound.getPitch() * 0.5F);
 				} else {
 					player.sendMessage(new TextComponentTranslation("technology.decipher.flawless"));
-					world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 0.75F, 1.0F);
+					world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP,
+							SoundCategory.PLAYERS, 0.75F, 1.0F);
 
 					NBTTagCompound tag = StackUtils.INSTANCE.getItemData(item);
 					NBTTagList nbt = tag.getTagList("FTGU", NBT.TAG_COMPOUND);

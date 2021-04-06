@@ -356,7 +356,8 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 						.entrySet()) {
 					for (Map.Entry<ResourceLocation, Technology.Builder> entry : domain.getValue().entrySet()) {
 						removeFromCache(entry.getKey());
-						error("Couldn't load technology " + entry.getKey());
+						error("Couldn't load technology " + entry.getKey(),
+								"Parent couldn't be loaded or doesn't exist");
 					}
 				}
 			}
@@ -390,9 +391,9 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		printToPlayer(string + "\n " + e.getClass().getSimpleName() + ": " + e.getMessage());
 	}
 
-	private static void error(String string) {
+	private static void error(String string, String e) {
 		Technology.getLogger().error(string);
-		printToPlayer(string);
+		printToPlayer(string + "\n " + e);
 	}
 
 	private static void info(String string) {
