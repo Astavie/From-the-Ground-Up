@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.FTGU;
+import ftgumod.FTGUConfig;
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.technology.ITechnologyManager;
@@ -233,7 +234,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 		clear();
 
 		cache = new HashMap<>();
-		load(new File(FTGU.folder, "technologies"));
+		load(new File(FTGU.configFolder, "technologies"));
 		load(new File(data, "technologies"));
 
 		load();
@@ -300,7 +301,7 @@ public class TechnologyManager implements ITechnologyManager, Iterable<Technolog
 					return context;
 				}, entry -> entry.getValue().getRight()));
 
-		if (!FTGU.custom) {
+		if (FTGUConfig.loadDefaultTechnologies) {
 			loadBuiltin().forEach((context, map) -> {
 				if (!json.containsKey(context))
 					json.put(context, map);

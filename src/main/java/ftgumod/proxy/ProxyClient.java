@@ -6,7 +6,6 @@ import ftgumod.api.technology.ITechnology;
 import ftgumod.client.GuiHandlerClient;
 import ftgumod.client.gui.GuiResearchBook;
 import ftgumod.client.gui.toast.ToastTechnology;
-import ftgumod.compat.jei.CompatJEI;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import net.minecraft.client.Minecraft;
@@ -18,9 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -81,12 +78,6 @@ public class ProxyClient extends ProxyCommon {
 		renderItem.getItemModelMesher().register(Content.i_parchmentResearch, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_parchmentResearch, "inventory"));
 		renderItem.getItemModelMesher().register(Content.i_researchBook, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_researchBook, "inventory"));
 		renderItem.getItemModelMesher().register(Content.i_magnifyingGlass, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_magnifyingGlass, "inventory"));
-	}
-
-	@Override
-	public void postInit(FMLPostInitializationEvent event) {
-		if (Loader.isModLoaded("jei"))
-			FTGU.INSTANCE.compat.put("jei", new CompatJEI());
 	}
 
 }

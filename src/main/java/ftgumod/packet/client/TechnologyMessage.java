@@ -7,6 +7,7 @@ import java.util.HashSet;
 import ftgumod.FTGU;
 import ftgumod.api.event.FTGUClientSyncEvent;
 import ftgumod.api.technology.ITechnology;
+import ftgumod.compat.jei.CompatJEI;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.CapabilityTechnology;
 import ftgumod.technology.Technology;
@@ -111,7 +112,8 @@ public class TechnologyMessage implements IMessage {
 				for (ITechnology toast : message.toasts)
 					FTGU.PROXY.displayToastTechnology(toast);
 
-				FTGU.INSTANCE.runCompat("jei");
+				if(FTGU.JEI_LOADED)
+					CompatJEI.refreshHiddenItems(false);
 				MinecraftForge.EVENT_BUS.post(new FTGUClientSyncEvent.Post());
 			}
 

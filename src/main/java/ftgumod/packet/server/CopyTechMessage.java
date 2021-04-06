@@ -1,7 +1,7 @@
 package ftgumod.packet.server;
 
 import ftgumod.Content;
-import ftgumod.FTGU;
+import ftgumod.FTGUConfig;
 import ftgumod.api.util.IStackUtils;
 import ftgumod.packet.MessageHandler;
 import ftgumod.technology.Technology;
@@ -39,7 +39,7 @@ public class CopyTechMessage implements IMessage {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, CopyTechMessage message) {
-			if (FTGU.copy) {
+			if (FTGUConfig.allowResearchCopy) {
 				Technology tech = TechnologyManager.INSTANCE.getTechnology(new ResourceLocation(message.id));
 
 				if (tech != null && tech.canCopy() && tech.isResearched(player)) {

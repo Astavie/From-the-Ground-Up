@@ -1,5 +1,9 @@
 package ftgumod.api.util.predicate;
 
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 import net.minecraft.block.Block;
@@ -7,10 +11,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
 public class BlockPredicateCompound extends BlockPredicate {
 

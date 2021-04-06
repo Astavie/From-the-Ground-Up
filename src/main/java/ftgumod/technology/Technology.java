@@ -23,6 +23,7 @@ import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.recipe.IdeaRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.util.JsonContextPublic;
+import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.util.ListenerTechnology;
 import net.minecraft.advancements.AdvancementRewards;
@@ -402,7 +403,7 @@ public class Technology implements ITechnology {
 	}
 
 	private boolean unlockedStage(EntityPlayer player) {
-		return stage == null || !FTGU.INSTANCE.runCompat("gamestages", player, stage);
+		return stage == null || (!FTGU.GAME_STAGES_LOADED || CompatGameStages.hasGameStage(player, stage));
 	}
 
 	public boolean canResearchIgnoreCustomUnlock(EntityPlayer player) {

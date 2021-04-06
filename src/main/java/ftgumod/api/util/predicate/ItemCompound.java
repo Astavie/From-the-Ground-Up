@@ -1,11 +1,11 @@
 package ftgumod.api.util.predicate;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
 
 public class ItemCompound extends ItemPredicate {
 

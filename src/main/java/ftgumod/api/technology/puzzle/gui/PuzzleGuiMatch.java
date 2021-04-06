@@ -1,5 +1,9 @@
 package ftgumod.api.technology.puzzle.gui;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.technology.puzzle.PuzzleMatch;
 import net.minecraft.client.Minecraft;
@@ -9,10 +13,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.client.config.GuiUtils;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class PuzzleGuiMatch implements IPuzzleGui {
 

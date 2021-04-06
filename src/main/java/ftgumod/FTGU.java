@@ -1,8 +1,6 @@
 package ftgumod;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -11,7 +9,6 @@ import ftgumod.api.technology.puzzle.ResearchMatch;
 import ftgumod.api.util.predicate.ItemFluid;
 import ftgumod.api.util.predicate.ItemLambda;
 import ftgumod.command.CommandTechnology;
-import ftgumod.compat.ICompat;
 import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.compat.gamestages.UnlockGameStage;
 import ftgumod.compat.immersiveengineering.CompatIE;
@@ -40,7 +37,6 @@ import net.minecraft.util.text.Style;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -65,19 +61,15 @@ public class FTGU {
 
 	public static final String MODID = "ftgumod";
 
-	public static File folder;
-
-	public static boolean copy = true;
-	public static boolean custom = false;
-	public static byte hide = 1;
-	public static boolean journal = true;
+	public static File configFolder;
 
 	@Instance(value = FTGU.MODID)
 	public static FTGU INSTANCE;
 
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon PROXY;
-	public final Map<String, ICompat> compat = new HashMap<>();
+	public static final boolean GAME_STAGES_LOADED = Loader.isModLoaded("gamestages");
+	public static final boolean JEI_LOADED = Loader.isModLoaded("jei");
 
 	private void registerItem(Item item, String name) {
 		item.setRegistryName(name);
@@ -89,11 +81,6 @@ public class FTGU {
 		ForgeRegistries.BLOCKS.register(block);
 
 		registerItem(item, name);
-	}
-
-	public boolean runCompat(String name, Object... arg) {
-		ICompat compat = this.compat.get(name);
-		return compat != null && compat.run(arg);
 	}
 
 	@Mod.EventHandler
@@ -134,22 +121,7 @@ public class FTGU {
 
 		PacketDispatcher.registerPackets();
 
-		folder = new File(event.getModConfigurationDirectory(), MODID);
-
-		Configuration config = new Configuration(new File(folder, MODID + ".cfg"));
-		config.load();
-
-		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "copy", true,
-				"If enabled, technologies can be copied");
-		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "custom", false,
-				"If enabled, only config and world technologies will be loaded");
-		journal = config.getBoolean(Configuration.CATEGORY_GENERAL, "journal", true,
-				"If enabled, every player will get a research book when they join a new world or server");
-
-		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 1, 0, 2,
-				"0: No items or recipes are hidden from JEI\n1: Only locked recipes are hidden from JEI\n2: Locked items and recipes are hidden from JEI");
-
-		config.save();
+		configFolder = new File(event.getModConfigurationDirectory(), MODID);
 	}
 
 	@Mod.EventHandler
@@ -161,15 +133,12 @@ public class FTGU {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		if (Loader.isModLoaded("immersiveengineering")) {
-			MinecraftForge.EVENT_BUS.register(new CompatIE());
+			MinecraftForge.EVENT_BUS.register(CompatIE.class);
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"),
 					new UnlockMultiblockFactory());
 		}
-		if (Loader.isModLoaded("gamestages")) {
-			ICompat compat = new CompatGameStages();
-			this.compat.put("gamestages", compat);
-			MinecraftForge.EVENT_BUS.register(compat);
-
+		if (GAME_STAGES_LOADED) {
+			MinecraftForge.EVENT_BUS.register(CompatGameStages.class);
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"),
 					new UnlockGameStage.Factory());
 		}
