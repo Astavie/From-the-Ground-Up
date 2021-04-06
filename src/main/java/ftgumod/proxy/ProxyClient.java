@@ -83,10 +83,4 @@ public class ProxyClient extends ProxyCommon {
 		renderItem.getItemModelMesher().register(Content.i_magnifyingGlass, 0, new ModelResourceLocation(FTGU.MODID + ":" + Content.n_magnifyingGlass, "inventory"));
 	}
 
-	@Override
-	public void postInit(FMLPostInitializationEvent event) {
-		if (Loader.isModLoaded("jei"))
-			FTGU.INSTANCE.compat.put("jei", new CompatJEI());
-	}
-
 }

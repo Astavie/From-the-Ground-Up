@@ -1,6 +1,7 @@
 package ftgumod;
 
 import ftgumod.api.util.BlockSerializable;
+import ftgumod.compat.jei.CompatJEI;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemMagnifyingGlass;
 import ftgumod.item.ItemParchmentResearch;
@@ -224,8 +225,8 @@ public class EventHandler {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void onTick(TickEvent.ClientTickEvent event) {
-		if (event.phase == TickEvent.Phase.START)
-			FTGU.INSTANCE.runCompat("jei", true);
+		if (event.phase == TickEvent.Phase.START && FTGU.JEI_LOADED)
+			CompatJEI.refreshHiddenItems(true);
 	}
 
 }

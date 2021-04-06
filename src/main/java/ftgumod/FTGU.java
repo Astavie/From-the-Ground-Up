@@ -7,7 +7,6 @@ import ftgumod.api.technology.puzzle.ResearchMatch;
 import ftgumod.api.util.predicate.ItemFluid;
 import ftgumod.api.util.predicate.ItemLambda;
 import ftgumod.command.CommandTechnology;
-import ftgumod.compat.ICompat;
 import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.compat.gamestages.UnlockGameStage;
 import ftgumod.compat.immersiveengineering.CompatIE;
@@ -46,8 +45,6 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 @Mod(modid = FTGU.MODID, name = "From the Ground Up!")
 public class FTGU {
@@ -68,7 +65,8 @@ public class FTGU {
 
 	@SidedProxy(clientSide = "ftgumod.proxy.ProxyClient", serverSide = "ftgumod.proxy.ProxyCommon")
 	public static ProxyCommon PROXY;
-	public final Map<String, ICompat> compat = new HashMap<>();
+	public static final boolean GAME_STAGES_LOADED = Loader.isModLoaded("gamestages");
+	public static final boolean JEI_LOADED = Loader.isModLoaded("jei");
 
 	private void registerItem(Item item, String name) {
 		item.setRegistryName(name);
@@ -80,11 +78,6 @@ public class FTGU {
 		ForgeRegistries.BLOCKS.register(block);
 
 		registerItem(item, name);
-	}
-
-	public boolean runCompat(String name, Object... arg) {
-		ICompat compat = this.compat.get(name);
-		return compat != null && compat.run(arg);
 	}
 
 	@Mod.EventHandler
@@ -146,14 +139,11 @@ public class FTGU {
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		if (Loader.isModLoaded("immersiveengineering")) {
-			MinecraftForge.EVENT_BUS.register(new CompatIE());
+			MinecraftForge.EVENT_BUS.register(CompatIE.class);
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"), new UnlockMultiblockFactory());
 		}
-		if (Loader.isModLoaded("gamestages")) {
-			ICompat compat = new CompatGameStages();
-			this.compat.put("gamestages", compat);
-			MinecraftForge.EVENT_BUS.register(compat);
-
+		if (GAME_STAGES_LOADED) {
+			MinecraftForge.EVENT_BUS.register(CompatGameStages.class);
 			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
 		}
 		PROXY.postInit(event);

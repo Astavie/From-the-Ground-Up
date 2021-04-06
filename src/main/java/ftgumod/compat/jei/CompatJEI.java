@@ -4,7 +4,6 @@ import ftgumod.Content;
 import ftgumod.FTGU;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.util.predicate.ItemPredicate;
-import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import mezz.jei.Internal;
@@ -26,14 +25,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 @JEIPlugin
-public class CompatJEI implements ICompat, IModPlugin {
+public class CompatJEI implements IModPlugin {
 
-	private static IRecipeRegistry recipe;
-	private static IIngredientRegistry ingredient;
+	private static IRecipeRegistry recipeRegistry;
+	private static IIngredientRegistry ingredientRegistry;
 
-	private static boolean config = Config.isCheatItemsEnabled();
+	private static boolean cheatItemsEnabled = Config.isCheatItemsEnabled();
 
-	private List<ItemStack> lockedLast = new LinkedList<>();
+	private static List<ItemStack> lockedLast = new LinkedList<>();
 	private static List<IRecipeWrapper> wrappers;
 
 	@Override
@@ -42,30 +41,28 @@ public class CompatJEI implements ICompat, IModPlugin {
 		blacklist.addIngredientToBlacklist(new ItemStack(Content.i_parchmentIdea));
 		blacklist.addIngredientToBlacklist(new ItemStack(Content.i_parchmentResearch));
 
-		ingredient = registry.getIngredientRegistry();
+		ingredientRegistry = registry.getIngredientRegistry();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onRuntimeAvailable(IJeiRuntime runtime) {
-		recipe = runtime.getRecipeRegistry();
-		wrappers = recipe.getRecipeWrappers(recipe.getRecipeCategory(VanillaRecipeCategoryUid.CRAFTING));
+		recipeRegistry = runtime.getRecipeRegistry();
+		wrappers = recipeRegistry.getRecipeWrappers(recipeRegistry.getRecipeCategory(VanillaRecipeCategoryUid.CRAFTING));
 	}
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public boolean run(Object... arg) {
+	public static boolean refreshHiddenItems(boolean refreshCheatItems) {
 		if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-			Minecraft.getMinecraft().addScheduledTask(() -> run(arg));
+			Minecraft.getMinecraft().addScheduledTask(() -> refreshHiddenItems(refreshCheatItems));
 			return true;
 		}
 
 		if (Minecraft.getMinecraft().player == null)
 			return true;
 
-		if (arg.length > 0 && (boolean) arg[0]) {
-			if (config != Config.isCheatItemsEnabled())
-				config = Config.isCheatItemsEnabled();
+		if (refreshCheatItems) {
+			if (cheatItemsEnabled != Config.isCheatItemsEnabled())
+				cheatItemsEnabled = Config.isCheatItemsEnabled();
 			else
 				return true;
 		}
@@ -81,23 +78,23 @@ public class CompatJEI implements ICompat, IModPlugin {
 
 		// Lock those inside JEI
 		if (!lockedLast.isEmpty()) {
-			ingredient.addIngredientsAtRuntime(VanillaTypes.ITEM, lockedLast);
+			ingredientRegistry.addIngredientsAtRuntime(VanillaTypes.ITEM, lockedLast);
 		}
-		if (!config && !stacks.isEmpty() && FTGU.hide == 2) {
-			ingredient.removeIngredientsAtRuntime(VanillaTypes.ITEM, stacks);
+		if (!cheatItemsEnabled && !stacks.isEmpty() && FTGU.hide == 2) {
+			ingredientRegistry.removeIngredientsAtRuntime(VanillaTypes.ITEM, stacks);
 		}
 
 		// Lock every recipe with those outputs
 		Ingredient locked = new ItemPredicate(stacks.toArray(new ItemStack[0]));
 
 		for (IRecipeWrapper wrapper : wrappers) {
-			IIngredients ingredients = ((RecipeRegistry) recipe).getIngredients(wrapper);
+			IIngredients ingredients = ((RecipeRegistry) recipeRegistry).getIngredients(wrapper);
 			List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
 			if (FTGU.hide > 0 && outputs.size() > 0 && outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
-				recipe.hideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
+				recipeRegistry.hideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
 			} else {
-				recipe.unhideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
+				recipeRegistry.unhideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
 			}
 		}
 
