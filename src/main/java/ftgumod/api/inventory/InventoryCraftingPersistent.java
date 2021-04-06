@@ -1,11 +1,11 @@
 package ftgumod.api.inventory;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 public class InventoryCraftingPersistent extends InventoryCrafting {
 
@@ -36,7 +36,8 @@ public class InventoryCraftingPersistent extends InventoryCrafting {
 	public void setInventorySlotContents(int index, ItemStack stack) {
 		if (index >= 0 && index < size)
 			parent.setInventorySlotContents(index + offset, stack);
-		else throw new ArrayIndexOutOfBoundsException();
+		else
+			throw new ArrayIndexOutOfBoundsException();
 	}
 
 	@Override

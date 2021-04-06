@@ -1,5 +1,9 @@
 package ftgumod.server;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.crafting.CraftingManager;
@@ -10,10 +14,6 @@ import net.minecraft.stats.RecipeBookServer;
 import net.minecraft.util.ResourceLocation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class RecipeBookServerImpl extends RecipeBookServer {
 

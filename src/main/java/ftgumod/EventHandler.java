@@ -1,5 +1,7 @@
 package ftgumod;
 
+import java.util.List;
+
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.event.PlayerLockEvent;
 import ftgumod.item.ItemMagnifyingGlass;
@@ -44,8 +46,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
-import java.util.List;
-
 public class EventHandler {
 
 	private ItemStack stack = ItemStack.EMPTY;
@@ -58,7 +58,8 @@ public class EventHandler {
 			List<BlockSerializable> blocks = ItemMagnifyingGlass.getInspected(evt.getItemStack());
 			if (Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 				for (BlockSerializable block : blocks)
-					evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + block.getLocalizedName());
+					evt.getToolTip()
+							.add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + block.getLocalizedName());
 				if (blocks.size() > 0)
 					evt.getToolTip().add("");
 			} else if (blocks.size() > 0) {
@@ -70,18 +71,24 @@ public class EventHandler {
 		} else if (item == Content.i_parchmentIdea) {
 			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
-				String k = tech.isResearched(evt.getEntityPlayer()) || tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer()) ? "" : "" + TextFormatting.OBFUSCATED;
-				evt.getToolTip().add(TextFormatting.GOLD + I18n.format("technology.idea", tech.getDisplayInfo().getTitle().getUnformattedText()));
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().getUnformattedText());
+				String k = tech.isResearched(evt.getEntityPlayer())
+						|| tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer()) ? ""
+								: "" + TextFormatting.OBFUSCATED;
+				evt.getToolTip().add(TextFormatting.GOLD
+						+ I18n.format("technology.idea", tech.getDisplayInfo().getTitle().getUnformattedText()));
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k
+						+ tech.getDisplayInfo().getDescription().getUnformattedText());
 			}
 		} else if (item == Content.i_parchmentResearch) {
 			Technology tech = StackUtils.INSTANCE.getTechnology(evt.getItemStack());
 			if (tech != null) {
-				boolean can = tech.isResearched(evt.getEntityPlayer()) || tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer());
+				boolean can = tech.isResearched(evt.getEntityPlayer())
+						|| tech.canResearchIgnoreCustomUnlock(evt.getEntityPlayer());
 				String k = can ? "" : "" + TextFormatting.OBFUSCATED;
 
 				evt.getToolTip().add(TextFormatting.GOLD + tech.getDisplayInfo().getTitle().getUnformattedText());
-				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k + tech.getDisplayInfo().getDescription().getUnformattedText());
+				evt.getToolTip().add(TextFormatting.DARK_PURPLE + "" + TextFormatting.ITALIC + k
+						+ tech.getDisplayInfo().getDescription().getUnformattedText());
 
 				if (can && !tech.isResearched(evt.getEntityPlayer())) {
 					evt.getToolTip().add("");
@@ -144,7 +151,8 @@ public class EventHandler {
 				if (tech.hasCustomUnlock() && tech.canResearchIgnoreCustomUnlock(evt.player))
 					tech.registerListeners((EntityPlayerMP) evt.player);
 
-			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache), (EntityPlayerMP) evt.player);
+			PacketDispatcher.sendTo(new TechnologyInfoMessage(TechnologyManager.INSTANCE.cache),
+					(EntityPlayerMP) evt.player);
 		}
 	}
 
@@ -191,7 +199,8 @@ public class EventHandler {
 					if (stack.isEmpty())
 						this.stack = stack;
 					else if (stack != this.stack) {
-						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack, ((InventoryCraftResult) s.inventory).getRecipeUsed());
+						PlayerLockEvent event = new PlayerLockEvent(Minecraft.getMinecraft().player, stack,
+								((InventoryCraftResult) s.inventory).getRecipeUsed());
 						MinecraftForge.EVENT_BUS.post(event);
 
 						if (!event.isCanceled())
@@ -207,11 +216,14 @@ public class EventHandler {
 	@SubscribeEvent
 	public void onLootTableLoad(LootTableLoadEvent event) {
 		if (event.getName().toString().equals("minecraft:chests/village_blacksmith"))
-			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/blacksmith"));
+			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(),
+					new ResourceLocation(FTGU.MODID, "inject/blacksmith"));
 		if (event.getName().toString().equals("minecraft:chests/desert_pyramid"))
-			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/pyramid"));
+			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(),
+					new ResourceLocation(FTGU.MODID, "inject/pyramid"));
 		if (event.getName().toString().equals("minecraft:chests/stronghold_library"))
-			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(), new ResourceLocation(FTGU.MODID, "inject/library"));
+			LootUtils.addLootPools(event.getLootTableManager(), event.getTable(),
+					new ResourceLocation(FTGU.MODID, "inject/library"));
 	}
 
 	@SubscribeEvent

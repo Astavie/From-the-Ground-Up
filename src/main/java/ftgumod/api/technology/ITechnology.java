@@ -1,5 +1,8 @@
 package ftgumod.api.technology;
 
+import java.util.Map;
+import java.util.Set;
+
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
@@ -10,9 +13,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-
-import java.util.Map;
-import java.util.Set;
 
 public interface ITechnology {
 
@@ -81,7 +81,8 @@ public interface ITechnology {
 	ITechnology getParent();
 
 	/**
-	 * @return All {@code IUnlocks} that are unlocked when researching this {@code Technology}
+	 * @return All {@code IUnlocks} that are unlocked when researching this
+	 *         {@code Technology}
 	 */
 	NonNullList<IUnlock> getUnlock();
 
@@ -98,7 +99,8 @@ public interface ITechnology {
 	Map<String, Criterion> getCriteria();
 
 	/**
-	 * @return The criteria arrays required for this {@code Technology} to be unlocked
+	 * @return The criteria arrays required for this {@code Technology} to be
+	 *         unlocked
 	 * @see #getCriteria()
 	 */
 	String[][] getRequirements();
@@ -125,10 +127,14 @@ public interface ITechnology {
 
 	/**
 	 * Gives this {@code Technology} to the specified player.
-	 * <p>This method does <i>not</i> notify the player.
-	 * <p><strong>{@link ITechnologyManager#sync(EntityPlayerMP, ITechnology[])} should always be invoked after calling this method!</strong></p>
+	 * <p>
+	 * This method does <i>not</i> notify the player.
+	 * <p>
+	 * <strong>{@link ITechnologyManager#sync(EntityPlayerMP, ITechnology[])} should
+	 * always be invoked after calling this method!</strong>
+	 * </p>
 	 *
-	 * @param player The {@code EntityPlayer} to give this {@code Technology} to
+	 * @param player   The {@code EntityPlayer} to give this {@code Technology} to
 	 * @param announce Whether or not to notify the player
 	 * @see #removeResearched(EntityPlayer)
 	 */
@@ -174,7 +180,8 @@ public interface ITechnology {
 	boolean canResearch(EntityPlayer player);
 
 	/**
-	 * {@code TechnologyBuilders} created from {@code Technologies} can modify the original using the {@link ITechnologyBuilder#save()} method.
+	 * {@code TechnologyBuilders} created from {@code Technologies} can modify the
+	 * original using the {@link ITechnologyBuilder#save()} method.
 	 *
 	 * @return A new {@code TechnologyBuilder}
 	 * @see ITechnologyManager#createBuilder(ResourceLocation)
@@ -184,7 +191,8 @@ public interface ITechnology {
 	/**
 	 * Game Stages is a mod that adds... Game Stages
 	 *
-	 * @return The Game Stage needed to research this technology, or {@code null} if none are required
+	 * @return The Game Stage needed to research this technology, or {@code null} if
+	 *         none are required
 	 */
 	String getGameStage();
 

@@ -1,5 +1,9 @@
 package ftgumod;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import ftgumod.api.technology.puzzle.ResearchConnect;
@@ -41,18 +45,23 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 @Mod(modid = FTGU.MODID, name = "From the Ground Up!")
 public class FTGU {
 
-	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(Technology.Builder.class, new Technology.Deserializer()).registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer()).registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer()).registerTypeHierarchyAdapter(Style.class, new Style.Serializer()).registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
+	public static final Gson GSON = new GsonBuilder()
+			.registerTypeAdapter(Technology.Builder.class, new Technology.Deserializer())
+			.registerTypeAdapter(AdvancementRewards.class, new AdvancementRewards.Deserializer())
+			.registerTypeHierarchyAdapter(ITextComponent.class, new ITextComponent.Serializer())
+			.registerTypeHierarchyAdapter(Style.class, new Style.Serializer())
+			.registerTypeAdapterFactory(new EnumTypeAdapterFactory()).create();
 
 	public static final String MODID = "ftgumod";
 
@@ -107,10 +116,12 @@ public class FTGU {
 		CriteriaTriggers.register(Content.c_inspect);
 
 		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "fluid"), new ItemFluid.Factory());
-		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"), new ItemLambda.Factory(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
+		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"),
+				new ItemLambda.Factory(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
 
 		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "match"), new ResearchMatch.Factory());
-		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"), new ResearchConnect.Factory());
+		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"),
+				new ResearchConnect.Factory());
 
 		CapabilityManager.INSTANCE.register(CapabilityTechnology.ITechnology.class, new Storage(), DefaultImpl::new);
 
@@ -128,11 +139,15 @@ public class FTGU {
 		Configuration config = new Configuration(new File(folder, MODID + ".cfg"));
 		config.load();
 
-		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "copy", true, "If enabled, technologies can be copied");
-		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "custom", false, "If enabled, only config and world technologies will be loaded");
-		journal = config.getBoolean(Configuration.CATEGORY_GENERAL, "journal", true, "If enabled, every player will get a research book when they join a new world or server");
+		copy = config.getBoolean(Configuration.CATEGORY_GENERAL, "copy", true,
+				"If enabled, technologies can be copied");
+		custom = config.getBoolean(Configuration.CATEGORY_GENERAL, "custom", false,
+				"If enabled, only config and world technologies will be loaded");
+		journal = config.getBoolean(Configuration.CATEGORY_GENERAL, "journal", true,
+				"If enabled, every player will get a research book when they join a new world or server");
 
-		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 1, 0, 2, "0: No items or recipes are hidden from JEI\n1: Only locked recipes are hidden from JEI\n2: Locked items and recipes are hidden from JEI");
+		hide = (byte) config.getInt(Configuration.CATEGORY_CLIENT, "hide", 1, 0, 2,
+				"0: No items or recipes are hidden from JEI\n1: Only locked recipes are hidden from JEI\n2: Locked items and recipes are hidden from JEI");
 
 		config.save();
 	}
@@ -147,21 +162,24 @@ public class FTGU {
 	public void postInit(FMLPostInitializationEvent event) {
 		if (Loader.isModLoaded("immersiveengineering")) {
 			MinecraftForge.EVENT_BUS.register(new CompatIE());
-			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"), new UnlockMultiblockFactory());
+			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("immersiveengineering", "multiblock"),
+					new UnlockMultiblockFactory());
 		}
 		if (Loader.isModLoaded("gamestages")) {
 			ICompat compat = new CompatGameStages();
 			this.compat.put("gamestages", compat);
 			MinecraftForge.EVENT_BUS.register(compat);
 
-			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"), new UnlockGameStage.Factory());
+			TechnologyManager.INSTANCE.registerUnlock(new ResourceLocation("gamestages", "stage"),
+					new UnlockGameStage.Factory());
 		}
 		PROXY.postInit(event);
 	}
 
 	@Mod.EventHandler
 	public void serverAboutToStart(FMLServerAboutToStartEvent event) {
-		TechnologyManager.INSTANCE.reload(event.getServer().getActiveAnvilConverter().getFile(event.getServer().getFolderName(), "data"));
+		TechnologyManager.INSTANCE
+				.reload(event.getServer().getActiveAnvilConverter().getFile(event.getServer().getFolderName(), "data"));
 	}
 
 	@Mod.EventHandler

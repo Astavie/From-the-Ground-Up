@@ -1,5 +1,9 @@
 package ftgumod.packet.client;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import ftgumod.inventory.ContainerResearchTable;
 import ftgumod.packet.MessageHandler;
 import io.netty.buffer.ByteBuf;
@@ -7,10 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class HintMessage implements IMessage {
 
@@ -52,7 +52,8 @@ public class HintMessage implements IMessage {
 
 		@Override
 		public IMessage handleMessage(EntityPlayer player, HintMessage message) {
-			if (player.openContainer instanceof ContainerResearchTable && ((ContainerResearchTable) player.openContainer).invInput.puzzle != null)
+			if (player.openContainer instanceof ContainerResearchTable
+					&& ((ContainerResearchTable) player.openContainer).invInput.puzzle != null)
 				((ContainerResearchTable) player.openContainer).invInput.puzzle.setHints(message.hints);
 			return null;
 		}

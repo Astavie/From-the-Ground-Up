@@ -1,13 +1,13 @@
 package ftgumod.api.technology.unlock;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonObject;
 import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
 
 public interface IUnlock {
 
@@ -18,7 +18,8 @@ public interface IUnlock {
 	boolean isDisplayed();
 
 	/**
-	 * @return The icon in the Research Book, or {@code null} if {@link #isDisplayed()} is false
+	 * @return The icon in the Research Book, or {@code null} if
+	 *         {@link #isDisplayed()} is false
 	 * @see #isDisplayed()
 	 */
 	@Nullable
@@ -26,7 +27,8 @@ public interface IUnlock {
 
 	/**
 	 * @param stack The {@code ItemStack} to check
-	 * @return If this {@code IUnlock} unlocks the recipe for the specified {@code ItemStack}
+	 * @return If this {@code IUnlock} unlocks the recipe for the specified
+	 *         {@code ItemStack}
 	 */
 	boolean unlocks(ItemStack stack);
 

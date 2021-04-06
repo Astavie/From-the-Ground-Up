@@ -1,5 +1,8 @@
 package ftgumod.technology;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import ftgumod.FTGU;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -16,9 +19,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 public class CapabilityTechnology {
 
@@ -41,31 +41,36 @@ public class CapabilityTechnology {
 	@SubscribeEvent
 	public void onEntityConstruct(AttachCapabilitiesEvent evt) {
 		if (evt.getObject() instanceof EntityPlayer) {
-			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"), new ICapabilitySerializable<NBTTagCompound>() {
+			evt.addCapability(new ResourceLocation(FTGU.MODID, "ITechnology"),
+					new ICapabilitySerializable<NBTTagCompound>() {
 
-				private final ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
+						private final ITechnology inst = CapabilityTechnology.TECH_CAP.getDefaultInstance();
 
-				@Override
-				public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-					return capability == CapabilityTechnology.TECH_CAP;
-				}
+						@Override
+						public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+							return capability == CapabilityTechnology.TECH_CAP;
+						}
 
-				@Override
-				public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-					return capability == CapabilityTechnology.TECH_CAP ? CapabilityTechnology.TECH_CAP.<T>cast(inst) : null;
-				}
+						@Override
+						public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+							return capability == CapabilityTechnology.TECH_CAP
+									? CapabilityTechnology.TECH_CAP.<T>cast(inst)
+									: null;
+						}
 
-				@Override
-				public NBTTagCompound serializeNBT() {
-					return (NBTTagCompound) CapabilityTechnology.TECH_CAP.getStorage().writeNBT(CapabilityTechnology.TECH_CAP, inst, null);
-				}
+						@Override
+						public NBTTagCompound serializeNBT() {
+							return (NBTTagCompound) CapabilityTechnology.TECH_CAP.getStorage()
+									.writeNBT(CapabilityTechnology.TECH_CAP, inst, null);
+						}
 
-				@Override
-				public void deserializeNBT(NBTTagCompound nbt) {
-					CapabilityTechnology.TECH_CAP.getStorage().readNBT(CapabilityTechnology.TECH_CAP, inst, null, nbt);
-				}
+						@Override
+						public void deserializeNBT(NBTTagCompound nbt) {
+							CapabilityTechnology.TECH_CAP.getStorage().readNBT(CapabilityTechnology.TECH_CAP, inst,
+									null, nbt);
+						}
 
-			});
+					});
 		}
 	}
 

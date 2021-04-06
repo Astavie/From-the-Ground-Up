@@ -1,5 +1,9 @@
 package ftgumod.compat.jei;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import ftgumod.Content;
 import ftgumod.FTGU;
 import ftgumod.api.technology.unlock.IUnlock;
@@ -8,7 +12,11 @@ import ftgumod.compat.ICompat;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import mezz.jei.Internal;
-import mezz.jei.api.*;
+import mezz.jei.api.IJeiRuntime;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.IModRegistry;
+import mezz.jei.api.IRecipeRegistry;
+import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.ingredients.IIngredients;
@@ -20,10 +28,6 @@ import mezz.jei.recipes.RecipeRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 @JEIPlugin
 public class CompatJEI implements ICompat, IModPlugin {
@@ -94,7 +98,8 @@ public class CompatJEI implements ICompat, IModPlugin {
 			IIngredients ingredients = ((RecipeRegistry) recipe).getIngredients(wrapper);
 			List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
-			if (FTGU.hide > 0 && outputs.size() > 0 && outputs.get(0).size() > 0 && locked.apply(outputs.get(0).get(0))) {
+			if (FTGU.hide > 0 && outputs.size() > 0 && outputs.get(0).size() > 0
+					&& locked.apply(outputs.get(0).get(0))) {
 				recipe.hideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);
 			} else {
 				recipe.unhideRecipe(wrapper, VanillaRecipeCategoryUid.CRAFTING);

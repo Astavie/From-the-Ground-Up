@@ -1,5 +1,12 @@
 package ftgumod.api.technology.puzzle;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
@@ -25,12 +32,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class PuzzleConnect implements IPuzzle {
 
@@ -107,7 +108,8 @@ public class PuzzleConnect implements IPuzzle {
 		InventoryCrafting crafting = new InventoryCraftingPersistent(inventory, 0, 3, 1);
 		for (int i = 0; i < 3; i++) {
 			final int j = i;
-			container.addSlotToContainer(new SlotCrafting(container, crafting, i, 44 + i * 18, 35, 1, stack -> fits(stack, j)));
+			container.addSlotToContainer(
+					new SlotCrafting(container, crafting, i, 44 + i * 18, 35, 1, stack -> fits(stack, j)));
 		}
 	}
 
@@ -139,7 +141,8 @@ public class PuzzleConnect implements IPuzzle {
 
 	@Override
 	public void onFinish() {
-		NonNullList<ItemStack> remaining = ForgeHooks.defaultRecipeGetRemainingItems(new InventoryCraftingPersistent(inventory, 0, 3, 1));
+		NonNullList<ItemStack> remaining = ForgeHooks
+				.defaultRecipeGetRemainingItems(new InventoryCraftingPersistent(inventory, 0, 3, 1));
 		for (int i = 0; i < 3; i++)
 			inventory.setInventorySlotContents(i, remaining.get(i));
 	}
@@ -153,7 +156,8 @@ public class PuzzleConnect implements IPuzzle {
 					if (!stack.isEmpty() && !player.addItemStackToInventory(stack))
 						player.dropItem(stack, false);
 				}
-			} else InventoryHelper.dropInventoryItems(world, pos, inventory);
+			} else
+				InventoryHelper.dropInventoryItems(world, pos, inventory);
 		}
 		for (ContainerResearch container : registry)
 			container.removeSlots(3);

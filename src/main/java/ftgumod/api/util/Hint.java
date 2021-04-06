@@ -1,5 +1,9 @@
 package ftgumod.api.util;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -11,10 +15,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextFormatting;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Hint {
 
@@ -53,9 +53,11 @@ public class Hint {
 			if (!decipher.isJsonObject())
 				throw new JsonSyntaxException("Expected decipher to be an object or an array of objects");
 			if (decipher.getAsJsonObject().has("decipher")) {
-				BlockPredicate predicate = BlockPredicateCompound.deserialize(decipher.getAsJsonObject().get("decipher"));
+				BlockPredicate predicate = BlockPredicateCompound
+						.deserialize(decipher.getAsJsonObject().get("decipher"));
 				ITextComponent newHint = GSON.fromJson(decipher.getAsJsonObject().get("hint"), ITextComponent.class);
-				List<Pair<BlockPredicate, ITextComponent>> hints = Collections.singletonList(Pair.of(predicate, newHint));
+				List<Pair<BlockPredicate, ITextComponent>> hints = Collections
+						.singletonList(Pair.of(predicate, newHint));
 				return new Hint(hint, hints);
 			}
 		}
@@ -84,8 +86,7 @@ public class Hint {
 	}
 
 	public boolean inspect(BlockSerializable block, List<BlockSerializable> inspected) {
-		a:
-		for (Pair<BlockPredicate, ITextComponent> hint : hints) {
+		a: for (Pair<BlockPredicate, ITextComponent> hint : hints) {
 			if (block.test(hint.getLeft()))
 				for (BlockSerializable b : inspected) {
 					if (b.test(hint.getLeft()))

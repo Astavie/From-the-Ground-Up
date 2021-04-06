@@ -1,5 +1,7 @@
 package ftgumod.client.gui.toast;
 
+import java.util.List;
+
 import ftgumod.api.technology.ITechnology;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
@@ -9,8 +11,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ToastTechnology implements IToast {
@@ -37,10 +37,12 @@ public class ToastTechnology implements IToast {
 			gui.getMinecraft().fontRenderer.drawString(title, 30, 18, -1);
 		} else {
 			if (delta < 1500L) {
-				int k = MathHelper.floor(MathHelper.clamp((float) (1500L - delta) / 300.0F, 0.0F, 1.0F) * 255.0F) << 24 | 0x400000;
+				int k = MathHelper.floor(MathHelper.clamp((float) (1500L - delta) / 300.0F, 0.0F, 1.0F) * 255.0F) << 24
+						| 0x400000;
 				gui.getMinecraft().fontRenderer.drawString(display, 30, 11, 0xFFFF00 | k);
 			} else {
-				int i1 = MathHelper.floor(MathHelper.clamp((float) (delta - 1500L) / 300.0F, 0.0F, 1.0F) * 252.0F) << 24 | 0x400000;
+				int i1 = MathHelper.floor(MathHelper.clamp((float) (delta - 1500L) / 300.0F, 0.0F, 1.0F) * 252.0F) << 24
+						| 0x400000;
 				int l = 16 - list.size() * gui.getMinecraft().fontRenderer.FONT_HEIGHT / 2;
 
 				for (String s : list) {

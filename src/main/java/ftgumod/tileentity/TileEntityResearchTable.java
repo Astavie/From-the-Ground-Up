@@ -1,5 +1,7 @@
 package ftgumod.tileentity;
 
+import javax.annotation.Nullable;
+
 import ftgumod.Content;
 import ftgumod.api.technology.recipe.IPuzzle;
 import ftgumod.inventory.ContainerResearchTable;
@@ -11,8 +13,6 @@ import net.minecraft.inventory.Container;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-
-import javax.annotation.Nullable;
 
 public class TileEntityResearchTable extends TileEntityInventory {
 

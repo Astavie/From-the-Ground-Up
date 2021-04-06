@@ -1,14 +1,15 @@
 package ftgumod.api.technology.recipe;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.inventory.ContainerResearch;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public interface IPuzzle {
 
@@ -27,26 +28,26 @@ public interface IPuzzle {
 	boolean test();
 
 	/**
-	 * Fired when this technology is placed in its slot.
-	 * Use this, for example, to add slots.
+	 * Fired when this technology is placed in its slot. Use this, for example, to
+	 * add slots.
 	 */
 	void onStart(ContainerResearch container);
 
 	/**
-	 * Fired when the internal inventory of the container changes.
-	 * Use this, for example, to send data to the client.
+	 * Fired when the internal inventory of the container changes. Use this, for
+	 * example, to send data to the client.
 	 */
 	void onInventoryChange(ContainerResearch container);
 
 	/**
-	 * Fired when a player clicks on the output slot to finish a research.
-	 * Use this, for example, to remove items.
+	 * Fired when a player clicks on the output slot to finish a research. Use this,
+	 * for example, to remove items.
 	 */
 	void onFinish();
 
 	/**
-	 * Fired when this puzzle is removed.
-	 * Use this, for example, to remove added slots.
+	 * Fired when this puzzle is removed. Use this, for example, to remove added
+	 * slots.
 	 */
 	void onRemove(@Nullable EntityPlayer player, World world, BlockPos pos);
 

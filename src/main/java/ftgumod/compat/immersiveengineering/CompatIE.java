@@ -1,13 +1,13 @@
 package ftgumod.compat.immersiveengineering;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import blusunrize.immersiveengineering.api.MultiblockHandler;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class CompatIE {
 

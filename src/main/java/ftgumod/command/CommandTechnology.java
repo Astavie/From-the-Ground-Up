@@ -1,20 +1,29 @@
 package ftgumod.command;
 
+import java.io.File;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import ftgumod.packet.PacketDispatcher;
 import ftgumod.packet.client.TechnologyInfoMessage;
 import ftgumod.packet.client.TechnologyMessage;
 import ftgumod.technology.Technology;
 import ftgumod.technology.TechnologyManager;
-import net.minecraft.command.*;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-
-import javax.annotation.Nullable;
-import java.io.File;
-import java.util.*;
 
 public class CommandTechnology extends CommandBase {
 

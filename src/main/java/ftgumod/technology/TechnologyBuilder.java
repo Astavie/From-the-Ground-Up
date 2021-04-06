@@ -1,5 +1,11 @@
 package ftgumod.technology;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.technology.ITechnologyBuilder;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
@@ -9,11 +15,6 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 
 public class TechnologyBuilder implements ITechnologyBuilder {
 
@@ -158,7 +159,8 @@ public class TechnologyBuilder implements ITechnologyBuilder {
 		if (this.parent != null && parent == null)
 			throw new NullPointerException("Unknown technology '" + this.parent + "'");
 
-		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
+		original = new Technology(id, parent, display, rewards, criteria, requirements, start, copy, unlock, idea,
+				research, stage);
 		return original;
 	}
 

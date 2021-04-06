@@ -1,11 +1,11 @@
 package ftgumod.api.inventory;
 
+import java.util.function.Predicate;
+
 import ftgumod.api.FTGUAPI;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import java.util.function.Predicate;
 
 public class SlotSpecial extends Slot {
 

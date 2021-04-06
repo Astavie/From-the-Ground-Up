@@ -1,6 +1,20 @@
 package ftgumod.technology;
 
-import com.google.gson.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import ftgumod.Content;
 import ftgumod.FTGU;
 import ftgumod.api.technology.ITechnology;
@@ -11,7 +25,12 @@ import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.util.JsonContextPublic;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.util.ListenerTechnology;
-import net.minecraft.advancements.*;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.advancements.ICriterionInstance;
+import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -27,9 +46,6 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class Technology implements ITechnology {
 
@@ -56,7 +72,10 @@ public class Technology implements ITechnology {
 	boolean start;
 	boolean copy;
 
-	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable NonNullList<IUnlock> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research, String stage) {
+	Technology(ResourceLocation id, @Nullable Technology parent, DisplayInfo display, AdvancementRewards rewards,
+			Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy,
+			@Nullable NonNullList<IUnlock> unlock, @Nullable IIdeaRecipe idea, @Nullable IResearchRecipe research,
+			String stage) {
 		this.id = id;
 		this.parent = parent;
 		this.display = display;
@@ -147,7 +166,9 @@ public class Technology implements ITechnology {
 
 	@Override
 	public boolean isRoot() {
-		return !hasParent() || !getRegistryName().getPath().substring(0, getRegistryName().getPath().indexOf('/')).equals(parent.getRegistryName().getPath().substring(0, parent.getRegistryName().getPath().indexOf('/')));
+		return !hasParent()
+				|| !getRegistryName().getPath().substring(0, getRegistryName().getPath().indexOf('/')).equals(parent
+						.getRegistryName().getPath().substring(0, parent.getRegistryName().getPath().indexOf('/')));
 	}
 
 	@Override
@@ -196,11 +217,14 @@ public class Technology implements ITechnology {
 				MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Research(player, this));
 			}
 			if (announce) {
-				player.getServer().getPlayerList().sendMessage(new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));
+				player.getServer().getPlayerList().sendMessage(
+						new TextComponentTranslation("chat.type.technology", player.getDisplayName(), displayText));
 				for (Technology child : children)
 					if (child.isRoot() && child.isUnlocked(player))
-						player.sendMessage(new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
-				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						player.sendMessage(
+								new TextComponentTranslation("technology.complete.unlock.root", child.displayText));
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP,
+						SoundCategory.PLAYERS, 1.0F, 1.0F);
 			}
 		}
 	}
@@ -274,8 +298,10 @@ public class Technology implements ITechnology {
 	public void unlock(EntityPlayerMP player) {
 		MinecraftForge.EVENT_BUS.post(new TechnologyEvent.Unlock(player, this));
 
-		player.sendMessage(new TextComponentTranslation(isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
-		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS, 1.0F, 1.0F);
+		player.sendMessage(new TextComponentTranslation(
+				isRoot() ? "technology.complete.unlock.root" : "technology.complete.unlock", displayText));
+		player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_PLAYER_LEVELUP, SoundCategory.PLAYERS,
+				1.0F, 1.0F);
 
 		Content.c_technologyUnlocked.trigger(player, this);
 	}
@@ -309,7 +335,8 @@ public class Technology implements ITechnology {
 					if (instance != null) {
 						ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());
 						if (trigger != null)
-							trigger.addListener(player.getAdvancements(), new ListenerTechnology<>(instance, this, entry.getKey()));
+							trigger.addListener(player.getAdvancements(),
+									new ListenerTechnology<>(instance, this, entry.getKey()));
 					}
 				}
 			}
@@ -327,7 +354,8 @@ public class Technology implements ITechnology {
 				if (instance != null) {
 					ICriterionTrigger<ICriterionInstance> trigger = CriteriaTriggers.get(instance.getId());
 					if (trigger != null)
-						trigger.removeListener(player.getAdvancements(), new ListenerTechnology<>(instance, this, entry.getKey()));
+						trigger.removeListener(player.getAdvancements(),
+								new ListenerTechnology<>(instance, this, entry.getKey()));
 				}
 			}
 		}
@@ -339,7 +367,8 @@ public class Technology implements ITechnology {
 	}
 
 	public boolean hasProgress(EntityPlayer player) {
-		return isResearched(player) || (hasCustomUnlock() && TechnologyManager.INSTANCE.getProgress(player, this).hasProgress());
+		return isResearched(player)
+				|| (hasCustomUnlock() && TechnologyManager.INSTANCE.getProgress(player, this).hasProgress());
 	}
 
 	@Override
@@ -408,7 +437,9 @@ public class Technology implements ITechnology {
 
 		private Technology parent;
 
-		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, AdvancementRewards rewards, Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy, @Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research, String stage) {
+		private Builder(@Nullable ResourceLocation parent, DisplayInfo display, AdvancementRewards rewards,
+				Map<String, Criterion> criteria, String[][] requirements, boolean start, boolean copy,
+				@Nullable JsonArray unlock, @Nullable JsonObject idea, @Nullable JsonObject research, String stage) {
 			this.parentId = parent;
 			this.display = display;
 			this.rewards = rewards;
@@ -436,9 +467,11 @@ public class Technology implements ITechnology {
 					unlock.add(TechnologyManager.INSTANCE.getUnlock(element, context, location));
 
 			IIdeaRecipe idea = this.idea == null ? null : IdeaRecipe.deserialize(this.idea, context);
-			IResearchRecipe research = this.research == null ? null : TechnologyManager.INSTANCE.getPuzzle(this.research, context, location);
+			IResearchRecipe research = this.research == null ? null
+					: TechnologyManager.INSTANCE.getPuzzle(this.research, context, location);
 
-			Technology r = new Technology(location, parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
+			Technology r = new Technology(location, parent, display, rewards, criteria, requirements, start, copy,
+					unlock, idea, research, stage);
 			if (research != null)
 				research.setTechnology(r);
 			return r;
@@ -449,12 +482,14 @@ public class Technology implements ITechnology {
 	public static class Deserializer implements JsonDeserializer<Builder> {
 
 		@Override
-		public Builder deserialize(JsonElement element, java.lang.reflect.Type ignore, JsonDeserializationContext context) throws JsonParseException {
+		public Builder deserialize(JsonElement element, java.lang.reflect.Type ignore,
+				JsonDeserializationContext context) throws JsonParseException {
 			if (!element.isJsonObject())
 				throw new JsonSyntaxException("Expected technology to be an object");
 			JsonObject json = element.getAsJsonObject();
 
-			ResourceLocation parent = json.has("parent") ? new ResourceLocation(JsonUtils.getString(json, "parent")) : null;
+			ResourceLocation parent = json.has("parent") ? new ResourceLocation(JsonUtils.getString(json, "parent"))
+					: null;
 
 			JsonObject displayObject = JsonUtils.getJsonObject(json, "display");
 			DisplayInfo display = DisplayInfo.deserialize(displayObject, context);
@@ -462,8 +497,11 @@ public class Technology implements ITechnology {
 			if (displayObject.has("x") || displayObject.has("y"))
 				display.setPosition(JsonUtils.getInt(displayObject, "x"), JsonUtils.getInt(displayObject, "y"));
 
-			AdvancementRewards rewards = JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context, AdvancementRewards.class);
-			Map<String, Criterion> criteria = json.has("criteria") ? Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context) : Collections.emptyMap();
+			AdvancementRewards rewards = JsonUtils.deserializeClass(json, "rewards", AdvancementRewards.EMPTY, context,
+					AdvancementRewards.class);
+			Map<String, Criterion> criteria = json.has("criteria")
+					? Criterion.criteriaFromJson(JsonUtils.getJsonObject(json, "criteria"), context)
+					: Collections.emptyMap();
 
 			JsonArray array = JsonUtils.getJsonArray(json, "requirements", new JsonArray());
 			String[][] requirements = new String[array.size()][];
@@ -481,7 +519,7 @@ public class Technology implements ITechnology {
 				int k = 0;
 
 				for (String s2 : criteria.keySet())
-					requirements[k++] = new String[] {s2};
+					requirements[k++] = new String[] { s2 };
 			}
 
 			for (String[] subarray : requirements) {
@@ -504,7 +542,8 @@ public class Technology implements ITechnology {
 				}
 
 				if (!flag)
-					throw new JsonSyntaxException("Criterion '" + s1 + "' isn't a requirement for completion. This isn't supported behaviour, all criteria must be required.");
+					throw new JsonSyntaxException("Criterion '" + s1
+							+ "' isn't a requirement for completion. This isn't supported behaviour, all criteria must be required.");
 			}
 
 			JsonArray unlock = json.has("unlock") ? JsonUtils.getJsonArray(json, "unlock") : null;
@@ -516,7 +555,8 @@ public class Technology implements ITechnology {
 			boolean start = JsonUtils.getBoolean(json, "start", false);
 			boolean copy = JsonUtils.getBoolean(json, "copy", true);
 
-			return new Builder(parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research, stage);
+			return new Builder(parent, display, rewards, criteria, requirements, start, copy, unlock, idea, research,
+					stage);
 		}
 
 	}

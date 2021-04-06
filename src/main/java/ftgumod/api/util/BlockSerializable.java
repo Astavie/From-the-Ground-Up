@@ -1,5 +1,10 @@
 package ftgumod.api.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.util.predicate.BlockPredicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
@@ -12,10 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class BlockSerializable {
 
@@ -86,7 +87,8 @@ public class BlockSerializable {
 	}
 
 	public boolean test(BlockPredicate predicate) {
-		return predicate.test(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimension.getId()), pos, block, properties);
+		return predicate.test(FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(dimension.getId()), pos,
+				block, properties);
 	}
 
 }

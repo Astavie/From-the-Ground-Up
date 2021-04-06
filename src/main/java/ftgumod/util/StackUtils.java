@@ -1,5 +1,12 @@
 package ftgumod.util;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -23,12 +30,6 @@ import net.minecraftforge.advancements.critereon.ItemPredicates;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 public class StackUtils implements IStackUtils {
 
 	public static final StackUtils INSTANCE = new StackUtils();
@@ -50,12 +51,16 @@ public class StackUtils implements IStackUtils {
 
 	@Override
 	public boolean isStackOf(ItemStack ingredient, ItemStack stack) {
-		return ingredient.getItem() == stack.getItem() && (ingredient.getItemDamage() == OreDictionary.WILDCARD_VALUE || ingredient.getItemDamage() == stack.getItemDamage()) && (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
+		return ingredient.getItem() == stack.getItem()
+				&& (ingredient.getItemDamage() == OreDictionary.WILDCARD_VALUE
+						|| ingredient.getItemDamage() == stack.getItemDamage())
+				&& (!ingredient.hasTagCompound() || ItemStack.areItemStackTagsEqual(ingredient, stack));
 	}
 
 	@Override
 	public boolean isEqual(ItemStack s1, ItemStack s2) {
-		return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage() && ItemStack.areItemStackTagsEqual(s1, s2);
+		return s1.getItem() == s2.getItem() && s1.getItemDamage() == s2.getItemDamage()
+				&& ItemStack.areItemStackTagsEqual(s1, s2);
 	}
 
 	@Override
@@ -95,7 +100,8 @@ public class StackUtils implements IStackUtils {
 					return REGISTRY.get(type).apply(object);
 			}
 			return new ItemIngredient(CraftingHelper.getIngredient(object, context));
-		} else throw new JsonSyntaxException("Expected predicate to be an object or an array of objects");
+		} else
+			throw new JsonSyntaxException("Expected predicate to be an object or an array of objects");
 
 		return new ItemCompound(predicates);
 	}

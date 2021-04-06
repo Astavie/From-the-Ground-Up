@@ -1,5 +1,7 @@
 package ftgumod.inventory;
 
+import java.util.List;
+
 import ftgumod.Content;
 import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.SlotCrafting;
@@ -25,8 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.List;
 
 public class ContainerResearchTable extends ContainerResearch {
 

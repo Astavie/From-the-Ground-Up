@@ -1,5 +1,9 @@
 package ftgumod.criterion;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -9,9 +13,6 @@ import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 public class TriggerTechnology extends TriggerFTGU<TriggerTechnology.Instance> {
 

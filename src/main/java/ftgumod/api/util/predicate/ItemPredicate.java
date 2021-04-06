@@ -1,13 +1,14 @@
 package ftgumod.api.util.predicate;
 
+import java.util.function.Function;
+
+import javax.annotation.Nonnull;
+
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientFactory;
 import net.minecraftforge.common.crafting.JsonContext;
-
-import javax.annotation.Nonnull;
-import java.util.function.Function;
 
 public class ItemPredicate extends Ingredient {
 

@@ -1,14 +1,14 @@
 package ftgumod.criterion;
 
-import net.minecraft.advancements.ICriterionTrigger;
-import net.minecraft.advancements.PlayerAdvancements;
-import net.minecraft.advancements.critereon.AbstractCriterionInstance;
-import net.minecraft.util.ResourceLocation;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import net.minecraft.advancements.ICriterionTrigger;
+import net.minecraft.advancements.PlayerAdvancements;
+import net.minecraft.advancements.critereon.AbstractCriterionInstance;
+import net.minecraft.util.ResourceLocation;
 
 public abstract class TriggerFTGU<T extends TriggerFTGU.Instance> implements ICriterionTrigger<T> {
 

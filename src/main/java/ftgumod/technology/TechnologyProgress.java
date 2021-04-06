@@ -1,14 +1,15 @@
 package ftgumod.technology;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import net.minecraft.advancements.Criterion;
-
-import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import net.minecraft.advancements.Criterion;
 
 public class TechnologyProgress {
 
