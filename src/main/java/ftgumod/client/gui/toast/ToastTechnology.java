@@ -1,5 +1,7 @@
 package ftgumod.client.gui.toast;
 
+import java.util.List;
+
 import ftgumod.api.technology.ITechnology;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
@@ -9,8 +11,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ToastTechnology implements IToast {

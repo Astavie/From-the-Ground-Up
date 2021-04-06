@@ -1,13 +1,14 @@
 package ftgumod.api.util;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonElement;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public interface IStackUtils {
 

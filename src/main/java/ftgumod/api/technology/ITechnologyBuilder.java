@@ -1,5 +1,9 @@
 package ftgumod.api.technology;
 
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
@@ -7,9 +11,6 @@ import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Map;
 
 public interface ITechnologyBuilder {
 

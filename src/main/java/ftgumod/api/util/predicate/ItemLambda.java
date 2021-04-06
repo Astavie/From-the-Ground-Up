@@ -1,9 +1,9 @@
 package ftgumod.api.util.predicate;
 
+import java.util.function.Predicate;
+
 import com.google.gson.JsonObject;
 import net.minecraft.item.ItemStack;
-
-import java.util.function.Predicate;
 
 public class ItemLambda extends ItemPredicate {
 

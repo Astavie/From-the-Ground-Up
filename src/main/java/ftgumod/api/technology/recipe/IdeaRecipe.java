@@ -1,5 +1,9 @@
 package ftgumod.api.technology.recipe;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,10 +16,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeHooks;
 import org.apache.commons.lang3.tuple.Pair;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public class IdeaRecipe implements IIdeaRecipe {
 

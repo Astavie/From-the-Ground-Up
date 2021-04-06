@@ -1,5 +1,9 @@
 package ftgumod.packet.client;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+
 import ftgumod.FTGU;
 import ftgumod.api.event.FTGUClientSyncEvent;
 import ftgumod.api.technology.ITechnology;
@@ -14,10 +18,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 
 public class TechnologyMessage implements IMessage {
 

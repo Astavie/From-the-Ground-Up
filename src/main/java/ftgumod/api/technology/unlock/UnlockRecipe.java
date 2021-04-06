@@ -1,5 +1,7 @@
 package ftgumod.api.technology.unlock;
 
+import java.util.List;
+
 import ftgumod.api.FTGUAPI;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -7,8 +9,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
-
-import java.util.List;
 
 public class UnlockRecipe implements IUnlock {
 

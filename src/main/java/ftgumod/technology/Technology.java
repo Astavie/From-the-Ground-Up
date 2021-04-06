@@ -1,6 +1,20 @@
 package ftgumod.technology;
 
-import com.google.gson.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import ftgumod.Content;
 import ftgumod.FTGU;
 import ftgumod.api.technology.ITechnology;
@@ -12,7 +26,12 @@ import ftgumod.api.util.JsonContextPublic;
 import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.event.TechnologyEvent;
 import ftgumod.util.ListenerTechnology;
-import net.minecraft.advancements.*;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
+import net.minecraft.advancements.DisplayInfo;
+import net.minecraft.advancements.ICriterionInstance;
+import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -28,9 +47,6 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class Technology implements ITechnology {
 

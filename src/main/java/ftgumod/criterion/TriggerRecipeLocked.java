@@ -1,5 +1,9 @@
 package ftgumod.criterion;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -11,9 +15,6 @@ import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Set;
 
 public class TriggerRecipeLocked extends TriggerFTGU<TriggerRecipeLocked.Instance> {
 

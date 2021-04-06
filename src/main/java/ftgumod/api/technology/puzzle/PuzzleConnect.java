@@ -1,5 +1,12 @@
 package ftgumod.api.technology.puzzle;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.FTGUAPI;
 import ftgumod.api.inventory.ContainerResearch;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
@@ -25,12 +32,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-
-import javax.annotation.Nullable;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 
 public class PuzzleConnect implements IPuzzle {
 

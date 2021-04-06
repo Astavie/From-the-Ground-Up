@@ -1,5 +1,7 @@
 package ftgumod;
 
+import java.util.List;
+
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.compat.jei.CompatJEI;
 import ftgumod.event.PlayerLockEvent;
@@ -44,8 +46,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
-
-import java.util.List;
 
 public class EventHandler {
 

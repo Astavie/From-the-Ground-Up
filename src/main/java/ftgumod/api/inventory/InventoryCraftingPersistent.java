@@ -1,11 +1,11 @@
 package ftgumod.api.inventory;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.client.util.RecipeItemHelper;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
-
-import javax.annotation.Nonnull;
 
 public class InventoryCraftingPersistent extends InventoryCrafting {
 

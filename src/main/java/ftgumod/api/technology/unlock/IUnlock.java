@@ -1,13 +1,13 @@
 package ftgumod.api.technology.unlock;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonObject;
 import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
 
 public interface IUnlock {
 

@@ -1,5 +1,8 @@
 package ftgumod.api.util.predicate;
 
+import java.util.Iterator;
+import java.util.Map;
+
 import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonElement;
@@ -14,9 +17,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-
-import java.util.Iterator;
-import java.util.Map;
 
 public class BlockPredicate {
 

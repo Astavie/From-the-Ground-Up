@@ -1,5 +1,7 @@
 package ftgumod.compat.gamestages;
 
+import java.util.Collections;
+
 import com.google.gson.JsonObject;
 import ftgumod.FTGU;
 import ftgumod.api.technology.unlock.IUnlock;
@@ -14,8 +16,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-
-import java.util.Collections;
 
 public class UnlockGameStage implements IUnlock {
 

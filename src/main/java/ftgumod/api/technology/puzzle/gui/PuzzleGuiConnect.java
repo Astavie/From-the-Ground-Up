@@ -1,5 +1,8 @@
 package ftgumod.api.technology.puzzle.gui;
 
+import java.util.Collections;
+import java.util.List;
+
 import ftgumod.api.technology.puzzle.ResearchConnect;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -7,9 +10,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.client.config.GuiUtils;
-
-import java.util.Collections;
-import java.util.List;
 
 public class PuzzleGuiConnect implements IPuzzleGui {
 

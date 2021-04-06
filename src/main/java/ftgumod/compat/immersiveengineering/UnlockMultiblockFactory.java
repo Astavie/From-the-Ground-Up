@@ -1,5 +1,7 @@
 package ftgumod.compat.immersiveengineering;
 
+import java.util.Locale;
+
 import blusunrize.immersiveengineering.api.MultiblockHandler;
 import blusunrize.immersiveengineering.common.IEContent;
 import blusunrize.immersiveengineering.common.blocks.metal.BlockTypes_MetalMultiblock;
@@ -15,8 +17,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import org.apache.commons.lang3.EnumUtils;
-
-import java.util.Locale;
 
 public class UnlockMultiblockFactory implements IUnlock.Factory<UnlockRecipe> {
 

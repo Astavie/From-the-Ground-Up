@@ -1,5 +1,7 @@
 package ftgumod.criterion;
 
+import java.util.Set;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import ftgumod.FTGU;
@@ -10,8 +12,6 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-
-import java.util.Set;
 
 public class TriggerInspect extends TriggerFTGU<TriggerInspect.Instance> {
 

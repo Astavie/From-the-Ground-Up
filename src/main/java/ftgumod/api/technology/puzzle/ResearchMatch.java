@@ -1,5 +1,12 @@
 package ftgumod.api.technology.puzzle;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
@@ -17,12 +24,6 @@ import ftgumod.api.util.predicate.ItemLambda;
 import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 public class ResearchMatch implements IResearchRecipe {
 

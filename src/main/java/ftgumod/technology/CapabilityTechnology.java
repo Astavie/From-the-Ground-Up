@@ -1,5 +1,8 @@
 package ftgumod.technology;
 
+import java.util.Collection;
+import java.util.HashSet;
+
 import ftgumod.FTGU;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
@@ -16,9 +19,6 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.Collection;
-import java.util.HashSet;
 
 public class CapabilityTechnology {
 

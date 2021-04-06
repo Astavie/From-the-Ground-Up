@@ -1,5 +1,11 @@
 package ftgumod.technology;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import ftgumod.api.technology.ITechnologyBuilder;
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
@@ -9,11 +15,6 @@ import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-
-import javax.annotation.Nullable;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
 
 public class TechnologyBuilder implements ITechnologyBuilder {
 

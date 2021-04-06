@@ -1,5 +1,8 @@
 package ftgumod.api.technology;
 
+import java.util.Map;
+import java.util.Set;
+
 import ftgumod.api.technology.recipe.IIdeaRecipe;
 import ftgumod.api.technology.recipe.IResearchRecipe;
 import ftgumod.api.technology.unlock.IUnlock;
@@ -10,9 +13,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
-
-import java.util.Map;
-import java.util.Set;
 
 public interface ITechnology {
 

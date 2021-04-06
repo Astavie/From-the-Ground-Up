@@ -1,12 +1,12 @@
 package ftgumod.api.technology.recipe;
 
+import java.util.List;
+
 import com.google.gson.JsonObject;
 import ftgumod.api.technology.ITechnology;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.api.util.JsonContextPublic;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.List;
 
 public interface IResearchRecipe {
 

@@ -1,13 +1,13 @@
 package ftgumod.api.technology.unlock;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.crafting.CompoundIngredient;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class UnlockCompound implements IUnlock {
 

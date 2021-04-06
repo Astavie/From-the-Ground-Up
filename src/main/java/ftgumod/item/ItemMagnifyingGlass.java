@@ -1,5 +1,8 @@
 package ftgumod.item;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import ftgumod.Content;
 import ftgumod.api.util.BlockSerializable;
 import ftgumod.event.PlayerInspectEvent;
@@ -27,9 +30,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.Constants.NBT;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class ItemMagnifyingGlass extends Item {
 

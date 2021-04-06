@@ -1,5 +1,10 @@
 package ftgumod.api.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import ftgumod.api.FTGUAPI;
@@ -7,10 +12,6 @@ import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.util.JsonUtils;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.JsonContext;
-
-import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.Map;
 
 public class JsonContextPublic extends JsonContext {
 

@@ -1,13 +1,13 @@
 package ftgumod.event;
 
+import javax.annotation.Nullable;
+
 import ftgumod.technology.TechnologyManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.Cancelable;
-
-import javax.annotation.Nullable;
 
 @Cancelable
 public class PlayerLockEvent extends PlayerEvent {

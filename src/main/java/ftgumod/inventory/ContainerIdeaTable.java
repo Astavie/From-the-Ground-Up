@@ -1,5 +1,8 @@
 package ftgumod.inventory;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import ftgumod.Content;
 import ftgumod.api.inventory.InventoryCraftingPersistent;
 import ftgumod.api.inventory.SlotSpecial;
@@ -13,14 +16,16 @@ import ftgumod.util.StackUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryCraftResult;
+import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 public class ContainerIdeaTable extends Container {
 

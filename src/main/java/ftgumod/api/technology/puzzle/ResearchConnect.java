@@ -1,5 +1,7 @@
 package ftgumod.api.technology.puzzle;
 
+import java.util.List;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -12,8 +14,6 @@ import ftgumod.api.util.JsonContextPublic;
 import ftgumod.api.util.predicate.ItemPredicate;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-
-import java.util.List;
 
 public class ResearchConnect implements IResearchRecipe {
 
