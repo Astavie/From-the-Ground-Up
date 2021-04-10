@@ -1,14 +1,10 @@
 package ftgumod.compat.gamestages;
 
-import java.util.Collections;
-
 import com.google.gson.JsonObject;
 import ftgumod.FTGU;
 import ftgumod.api.technology.unlock.IUnlock;
 import ftgumod.api.util.JsonContextPublic;
 import net.darkhax.gamestages.GameStageHelper;
-import net.darkhax.gamestages.GameStages;
-import net.darkhax.gamestages.packet.PacketSyncClient;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
@@ -45,7 +41,7 @@ public class UnlockGameStage implements IUnlock {
 	@Override
 	public void unlock(EntityPlayerMP player) {
 		GameStageHelper.addStage(player, stage);
-		GameStages.NETWORK.sendTo(new PacketSyncClient(Collections.singleton(stage)), player);
+		GameStageHelper.syncPlayer(player);
 		player.sendMessage(message);
 	}
 

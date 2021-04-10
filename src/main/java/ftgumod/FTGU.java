@@ -8,6 +8,7 @@ import ftgumod.api.technology.puzzle.ResearchConnect;
 import ftgumod.api.technology.puzzle.ResearchMatch;
 import ftgumod.api.util.predicate.ItemFluid;
 import ftgumod.api.util.predicate.ItemLambda;
+import ftgumod.api.util.predicate.ItemMod;
 import ftgumod.command.CommandTechnology;
 import ftgumod.compat.gamestages.CompatGameStages;
 import ftgumod.compat.gamestages.UnlockGameStage;
@@ -105,6 +106,7 @@ public class FTGU {
 		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "fluid"), new ItemFluid.Factory());
 		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "enchantment"),
 				new ItemLambda.Factory(i -> EnchantmentHelper.getEnchantments(i).size() > 0));
+		StackUtils.INSTANCE.registerItemPredicate(new ResourceLocation(MODID, "mod"), new ItemMod.Factory());
 
 		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "match"), new ResearchMatch.Factory());
 		TechnologyManager.INSTANCE.registerPuzzle(new ResourceLocation(MODID, "connect"),
